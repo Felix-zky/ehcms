@@ -18,7 +18,8 @@
     "require": {
         "php": ">=5.4.0",
         "topthink/framework": "*",
-        "topthink/think-captcha": "^1.0"
+        "topthink/think-captcha": "^1.0",
+        "topthink/think-image": "^1.0"
     },
     "extra": {
         "think-path": "thinkphp"
