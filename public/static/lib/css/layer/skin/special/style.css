@@ -1,0 +1,110 @@
+html #layui_layer_skinspecialstylecss{
+	display:none; position: absolute; width:1989px;
+}
+body .layer-ext-special{
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+	border-radius: 10px;
+	overflow: hidden;
+}
+body .layer-ext-special.no-border-radius{
+	border-radius: 0;
+}
+body .layer-ext-special[type="dialog"] {
+	min-width: 320px;
+}
+body .layer-ext-special-msg[type="dialog"]{min-width:200px;}
+body .layer-ext-special .layui-layer-title{ 
+	border-bottom: 1px solid #e5e5e5;
+	padding: 15px;
+	height: auto;
+	line-height: normal;
+	font-size: 14px;
+	text-align: center;
+
+}
+body .layer-ext-special .layui-layer-title img.icon{
+	width: 18px;
+	height: 18px;
+	vertical-align: text-bottom;
+	margin-right: 5px;
+}
+body .layer-ext-special .subtitle{
+	margin-left: 10px;
+	color: #999;
+	font-size: 12px;
+	font-weight: normal;
+}
+body .layui-layer-page{
+	overflow: auto;
+}
+body .layui-layer-page .layui-layer-content > div,body .layui-layer-page .layui-layer-content > p{
+	padding: 15px;
+}
+body .layer-ext-special .layui-layer-btn{
+	border-top: 1px solid #e5e5e5;
+    padding: 15px;
+    text-align: right;
+}
+body .layer-ext-special .layui-layer-btn a{
+	border-radius: 4px;
+	padding: 2px 20px;
+	font-size: 14px;
+	height: 32px;
+}
+body .layer-ext-special .layui-layer-btn .layui-layer-btn0{
+	background-color: #337ab7;
+	border-color: #2e6da4;
+	color: #fff;
+}
+body .layer-ext-special .layui-layer-btn .layui-layer-btn0:hover{
+	background-color: #286090;
+	border-color: #204d74;
+	color: #fff;
+}
+body .layer-ext-special .layui-layer-btn .layui-layer-btn1{
+	background-color: #fff;
+	border-color: #ccc;
+	color: #333;
+}
+body .layer-ext-special .layui-layer-btn .layui-layer-btn1:hover{
+	background-color: #e6e6e6;
+	border-color: #adadad;
+	color: #333;
+}
+body .layer-ext-special .layui-layer-content .layui-layer-ico {
+	height: 32px;
+	width: 32px;
+	top:18.5px;
+}
+body .layer-ext-special .layui-layer-padding{
+	padding-left: 60px;
+}
+body .layer-ext-special .layui-layer-ico0 {
+	background: url(default.png) no-repeat -96px 0;
+	;
+}
+body .layer-ext-special .layui-layer-ico1 {
+	background: url(default.png) no-repeat -224px 0;
+	;
+}
+body .layer-ext-special .layui-layer-ico2 {
+	background: url(default.png) no-repeat -192px 0;
+}
+body .layer-ext-special .layui-layer-ico3 {
+	background: url(default.png) no-repeat -160px 0;
+}
+body .layer-ext-special .layui-layer-ico4 {
+	background: url(default.png) no-repeat -320px 0;
+}
+body .layer-ext-special .layui-layer-ico5 {
+	background: url(default.png) no-repeat -288px 0;
+}
+body .layer-ext-special .layui-layer-ico6 {
+	background: url(default.png) -256px 0;
+}
+body .layer-ext-special .layui-layer-ico7 {
+	background: url(default.png) no-repeat -128px 0;
+}
+body .layer-ext-special .layui-layer-setwin{
+	top: 20px;
+}
