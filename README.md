@@ -70,6 +70,9 @@ ehcms依据网页功能需要开发了一系列辅助类库，为快速构建模
 
 ### 模板
 
+#### 官方模板 一键安装
+
+----------
 
 ### 感谢（排名不分先后）
 thinkphp：[中文WEB应用框架（www.thinkphp.cn）](http://www.thinkphp.cn)  

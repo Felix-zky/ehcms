@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<title>{$metaTitle | default='ehcms内容管理系统'}</title>
+	<link rel="stylesheet" type="text/css" href="__CSS__/style.css" />
+</head>
+<body>
+	<header></header>
+	<section id="iframe-main" class="container-fluid">
+		<div class="menu-tree open">
+			<div class="logo">
+				<img src="__IMAGES__/logo_default.png">
+			</div>
+			<!-- <div class="search">
+				<input type="text" />
+			</div> -->
+			<ul class="level-1">
+				<li>
+					<div class="row">
+						<i class="fa fa-plus-circle"></i>
+						<span>第一行</span>
+					</div>
+					<ul class="level-2">
+						<li data-url = 'http://www.baidu.com'>
+							<div class="row">
+								<i class="fa fa-plus-circle"></i>
+								<span>百度</span>
+							</div>
+						</li>
+						<li data-url = "http://www.csdn.net">
+							<div class="row">
+								<i class="fa fa-plus-circle"></i>
+								<span>CSDN</span>
+							</div>
+						</li>
+					</ul>
+				</li>
+
+				<li>
+					<div class="row">
+						<i class="fa fa-plus-circle"></i>
+						<span>第二行</span>
+					</div>
+					<ul class="level-2">
+						<li>
+							<div class="row">
+								<i class="fa fa-plus-circle"></i>
+								<span>第一行</span>
+							</div>
+						</li>
+						<li>
+							<div class="row">
+								<i class="fa fa-plus-circle"></i>
+								<span>第一行</span>
+							</div>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<div class="row">
+						<i class="fa fa-plus-circle"></i>
+						<span>第三行</span>
+					</div>
+					<ul class="level-2">
+						<li>
+							<div class="row">
+								<i class="fa fa-plus-circle"></i>
+								<span>第一行</span>
+							</div>
+						</li>
+						<li>
+							<div class="row">
+								<i class="fa fa-plus-circle"></i>
+								<span>第一行</span>
+							</div>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<div class="row">
+						<i class="fa fa-plus-circle"></i>
+						<span>第四行</span>
+					</div>
+					<ul class="level-2">
+						<li>
+							<div class="row">
+								<i class="fa fa-plus-circle"></i>
+								<span>第一行</span>
+							</div>
+						</li>
+						<li>
+							<div class="row">
+								<i class="fa fa-plus-circle"></i>
+								<span>第一行</span>
+							</div>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+		<div class="content">
+			<iframe  frameborder="0" width="100%" height="100%"></iframe>
+			<div class="loading">
+				<div class="tips">
+					<i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i><span>页面正在加载...</span>
+				</div>
+			</div>
+		</div>
+	</section>
+</body>
+<script type="text/javascript" src="http://cdn.bootcss.com/require.js/2.2.0/require.min.js" charset="utf-8"></script>
+<script type="text/javascript">
+	require.config({
+		baseUrl: '__LIB_JS__',
+		paths: {
+			admin: '__JS__',
+			layer: 'layer/layer.init',
+			jquery: [
+				'http://cdn.bootcss.com/jquery/1.12.4/jquery.min',
+				'jquery/jquery.min'
+			],
+			'jquery.contextMenu': [
+				'http://cdn.bootcss.com/jquery-contextmenu/2.2.3/jquery.contextMenu.min',
+				'jquery/jquery.contextMenu.min'
+			],
+			'layer.min': [
+				'http://cdn.bootcss.com/layer/2.3/layer',
+				'layer/layer.min'
+			]
+		}
+	});
+
+	require(['admin/test']);
+</script>
+</html>
