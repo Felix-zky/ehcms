@@ -1,0 +1,46 @@
+{extend name="base" /}
+{block name="title"}{$metaTitle | default='ehcms内容管理系统'}{/block}
+{block name="css"}
+	<link rel="stylesheet" type="text/css" href="__CSS__/{$Request.action}.css" />
+{/block}
+{block name="left"}
+	<div id="left" class="menu-tree open">
+		<div class="logo">
+			<img src="__IMAGES__/logo_default.png">
+		</div>
+		<ul class="level-1">
+			<li>
+				<div class="row">
+					<i class="fa fa-plus-circle"></i>
+					<span>第一行</span>
+				</div>
+				<ul class="level-2">
+					<li data-url = 'http://www.baidu.com'>
+						<div class="row">
+							<i class="fa fa-plus-circle"></i>
+							<span>百度</span>
+						</div>
+					</li>
+					<li data-url = "http://www.csdn.net">
+						<div class="row">
+							<i class="fa fa-plus-circle"></i>
+							<span>CSDN</span>
+						</div>
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+{/block}
+{block name="right"}
+	<div id="right">
+		<div class="container-fluid">
+			{__CONTENT__}
+		</div>
+	</div>
+{/block}
+{block name='js'}
+	<script type="text/javascript">
+		require(['admin/test']);
+	</script>
+{/js}

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<title>{block name="title"}{/block}</title>
+	<link rel="stylesheet" type="text/css" href="__CSS__/style.css" />
+	{block name="css"}{/block}
+</head>
+<body>
+	{block name="header"}{/block}
+	{block name="left"}{/block}
+	{block name="right"}{/block}
+	{block name="footer"}{/block}
+</body>
+<script type="text/javascript" src="http://cdn.bootcss.com/require.js/2.2.0/require.min.js" charset="utf-8"></script>
+<script type="text/javascript">
+	require.config({
+		baseUrl: '__LIB_JS__',
+		paths: {
+			admin: '__ADMIN_JS__',
+			layer: 'layer/layer.init',
+			jquery: [
+				'http://cdn.bootcss.com/jquery/1.12.4/jquery.min',
+				'jquery/jquery.min'
+			],
+			'jquery.contextMenu': [
+				'http://cdn.bootcss.com/jquery-contextmenu/2.2.3/jquery.contextMenu.min',
+				'jquery/jquery.contextMenu.min'
+			],
+			'layer.min': [
+				'http://cdn.bootcss.com/layer/2.3/layer',
+				'layer/layer.min'
+			],
+			'lodash': [
+				'http://cdn.bootcss.com/lodash.js/4.13.1/lodash.min',
+				'loadsh.min'
+			]
+		}
+	});
+</script>
+{block name="js"}{/block}
+</html>

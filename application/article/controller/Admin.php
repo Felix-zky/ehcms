@@ -11,15 +11,22 @@
 
 namespace app\article\controller;
 
-use think\Controller;
-
+use app\admin\controller\Base;
 /**
  * 文章模块后台控制器
  */
-class Admin extends Controller{
+class Admin extends Base{
 	
-	public function get(){
+	public function __construct(){
+		parent::__construct();
+	}
+	
+	/**
+	 * 获取文章列表
+	 */
+	public function index(){
 		
+		return $this->fetch();
 	}
 	
 }
