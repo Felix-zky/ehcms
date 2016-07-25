@@ -9,7 +9,7 @@
 <body class="desktop">
 	<div id="desktop-icon">
 		<ul>
-			<li data-url="/admin/index/test.html"><div class="icon-img"><img src="__IMAGES__/computer.png" /></div><div class="icon-name"><span>我的电脑</span></div></li>
+			<li data-module="xxx"><div class="icon-img"><img src="__IMAGES__/computer.png" /></div><div class="icon-name"><span>我的电脑</span></div></li>
 			<li><div class="icon-img"><img src="__IMAGES__/computer.png" /></div><div class="icon-name"><span>我的电脑</span></div></li>
 			<li><div class="icon-img"><img src="__IMAGES__/computer.png" /></div><div class="icon-name"><span>我的电脑</span></div></li>
 			<li><div class="icon-img"><img src="__IMAGES__/computer.png" /></div><div class="icon-name"><span>我的电脑</span></div></li>
@@ -66,5 +66,34 @@
 	});
 
 	require(['admin/index']);
+</script>
+<script type="text/html" id="menu-tree">
+	<div class="menu-tree open">
+		<div class="logo">
+			<img src="__IMAGES__/logo_default.png">
+		</div>
+		<ul class="level-1">
+			{{# for(var i = 0, len = d.length; i < len; i++){ }}
+				<li>
+					<div class="row">
+						<i class="fa fa-plus-circle"></i>
+						<span>d[i].name</span>
+					</div>
+					{{# if(d[i].child){ }}
+						<ul class="level-2">
+							{{# for(var c = 0, cLen = c.length; c < cLen; c++){ }}
+								<li data-url = 'http://www.baidu.com'>
+									<div class="row">
+										<i class="fa fa-plus-circle"></i>
+										<span>百度</span>
+									</div>
+								</li>
+							{{# } }}
+						</ul>
+					{{# } }}
+				</li>
+			{{# } }}
+		</ul>
+	</div>
 </script>
 </html>

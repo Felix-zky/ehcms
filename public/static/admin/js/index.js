@@ -1,4 +1,4 @@
-define(['jquery', 'layer', 'jquery.contextMenu', 'lodash'],function(){
+define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash'],function(laytpl){
 		var	screenHeight = window.screen.height,
 		contentMenuItemsConfigure = {
 			'open': {
@@ -38,7 +38,6 @@ define(['jquery', 'layer', 'jquery.contextMenu', 'lodash'],function(){
 		contentMenuSign = {},
 		taskbarTime = $('#taskbar .taskbar-right .time'),
 		taskbarTimeIndex,
-		currentIframe,
 		iframeActiveList = [];
 
 	$(document).ready(function(){
@@ -74,7 +73,7 @@ define(['jquery', 'layer', 'jquery.contextMenu', 'lodash'],function(){
 		$('#desktop-icon').on('dblclick', 'li', function() {
 			var icon = $(this).find('img').attr('src'),
 				name = $(this).find('span').html(),
-				currentIframe = openiframe($('li:eq(0)').data('url')),
+				currentIframe = openiframe($('li:eq(0)').data('module')),
 				taskbarHtml = '<li data-index=' + currentIframe + ' class="active"><img src="' + icon + '" /><span>' + name + '</span></li>';
 
 			iframeActiveList.unshift(currentIframe);
@@ -286,7 +285,23 @@ define(['jquery', 'layer', 'jquery.contextMenu', 'lodash'],function(){
 	/**
 	 * 打开新的iframe页面
 	 */
-	function openiframe(url){
+	function openiframe(module){
+		//ajax
+		var data = {
+			[{
+				name: '第一行',
+				child: {
+					[{
+						'name': '百度'
+					}]
+				}
+			}]
+		};
+
+		console.log($('#menu-tree').render(data));
+		return false;
+
+
 		return layer.open({
 			type:2,
 			area:['70%','80%'],
