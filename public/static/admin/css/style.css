@@ -2796,6 +2796,10 @@ li {
 .desktop .layui-layer-page .layui-layer-content > div {
   padding: 0 !important;
 }
+.desktop .layui-layer-shade,
+.desktop .layui-layer-dialog {
+  z-index: 100000000 !important;
+}
 #iframe-main {
   position: absolute;
   height: 100%;

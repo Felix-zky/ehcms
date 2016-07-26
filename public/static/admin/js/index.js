@@ -57,7 +57,7 @@ define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash'],function(la
 		$(window).resize(function() {
 			sortDesktopIcon();
 			checkFullScreen();
-		});	
+		});
 
 		/** 点击屏幕空白区域，将当前选中的图标状态去除 */
 		$('#desktop-icon').click(function(e){
@@ -306,9 +306,10 @@ define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash'],function(la
 					if ($(this).parents('#iframe-main').find('iframe').attr('src') != url) {
 						iframe.call($(this).parents('#iframe-main'), url);
 					}else{
-						layer.confirm('您确定要重新打开本页面吗？', {btn: ['确定', '取消'], zIndex: 100000000}, 
+						var that = $(this);
+						layer.confirm('您确定要重新打开本页面吗？', {btn: ['确定', '取消']}, 
 							function(index){
-								iframe.call($(this).parents('#iframe-main'), url);
+								iframe.call(that.parents('#iframe-main'), url);
 								layer.close(index);
 							}
 						);
@@ -325,19 +326,31 @@ define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash'],function(la
 		var iframe = this.find('iframe'),
 			loading = this.find('.loading');
 
-		iframe.css({
-			opacity: 0
-		});
+		iframe.css({opacity: 0});
 
 		iframe.attr('src', url);
 
 		loading.show();
 
 		iframe.load(function(){
-			iframe.css({
-				opacity: 1
-			});
+			iframe.css({opacity: 1});
 			loading.hide();
+		});
+	}
+
+	/**
+	 * 计算右侧内容区宽度
+	 */
+	function contentWidthCompute(index){
+		if (!index){
+			return false;
+		}
+
+		var layero = $('#layui-layer'+[index]),
+			windowWidth = layero.outerWidth();
+
+		layero.find('#iframe-main .content').css({
+			width: (windowWidth - 218) + 'px'
 		});
 	}
 
@@ -385,6 +398,26 @@ define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash'],function(la
 				'url': 'http://www.baidu.com',
 				'icon': '',
 				'customIcon': ''
+			},
+			{
+				'name': 'CSDN',
+				'url': 'http://www.csdn.net',
+				'icon': '',
+				'customIcon': ''
+			}]
+		},{
+			name: '第二行',
+			child: [{
+				'name': '百度',
+				'url': 'http://www.baidu.com',
+				'icon': '',
+				'customIcon': ''
+			},
+			{
+				'name': 'CSDN',
+				'url': 'http://www.csdn.net',
+				'icon': '',
+				'customIcon': ''
 			}]
 		}];
 
@@ -404,8 +437,13 @@ define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash'],function(la
 			cancel: function(index){
 				$('#taskbar li[data-index = ' + index + ']').remove();
 			},
-			success: function(index){
-				layer.setTop(index);
+			success: function(layero, index){
+				layer.style(index, {
+					width: layero.outerWidth(),
+					height: layero.outerHeight()
+				});
+				contentWidthCompute(index);
+				layer.setTop(layero);
 			},
 			full: function(layero){
 				setTimeout(function(){
@@ -415,9 +453,11 @@ define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash'],function(la
 						height: ($(window).height() - 40) + 'px',
 					});
 
-					layero.find('iframe').css({
-						height: (layero.find('iframe').height() - 40 - 2) + 'px'
+					layero.find('.layui-layer-content').css({
+						height: (layero.height() - layero.find('.layui-layer-title').outerHeight()) + 'px'
 					});
+
+					contentWidthCompute(layero.attr('times'));
 				}, 150);
 			},
 			restore: function(layero){
@@ -427,9 +467,11 @@ define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash'],function(la
 						height: Math.ceil($(window).height() * .8) + 'px',
 					});
 
-					layero.find('iframe').css({
+					layero.find('.layui-layer-content').css({
 						height: (layero.height() - layero.find('.layui-layer-title').outerHeight()) + 'px'
 					});
+
+					contentWidthCompute(layero.attr('times'));
 				}, 150);
 			}
 		});
