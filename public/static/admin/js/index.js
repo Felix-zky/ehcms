@@ -248,7 +248,98 @@ define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash'],function(la
 				}
 			}
 		});
+
+		$('body').on('transitionend', '.menu-tree li', function(){
+			$(this).removeClass('wait');
+		});
+
+		/** 菜单树li元素点击触发 */
+		$('body').on('click', '.menu-tree li', function(e){
+			if (!$(this).parents('.menu-tree').is('.open')){
+				return false;
+			}
+
+			e.stopPropagation();
+
+			var childrenUI = $(this).children('ul');
+
+			if (childrenUI.length > 0){
+				if ($(this).parents('.menu-tree').find('.wait').length > 0){
+					return false;
+				}
+
+				$(this).addClass('wait');
+
+				//当前如果是打开状态被点击就隐藏掉
+				if ($(this).is('.selected')) {
+					$(this).css({
+						height: ($(this).outerHeight() - childrenUI.outerHeight()) + 'px'
+					});
+					$(this).children('.row').children('i').removeClass('fa-minus-circle').addClass('fa-plus-circle');
+					$(this).removeClass('selected');
+					$(this).find('.selected').removeClass('selected');
+				}else{
+					//如果当前是关闭状态被点击首先判断是否存在已经打开的菜单列表，如果存在将其隐藏掉。
+					var selected = $(this).siblings('li.selected');
+
+					selected.css({
+						height: (selected.outerHeight() - selected.children('ul').outerHeight()) + 'px'
+					});
+
+					selected.children('.row').children('i').removeClass('fa-minus-circle').addClass('fa-plus-circle');
+
+					selected.find('.selected').removeClass('selected');
+
+					//当前触发对象获取被被选中状态
+					$(this).css({
+						height: ($(this).outerHeight() + childrenUI.outerHeight()) + 'px'
+					});
+					$(this).addClass('selected').siblings('li').removeClass('selected');
+					$(this).children('.row').children('i').removeClass('fa-plus-circle').addClass('fa-minus-circle');
+				}
+			}else{
+				var url = $(this).data('url');
+
+				$(this).addClass('selected').siblings('li').removeClass('selected');
+					
+				if (url) {
+					if ($(this).parents('#iframe-main').find('iframe').attr('src') != url) {
+						iframe.call($(this).parents('#iframe-main'), url);
+					}else{
+						layer.confirm('您确定要重新打开本页面吗？', {btn: ['确定', '取消'], zIndex: 100000000}, 
+							function(index){
+								iframe.call($(this).parents('#iframe-main'), url);
+								layer.close(index);
+							}
+						);
+					}
+				}
+			}
+		});
 	});
+
+	/**
+	 * 隐藏iframe框内容并显示加载提醒，加载完成后关闭提醒并显示iframe框新内容
+	 */
+	function iframe(url){
+		var iframe = this.find('iframe'),
+			loading = this.find('.loading');
+
+		iframe.css({
+			opacity: 0
+		});
+
+		iframe.attr('src', url);
+
+		loading.show();
+
+		iframe.load(function(){
+			iframe.css({
+				opacity: 1
+			});
+			loading.hide();
+		});
+	}
 
 	/**
 	 * 检查是否进入全屏状态
@@ -287,27 +378,24 @@ define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash'],function(la
 	 */
 	function openiframe(module){
 		//ajax
-		var data = {
-			[{
-				name: '第一行',
-				child: {
-					[{
-						'name': '百度'
-					}]
-				}
+		var data = [{
+			name: '第一行',
+			child: [{
+				'name': '百度',
+				'url': 'http://www.baidu.com',
+				'icon': '',
+				'customIcon': ''
 			}]
-		};
+		}];
 
-		console.log($('#menu-tree').render(data));
-		return false;
-
+		var content = laytpl($('#menu-tree').html()).render(data);
 
 		return layer.open({
-			type:2,
+			type:1,
 			area:['70%','80%'],
 			maxmin: true,
 			shift: 1,
-			content: url,
+			content: content,
 			shade: 0,
 			zIndex: layer.zIndex,
 			moveOut: true,

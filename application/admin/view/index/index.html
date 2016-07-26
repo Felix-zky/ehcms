@@ -67,33 +67,48 @@
 
 	require(['admin/index']);
 </script>
+
+<!-- 自定义页面左侧菜单 -->
 <script type="text/html" id="menu-tree">
-	<div class="menu-tree open">
-		<div class="logo">
-			<img src="__IMAGES__/logo_default.png">
-		</div>
-		<ul class="level-1">
-			{{# for(var i = 0, len = d.length; i < len; i++){ }}
-				<li>
-					<div class="row">
-						<i class="fa fa-plus-circle"></i>
-						<span>d[i].name</span>
-					</div>
-					{{# if(d[i].child){ }}
+	<div id="iframe-main">
+		<div class="menu-tree open">
+			<div class="logo">
+				<img src="__IMAGES__/logo_default.png">
+			</div>
+			<div class="menu">
+				<ul class="level-1">
+					{{# for(var i = 0, len = d.length; i < len; i++){ }}
+					<li>
+						<div class="row">
+							<i class="fa fa-plus-circle"></i>
+							<span>{{ d[i].name }}</span>
+						</div>
+						{{# if(d[i].child){ }}
 						<ul class="level-2">
-							{{# for(var c = 0, cLen = c.length; c < cLen; c++){ }}
-								<li data-url = 'http://www.baidu.com'>
-									<div class="row">
-										<i class="fa fa-plus-circle"></i>
-										<span>百度</span>
-									</div>
-								</li>
+							{{# for(var c = 0, cLen = d[i].child.length; c < cLen; c++){ }}
+							<li data-url = '{{ d[i].child[c].url }}'>
+								<div class="row">
+									<i class="fa fa-plus-circle"></i>
+									<span>{{ d[i].child[c].name }}</span>
+								</div>
+							</li>
 							{{# } }}
 						</ul>
+						{{# } }}
+					</li>
 					{{# } }}
-				</li>
-			{{# } }}
-		</ul>
+				</ul>
+			</div>
+		</div>
+		<div class="content">
+			<iframe  frameborder="0" width="100%" height="100%"></iframe>
+			<div class="loading">
+				<div class="tips">
+					<i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i><span>页面正在加载...</span>
+				</div>
+			</div>
+		</div>
 	</div>
 </script>
+
 </html>

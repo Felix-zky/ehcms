@@ -2595,12 +2595,12 @@ li {
 .hide {
   display: none !important;
 }
-#desktop-icon {
+.desktop #desktop-icon {
   width: 100%;
   margin: 0 auto;
   position: relative;
 }
-#desktop-icon ul li {
+.desktop #desktop-icon ul li {
   height: 100px;
   width: 80px;
   position: absolute;
@@ -2619,29 +2619,29 @@ li {
   -o-user-select: none;
   user-select: none;
 }
-#desktop-icon ul li:hover {
+.desktop #desktop-icon ul li:hover {
   background-color: rgba(255, 255, 255, 0.3);
 }
-#desktop-icon ul li.selected {
+.desktop #desktop-icon ul li.selected {
   background-color: rgba(255, 255, 255, 0.4);
   border: 1px solid rgba(0, 0, 0, 0.35);
 }
-#desktop-icon ul li.selected .icon-name {
+.desktop #desktop-icon ul li.selected .icon-name {
   background-color: transparent;
 }
-#desktop-icon ul li.selected .icon-name span {
+.desktop #desktop-icon ul li.selected .icon-name span {
   text-shadow: 0 0 0 #fff, 0 0 2px #000, 0 0 4px #000;
 }
-#desktop-icon ul li .icon-img {
+.desktop #desktop-icon ul li .icon-img {
   max-width: 60px;
   max-height: 60px;
   margin: 0 auto;
 }
-#desktop-icon ul li .icon-img img {
+.desktop #desktop-icon ul li .icon-img img {
   width: 100%;
   height: auto;
 }
-#desktop-icon ul li .icon-name {
+.desktop #desktop-icon ul li .icon-name {
   width: 100%;
   border-radius: 10px;
   background-color: rgba(0, 0, 0, 0.35);
@@ -2654,7 +2654,7 @@ li {
   padding: 3px 5px;
   margin-top: 7px;
 }
-#taskbar {
+.desktop #taskbar {
   position: fixed;
   bottom: 0;
   left: 0;
@@ -2663,16 +2663,16 @@ li {
   background: url(../images/taskbarbg.png) repeat-x left top;
   z-index: 99999999;
 }
-#taskbar .box {
+.desktop #taskbar .box {
   width: 100%;
   height: 40px;
   background-color: rgba(0, 0, 0, 0.1);
   position: relative;
 }
-#taskbar .box .list {
+.desktop #taskbar .box .list {
   margin-left: 59px;
 }
-#taskbar .box .list ul li {
+.desktop #taskbar .box .list ul li {
   float: left;
   height: 40px;
   width: 160px;
@@ -2704,8 +2704,8 @@ li {
   -o-user-select: none;
   user-select: none;
 }
-#taskbar .box .list ul li.active,
-#taskbar .box .list ul li:hover {
+.desktop #taskbar .box .list ul li.active,
+.desktop #taskbar .box .list ul li:hover {
   background: rgba(255, 255, 255, 0);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='rgba(255,255,255,0.7)', endColorstr='rgba(255,255,255,0)');
   background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0));
@@ -2715,23 +2715,23 @@ li {
   background-image: linear-gradient(top, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0));
   box-shadow: 0 0 6px #000;
 }
-#taskbar .box .list ul li img {
+.desktop #taskbar .box .list ul li img {
   width: 32px;
   height: 32px;
   margin-top: 3px;
   float: left;
 }
-#taskbar .box .list ul li span {
+.desktop #taskbar .box .list ul li span {
   padding-left: 5px;
 }
-#taskbar .box .taskbar-right {
+.desktop #taskbar .box .taskbar-right {
   position: absolute;
   right: 0;
   top: 0;
   width: 95px;
   height: 40px;
 }
-#taskbar .box .taskbar-right .time {
+.desktop #taskbar .box .taskbar-right .time {
   width: 80px;
   height: 40px;
   float: left;
@@ -2743,7 +2743,7 @@ li {
   -o-user-select: none;
   user-select: none;
 }
-#taskbar .box .taskbar-right .time p {
+.desktop #taskbar .box .taskbar-right .time p {
   height: 20px;
   line-height: 20px;
   overflow: hidden;
@@ -2751,7 +2751,7 @@ li {
   text-align: center;
   color: #FFF;
 }
-#taskbar .box .taskbar-right .back-desktop {
+.desktop #taskbar .box .taskbar-right .back-desktop {
   float: left;
   width: 15px;
   height: 40px;
@@ -2767,7 +2767,7 @@ li {
   background-image: -ms-linear-gradient(top, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
   background-image: linear-gradient(top, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
 }
-#taskbar .box .taskbar-right .back-desktop:hover {
+.desktop #taskbar .box .taskbar-right .back-desktop:hover {
   background: rgba(255, 255, 255, 0);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='rgba(255,255,255,0.7)', endColorstr='rgba(255,255,255,0)');
   background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0));
@@ -2777,7 +2777,7 @@ li {
   background-image: linear-gradient(top, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0));
   box-shadow: 0 0 10px #fff;
 }
-#taskbar .box .start {
+.desktop #taskbar .box .start {
   background: url(../images/start.png) no-repeat left top;
   width: 40px;
   height: 40px;
@@ -2787,8 +2787,14 @@ li {
   border-radius: 50%;
   cursor: pointer;
 }
-#taskbar .box .start:hover {
+.desktop #taskbar .box .start:hover {
   background-position: 0 -40px;
+}
+.desktop .layui-layer-page .layui-layer-content {
+  overflow: hidden;
+}
+.desktop .layui-layer-page .layui-layer-content > div {
+  padding: 0 !important;
 }
 #iframe-main {
   position: absolute;
