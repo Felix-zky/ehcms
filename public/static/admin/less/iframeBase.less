@@ -7,20 +7,6 @@
 		border-right: 1px solid #ccc;
 		float: left;
 		overflow-x: hidden;
-		// &.fold{
-		// 	width: 40px;
-		// 	.logo{
-		// 		display: none;
-		// 	}
-		// 	ul{
-		// 		&.level-1{
-
-		// 		}
-		// 		&.level-2{
-		// 			display: none;
-		// 		}
-		// 	}
-		// }
 		&.open{
 			width: 218px;
 			.logo{
@@ -30,18 +16,18 @@
 					height: auto;
 				}
 			}
-			.search{
-				input{
-					width: 80%;
-					height: 25px;
-					padding: 5px;
-					font-size: 12px;
-					border: 1px solid #ccc;
-					border-radius: 5px;
-					margin: 0 auto 10px;
-					display: block;
-				}
-			}
+			// .search{
+			// 	input{
+			// 		width: 80%;
+			// 		height: 25px;
+			// 		padding: 5px;
+			// 		font-size: 12px;
+			// 		border: 1px solid #ccc;
+			// 		border-radius: 5px;
+			// 		margin: 0 auto 10px;
+			// 		display: block;
+			// 	}
+			// }
 			ul{
 				&.level-1{
 					> li{
@@ -53,7 +39,7 @@
 						text-transform: capitalize;
 						border-bottom: 1px dashed #ccc;
 						transition: height 0.2s;
-						> .row{
+						> .menu-row{
 							width: 100%;
 							height: 55px;
 							i, span{
@@ -72,7 +58,7 @@
 							}
 						}
 						&.selected{
-							> .row{
+							> .menu-row{
 								background-color: #ea533f;
 								color: #FFF;
 							}
@@ -88,7 +74,7 @@
 						overflow: hidden;
 						text-transform: capitalize;
 						transition: height 0.2s;
-						> .row{
+						> .menu-row{
 							width: 100%;
 							height: 40px;
 							padding-left: 30px;
@@ -107,7 +93,7 @@
 							background-color: #ccc;
 						}
 						&.selected {
-							> .row{
+							> .menu-row{
 								padding-left: 25px;
 							}
 							background-color: #ddd;

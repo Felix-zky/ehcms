@@ -1,9 +1,8 @@
-{extend name="base" /}
-{block name="css"}
-	<link rel="stylesheet" type="text/css" href="__CSS__/{$Request.action}.css" />
-{/block}
+{extend name="admin@layout/base" /}
 {block name="main"}
 	<div class="container-fluid">
-		{__CONTENT__}
+		<div id="{$Request.module}-{$Request.controller|lcfirst}-{$Request.action|lcfirst}">
+			{__CONTENT__}
+		</div>
 	</div>
 {/block}

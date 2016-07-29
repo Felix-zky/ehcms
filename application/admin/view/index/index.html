@@ -68,7 +68,7 @@
 	require(['admin/index']);
 </script>
 
-<!-- 自定义页面左侧菜单 -->
+<!-- 自定义页面左侧菜单模板 -->
 <script type="text/html" id="menu-tree">
 	<div id="iframe-main">
 		<div class="menu-tree open">
@@ -79,7 +79,7 @@
 				<ul class="level-1">
 					{{# for(var i = 0, len = d.length; i < len; i++){ }}
 					<li>
-						<div class="row">
+						<div class="menu-row">
 							<i class="fa fa-plus-circle"></i>
 							<span>{{ d[i].name }}</span>
 						</div>
@@ -87,7 +87,7 @@
 						<ul class="level-2">
 							{{# for(var c = 0, cLen = d[i].child.length; c < cLen; c++){ }}
 							<li data-url = '{{ d[i].child[c].url }}'>
-								<div class="row">
+								<div class="menu-row">
 									<i class="fa fa-plus-circle"></i>
 									<span>{{ d[i].child[c].name }}</span>
 								</div>

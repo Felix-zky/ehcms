@@ -41,6 +41,13 @@ define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash'],function(la
 		iframeActiveList = [];
 
 	$(document).ready(function(){
+		$('body').on('mousedown', '.layui-layer-page', function(){
+			if ($(this).css('z-index') < layer.zIndex){
+				var index = $(this).attr('times');
+				$('#taskbar li[data-index="' + index + '"]').click();
+			}
+		});
+
 		layer.min = function(index, options){
 			var layerDom = $('#layui-layer' + index);
 			layerDom.hide();
@@ -242,9 +249,9 @@ define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash'],function(la
 				iframeActiveList.unshift(index);
 				$(this).addClass('active').siblings('li.active').removeClass('active');
 				!layero.is(':visible') && layero.show();
-				if (layero.css('z-index') < layer.zIndex + 1) {
+				if (layero.css('z-index') < layer.zIndex) {
 					layer.zIndex++;
-					layero.css('z-index', layer.zIndex + 1);
+					layero.css('z-index', layer.zIndex);
 				}
 			}
 		});
@@ -404,7 +411,14 @@ define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash'],function(la
 				'url': 'http://www.csdn.net',
 				'icon': '',
 				'customIcon': ''
-			}]
+			},
+			{
+				'name': '文章管理',
+				'url': '/article/Admin',
+				'icon': '',
+				'customIcon': ''
+			}
+			]
 		},{
 			name: '第二行',
 			child: [{
@@ -430,9 +444,9 @@ define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash'],function(la
 			shift: 1,
 			content: content,
 			shade: 0,
-			zIndex: layer.zIndex,
 			moveOut: true,
 			scrollbar: false,
+			zIndex: layer.zIndex, 
 			fix: false,
 			cancel: function(index){
 				$('#taskbar li[data-index = ' + index + ']').remove();
@@ -443,7 +457,6 @@ define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash'],function(la
 					height: layero.outerHeight()
 				});
 				contentWidthCompute(index);
-				layer.setTop(layero);
 			},
 			full: function(layero){
 				setTimeout(function(){
@@ -475,6 +488,10 @@ define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash'],function(la
 				}, 150);
 			}
 		});
+	}
+
+	function alterCurrentIframeTitle(){
+
 	}
 
 	/**

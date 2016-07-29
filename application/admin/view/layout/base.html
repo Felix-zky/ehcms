@@ -3,14 +3,13 @@
 <head>
 	<meta charset="UTF-8">
 	<title>{block name="title"}{/block}</title>
-	<link rel="stylesheet" type="text/css" href="__CSS__/style.css" />
+	<link rel="stylesheet" type="text/css" href="__ADMIN_CSS__/style.css" />
 	{block name="css"}{/block}
 	<script type="text/javascript" src="http://cdn.bootcss.com/require.js/2.2.0/require.min.js" charset="utf-8"></script>
 	<script type="text/javascript">
 		require.config({
 			baseUrl: '__LIB_JS__',
 			paths: {
-				admin: '__ADMIN_JS__',
 				layer: 'layer/layer.init',
 				jquery: [
 					'http://cdn.bootcss.com/jquery/1.12.4/jquery.min',
@@ -27,13 +26,26 @@
 				'lodash': [
 					'http://cdn.bootcss.com/lodash.js/4.13.1/lodash.min',
 					'loadsh.min'
+				],
+				'bootstrap': [
+					'http://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min',
+					'bootstrap.min'
 				]
 			}
 		});
 	</script>
 </head>
 <body>
-	{block name="header"}{/block}
+	{block name="header"}
+		<header>
+			<div class="pull-left">
+				<button class="btn btn-default">返回文章列表</button>
+			</div>
+			<div class="pull-right">
+				<button class="btn btn-default">清空当前表单</button> <button class="btn btn-default">恢复表单数据</button> <button class="btn btn-default">刷新当前页面</button>
+			</div>
+		</header>
+	{/block}
 	{block name="main"}{/block}
 	{block name="footer"}{/block}
 </body>
