@@ -42,7 +42,7 @@ define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash'],function(la
 
 	$(document).ready(function(){
 		$('body').on('mousedown', '.layui-layer-page', function(){
-			if ($(this).css('z-index') < layer.zIndex){
+			if ($(this).css('z-index') < layer.zIndex && $(this).attr('times') != iframeActiveList[0]){
 				var index = $(this).attr('times');
 				$('#taskbar li[data-index="' + index + '"]').click();
 			}
@@ -305,17 +305,21 @@ define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash'],function(la
 					$(this).children('.row').children('i').removeClass('fa-plus-circle').addClass('fa-minus-circle');
 				}
 			}else{
-				var url = $(this).data('url');
+				var url = $(this).data('url'), //目标url
+					title = $(this).find('span').html(), //目标页面标题
+					layerIndex = $(this).parents('.layui-layer-page').attr('times'); //当前的layer弹窗编号
 
 				$(this).addClass('selected').siblings('li').removeClass('selected');
 					
 				if (url) {
 					if ($(this).parents('#iframe-main').find('iframe').attr('src') != url) {
+						alterCurrentIframeTitle(layerIndex, title);
 						iframe.call($(this).parents('#iframe-main'), url);
 					}else{
 						var that = $(this);
-						layer.confirm('您确定要重新打开本页面吗？', {btn: ['确定', '取消']}, 
+						layer.confirm('您确定要重新打开本页面吗？', {btn: ['确定', '取消'], zIndex: layer.zIndex}, 
 							function(index){
+								alterCurrentIframeTitle(layerIndex, title);
 								iframe.call(that.parents('#iframe-main'), url);
 								layer.close(index);
 							}
@@ -490,8 +494,17 @@ define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash'],function(la
 		});
 	}
 
-	function alterCurrentIframeTitle(){
-
+	/**
+	 * 修改模块弹窗的标题，实现框架内页面切换标题跟随切换。
+	 *
+	 * @param  {Number} index layer弹窗的编号
+	 * @param  {String} title 需要更换的标题内容
+	 */
+	function alterCurrentIframeTitle(index, title){
+		var layero = $('#layui-layer' + index);
+		if (layero.length === 1){
+			layero.find('.layui-layer-title').html(title);
+		}
 	}
 
 	/**

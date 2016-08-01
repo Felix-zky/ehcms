@@ -1,0 +1,3 @@
+defind(['jquery'], function(){
+	
+});
