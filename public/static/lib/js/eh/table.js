@@ -1,3 +1,3 @@
-defind(['laypage', 'quickEdit', 'jquery'], function(laypage, quickEdit){
+define(['laypage', 'quickEdit', 'jquery'], function(laypage, quickEdit){
 
 });

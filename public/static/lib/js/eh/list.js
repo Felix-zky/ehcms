@@ -1,4 +1,4 @@
-defind(['laypage', 'quickEdit', 'jquery', 'eh'], function(laypage, quickEdit){
+define(['laypage', 'quickEdit', 'jquery', 'eh'], function(laypage, quickEdit){
 	var exports = {},
 		defaultOption = {
 

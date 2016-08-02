@@ -1,3 +1,3 @@
-defind(['jquery'], function(){
+define(['jquery'], function(){
 	
 });
