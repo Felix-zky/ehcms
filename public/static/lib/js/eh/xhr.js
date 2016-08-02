@@ -1,21 +1,35 @@
+/**
+ * XMLHttpRequest-异步请求组件
+ *
+ * @return {Object} 常用请求合集
+ */
 define(['layer', 'jquery', 'eh'], function(dialog){
 	var xhr = {
 		/**
 		 * 异步GET请求
 		 *
-		 * @param  {String}   url      [description]
-		 * @param  {Object}   data     [description]
-		 * @param  {String}   dataType [description]
-		 * @param  {Mixed}    done     [description]
-		 * @param  {[type]}   fail     [description]
-		 * @return {[type]}            [description]
+		 * @param  {String}   url        请求URL
+		 * @param  {Object}   [data]     请求的参数
+		 * @param  {String}   [dataType] 请求返回的类型
+		 * @param  {Mixed}    [done]     请求正确时触发的函数或函数组
+		 * @param  {[type]}   [fail]     请求错误时触发的函数或函数组
 		 */
 		get: function(url, data, dataType, done, fail){
 			$.get(url, data, dataType || 'json').then(executeDone(done, data), executeFail(fail, data));
 		},
+		/**
+		 * 异步POST请求
+		 *
+		 * 参数同上
+		 */
 		post: function(url, data, dataType, done, fail){
 			$.post(url, data, dataType || 'json').then(executeDone(done, data), executeFail(fail, data));
 		},
+		/**
+		 * 异步PUT请求（配合ThinkPHP的资源路由）
+		 *
+		 * 参数同上
+		 */
 		put: function(url, data, dataType, done, fail){
 			var option = {
 				url: url,
@@ -26,6 +40,11 @@ define(['layer', 'jquery', 'eh'], function(dialog){
 
 			$.ajax(option).then(executeDone(done, data), executeFail(fail, data));
 		},
+		/**
+		 * 异步DELETE请求（配合ThinkPHP的资源路由）
+		 *
+		 * 参数同上
+		 */
 		delete: function(url, data, dataType, done, fail){
 			var option = {
 				url: url,
@@ -36,6 +55,13 @@ define(['layer', 'jquery', 'eh'], function(dialog){
 
 			$.ajax(option).then(executeDone(done, data), executeFail(fail, data));
 		},
+		/**
+		 * 异步跨域请求
+		 *
+		 * 相同参数同上
+		 * @param {String} jsonp         请求参数的数组名称
+		 * @param {String} jsonpCallback 请求返回时的函数名称
+		 */
 		jsonp: function(url, data, dataType, jsonp, jsonpCallback, done, fail){
 			var option = {
 				url: url,
