@@ -12,7 +12,7 @@ define(['layer', 'jquery', 'eh'], function(dialog){
 		 * @param  {Object}   [data]     请求的参数
 		 * @param  {String}   [dataType] 请求返回的类型
 		 * @param  {Mixed}    [done]     请求正确时触发的函数或函数组
-		 * @param  {[type]}   [fail]     请求错误时触发的函数或函数组
+		 * @param  {Mixed}   [fail]     请求错误时触发的函数或函数组
 		 */
 		get: function(url, data, dataType, done, fail){
 			$.get(url, data, dataType || 'json').then(executeDone(done, data), executeFail(fail, data));
