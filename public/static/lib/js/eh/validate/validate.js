@@ -6,29 +6,57 @@ define(['layer', 'jquery', 'eh', 'eh.validate.language'], function(dialog, $, eh
 	//
 	validata = {
 		//函数调用入口
-		check: function(rules, data){
+		check: function(param, data){
 			var state = 1;
 
-			$.each(rules, function(index, val) {
-				var currentMethods = val.methods,
-					dataCheckResult = dataCheck(currentMethods, data.index);
+			//规则必须为数组
+			if (typeof param.rules == 'object') {
+				$.each(param.rules, function(index, val) {
+					//获取当前规则的错误提示信息，没有为空对象。
+					var message = typeof param.messages[index] == 'object' ? param.messages['index'] : {};
 
-				if (dataCheckResult === true){
-					if (typeof currentMethods == 'array') {
-						$.each(currentMethods, function(mIndex, mVal) {
-							methodCheck(mVal) && mVal(data.index, );
-						});
+					//判断当前规则的条件是否为数组
+					if (typeof val == 'object') {
+						//验证数据是否存在
+						var dataCheckResult = dataCheck(val, data[index]);
+
+						//验证通过，继续执行
+						if (dataCheckResult === true) {
+							val.required && delete val.required;
+
+							//当前规则为数组且需要验证的数据存在，循环执行各方法。
+							$.each(val, function(mIndex, mVal) {
+								var validataResult = typeof methods[mIndex] == 'function' && methods[mIndex](mVal);
+
+								if (validataResult != true) {
+									eh.debugPrint(message[mIndex] || language[mIndex] || language.default);
+									state = 0;
+									return false;
+								}
+							});
+
+							//方法循环执行出错，直接全部终止。
+							if (state == 0) {
+								return false;
+							}
+
+						//返回false说明当前数据不存在，终止全部验证。	
+						}else if (dataCheckResult === false) {
+							state = 0;
+							return false;
+						}
 					}else{
-						methodCheck(currentMethods) && currentMethods(data.index, val.param);
+						return true;
 					}
-				}else if (dataCheckResult === false) {}{
-					return false;
-				}
+				});
 
 				if (state == 0) {
 					return false;
 				}
-			});
+			}else{
+				return false;
+			}
+			return true;
 		},
 		//元素绑定入口
 		bind: function(){
@@ -37,25 +65,19 @@ define(['layer', 'jquery', 'eh', 'eh.validate.language'], function(dialog, $, eh
 	};
 
 	/**
-	 * 验证方法检测，判断传入的方法类型、名称是否正确
-	 *
-	 * @param  {String} method 方法的名称
-	 * @return {Boolean}       是否正确
-	 */
-	function methodCheck(method){
-
-	}
-
-	/**
 	 * 验证数据是否可用，如果验证方法中不包含required，那么有则验证，无则返回。如果包含required，那么数据必须存在。
+	 * true: 表示数据验证通过
+	 * false: 表示规则要求强制验证数据是否存在并且验证结果为错误
+	 * null: 表示未要求强制验证数据且验证结果为错误
+	 * false和null的区别在于：
+	 * 如果要求强制验证却没验证通过，则整体返回false，终止全部验证；
+	 * 如果未强制要求验证却没验证过，说明该数据属于有则验证，无则跳过，跳出对该数据验证，继续其他验证。
 	 */
 	function dataCheck(methods, data){
 		var result = methods.required(data);
 
-		if ((typeof currentMethods == 'array' && $.inArray('required', currentMethods)) || (typeof currentMethods == 'string' && currentMethods == 'required')) {
-			if (result !== true){
-				return false;
-			}
+		if (methods.required == true && result !== true) {
+			return false;
 		}else if (result !== true) {
 			return null;
 		}
@@ -75,16 +97,22 @@ define(['layer', 'jquery', 'eh', 'eh.validate.language'], function(dialog, $, eh
 	 */
 	methods = {
 		/** 判断是否存在 */
-		required: function(value){
-
-		},
-		/** 判断数据类型 */
-		type: function(value, param){
-			if (typeof value != param.rule) {
-				eh.error = param.error || language.type;
+		required: function(data){
+			// 0也是有效数据
+			if (data == 0) {
 				return false;
 			}
+
+			//过滤null、undefined、空数组、空对象
+			if (!data || data == false || (typeof data == 'object' && $.isEmptyObject(data) == true)) {
+				return false;
+			}
+
 			return true;
+		},
+		/** 判断数据类型 */
+		type: function(value, data){
+			return typeof data != value ? true : false;
 		},
 		/** 判断11位手机号 */
 		phone: function
