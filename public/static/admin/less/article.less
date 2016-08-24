@@ -5,15 +5,38 @@
 	.list-main{
 		width:100%;
 		li{
-			width: 100%;
 			background-color: #FFF;
 			margin-bottom: 10px;
+			padding: 15px 0;
+			position: relative;
 			img{
 				width: 100%;
 				height: auto;
 			}
 			span{
 				display: block;
+				position: relative;
+				&.title, &.keywords, &.description{
+					padding-left: 56px;
+					line-height: 24px;
+				}
+				&.description{
+					height: 50px;
+					overflow: hidden;
+				}
+				strong{
+					position: absolute;
+					left: 0;
+					top: 0;
+					width: 56px;
+					display: inline-block;
+					text-align: right;
+				}
+			}
+			.button{
+				position: absolute;
+				right: 20px;
+				bottom: 15px;
 			}
 		}
 	}

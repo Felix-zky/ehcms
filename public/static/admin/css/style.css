@@ -9003,8 +9003,14 @@ ul,
 li {
   list-style: none;
 }
-.hide {
-  display: none !important;
+.padding-clean {
+  padding: 0 !important;
+}
+.padding-clean-left {
+  padding-left: 0 !important;
+}
+.margin-clean {
+  margin: 0 !important;
 }
 /**
  * 页面样式
@@ -9346,7 +9352,7 @@ body.desktop .layui-layer-dialog {
   vertical-align: middle;
   margin-right: 10px;
 }
-body {
+.container-fluid {
   background-color: #e9e9e9;
 }
 header {
@@ -9369,9 +9375,10 @@ header .crumbs a:hover {
   width: 100%;
 }
 #article-admin-index .list-main li {
-  width: 100%;
   background-color: #FFF;
   margin-bottom: 10px;
+  padding: 15px 0;
+  position: relative;
 }
 #article-admin-index .list-main li img {
   width: 100%;
@@ -9379,4 +9386,28 @@ header .crumbs a:hover {
 }
 #article-admin-index .list-main li span {
   display: block;
+  position: relative;
+}
+#article-admin-index .list-main li span.title,
+#article-admin-index .list-main li span.keywords,
+#article-admin-index .list-main li span.description {
+  padding-left: 56px;
+  line-height: 24px;
+}
+#article-admin-index .list-main li span.description {
+  height: 50px;
+  overflow: hidden;
+}
+#article-admin-index .list-main li span strong {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 56px;
+  display: inline-block;
+  text-align: right;
+}
+#article-admin-index .list-main li .button {
+  position: absolute;
+  right: 20px;
+  bottom: 15px;
 }
