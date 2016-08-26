@@ -2,6 +2,22 @@
  * 文章模块后台样式
  */
 #article-admin-index{
+	.list-header{
+		width: 100%;
+		ul{
+			background-color: #FFF;
+			li{
+				padding: 10px 0;
+				border-top: 1px solid #ccc;
+				border-bottom: 1px solid #ccc;
+				border-left: 1px solid #ccc;
+				font-weight: bold;
+				&:first-child{
+					border-left:none;
+				}
+			}
+		}
+	}
 	.list-main{
 		width:100%;
 		li{
@@ -14,24 +30,30 @@
 				height: auto;
 			}
 			span{
-				display: block;
 				position: relative;
-				&.title, &.keywords, &.description{
-					padding-left: 56px;
+				&.title, &.description{
+					display: block;
 					line-height: 24px;
 				}
 				&.description{
 					height: 50px;
+					margin-top: 5px;
 					overflow: hidden;
 				}
-				strong{
-					position: absolute;
-					left: 0;
-					top: 0;
-					width: 56px;
-					display: inline-block;
-					text-align: right;
+				&.title{
+					strong{
+						font-size: 16px;
+					}
 				}
+			}
+			.keywords{
+				position: absolute;
+				left: 0;
+				bottom: 20px;
+				padding: 0;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
 			}
 			.button{
 				position: absolute;

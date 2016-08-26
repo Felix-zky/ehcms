@@ -9354,12 +9354,29 @@ body.desktop .layui-layer-dialog {
 }
 .container-fluid {
   background-color: #e9e9e9;
+  padding-top: 10px;
 }
 header {
   width: 100%;
-  height: 50px;
   padding: 15px;
+  overflow: hidden;
   background-color: #FFF;
+}
+header:before,
+header:after {
+  content: " ";
+  display: table;
+}
+header:after {
+  clear: both;
+}
+header:before,
+header:after {
+  content: " ";
+  display: table;
+}
+header:after {
+  clear: both;
 }
 header .crumbs a {
   color: #3352c7;
@@ -9371,6 +9388,22 @@ header .crumbs a:hover {
 /**
  * 文章模块后台样式
  */
+#article-admin-index .list-header {
+  width: 100%;
+}
+#article-admin-index .list-header ul {
+  background-color: #FFF;
+}
+#article-admin-index .list-header ul li {
+  padding: 10px 0;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+  font-weight: bold;
+}
+#article-admin-index .list-header ul li:first-child {
+  border-left: none;
+}
 #article-admin-index .list-main {
   width: 100%;
 }
@@ -9385,26 +9418,29 @@ header .crumbs a:hover {
   height: auto;
 }
 #article-admin-index .list-main li span {
-  display: block;
   position: relative;
 }
 #article-admin-index .list-main li span.title,
-#article-admin-index .list-main li span.keywords,
 #article-admin-index .list-main li span.description {
-  padding-left: 56px;
+  display: block;
   line-height: 24px;
 }
 #article-admin-index .list-main li span.description {
   height: 50px;
+  margin-top: 5px;
   overflow: hidden;
 }
-#article-admin-index .list-main li span strong {
+#article-admin-index .list-main li span.title strong {
+  font-size: 16px;
+}
+#article-admin-index .list-main li .keywords {
   position: absolute;
   left: 0;
-  top: 0;
-  width: 56px;
-  display: inline-block;
-  text-align: right;
+  bottom: 20px;
+  padding: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 #article-admin-index .list-main li .button {
   position: absolute;
