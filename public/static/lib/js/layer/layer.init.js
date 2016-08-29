@@ -4,4 +4,6 @@ define(['layer.min'], function(){
 		extend: ['skin/special/style.css'],
 		skin: 'layer-ext-special'
 	});
+
+	return layer;
 });

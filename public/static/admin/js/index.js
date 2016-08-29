@@ -80,7 +80,7 @@ define(['laytpl', 'eh.xhr', 'jquery', 'layer', 'jquery.contextMenu', 'lodash'],f
 		$('#desktop-icon').on('dblclick', 'li', function() {
 			var icon = $(this).find('img').attr('src'),
 				name = $(this).find('span').html(),
-				currentIframe = openiframe($('li:eq(0)').data('top-menu-ids')),
+				currentIframe = openiframe($(this).data('top-menu-ids')),
 				taskbarHtml = '<li data-index=' + currentIframe + ' class="active"><img src="' + icon + '" /><span>' + name + '</span></li>';
 
 			iframeActiveList.unshift(currentIframe);
@@ -401,10 +401,16 @@ define(['laytpl', 'eh.xhr', 'jquery', 'layer', 'jquery.contextMenu', 'lodash'],f
 	 * 打开新的iframe页面
 	 */
 	function openiframe(ids){
-		console.log(ids);
-		$.post('/admin/Index/getMenu', {ids: '1,5'}, function(xxx){
-			console.log(xxx);
-		});
+		// console.log(ids);
+		// $.post('/admin/Index/getMenu', {ids: ids}, function(xxx){
+		// 	console.log(xxx);
+		// },'html');
+
+		//xhr.post.call(this, '/admin/Index/getMenu', {ids: ids}, '', 'return');
+
+		//console.log(xhr.post());
+
+		return false;
 
 		var content = laytpl($('#menu-tree').html()).render(data);
 

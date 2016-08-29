@@ -10,7 +10,7 @@
 	<div id="desktop-icon">
 		<ul>
 			{foreach $desktop as $d}
-				<li id-top-menu-ids = "{$d.top_menu_ids}"><div class="icon-img"><img src="__IMAGES__/{$d.icon}" /></div><div class="icon-name"><span>{$d.name}</span></div></li>
+				<li data-top-menu-ids = "{$d.top_menu_ids}"><div class="icon-img"><img src="__IMAGES__/{$d.icon}" /></div><div class="icon-name"><span>{$d.name}</span></div></li>
 			{/foreach}
 		</ul>
 	</div>
