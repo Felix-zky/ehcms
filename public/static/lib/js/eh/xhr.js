@@ -88,7 +88,11 @@ define(['layer', 'jquery', 'eh'], function(dialog){
 		}else if (typeof done == 'function') {
 			done(data);
 		}else if (typeof done == 'string') {
-			dialog.msg(done, {icon: 6});
+			if (done == 'return') {
+				return data;
+			}else{
+				dialog.msg(done, {icon: 6});
+			}
 		}else{
 			dialog.msg('请求成功', {icon: 6});
 		}

@@ -1,4 +1,4 @@
-define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash'],function(laytpl){
+define(['laytpl', 'eh.xhr', 'jquery', 'layer', 'jquery.contextMenu', 'lodash'],function(laytpl, xhr){
 		var	screenHeight = window.screen.height,
 		contentMenuItemsConfigure = {
 			'open': {
@@ -80,7 +80,7 @@ define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash'],function(la
 		$('#desktop-icon').on('dblclick', 'li', function() {
 			var icon = $(this).find('img').attr('src'),
 				name = $(this).find('span').html(),
-				currentIframe = openiframe($('li:eq(0)').data('module')),
+				currentIframe = openiframe($('li:eq(0)').data('top-menu-ids')),
 				taskbarHtml = '<li data-index=' + currentIframe + ' class="active"><img src="' + icon + '" /><span>' + name + '</span></li>';
 
 			iframeActiveList.unshift(currentIframe);
@@ -400,44 +400,11 @@ define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash'],function(la
 	/**
 	 * 打开新的iframe页面
 	 */
-	function openiframe(module){
-		//ajax
-		var data = [{
-			name: '第一行',
-			child: [{
-				'name': '百度',
-				'url': 'http://www.baidu.com',
-				'icon': '',
-				'customIcon': ''
-			},
-			{
-				'name': 'CSDN',
-				'url': 'http://www.csdn.net',
-				'icon': '',
-				'customIcon': ''
-			},
-			{
-				'name': '文章管理',
-				'url': '/article/Admin',
-				'icon': '',
-				'customIcon': ''
-			}
-			]
-		},{
-			name: '第二行',
-			child: [{
-				'name': '百度',
-				'url': 'http://www.baidu.com',
-				'icon': '',
-				'customIcon': ''
-			},
-			{
-				'name': 'CSDN',
-				'url': 'http://www.csdn.net',
-				'icon': '',
-				'customIcon': ''
-			}]
-		}];
+	function openiframe(ids){
+		console.log(ids);
+		$.post('/admin/Index/getMenu', {ids: '1,5'}, function(xxx){
+			console.log(xxx);
+		});
 
 		var content = laytpl($('#menu-tree').html()).render(data);
 

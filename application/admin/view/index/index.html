@@ -9,21 +9,9 @@
 <body class="desktop">
 	<div id="desktop-icon">
 		<ul>
-			<li data-module="xxx"><div class="icon-img"><img src="__IMAGES__/computer.png" /></div><div class="icon-name"><span>我的电脑</span></div></li>
-			<li><div class="icon-img"><img src="__IMAGES__/computer.png" /></div><div class="icon-name"><span>我的电脑</span></div></li>
-			<li><div class="icon-img"><img src="__IMAGES__/computer.png" /></div><div class="icon-name"><span>我的电脑</span></div></li>
-			<li><div class="icon-img"><img src="__IMAGES__/computer.png" /></div><div class="icon-name"><span>我的电脑</span></div></li>
-			<li><div class="icon-img"><img src="__IMAGES__/computer.png" /></div><div class="icon-name"><span>我的电脑</span></div></li>
-			<li><div class="icon-img"><img src="__IMAGES__/computer.png" /></div><div class="icon-name"><span>我的电脑</span></div></li>
-			<li><div class="icon-img"><img src="__IMAGES__/computer.png" /></div><div class="icon-name"><span>我的电脑</span></div></li>
-			<li><div class="icon-img"><img src="__IMAGES__/computer.png" /></div><div class="icon-name"><span>我的电脑</span></div></li>
-			<li><div class="icon-img"><img src="__IMAGES__/computer.png" /></div><div class="icon-name"><span>我的电脑</span></div></li>
-			<li><div class="icon-img"><img src="__IMAGES__/computer.png" /></div><div class="icon-name"><span>我的电脑</span></div></li>
-			<li><div class="icon-img"><img src="__IMAGES__/computer.png" /></div><div class="icon-name"><span>我的电脑</span></div></li>
-			<li><div class="icon-img"><img src="__IMAGES__/computer.png" /></div><div class="icon-name"><span>我的电脑</span></div></li>
-			<li><div class="icon-img"><img src="__IMAGES__/computer.png" /></div><div class="icon-name"><span>我的电脑</span></div></li>
-			<li><div class="icon-img"><img src="__IMAGES__/computer.png" /></div><div class="icon-name"><span>我的电脑</span></div></li>
-			<li><div class="icon-img"><img src="__IMAGES__/computer.png" /></div><div class="icon-name"><span>我的电脑</span></div></li>
+			{foreach $desktop as $d}
+				<li id-top-menu-ids = "{$d.top_menu_ids}"><div class="icon-img"><img src="__IMAGES__/{$d.icon}" /></div><div class="icon-name"><span>{$d.name}</span></div></li>
+			{/foreach}
 		</ul>
 	</div>
 	<div id="taskbar">
@@ -45,7 +33,18 @@
 		baseUrl: '__LIB_JS__',
 		paths: {
 			admin: '__JS__',
-			layer: 'layer/layer.init',
+			'layer': 'layer/layer.init',
+			'laypage': 'laypage/laypage.init',
+			'laypage.min': 'laypage/laypage.min',
+			'eh': 'eh/eh',
+			'eh.xhr': 'eh/xhr',
+			'eh.list': 'eh/list',
+			'eh.table': 'eh/table',
+			'eh.dialog': 'eh/dialog',
+			'eh.uploader': 'eh/uploader',
+			'eh.quickEdit': 'eh/quickEdit',
+			'eh.validate': 'eh/validate/validate',
+			'eh.validate.language': 'eh/validate/zh-cn',
 			jquery: [
 				'http://cdn.bootcss.com/jquery/1.12.4/jquery.min',
 				'jquery/jquery.min'
