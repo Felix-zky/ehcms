@@ -29,6 +29,37 @@ class Admin extends Base{
 	}
 	
 	
+	/**
+	 * 新增文章
+	 */
+	public function create(){
+		return $this->fetch();
+	}
+	
+	/**
+	 * 保存（新增入库）文章
+	 */
+	public function save(){
+		
+	}
+	
+	/**
+	 * 更新文章
+	 */
+	public function update($id){
+		
+	}
+	
+	/**
+	 * 删除文章
+	 */
+	public function delete($id){
+		
+	}
+	
+	/**
+	 * 文章回收站
+	 */
 	public function recycle(){
 	
 	}

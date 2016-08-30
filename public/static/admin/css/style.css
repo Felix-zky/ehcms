@@ -9469,3 +9469,23 @@ header .crumbs a:hover {
   right: 20px;
   bottom: 15px;
 }
+#article-admin-create section.form {
+  margin-top: 10px;
+  padding: 0 15px;
+  background-color: #FFF;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+#article-admin-create section.form form {
+  padding-top: 15px;
+}
+@media (min-width: 768px) and (max-width: 991px) {
+  #article-admin-create .col-sm-1 {
+    padding-left: 0;
+    padding-right: 0;
+    width: 12%;
+  }
+  #article-admin-create .col-sm-11 {
+    width: 88%;
+  }
+}
