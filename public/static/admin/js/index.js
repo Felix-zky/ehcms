@@ -1,4 +1,4 @@
-define(['laytpl', 'eh.xhr', 'jquery', 'layer', 'jquery.contextMenu', 'lodash'],function(laytpl, xhr){
+define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash'],function(laytpl){
 		var	screenHeight = window.screen.height,
 		contentMenuItemsConfigure = {
 			'open': {
@@ -79,14 +79,21 @@ define(['laytpl', 'eh.xhr', 'jquery', 'layer', 'jquery.contextMenu', 'lodash'],f
 		/** 双击图标触发 */
 		$('#desktop-icon').on('dblclick', 'li', function() {
 			var icon = $(this).find('img').attr('src'),
-				name = $(this).find('span').html(),
-				currentIframe = openiframe($(this).data('top-menu-ids')),
-				taskbarHtml = '<li data-index=' + currentIframe + ' class="active"><img src="' + icon + '" /><span>' + name + '</span></li>';
+				name = $(this).find('span').html();
 
-			iframeActiveList.unshift(currentIframe);
+			var xhr = $.post('/admin/Index/getMenu', {ids: $(this).data('top-menu-ids')}, '', "json");
+
+			xhr.done(function(response){
+				if (response.code == 1){
+					currentIframe = openiframe(response.data);
+					taskbarHtml = '<li data-index=' + currentIframe + ' class="active"><img src="' + icon + '" /><span>' + name + '</span></li>';
+
+					iframeActiveList.unshift(currentIframe);
 			
-			$('#taskbar .list ul li.active').removeClass('active');
-			$('#taskbar .list ul').append(taskbarHtml);
+					$('#taskbar .list ul li.active').removeClass('active');
+					$('#taskbar .list ul').append(taskbarHtml);
+				}
+			});
 		});
 
 		/** 图标右键 */
@@ -400,18 +407,8 @@ define(['laytpl', 'eh.xhr', 'jquery', 'layer', 'jquery.contextMenu', 'lodash'],f
 	/**
 	 * 打开新的iframe页面
 	 */
-	function openiframe(ids){
-		// console.log(ids);
-		// $.post('/admin/Index/getMenu', {ids: ids}, function(xxx){
-		// 	console.log(xxx);
-		// },'html');
-
-		//xhr.post.call(this, '/admin/Index/getMenu', {ids: ids}, '', 'return');
-
-		//console.log(xhr.post());
-
-		return false;
-
+	function openiframe(data){
+		console.log(data);
 		var content = laytpl($('#menu-tree').html()).render(data);
 
 		return layer.open({

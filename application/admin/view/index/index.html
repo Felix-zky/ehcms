@@ -87,7 +87,7 @@
 							{{# for(var c = 0, cLen = d[i].child.length; c < cLen; c++){ }}
 							<li data-url = '{{ d[i].child[c].url }}'>
 								<div class="menu-row">
-									<i class="fa fa-plus-circle"></i>
+									<i class="fa fa-{{ d[i].child[c].icon }}"></i>
 									<span>{{ d[i].child[c].name }}</span>
 								</div>
 							</li>

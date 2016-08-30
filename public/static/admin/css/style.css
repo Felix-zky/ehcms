@@ -9361,7 +9361,7 @@ body.desktop .layui-layer-dialog {
 }
 header {
   width: 100%;
-  padding: 15px;
+  padding: 16px 15px;
   overflow: hidden;
   background-color: #FFF;
 }
@@ -9428,6 +9428,12 @@ header .crumbs a:hover {
 }
 #article-admin-index .list-main li:last-child {
   margin-bottom: 0;
+}
+#article-admin-index .list-main li .number,
+#article-admin-index .list-main li .add-time {
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #ccc;
 }
 #article-admin-index .list-main li img {
   width: 100%;

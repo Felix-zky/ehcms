@@ -28,4 +28,8 @@ class Admin extends Base{
 		return $this->fetch();
 	}
 	
+	
+	public function recycle(){
+	
+	}
 }

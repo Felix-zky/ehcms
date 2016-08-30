@@ -28,15 +28,20 @@ class Index extends Base{
 
 		
 		foreach ($level2 as $l2){
-			$menu[$l2['parent_id']]['child']['name'] = $l2['name'];
-			$menu[$l2['parent_id']]['child']['url'] = $l2['url'];
-			$menu[$l2['parent_id']]['child']['icon'] = $l2['icon'];
+			$data = [
+				'name' => $l2['name'],
+				'url'  => $l2['url'],
+				'icon' => $l2['icon']
+			];
+			
+			$menu[$l2['parent_id']]['child'][] = $data;
 		}
+		
+		$menu = array_values($menu);
 		
 		$menu['isData'] = TRUE;
 		return $this->ajaxSuccessResult($menu);
 	}
-	
 }
 
 ?>
