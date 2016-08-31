@@ -9359,6 +9359,11 @@ body.desktop .layui-layer-dialog {
 .container-fluid .row {
   margin: 0;
 }
+.webuploader-pick {
+  padding: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+}
 header {
   width: 100%;
   padding: 16px 15px;
