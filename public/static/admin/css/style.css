@@ -9479,7 +9479,7 @@ header .crumbs a:hover {
 #article-admin-create section.form form {
   padding-top: 15px;
 }
-@media (min-width: 768px) and (max-width: 991px) {
+@media (min-width: 768px) and (max-width: 1199px) {
   #article-admin-create .col-sm-1 {
     padding-left: 0;
     padding-right: 0;
