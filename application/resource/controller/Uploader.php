@@ -20,11 +20,32 @@ class Uploader{
 	/**
 	 * 文件接收器，所有资源的上传入口。
 	 */
-	public function receiver(){ 
+	public function receiver(){
+		//获取文件，目前仅支持单文件，后期再加多文件的处理
 		$file = request()->file('file');
 		
-		$info = $file->move(ROOT_PATH . 'public' . DS . 'uploads' . DS . 'article');
+		//组合文件上传目录
+		$post = input('post.');
+		$base = 'uploader/';
 		
-		echo $info->getPath();
+		if (!empty($post['uploaderPath'])){
+			$path = $base . $post['uploaderPath'];
+		}elseif (!empty($post['uploaderType'])){
+			$path = $base . $post['uploaderType'];
+		}else{
+			$path = $base . 'default';
+		}
+		
+		$info = $file->move($path);
+		
+		echo $info->getExtension()."\n";
+		echo $info->getBasename()."\n";
+		echo $info->getFileInfo()."\n";
+		echo $info->getFilename ()."\n";
+		echo $info->getLinkTarget()."\n";
+		echo $info->getPath()."\n";
+		echo $info->getPathInfo()."\n";
+		echo $info->getPathname()."\n";
+		echo $info->getRealPath();
 	}
 }

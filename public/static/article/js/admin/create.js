@@ -22,7 +22,11 @@ define(['jquery', 'webuploader', 'messenger.future'], function($, WebUploader, M
 				mimeTypes: 'image/*'
 			},
 			fileNumLimit: 1,
-			auto: true
+			auto: true,
+			compress: false,
+			formData: {
+				uploaderType: 'article'
+			}
 		});
 
 		uploader.on('fileQueued', function(file){
