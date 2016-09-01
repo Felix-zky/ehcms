@@ -1,10 +1,32 @@
-define(['jquery', 'webuploader', 'messenger.future'], function($, WebUploader, Messenger){
+define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight'], function($, WebUploader, Messenger, remarkable, hljs){
 
 	$(function(){
 		setFormHeight();
+		htmlPreviewHeight();
 
 		$(window).resize(function(){
 			setFormHeight();
+		});
+
+		var md = new remarkable('full', {
+			linkify: true,
+			highlight: function (str, lang) {
+				if (lang && hljs.getLanguage(lang)) {
+					try {
+						return hljs.highlight(lang, str).value;
+					} catch (err) {}
+				}
+
+				try {
+					return hljs.highlightAuto(str).value;
+				} catch (err) {}
+
+				return '';
+			}
+		});
+
+		$('#markdown').keyup(function(){
+			$('#html-preview').html(md.render($(this).val()));
 		});
 
 		Messenger.options = {
@@ -52,5 +74,9 @@ define(['jquery', 'webuploader', 'messenger.future'], function($, WebUploader, M
 	function setFormHeight(){
 		var listHeight = $(window).outerHeight() - $('header').outerHeight() - 10;
 		$('section.form').height(listHeight);
+	}
+
+	function htmlPreviewHeight(){
+		$('#html-preview').height($('#markdown').height());
 	}
 });
