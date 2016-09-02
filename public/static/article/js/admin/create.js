@@ -1,6 +1,8 @@
 define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight'], function($, WebUploader, Messenger, remarkable, hljs){
 
 	$(function(){
+		var textareaHeight, previewHeight;
+
 		setFormHeight();
 		htmlPreviewHeight();
 
@@ -10,6 +12,7 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight'],
 
 		var md = new remarkable('full', {
 			linkify: true,
+			linkTarget: 'blank',
 			highlight: function (str, lang) {
 				if (lang && hljs.getLanguage(lang)) {
 					try {
@@ -26,7 +29,19 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight'],
 		});
 
 		$('#markdown').keyup(function(){
-			$('#html-preview').html(md.render($(this).val()));
+			$('#html-preview .html-content').html(md.render($(this).val()));
+			textareaHeight = this.scrollHeight,
+			previewHeight = $('#html-preview .html-content').innerHeight();
+		});
+
+		$('#markdown').scroll(function() {
+			if (previewHeight > 0 && textareaHeight > 0) {
+				if ($(this).scrollTop() + $(this).innerHeight() == textareaHeight) {
+					$('#html-preview').scrollTop(previewHeight - $(this).outerHeight());
+				}else{
+					$('#html-preview').scrollTop($(this).scrollTop() * (previewHeight/textareaHeight));
+				}
+			}
 		});
 
 		Messenger.options = {
@@ -77,6 +92,6 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight'],
 	}
 
 	function htmlPreviewHeight(){
-		$('#html-preview').height($('#markdown').height());
+		$('#html-preview').height($('#markdown').innerHeight());
 	}
 });

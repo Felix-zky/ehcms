@@ -9494,3 +9494,16 @@ header .crumbs a:hover {
     width: 88%;
   }
 }
+#article-admin-create #markdown {
+  resize: none;
+}
+#article-admin-create #html-preview {
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0;
+}
+#article-admin-create #html-preview .html-content {
+  padding: 6px 12px;
+  overflow: hidden;
+  display: block;
+}
