@@ -60,15 +60,15 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight'],
 			},
 			fileNumLimit: 1,
 			auto: true,
-			compress: false,
-			formData: {
-				uploaderType: 'article'
-			}
+			compress: false
 		});
 
 		uploader.on('fileQueued', function(file){
 			$('.webuploader-pick').next('div').hide();
 			$('#thumbnail').val(file.name);
+			uploader.option('formData', {
+				extension: file.ext
+			})
 		});
 
 		uploader.on('startUpload', function(file){
