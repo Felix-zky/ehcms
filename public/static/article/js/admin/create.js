@@ -78,11 +78,23 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight'],
 		uploader.on('uploadSuccess', function(file, response){
 			uploader.reset();
 			$('.webuploader-pick').next('div').show();
-			Messenger().post({
-				message: '图片：' + file.name + ' 上传成功！',
-				showCloseButton: true
-			});
-			$('.logo-uploader button').html('<i class="fa fa-check"></i> 上传成功');
+
+			if (response.code == 1) {
+				Messenger().post({
+					message: '图片：' + file.name + ' 上传成功！',
+					showCloseButton: true
+				});
+				$('.logo-uploader button').html('<i class="fa fa-check"></i> 上传成功');
+				$('#thumbnail').val(file.name + '（' + response.data.file_name + '）');
+			}else{
+				Messenger().post({
+					message: '图片：' + file.name + ' 上传失败！',
+					showCloseButton: true,
+					type: 'error'
+				});
+				$('.logo-uploader button').html('重新上传');
+				$('#thumbnail').val('');
+			}
 		});
 	});
 

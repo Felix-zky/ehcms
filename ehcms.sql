@@ -2,7 +2,7 @@
 MySQL Backup
 Source Server Version: 5.6.17
 Source Database: ehcms
-Date: 2016/9/2 18:08:00
+Date: 2016/9/3 18:26:36
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -55,10 +55,9 @@ CREATE TABLE `eh_article` (
 DROP TABLE IF EXISTS `eh_resource`;
 CREATE TABLE `eh_resource` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL COMMENT '资源文件名称（不带后缀）',
+  `path_name` varchar(300) NOT NULL COMMENT '资源绝对路径+资源名称+资源后缀',
   `extension` varchar(50) NOT NULL COMMENT '资源文件后缀',
   `type` tinyint(4) NOT NULL COMMENT '资源类型',
-  `path` varchar(200) NOT NULL COMMENT '不带域名的绝对地址路径',
   `add_time` bigint(20) NOT NULL COMMENT '进入资源库的时间（在中转站的时间不算）',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -69,6 +68,7 @@ CREATE TABLE `eh_resource` (
 DROP TABLE IF EXISTS `eh_resource_relation`;
 CREATE TABLE `eh_resource_relation` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `resource_id` int(11) NOT NULL COMMENT '资源ID',
   `relation_type` tinyint(4) NOT NULL COMMENT '关联类型',
   `relation_id` int(11) NOT NULL COMMENT '关联ID',
   PRIMARY KEY (`id`)
@@ -80,10 +80,9 @@ CREATE TABLE `eh_resource_relation` (
 DROP TABLE IF EXISTS `eh_resource_transfer`;
 CREATE TABLE `eh_resource_transfer` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL COMMENT '资源文件名称（不带后缀）',
+  `path_name` varchar(300) NOT NULL COMMENT '资源路径+资源名称+资源后缀',
   `extension` varchar(50) NOT NULL COMMENT '资源文件后缀',
   `type` tinyint(4) NOT NULL COMMENT '资源类型',
-  `path` varchar(200) NOT NULL COMMENT '不带域名的绝对地址路径',
   `add_time` bigint(20) NOT NULL COMMENT '进入中转站的时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

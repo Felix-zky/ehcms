@@ -15,7 +15,7 @@ namespace app\resource\controller;
  * 资源模块-上传资源
  *
  */
-class Uploader{
+class Uploader extends Base{
 	//图片类型的编号及允许范围
 	const TYPE_IMAGE_NUMBER = 1;
 	
@@ -33,19 +33,41 @@ class Uploader{
 		$type = $this->checkExtension($post['extension']);
 		
 		if (!!$type === FALSE){
-			//$this->
+			return $this->ajaxErrorResult('该后缀类型不允许上传');
 		}
 		
 		//组合文件上传目录
 		$post = input('post.');
-		$path = 'uploader/';
+		$path = 'uploader';
 		
 		$info = $file->move($path);
 		
-		$data['extension'] = $info->getExtension();
-		$data['path'] = $info->getPathname();
-		
-		//db('resource_transfer')->insert($data)
+		if ($info){
+			$data = [
+				'extension' => $info->getExtension(),
+				'path_name' => '/'.str_replace('\\', '/', $info->getPathname()),
+				'add_time'  => THINK_START_TIME,
+				'type'      => $type
+			];
+			
+			if (db('resource_transfer')->insert($data) == 1){
+				$response = [
+					'id' => db()->getLastInsID(),
+					'path_name' => $data['path_name'],
+					'file_name' => $info->getFilename()
+				];
+				
+				return $this->ajaxSuccessResult('资源上传成功!', $response);
+			}else{
+				if (@unlink('.' . $data['path_name'])){
+					return $this->ajaxErrorResult('数据入库失败！');
+				}else{
+					return $this->ajaxErrorResult('数据入库失败，资源无法清除，请手动删除！');
+				}
+			}
+		}else {
+			return $this->ajaxErrorResult('资源上传失败!（' . $file->getError() . '）');
+		}
 	}
 	
 	/**
@@ -54,7 +76,7 @@ class Uploader{
 	 * @return int|boolean 在范围内，返回该访问的类型ID，不在范围内返回false。
 	 */
 	private function checkExtension($extension){
-		if (in_array($extension, $this->$typeImageExtension)){
+		if (in_array($extension, $this->typeImageExtension)){
 			return self::TYPE_IMAGE_NUMBER;
 		}
 		
