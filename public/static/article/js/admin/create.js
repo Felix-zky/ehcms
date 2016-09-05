@@ -1,6 +1,7 @@
-define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight'], function($, WebUploader, Messenger, remarkable, hljs){
+define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 'eh'], function($, WebUploader, Messenger, remarkable, hljs){
 
 	$(function(){
+		eh.buttonBind([{a:1}, {a:2}]);
 		var textareaHeight, previewHeight;
 
 		setFormHeight();

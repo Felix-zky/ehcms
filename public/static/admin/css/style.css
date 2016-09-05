@@ -9386,12 +9386,17 @@ header:after {
 header:after {
   clear: both;
 }
-header .crumbs a {
-  color: #3352c7;
+header > div.pull-left,
+header > div.pull-right {
+  font-size: 0;
 }
-header .crumbs a:hover {
-  color: #1539bd;
-  text-decoration: underline;
+header > div.pull-left button,
+header > div.pull-right button {
+  margin-right: 5px;
+}
+header > div.pull-left button:last-child,
+header > div.pull-right button:last-child {
+  margin-right: 0;
 }
 #list-pages {
   background-color: #FFF;

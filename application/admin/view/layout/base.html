@@ -20,14 +20,10 @@
 				'laypage': 'laypage/laypage.init',
 				'laypage.min': 'laypage/laypage.min',
 				'eh': 'eh/eh',
-				'eh.xhr': 'eh/xhr',
 				'eh.list': 'eh/list',
 				'eh.table': 'eh/table',
-				'eh.dialog': 'eh/dialog',
 				'eh.uploader': 'eh/uploader',
 				'eh.quickEdit': 'eh/quickEdit',
-				'eh.validate': 'eh/validate/validate',
-				'eh.validate.language': 'eh/validate/zh-cn',
 				'jquery': [
 					'http://cdn.bootcss.com/jquery/1.12.4/jquery.min',
 					'jquery/jquery.min'
@@ -77,16 +73,7 @@
 	</script>
 </head>
 <body>
-	{block name="header"}
-		<header>
-			<div class="pull-left">
-				<button class="btn btn-default">返回文章列表</button>
-			</div>
-			<div class="pull-right">
-				<button class="btn btn-default">清空当前表单</button> <button class="btn btn-default">恢复表单数据</button> <button class="btn btn-default">刷新当前页面</button>
-			</div>
-		</header>
-	{/block}
+	{block name="header"}{/block}
 	{block name="main"}{/block}
 	{block name="footer"}{/block}
 </body>
