@@ -42,6 +42,7 @@ define(['layer', 'jquery'], function(dialog){
 
 		/**
 		 * 页面按钮函数绑定
+		 * 使用该函数绑定按钮，有效的防止默认按钮函数被重载，被覆盖等问题，将函数私有化，内部调用。
 		 * @param  {Object}  option 当前页面需要注册的按钮或按钮数组
 		 * @return {Boolean}        页面元素是否挂载成功
 		 */
