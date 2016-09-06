@@ -1,7 +1,6 @@
-define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 'eh'], function($, WebUploader, Messenger, remarkable, hljs){
+define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 'eh.form'], function($, WebUploader, Messenger, remarkable, hljs){
 
 	$(function(){
-		eh.buttonBind([{a:1}, {a:2}]);
 		var textareaHeight, previewHeight;
 
 		setFormHeight();
@@ -9,6 +8,11 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 
 		$(window).resize(function(){
 			setFormHeight();
+		});
+
+		$('#header-button-empty-form').click(function(){
+			eh.form.emptyForm();
+			$('#html-preview .html-content').html(md.render($(this).val()));
 		});
 
 		var md = new remarkable('full', {
