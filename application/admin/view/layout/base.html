@@ -29,45 +29,67 @@
 					'http://cdn.bootcss.com/jquery/1.12.4/jquery.min',
 					'jquery/jquery.min'
 				],
+				/** 右键菜单 */
 				'jquery.contextMenu': [
 					'http://cdn.bootcss.com/jquery-contextmenu/2.2.3/jquery.contextMenu.min',
 					'jquery/jquery.contextMenu.min'
 				],
+				/** 弹窗 */
 				'layer.min': [
 					'http://cdn.bootcss.com/layer/2.3/layer',
 					'layer/layer.min'
 				],
+				/** 函数库 */
 				'lodash': [
 					'http://cdn.bootcss.com/lodash.js/4.13.1/lodash.min',
 					'loadsh.min'
 				],
+				/** 前端框架 */
 				'bootstrap': [
 					'http://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min',
 					'bootstrap.min'
 				],
+				/** 多行文本截断省略 */
 				'dotdotdot': 'jquery.dotdotdot.min',
+				/** 资源上传 */
 				'webuploader': 'webuploader/webuploader.min',
+				/** 提示弹窗 */
 				'messenger': [
 					'http://cdn.bootcss.com/messenger/1.5.0/js/messenger.min',
 					'messenger/messenger.min'
 				],
+				/** messenger提示弹窗个性化 */
 				'messenger.future': [
 					'http://cdn.bootcss.com/messenger/1.5.0/js/messenger-theme-future.min',
 					'messenger/messenger-theme-future'
 				],
+				/** markdown解析 */
 				'remarkable': [
 					'http://cdn.bootcss.com/remarkable/1.6.2/remarkable.min',
 					'remarkable.min'
 				],
+				/** 代码高亮 */
 				'highlight': [
 					'http://cdn.bootcss.com/highlight.js/9.6.0/highlight.min',
 					'highlight.min'
+				],
+				/** 表单验证 */
+				'validate': [
+					'http://cdn.bootcss.com/jquery-validate/1.15.1/jquery.validate.min',
+					'validate/validate.min'
+				],
+				/** 表单验证中文语言包，直接加载语言包，无需加载validation，语言包自动会将validation加载进去。 */
+				'validate.zh': [
+					'validate/validate.zh'
 				]
 			},
 			shim: {
 				'messenger.future': {
 					deps: ['messenger'],
 					exports: 'Messenger'
+				},
+				'validate.zh': {
+					deps: ['validate']
 				}
 			}
 		});

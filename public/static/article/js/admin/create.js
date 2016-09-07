@@ -15,6 +15,19 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 			$('#html-preview .html-content').html(md.render($(this).val()));
 		});
 
+		eh.form.checkFormData('form', {
+			rules: {
+				title: "required"
+			},
+			messages: {
+				title: '文章标题必须设置'
+			}
+		});
+
+		$('#header-button-submit-form').click(function(){
+			$('form').submit();
+		});
+
 		var md = new remarkable('full', {
 			linkify: true,
 			linkTarget: 'blank',
