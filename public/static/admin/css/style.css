@@ -9403,6 +9403,15 @@ header > div.pull-right button:last-child {
   padding: 20px 15px 0 0;
   text-align: right;
 }
+form .help-block {
+  margin-bottom: 0;
+}
+form em.help-block {
+  font-style: normal;
+}
+.fa.form-control-feedback {
+  line-height: 34px !important;
+}
 /**
  * 文章模块后台样式
  */

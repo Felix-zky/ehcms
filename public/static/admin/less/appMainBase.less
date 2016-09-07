@@ -31,3 +31,17 @@ header{
 	padding: 20px 15px 0 0;
 	text-align: right;
 }
+form{
+	.help-block{
+		margin-bottom: 0;
+	}
+	em.help-block{
+		font-style: normal;
+	}
+}
+.fa{
+	//当字体图标和bootstrap中带有行高的样式有冲突。
+	&.form-control-feedback{
+		line-height: 34px !important;
+	}
+}
