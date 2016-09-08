@@ -1,5 +1,7 @@
 define(['jquery', 'validate.zh', 'eh'], function(){
 
+	validateInit();
+
 	var form = {
 		/**
 		 * 清除指定或全部表单数据
@@ -10,6 +12,17 @@ define(['jquery', 'validate.zh', 'eh'], function(){
 			var obj = (element && $(element).length > 0) ? $(element) : $('form');
 
 			obj.find('input[type="text"], textarea').val('');
+		},
+
+		validataError: function(errorMap){
+			var i = 1, str = ['以下内容错误，请修改后提交：'];
+
+			$.each(errorMap, function(index, val){
+				str.push(i + '、' + val);
+				i++;
+			});
+
+			return str.join('<br />');
 		},
 
 		/**
@@ -24,7 +37,7 @@ define(['jquery', 'validate.zh', 'eh'], function(){
 		checkFormData: function(element, option, sign){
 			if (element && $(element).length > 0) {
 				if (option.rules && typeof option.rules == 'object') {
-					$(element).validate($.extend(validateParam(sign || 'bootstrap'), option));
+					return $(element).validate($.extend(validateParam(sign || 'bootstrap'), option));
 				}else{
 					eh.debugPrint('验证规则必须设置！');
 				}
@@ -32,6 +45,13 @@ define(['jquery', 'validate.zh', 'eh'], function(){
 				eh.debugPrint('表单元素不存在！');
 			}
 		}
+	}
+
+	//验证插件初始化
+	function validateInit(){
+		$.validator.setDefaults({
+			'ignore': '.no-validate'
+		});
 	}
 
 	/**
@@ -46,12 +66,11 @@ define(['jquery', 'validate.zh', 'eh'], function(){
 				return {
 					errorElement: "em",
 					errorPlacement: function ( error, element ) {
-						// Add the `help-block` class to the error element
+						// 添加`help-block`类到错误的元素上
 						error.addClass( "help-block" );
 
-						// Add `has-feedback` class to the parent div.form-group
-						// in order to add icons to inputs
-						element.parents( ".col-sm-11" ).addClass( "has-feedback" );
+						// 添加`has-feedback`类到父元素上。
+						element.parents( ".form-group" ).addClass( "has-feedback" );
 
 						if ( element.prop( "type" ) === "checkbox" ) {
 							error.insertAfter( element.parent( "label" ) );
@@ -59,23 +78,25 @@ define(['jquery', 'validate.zh', 'eh'], function(){
 							error.insertAfter( element );
 						}
 
-						// Add the span element, if doesn't exists, and apply the icon classes to it.
-						if ( !element.next( "span" )[ 0 ] ) {
+						//判断当前错误元素紧邻元素span是否存在，如果不存在，就添加一个新的，用于显示错误的信息！
+						if ( !$( element ).next( "span" )[0] ) {
 							$( "<span class='fa fa-close form-control-feedback'></span>" ).insertAfter( element );
 						}
 					},
 					success: function ( label, element ) {
-						// Add the span element, if doesn't exists, and apply the icon classes to it.
-						if ( !$( element ).next( "span" )[ 0 ] ) {
-							$( "<span class='fa fa-check form-control-feedback'></span>" ).insertAfter( $( element ) );
+						//判断当前元素紧邻元素span是否存在，如果不存在，就添加一个新的，用于显示正确的信息！
+						if ( !$( element ).next( "span" )[0] ) {
+							$( "<span class='fa fa-check form-control-feedback'></span>" ).insertAfter( element );
 						}
+						label.removeClass('help-block');
 					},
 					highlight: function ( element, errorClass, validClass ) {
-						$( element ).parents( ".col-sm-11" ).addClass( "has-error" ).removeClass( "has-success" );
+						$( element ).parents( ".form-group" ).addClass( "has-error" ).removeClass( "has-success" );
 						$( element ).next( "span" ).addClass( "fa-close" ).removeClass( "fa-check" );
+						$( element ).siblings('em').addClass('help-block');
 					},
 					unhighlight: function ( element, errorClass, validClass ) {
-						$( element ).parents( ".col-sm-11" ).addClass( "has-success" ).removeClass( "has-error" );
+						$( element ).parents( ".form-group" ).addClass( "has-success" ).removeClass( "has-error" );
 						$( element ).next( "span" ).addClass( "fa-check" ).removeClass( "fa-close" );
 					}
 				};

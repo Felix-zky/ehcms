@@ -45,3 +45,37 @@ form{
 		line-height: 34px !important;
 	}
 }
+
+//bootstrap验证成功样式修改。
+.has-success{
+	//去除表单输入框前面描述在验证通过的情况下文字颜色。
+	.control-label{
+		color: inherit;
+	}
+}
+
+.has-error{
+	.form-markdown-left, .form-markdown-right{
+		p{
+			color: @state-danger-text;
+		}
+	}
+}
+
+.form-markdown-left{
+	position: relative;
+	.pull-left;
+	.form-control-feedback{
+		right: 0 !important;
+		top: 33px;
+	}
+}
+.form-markdown-right{
+	.pull-right;
+}
+.form-markdown-left, .form-markdown-right{
+	width: 49%;
+	p{
+		padding: 7px 0;
+	}
+}

@@ -1,7 +1,7 @@
-define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 'eh.form'], function($, WebUploader, Messenger, remarkable, hljs){
+define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 'eh.form', 'layer'], function($, WebUploader, Messenger, remarkable, hljs){
 
 	$(function(){
-		var textareaHeight, previewHeight;
+		var textareaHeight, previewHeight, validate;
 
 		setFormHeight();
 		htmlPreviewHeight();
@@ -10,22 +10,32 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 			setFormHeight();
 		});
 
-		$('#header-button-empty-form').click(function(){
-			eh.form.emptyForm();
-			$('#html-preview .html-content').html(md.render($(this).val()));
-		});
-
-		eh.form.checkFormData('form', {
+		validate = eh.form.checkFormData('form', {
 			rules: {
-				title: "required"
+				title: "required",
+				markdown: "required"
 			},
 			messages: {
-				title: '文章标题必须设置'
+				title: '文章标题必须设置',
+				markdown: 'markdown不能为空'
 			}
 		});
 
+		$('#header-button-empty-form').click(function(){
+			eh.form.emptyForm();
+			$('#html-preview .html-content').html(md.render($(this).val()));
+			validate.resetForm();
+		});
+
 		$('#header-button-submit-form').click(function(){
-			$('form').submit();
+			if (validate.form()){
+				layer.msg('验证通过！');
+			}else{
+				layer.alert(eh.form.validataError(validate.errorMap), function(index){
+					layer.close(index);
+					validate.focusInvalid();
+				});
+			}
 		});
 
 		var md = new remarkable('full', {

@@ -1,7 +1,7 @@
 <header>
-	<div class="pull-right">
-		<button class="btn btn-success" id="header-button-submit-form">保存表单</button>
+	<div class="pull-left">
 		<button class="btn btn-danger" id="header-button-empty-form">清空当前表单</button>
+		<button class="btn btn-success" id="header-button-submit-form">保存表单</button>
 	</div>
 </header>
 <section class="form">
@@ -15,13 +15,13 @@
 		<div class="form-group">
 			<label for="keywords" class="col-sm-1 control-label">关键词：</label>
 			<div class="col-sm-11">
-				<input type="text" class="form-control" name="keywords" id="keywords" placeholder="输入文章关键词" />
+				<input type="text" class="form-control no-validate" name="keywords" id="keywords" placeholder="输入文章关键词" />
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="description" class="col-sm-1 control-label">描述：</label>
 			<div class="col-sm-11">
-				<textarea class="form-control" name="description" id="description" placeholder="输入文章描述"></textarea>
+				<textarea class="form-control no-validate" name="description" id="description" placeholder="输入文章描述"></textarea>
 			</div>
 		</div>
 		<div class="form-group">
@@ -31,28 +31,25 @@
 					<span class="input-group-btn logo-uploader">
 						<button class="btn btn-info" href="javascript:void();" type="button">上传缩略图</button>
 					</span>
-					<input class="form-control" name="thumbnail" id="thumbnail" placeholder="点击左侧按钮上传缩略图" readonly />
+					<input class="form-control no-validate" name="thumbnail" id="thumbnail" placeholder="点击左侧按钮上传缩略图" readonly />
 				</div>
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="markdown" class="col-sm-1 control-label">文章内容：</label>
-		</div>
-		<div class="form-group">
-			<p class="col-sm-6">MarkDown：</p>
-			<p class="col-sm-6">HTML实时预览：</p>
-		</div>
-		<div class="form-group">
-			<div class="col-sm-6" id="ceshiceshi">
-				<textarea class="form-control" name="markdown" id="markdown" rows="15"></textarea>
+			<div class="col-sm-11">
+				<div class="form-markdown-left">
+					<p>MarkDown</p>
+					<textarea class="form-control" name="markdown" id="markdown" rows="15"></textarea>
+				</div>
+				<div class="form-markdown-right">
+					<p>HTML实时预览</p>
+					<p class="form-control" id="html-preview">
+						<span class="html-content"></span>
+					</p>
+				</div>
 			</div>
-			<div class="col-sm-6">
-				<!-- <textarea class="form-control" rows="15" readonly></textarea> -->
-				<p class="form-control" id="html-preview">
-					<span class="html-content"></span>
-				</p>
-			</div>
-		</div>	
+		</div>
 	</form>
 </section>
 <script type="text/javascript">

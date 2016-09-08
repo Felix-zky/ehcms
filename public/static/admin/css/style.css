@@ -9412,6 +9412,34 @@ form em.help-block {
 .fa.form-control-feedback {
   line-height: 34px !important;
 }
+.has-success .control-label {
+  color: inherit;
+}
+.has-error .form-markdown-left p,
+.has-error .form-markdown-right p {
+  color: #a94442;
+}
+.form-markdown-left {
+  position: relative;
+  float: left !important;
+  float: left;
+}
+.form-markdown-left .form-control-feedback {
+  right: 0 !important;
+  top: 33px;
+}
+.form-markdown-right {
+  float: right !important;
+  float: right;
+}
+.form-markdown-left,
+.form-markdown-right {
+  width: 49%;
+}
+.form-markdown-left p,
+.form-markdown-right p {
+  padding: 7px 0;
+}
 /**
  * 文章模块后台样式
  */
