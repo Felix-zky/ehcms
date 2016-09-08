@@ -38,6 +38,22 @@ define(['layer', 'jquery'], function(dialog){
 				var regexp = /^(\d{3})\d{4}(\d{4})$/;
 				return phone.replace(regexp, "$1" + replacement + "$2");
 			}
+		},
+
+		/**
+		 * 后台iframe页面的内容区高度计算，除去头部。
+		 */
+		setIframeMainHeight: function(){
+			$('.iframe-main').height($(window).outerHeight() - $('header').outerHeight(true));
+		},
+
+		/**
+		 * 实时预览框与markdown输入框高度同步
+		 */
+		htmlPreviewHeight: function(htmlElement, markdownElement){
+			htmlElement = (htmlElement && $(htmlElement).length > 0) || $('#html-preview');
+			markdownElement = (markdownElement && $(markdownElement).length > 0) || $('#markdown');
+			htmlElement.height(markdownElement.innerHeight());
 		}
 	};
 

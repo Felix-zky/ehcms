@@ -93,6 +93,16 @@
 				}
 			}
 		});
+
+		require(['jquery', 'eh'], function(){
+			$(function(){
+				eh.setIframeMainHeight();
+
+				$(window).resize(function(){
+					eh.setIframeMainHeight();
+				});
+			});
+		});
 	</script>
 </head>
 <body>

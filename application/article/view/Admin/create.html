@@ -1,13 +1,13 @@
 <header>
 	<div class="pull-left">
-		<button class="btn btn-danger" id="header-button-empty-form">清空当前表单</button>
+		<button class="btn btn-danger" id="header-button-empty-form">清空表单</button>
 		<button class="btn btn-success" id="header-button-submit-form">保存表单</button>
 	</div>
 </header>
-<section class="form">
+<section class="iframe-main">
 	<form class="form-horizontal">
 		<div class="form-group">
-			<label for="title" class="col-sm-1 control-label">标题：</label>
+			<label for="title" class="col-sm-1 control-label">标题<span class="red">*</span>：</label>
 			<div class="col-sm-11">
 				<input type="text" class="form-control" name="title" id="title" placeholder="输入文章标题" />
 			</div>
@@ -31,12 +31,12 @@
 					<span class="input-group-btn logo-uploader">
 						<button class="btn btn-info" href="javascript:void();" type="button">上传缩略图</button>
 					</span>
-					<input class="form-control no-validate" name="thumbnail" id="thumbnail" placeholder="点击左侧按钮上传缩略图" readonly />
+					<input class="form-control no-validate" type="text" name="thumbnail" id="thumbnail" placeholder="点击左侧按钮上传缩略图" readonly />
 				</div>
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="markdown" class="col-sm-1 control-label">文章内容：</label>
+			<label for="markdown" class="col-sm-1 control-label">文章内容<span class="red">*</span>：</label>
 			<div class="col-sm-11">
 				<div class="form-markdown-left">
 					<p>MarkDown</p>

@@ -9003,6 +9003,9 @@ ul,
 li {
   list-style: none;
 }
+.red {
+  color: red;
+}
 .padding-clean {
   padding: 0 !important;
 }
@@ -9369,6 +9372,7 @@ header {
   padding: 16px 15px;
   overflow: hidden;
   background-color: #FFF;
+  margin-bottom: 10px;
 }
 header:before,
 header:after {
@@ -9403,11 +9407,30 @@ header > div.pull-right button:last-child {
   padding: 20px 15px 0 0;
   text-align: right;
 }
+form {
+  padding-top: 15px;
+}
 form .help-block {
   margin-bottom: 0;
 }
 form em.help-block {
   font-style: normal;
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+  form .col-sm-1 {
+    padding-left: 0;
+    padding-right: 0;
+    width: 12%;
+  }
+  form .col-sm-11 {
+    width: 88%;
+  }
+}
+section.iframe-main {
+  padding: 0 15px;
+  background-color: #FFF;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 .fa.form-control-feedback {
   line-height: 34px !important;
@@ -9515,26 +9538,6 @@ form em.help-block {
   position: absolute;
   right: 20px;
   bottom: 15px;
-}
-#article-admin-create section.form {
-  margin-top: 10px;
-  padding: 0 15px;
-  background-color: #FFF;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-#article-admin-create section.form form {
-  padding-top: 15px;
-}
-@media (min-width: 768px) and (max-width: 1199px) {
-  #article-admin-create .col-sm-1 {
-    padding-left: 0;
-    padding-right: 0;
-    width: 12%;
-  }
-  #article-admin-create .col-sm-11 {
-    width: 88%;
-  }
 }
 #article-admin-create #markdown {
   resize: none;

@@ -6,15 +6,21 @@ define(['jquery', 'validate.zh', 'eh'], function(){
 		/**
 		 * 清除指定或全部表单数据
 		 *
-		 * @param  {String} element 元素的id(#xxx)或class(.xxx)
+		 * @param  {String} element form元素的id(#xxx)或class(.xxx)
 		 */
-		emptyForm: function(element){
+		emptyFormData: function(element){
 			var obj = (element && $(element).length > 0) ? $(element) : $('form');
 
 			obj.find('input[type="text"], textarea').val('');
 		},
 
-		validataError: function(errorMap){
+		/**
+		 * 获取验证错误并生成列表
+		 *
+		 * @param  {Object} errorMap validate
+		 * @return {String}          生成后的错误列表
+		 */
+		validateError: function(errorMap){
 			var i = 1, str = ['以下内容错误，请修改后提交：'];
 
 			$.each(errorMap, function(index, val){
@@ -26,16 +32,35 @@ define(['jquery', 'validate.zh', 'eh'], function(){
 		},
 
 		/**
+		 * 清除设置的validate高亮样式
+		 *
+		 * @param  {String} sign    参数标示，默认值是bootstrap。
+		 * @param  {String} element form元素的id(#xxx)或class(.xxx)
+		 */
+		validateHighlightRemove: function(sign, element){
+			sign = sign || 'bootstrap';
+			var obj = (element && $(element).length > 0) ? $(element) : $('form');
+
+			switch(sign){
+				//目前bootstrap删除的是在unhighlight中定义的内容，如果删除unhighlight或者更改它这里也要对应修改。
+				case 'bootstrap':
+					obj.find(".has-success").removeClass('has-success').find('span.form-control-feedback, em.error').remove();
+					break;
+			}
+		},
+
+		/**
 		 * 检查表单数据
 		 * 该函数主要设置通用内容，比如错误提醒方式、触发方式等。
 		 * 检验的内容及检验方式由调用者提供
 		 *
-		 * @param  {String} element 表单的元素
 		 * @param  {Object} option  配置参数
 		 * @param  {String} sign    参数集标示
+		 * @param  {String} element 表单的元素
 		 */
-		checkFormData: function(element, option, sign){
-			if (element && $(element).length > 0) {
+		checkFormData: function(option, sign, element){
+			element = element || 'form';
+			if ($(element).length > 0) {
 				if (option.rules && typeof option.rules == 'object') {
 					return $(element).validate($.extend(validateParam(sign || 'bootstrap'), option));
 				}else{
@@ -47,7 +72,9 @@ define(['jquery', 'validate.zh', 'eh'], function(){
 		}
 	}
 
-	//验证插件初始化
+	/**
+	 * 验证插件初始化
+	 */
 	function validateInit(){
 		$.validator.setDefaults({
 			'ignore': '.no-validate'
@@ -90,12 +117,12 @@ define(['jquery', 'validate.zh', 'eh'], function(){
 						}
 						label.removeClass('help-block');
 					},
-					highlight: function ( element, errorClass, validClass ) {
+					highlight: function ( element ) {
 						$( element ).parents( ".form-group" ).addClass( "has-error" ).removeClass( "has-success" );
 						$( element ).next( "span" ).addClass( "fa-close" ).removeClass( "fa-check" );
 						$( element ).siblings('em').addClass('help-block');
 					},
-					unhighlight: function ( element, errorClass, validClass ) {
+					unhighlight: function ( element ) {
 						$( element ).parents( ".form-group" ).addClass( "has-success" ).removeClass( "has-error" );
 						$( element ).next( "span" ).addClass( "fa-check" ).removeClass( "fa-close" );
 					}

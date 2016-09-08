@@ -3,14 +3,12 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 	$(function(){
 		var textareaHeight, previewHeight, validate;
 
-		setFormHeight();
-		htmlPreviewHeight();
+		eh.htmlPreviewHeight();
 
-		$(window).resize(function(){
-			setFormHeight();
-		});
-
-		validate = eh.form.checkFormData('form', {
+		/**
+		 * 设置表单验证参数
+		 */
+		validate = eh.form.checkFormData({
 			rules: {
 				title: "required",
 				markdown: "required"
@@ -21,17 +19,26 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 			}
 		});
 
+		/**
+		 * 清空表单按钮点击事件绑定
+		 */
 		$('#header-button-empty-form').click(function(){
-			eh.form.emptyForm();
+			eh.form.emptyFormData();
 			$('#html-preview .html-content').html(md.render($(this).val()));
+			$('.logo-uploader btn').html('上传缩略图');
+
 			validate.resetForm();
+			eh.form.validateHighlightRemove();
 		});
 
+		/**
+		 * 保存表单按钮点击事件绑定
+		 */
 		$('#header-button-submit-form').click(function(){
 			if (validate.form()){
 				layer.msg('验证通过！');
 			}else{
-				layer.alert(eh.form.validataError(validate.errorMap), function(index){
+				layer.alert(eh.form.validateError(validate.errorMap), function(index){
 					layer.close(index);
 					validate.focusInvalid();
 				});
@@ -56,12 +63,19 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 			}
 		});
 
+		/**
+		 * 键盘按钮抬起立即解析markdown标记并生成新的预览内容
+		 */
 		$('#markdown').keyup(function(){
 			$('#html-preview .html-content').html(md.render($(this).val()));
 			textareaHeight = this.scrollHeight,
 			previewHeight = $('#html-preview .html-content').innerHeight();
 		});
 
+		/**
+		 * markdown滚动，预览内容跟随滚动，由于预览内容存在样式，一般情况下会比markdown页面要长，所有判断当前滚轮位置在markdown输入框的百分比，
+		 * 预览内容同样滚动到该比例位置，基本可以保证一致性。
+		 */
 		$('#markdown').scroll(function() {
 			if (previewHeight > 0 && textareaHeight > 0) {
 				if ($(this).scrollTop() + $(this).innerHeight() == textareaHeight) {
@@ -72,11 +86,17 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 			}
 		});
 
+		/**
+		 * 配置messenger的显示位置及样式
+		 */
 		Messenger.options = {
 			extraClasses: 'messenger-fixed messenger-on-top',
 			theme: 'future'
 		};
 
+		/**
+		 * 实例化资源上传组件并配置参数
+		 */
 		var uploader = new WebUploader.Uploader({
 			swf: '/static/lib/js/webuploader/Uploader.swf',
 			server: '/resource/Uploader/receiver',
@@ -91,6 +111,9 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 			compress: false
 		});
 
+		/**
+		 * 
+		 */
 		uploader.on('fileQueued', function(file){
 			$('.webuploader-pick').next('div').hide();
 			$('#thumbnail').val(file.name);
@@ -125,13 +148,4 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 			}
 		});
 	});
-
-	function setFormHeight(){
-		var listHeight = $(window).outerHeight() - $('header').outerHeight() - 10;
-		$('section.form').height(listHeight);
-	}
-
-	function htmlPreviewHeight(){
-		$('#html-preview').height($('#markdown').innerHeight());
-	}
 });

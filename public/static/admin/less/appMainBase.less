@@ -15,6 +15,7 @@ header{
 	padding: 16px 15px;
 	overflow: hidden;
 	background-color: #FFF;
+	margin-bottom: 10px;
 	.clearfix;
 	> div.pull-left, > div.pull-right{
 		font-size: 0;
@@ -32,13 +33,32 @@ header{
 	text-align: right;
 }
 form{
+	padding-top: 15px;
 	.help-block{
 		margin-bottom: 0;
 	}
 	em.help-block{
 		font-style: normal;
 	}
+
+	@media (min-width: @screen-sm-min) and (max-width: @screen-md-max){
+		.col-sm-1{
+			padding-left: 0;
+			padding-right: 0;
+			width: 12%;
+		}
+		.col-sm-11{
+			width: 88%;
+		}
+	}
 }
+section.iframe-main{
+	padding: 0 15px;
+	background-color: #FFF;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
 .fa{
 	//当字体图标和bootstrap中带有行高的样式有冲突。
 	&.form-control-feedback{
