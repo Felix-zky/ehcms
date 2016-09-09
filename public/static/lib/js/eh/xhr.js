@@ -23,7 +23,14 @@ define(['layer', 'jquery', 'eh'], function(dialog){
 		 * 参数同上
 		 */
 		post: function(url, data, dataType, done, fail){
-			$.post(url, {}, $.noop, 'json').then(executeDone(done, data, status, xhr), executeFail(fail, data));
+			$.post(url, data || {}, $.noop, dataType || 'json').then(
+				function(data, sign, xhrObj){
+					executeDone(done, data, sign, xhrObj);
+				},
+				function(xhrObj, sign, statusText){
+					executeFail(fail, xhrObj, sign, statusText);
+				}
+			);
 		},
 		/**
 		 * 异步PUT请求（配合ThinkPHP的资源路由）
@@ -82,7 +89,7 @@ define(['layer', 'jquery', 'eh'], function(dialog){
 	 * @param  {Mixed}  done 回调函数或函数数组或字符串
 	 * @param  {Object} data 执行结果
 	 */
-	function executeDone(done, data, status, xhr){
+	function executeDone(done, data, sign, xhrObj){
 		if (!done) {
 			dialog.msg(data.msg || '请求成功');
 			return false;
@@ -101,16 +108,28 @@ define(['layer', 'jquery', 'eh'], function(dialog){
 	 * @param  {Mixed}  fail 回调函数或函数数组
 	 * @param  {Object} data 执行结果
 	 */
-	function executeFail(fail, data){
-		console.log(data);
-		return false;
+	function executeFail(fail, xhrObj, sign, statusText){
+		//根据服务器返回的状态码，判断错误类型。
+		var statusText;
 
-		if (!fail) {
-			dialog.msg('请求失败', {icon: 5});
-			return false;
+		if (sign == 'parsererror') {
+			statusText = '服务端返回数据格式与要求不符！';
+		}else{
+			switch (xhrObj.status){
+				case 404:
+					statusText = '服务端页面无法响应！';
+					break;
+				default:
+					statusText = '服务端未知错误！'
+			}
 		}
 
-
+		if (!fail) {
+			dialog.msg(statusText || '请求失败', {icon: 5});
+			return false;
+		}else{
+			typeof fail == 'function' ? fail(data) : dialog.msg(fail, {icon: 5});
+		}
 	}
 
 

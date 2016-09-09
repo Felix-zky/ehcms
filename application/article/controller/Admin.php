@@ -24,7 +24,7 @@ class Admin extends Base{
 	/**
 	 * 获取文章列表
 	 */
-	public function index(){		
+	public function index(){
 		return $this->fetch();
 	}
 	
