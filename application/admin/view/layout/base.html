@@ -20,6 +20,7 @@
 				'laypage': 'laypage/laypage.init',
 				'laypage.min': 'laypage/laypage.min',
 				'eh': 'eh/eh',
+				'eh.xhr': 'eh/xhr',
 				'eh.list': 'eh/list',
 				'eh.form': 'eh/form',
 				'eh.table': 'eh/table',
@@ -94,6 +95,7 @@
 			}
 		});
 
+		/** iframe主体部分高度计算，后台通用 */
 		require(['jquery', 'eh'], function(){
 			$(function(){
 				eh.setIframeMainHeight();

@@ -4,6 +4,17 @@ define(['jquery', 'validate.zh', 'eh'], function(){
 
 	var form = {
 		/**
+		 * 提取表单数据
+		 *
+		 * @param {String} element 表单元素，默认为form
+		 */
+		extractData: function(option, element){
+			var obj = (element && $(element).length > 0) ? $(element) : $('form');
+
+
+		},
+
+		/**
 		 * 清除指定或全部表单数据
 		 *
 		 * @param  {String} element form元素的id(#xxx)或class(.xxx)

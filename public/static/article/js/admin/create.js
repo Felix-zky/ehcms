@@ -1,6 +1,8 @@
-define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 'eh.form', 'layer'], function($, WebUploader, Messenger, remarkable, hljs){
+define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 'eh.form', 'eh.xhr', 'layer'], function($, WebUploader, Messenger, remarkable, hljs){
 
 	$(function(){
+		eh.xhr.post('/article/index');
+
 		var textareaHeight, previewHeight, validate;
 
 		eh.htmlPreviewHeight();
@@ -36,7 +38,7 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 		 */
 		$('#header-button-submit-form').click(function(){
 			if (validate.form()){
-				layer.msg('验证通过！');
+				
 			}else{
 				layer.alert(eh.form.validateError(validate.errorMap), function(index){
 					layer.close(index);
