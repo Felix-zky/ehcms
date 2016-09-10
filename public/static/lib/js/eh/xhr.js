@@ -11,8 +11,8 @@ define(['layer', 'jquery', 'eh'], function(dialog){
 		 * @param  {String}   url        请求URL
 		 * @param  {Object}   [data]     请求的参数
 		 * @param  {String}   [dataType] 请求返回的类型
-		 * @param  {Mixed}    [done]     请求正确时触发的函数或函数组
-		 * @param  {Mixed}    [fail]     请求错误时触发的函数或函数组
+		 * @param  {Mixed}    [done]     请求正确时执行的函数或提示信息
+		 * @param  {Mixed}    [fail]     请求错误时执行的函数或提示信息
 		 */
 		get: function(url, data, dataType, done, fail){
 			$.get(url, data, '', dataType || 'json').then(executeDone(done, data), executeFail(fail, data));
@@ -130,33 +130,6 @@ define(['layer', 'jquery', 'eh'], function(dialog){
 		}else{
 			typeof fail == 'function' ? fail(data) : dialog.msg(fail, {icon: 5});
 		}
-	}
-
-
-	/**
-	 * 检查异步提交的参数，除url地址必须存在，其他的如不存赋初始值
-	 *
-	 * @param  {Object} option 要检查参数对象
-	 * @return {Object || Boolean} 范围检查后的对象或者false
-	 */
-	function submitOptionCheck(option){
-		if (typeof option != 'object') {
-			eh.debugPrint('参数必须为对象，请调整后重试！');
-			return false;
-		}
-
-		if (!option.url || typeof option.url != 'string') {
-			eh.debugPrint('表单提交地址错误！');
-			return false;
-		}
-
-		typeof option.data == 'object' || {};
-
-		typeof option.func == 'function' || '';
-
-		typeof option.type == 'string' || 'json';
-
-		return option;
 	}
 
 	eh.xhr = xhr;

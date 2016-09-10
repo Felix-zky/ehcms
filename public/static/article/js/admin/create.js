@@ -1,7 +1,7 @@
 define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 'eh.form', 'eh.xhr', 'layer'], function($, WebUploader, Messenger, remarkable, hljs){
 
 	$(function(){
-		eh.xhr.post('/article/index');
+		//eh.xhr.post('/article/index', 'single=Single&multiple=Multiple&multiple=Multiple3&check%5B%5D=check1&check%5B%5D=check2&radio=radio2');
 
 		var textareaHeight, previewHeight, validate;
 
@@ -38,7 +38,7 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 		 */
 		$('#header-button-submit-form').click(function(){
 			if (validate.form()){
-				
+				console.log(eh.form.extractData());
 			}else{
 				layer.alert(eh.form.validateError(validate.errorMap), function(index){
 					layer.close(index);

@@ -6,12 +6,28 @@ define(['jquery', 'validate.zh', 'eh'], function(){
 		/**
 		 * 提取表单数据
 		 *
+		 * @param {Object} option  设置
 		 * @param {String} element 表单元素，默认为form
 		 */
 		extractData: function(option, element){
-			var obj = (element && $(element).length > 0) ? $(element) : $('form');
+			var obj = (element && $(element).length > 0) ? $(element) : $('form'),
+				data = $(obj).serializeArray();
+			
+			//为option赋初始值，未定义元素直接访问其属性会报错。
+			option = option || {};
+			if (typeof option.only == 'array') {
 
+			}
 
+			if (typeof option.except == 'array') {
+				
+			}
+
+			if (&& typeof option.extend == 'array') {
+				
+			}
+
+			return $.param(data);
 		},
 
 		/**
@@ -142,6 +158,34 @@ define(['jquery', 'validate.zh', 'eh'], function(){
 			default:
 				return {};
 		}
+	}
+
+	function extractDataInput(){
+
+	}
+
+	function extractDataTextarea(){
+
+	}
+
+	function extractDataRadio(){
+
+	}
+
+	function extractDataCheckbox(){
+
+	}
+
+	function extractDataSelect(){
+
+	}
+
+	function extractDataClass(){
+
+	}
+
+	function extractDataID(){
+
 	}
 
 	eh.form = form;
