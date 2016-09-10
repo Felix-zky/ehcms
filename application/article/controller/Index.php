@@ -3,6 +3,6 @@ namespace app\article\controller;
 
 class Index{
 	public function index(){
-		print_r(input('post.'));
+		db('article')->strict(false)->insert(input('post.'));
 	}
 }

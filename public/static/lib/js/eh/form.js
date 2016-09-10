@@ -11,20 +11,50 @@ define(['jquery', 'validate.zh', 'eh'], function(){
 		 */
 		extractData: function(option, element){
 			var obj = (element && $(element).length > 0) ? $(element) : $('form'),
-				data = $(obj).serializeArray();
+				data = $(obj).serializeArray(),
+				onlyData = [], exceptData = [] ,extendData = [], extendFromElement = [];
 			
 			//为option赋初始值，未定义元素直接访问其属性会报错。
 			option = option || {};
-			if (typeof option.only == 'array') {
 
+			//只允许提取某些数据
+			if ($.isArray(option.only)) {
+				$.each(data, function() {
+					if ($.inArray(this.name, option.only) >= 0) {
+						onlyData.push(this);
+					}
+				});
+				data = onlyData;
 			}
 
-			if (typeof option.except == 'array') {
-				
+			//排除某些数据
+			if ($.isArray(option.except)) {
+				$.each(data, function() {
+					if ($.inArray(this.name, option.except) == -1) {
+						exceptData.push(this);
+					}
+				});
+				data = exceptData;
 			}
 
-			if (&& typeof option.extend == 'array') {
-				
+			//扩展数据，将一些非表单内的页面数据组合进去
+			if ($.isArray(option.extend)) {
+				$.each(option.extend, function() {
+					if (this.type == 'form') {
+						extendFromElement.push(this.element);
+					}else{
+						extendData.push(
+							{
+								'name' : this.name,
+								'value' : $(this.element).html()
+							}
+						);
+					}
+				});
+				data = data.concat(extendData);
+				if (extendFromElement.length > 0) {
+					data = data.concat($(extendFromElement.join(',')).serializeArray());
+				}
 			}
 
 			return $.param(data);
@@ -158,34 +188,6 @@ define(['jquery', 'validate.zh', 'eh'], function(){
 			default:
 				return {};
 		}
-	}
-
-	function extractDataInput(){
-
-	}
-
-	function extractDataTextarea(){
-
-	}
-
-	function extractDataRadio(){
-
-	}
-
-	function extractDataCheckbox(){
-
-	}
-
-	function extractDataSelect(){
-
-	}
-
-	function extractDataClass(){
-
-	}
-
-	function extractDataID(){
-
 	}
 
 	eh.form = form;

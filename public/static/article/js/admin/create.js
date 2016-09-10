@@ -1,8 +1,6 @@
 define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 'eh.form', 'eh.xhr', 'layer'], function($, WebUploader, Messenger, remarkable, hljs){
 
 	$(function(){
-		//eh.xhr.post('/article/index', 'single=Single&multiple=Multiple&multiple=Multiple3&check%5B%5D=check1&check%5B%5D=check2&radio=radio2');
-
 		var textareaHeight, previewHeight, validate;
 
 		eh.htmlPreviewHeight();
@@ -38,7 +36,17 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 		 */
 		$('#header-button-submit-form').click(function(){
 			if (validate.form()){
-				console.log(eh.form.extractData());
+				option = {
+					except: ['keywords'],
+					extend : [
+						{
+							'name': 'content',
+							'element': '.html-content'
+						}
+					]
+				};
+				console.log(eh.form.extractData(option));
+				//eh.xhr.post('/article/index', eh.form.extractData(option));
 			}else{
 				layer.alert(eh.form.validateError(validate.errorMap), function(index){
 					layer.close(index);
@@ -47,6 +55,9 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 			}
 		});
 
+		/**
+		 * 实例化markdown解析器
+		 */
 		var md = new remarkable('full', {
 			linkify: true,
 			linkTarget: 'blank',
@@ -114,7 +125,7 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 		});
 
 		/**
-		 * 
+		 * 缩略图进入列队触发
 		 */
 		uploader.on('fileQueued', function(file){
 			$('.webuploader-pick').next('div').hide();
@@ -124,10 +135,16 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 			})
 		});
 
+		/**
+		 * 缩略图开始上传触发
+		 */
 		uploader.on('startUpload', function(file){
 			$('.logo-uploader button').html('<i class="fa fa-spinner fa-pulse"></i> 正在上传');
 		});
 
+		/**
+		 * 缩略图上传成功后触发
+		 */
 		uploader.on('uploadSuccess', function(file, response){
 			uploader.reset();
 			$('.webuploader-pick').next('div').show();
