@@ -11,5 +11,9 @@ class Base extends Controller{
 		
 		$this->view->engine->layout('admin@layout/layout');
 	}
+	
+	private function checkUserLogin(){
+		session();
+	}
 
 }

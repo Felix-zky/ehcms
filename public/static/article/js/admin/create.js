@@ -45,8 +45,14 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 						}
 					]
 				};
-				console.log(eh.form.extractData(option));
-				//eh.xhr.post('/article/index', eh.form.extractData(option));
+				//console.log(eh.form.extractData(option));
+				var done = {
+					fail: function(data){
+						//$('.iframe-main').prepend(data.title);
+						console.log(data);
+					}
+				}
+				eh.xhr.post('/article/index', eh.form.extractData(option), '', done);
 			}else{
 				layer.alert(eh.form.validateError(validate.errorMap), function(index){
 					layer.close(index);
