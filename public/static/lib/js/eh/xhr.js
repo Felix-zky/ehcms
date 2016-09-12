@@ -1,7 +1,5 @@
 /**
  * XMLHttpRequest-异步请求组件
- *
- * @return {Object} 常用请求合集
  */
 define(['layer', 'jquery', 'eh'], function(dialog){
 	var xhr = {
@@ -15,7 +13,14 @@ define(['layer', 'jquery', 'eh'], function(dialog){
 		 * @param  {Mixed}    [fail]     请求错误时执行的函数或提示信息
 		 */
 		get: function(url, data, dataType, done, fail){
-			$.get(url, data, '', dataType || 'json').then(executeDone(done, data), executeFail(fail, data));
+			$.get(url, data, '', dataType || 'json').then(
+				function(data, sign, xhrObj){
+					executeDone(done, data, sign, xhrObj);
+				},
+				function(xhrObj, sign, statusText){
+					executeFail(fail, xhrObj, sign, statusText);
+				}
+			);
 		},
 		/**
 		 * 异步POST请求
@@ -45,7 +50,14 @@ define(['layer', 'jquery', 'eh'], function(dialog){
 				data: data
 			};
 
-			$.ajax(option).then(executeDone(done, data), executeFail(fail, data));
+			$.ajax(option).then(
+				function(data, sign, xhrObj){
+					executeDone(done, data, sign, xhrObj);
+				},
+				function(xhrObj, sign, statusText){
+					executeFail(fail, xhrObj, sign, statusText);
+				}
+			);
 		},
 		/**
 		 * 异步DELETE请求（配合ThinkPHP的资源路由）
@@ -60,7 +72,14 @@ define(['layer', 'jquery', 'eh'], function(dialog){
 				data: data
 			};
 
-			$.ajax(option).then(executeDone(done, data), executeFail(fail, data));
+			$.ajax(option).then(
+				function(data, sign, xhrObj){
+					executeDone(done, data, sign, xhrObj);
+				},
+				function(xhrObj, sign, statusText){
+					executeFail(fail, xhrObj, sign, statusText);
+				}
+			);
 		},
 		/**
 		 * 异步跨域请求
@@ -79,7 +98,14 @@ define(['layer', 'jquery', 'eh'], function(dialog){
 				jsonpCallback: jsonpCallback
 			};
 
-			$.ajax(option).then(executeDone(done, data), executeFail(fail, data));
+			$.ajax(option).then(
+				function(data, sign, xhrObj){
+					executeDone(done, data, sign, xhrObj);
+				},
+				function(xhrObj, sign, statusText){
+					executeFail(fail, xhrObj, sign, statusText);
+				}
+			);
 		}
 	};
 
