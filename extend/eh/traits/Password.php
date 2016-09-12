@@ -17,7 +17,11 @@ trait Password{
 	/**
 	 * 检查密码
 	 */
-	private function checkPassword(){
-		db('member');
+	private function checkPassword($password, $hash){
+		if (is_array($memberInfo)){
+			if (password_verify($password, $memberInfo['password'])){
+				//session('user_sign', );
+			}
+		}
 	}
 }
