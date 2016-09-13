@@ -1,9 +1,9 @@
 <?php
 namespace app\admin\controller;
 
-use think\Controller;
+use app\common\controller\Base;
 
-class Base extends Controller{
+class Init extends Base{
 	use \eh\traits\AsyncFastResponse;
 	
 	public function __construct(){

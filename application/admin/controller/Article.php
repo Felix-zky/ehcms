@@ -9,13 +9,11 @@
 // | Author: zky < zky@ehcms.com >
 // +----------------------------------------------------------------------
 
-namespace app\article\controller;
-
-use app\admin\controller\Base;
+namespace app\admin\controller;
 /**
  * 文章模块后台控制器
  */
-class Admin extends Base{
+class Article extends Init{
 	
 	public function __construct(){
 		parent::__construct();

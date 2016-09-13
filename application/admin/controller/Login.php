@@ -1,7 +1,7 @@
 <?php
 namespace app\admin\controller;
 
-class Login extends Base{
+class Login extends Init{
 	
 	public function __construct(){
 		parent::__construct();

@@ -1,7 +1,7 @@
 <?php
 namespace app\admin\controller;
 
-class Index extends Base{
+class Index extends Init{
 	public function __construct(){
 		parent::__construct();
 		
