@@ -7,7 +7,8 @@ return [
 		'__JS__' => '/static/admin/js',
 		'__LIB_CSS__' => '/static/lib/css',
 		'__LIB_JS__' => '/static/lib/js'
-	]
+	],
+	'url_convert' => false
 ]
 
 ?>

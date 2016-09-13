@@ -8,7 +8,7 @@ trait AsyncFastResponse{
 	 *
 	 * 参数的设置请参照ThinkPHP Jump->result()
 	 */
-	protected function ajaxSuccessResult($msg = '提交成功！', $data = '', $code = 1){
+	protected function ajaxSuccessResult($msg = '成功', $data = '', $code = 1){
 		$this->ajaxResultMsgIsData($msg, $data);
 		return $this->result($data, $code, $msg, 'json');
 	}
@@ -18,7 +18,7 @@ trait AsyncFastResponse{
 	 *
 	 * 参数的设置请参照ThinkPHP Jump->result()
 	 */
-	protected function ajaxErrorResult($msg = '提交失败！', $data = '', $code = 0){
+	protected function ajaxErrorResult($msg = '失败', $code = 0, $data = ''){
 		$this->ajaxResultMsgIsData($msg, $data);
 		return $this->result($data, $code, $msg, 'json');
 	}

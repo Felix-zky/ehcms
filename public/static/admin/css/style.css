@@ -9466,66 +9466,66 @@ section.iframe-main {
 /**
  * 文章模块后台样式
  */
-#article-admin-index .list-header {
+#admin-article-index .list-header {
   width: 100%;
 }
-#article-admin-index .list-header ul {
+#admin-article-index .list-header ul {
   background-color: #FFF;
 }
-#article-admin-index .list-header ul li {
+#admin-article-index .list-header ul li {
   padding: 10px 0;
   border-top: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
   border-left: 1px solid #ccc;
   font-weight: bold;
 }
-#article-admin-index .list-header ul li:first-child {
+#admin-article-index .list-header ul li:first-child {
   border-left: none;
 }
-#article-admin-index .list-main {
+#admin-article-index .list-main {
   width: 100%;
 }
-#article-admin-index .list-main ul {
+#admin-article-index .list-main ul {
   overflow-y: auto;
   overflow-x: hidden;
   margin: 10px 0;
 }
-#article-admin-index .list-main li {
+#admin-article-index .list-main li {
   background-color: #FFF;
   margin-bottom: 10px;
   padding: 15px 0;
   position: relative;
 }
-#article-admin-index .list-main li:last-child {
+#admin-article-index .list-main li:last-child {
   margin-bottom: 0;
 }
-#article-admin-index .list-main li .number,
-#article-admin-index .list-main li .add-time {
+#admin-article-index .list-main li .number,
+#admin-article-index .list-main li .add-time {
   margin-bottom: 15px;
   padding-bottom: 10px;
   border-bottom: 1px dashed #ccc;
 }
-#article-admin-index .list-main li img {
+#admin-article-index .list-main li img {
   width: 100%;
   height: auto;
 }
-#article-admin-index .list-main li span {
+#admin-article-index .list-main li span {
   position: relative;
 }
-#article-admin-index .list-main li span.title,
-#article-admin-index .list-main li span.description {
+#admin-article-index .list-main li span.title,
+#admin-article-index .list-main li span.description {
   display: block;
   line-height: 24px;
 }
-#article-admin-index .list-main li span.description {
+#admin-article-index .list-main li span.description {
   height: 50px;
   margin-top: 5px;
   overflow: hidden;
 }
-#article-admin-index .list-main li span.title strong {
+#admin-article-index .list-main li span.title strong {
   font-size: 16px;
 }
-#article-admin-index .list-main li .keywords {
+#admin-article-index .list-main li .keywords {
   position: absolute;
   left: 0;
   bottom: 20px;
@@ -9534,20 +9534,20 @@ section.iframe-main {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-#article-admin-index .list-main li .button {
+#admin-article-index .list-main li .button {
   position: absolute;
   right: 20px;
   bottom: 15px;
 }
-#article-admin-create #markdown {
+#admin-article-create #markdown {
   resize: none;
 }
-#article-admin-create #html-preview {
+#admin-article-create #html-preview {
   overflow-y: auto;
   overflow-x: hidden;
   padding: 0;
 }
-#article-admin-create #html-preview .html-content {
+#admin-article-create #html-preview .html-content {
   padding: 6px 12px;
   overflow: hidden;
   display: block;

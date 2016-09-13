@@ -31,6 +31,7 @@ class Article extends Init{
 	 * 新增文章
 	 */
 	public function create(){
+		$this->assign('saveUrl', url('save'));
 		return $this->fetch();
 	}
 	
@@ -38,7 +39,11 @@ class Article extends Init{
 	 * 保存（新增入库）文章
 	 */
 	public function save(){
-		
+		if (request()->isPost()){
+			
+		}else{
+			$this->ajaxErrorResult(lang('E-03002'), 'E-03002');
+		}
 	}
 	
 	/**
