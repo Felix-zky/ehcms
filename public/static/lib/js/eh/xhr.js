@@ -124,7 +124,7 @@ define(['layer', 'jquery', 'eh'], function(dialog){
 		if (data.code == 1) {
 			typeof done.success == 'function' ? done.success(data) : dialog.msg(done.success || data.msg, {icon: 6});
 		}else {
-			typeof done.fail == 'function' ? done.fail(data) : dialog.msg(done.fail || data.msg, {icon: 5});
+			typeof done.fail == 'function' ? done.fail(data) : dialog.msg(done.fail || (data.msg + '(' + data.code + ')'), {icon: 5});
 		}
 	}
 

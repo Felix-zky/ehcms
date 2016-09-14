@@ -3,6 +3,7 @@ namespace app\article\controller;
 
 use think\Controller;
 use think\Request;
+use think\Lang;
 class Index extends Controller{
 	use \eh\traits\AsyncFastResponse;
 	
@@ -10,7 +11,10 @@ class Index extends Controller{
 		//db('article')->strict(false)->insert(input('post.'));
 // 		print_r($_POST);
 // 		print_r(Request::instance()->post());
+		
+		Lang::load(ROOT_PATH . 'lang/zh-cn/error.php');
+		Lang::load(APP_PATH . 'lang/zh-cn/success.php');
 
-		return $this->ajaxErrorResult('文章标题不能为空', 'E-030201');
+		return $this->ajaxErrorResult(Lang::get('E-030201'), 'E-030201');
 	}
 }

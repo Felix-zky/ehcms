@@ -28,13 +28,13 @@ trait AsyncFastResponse{
 	 *
 	 * 条件：
 	 * 1、$msg为数组;
-	 * 2、$msg存在键名为isData且键值为TRUE的属性;
+	 * 2、$msg数组中不存在isMsg键名（为isMsg赋任何empty返回false的值都将导致不做任何处理）;
 	 * 3、$data为空;
 	 *
 	 * 理论上$msg（提示信息）一般为字符串类型，当它为数组时一定是data了，但为了保证程序的稳定性，将条件增加到3条，自由度也得到了提升，是否互换由使用者来决定。
 	 */
 	private function ajaxResultMsgIsData(&$msg, &$data){
-		if (is_array($msg) && !empty($msg['isData']) && $msg['isData'] === TRUE && empty($data)){
+		if (is_array($msg) && empty($msg['isMsg']) && empty($data)){
 			unset($msg['isData']);
 			$data = $msg;
 			$msg = '';

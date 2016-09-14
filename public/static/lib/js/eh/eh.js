@@ -3,7 +3,7 @@
  *
  * @return {Object} eh 函数库对象
  */
-define(['layer', 'jquery'], function(dialog){
+define(['layer', 'jquery', 'laypage'], function(dialog){
 	var debug = 1, //站点处于调试状态，所有eh函数内部错误（包括传值错误）都将以弹窗显性提示；正式上线需要将该参数设置为0，错误将在控制台输出。这并不影响函数内设置的与用户的交互提醒。
 		eh = {}; //函数库名称
 
@@ -54,6 +54,23 @@ define(['layer', 'jquery'], function(dialog){
 			htmlElement = (htmlElement && $(htmlElement).length > 0) || $('#html-preview');
 			markdownElement = (markdownElement && $(markdownElement).length > 0) || $('#markdown');
 			htmlElement.height(markdownElement.innerHeight());
+		}
+
+		/**
+		 * 分页生成
+		 * 默认采用hash做异步分页，可以使用option参数对默认值进行覆盖。
+		 *
+		 * @param {Object} option 分页参数
+		 */
+		 pageRender: function(option){
+		 	option = $.extend({
+		 		cont: 'list-pages', //容器。值支持id名、原生dom对象，jquery对象
+				curr: location.hash.replace('#!page=', ''), //获取hash值为page的当前页，与hash参数要对应。
+				hash: 'page', //自定义hash值
+				skin: '#AF0000'
+		 	},option);
+
+			laypage(option);
 		}
 	};
 

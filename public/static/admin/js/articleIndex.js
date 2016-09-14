@@ -1,4 +1,4 @@
-define(['layer', 'laypage', 'jquery', 'dotdotdot'], function(diolog, laypage){
+define(['layer', 'jquery', 'dotdotdot', 'eh.xhr', 'laytpl'], function(diolog, laypage){
 	var trigger_sign = 0;
 
 	$(function(){
@@ -17,16 +17,7 @@ define(['layer', 'laypage', 'jquery', 'dotdotdot'], function(diolog, laypage){
 			}
 		});
 
-		laypage({
-			cont: 'list-pages', //容器。值支持id名、原生dom对象，jquery对象,
-			pages: 68, //总页数
-			curr: location.hash.replace('#!page=', ''), //获取hash值为fenye的当前页
-			hash: 'page', //自定义hash值
-			skin: '#AF0000',
-			jump: function(obj){
-				console.log(obj.curr);
-			}
-		});
+
 	});
 
 	//执行内容恢复并重新截取
@@ -40,5 +31,20 @@ define(['layer', 'laypage', 'jquery', 'dotdotdot'], function(diolog, laypage){
 	function setListHeight(){
 		var listHeight = $(window).outerHeight() - $('header').outerHeight() - 10 - 80;
 		$('.list-main ul').height(listHeight);
+	}
+
+	function getArticleList(){
+		var done = {
+			success: function(){
+				listRender(data);
+			}
+		}
+		eh.xhr.get('article', {pages: 1}, '', done);
+	}
+
+	function listRender(data){
+		laytpl($('#tpl-article-list')).render(data, function(render){
+			$('section.list-main').html(render);
+		});
 	}
 });

@@ -23,7 +23,28 @@ class Article extends Init{
 	 * 获取文章列表
 	 */
 	public function index(){
-		return $this->fetch();
+		if (input('pages')){
+			$param = input('get.');
+			
+			if (is_int($param['pages']) && $param['pages'] > 0){
+				$article = db('article')->page($param['page'], 20)->select();
+				
+				if (count($article) > 0){
+					$data = [
+						'pages' => $article,
+						'count' => db('article')->count()
+					];
+					
+					return $this->ajaxSuccessResult($data);
+				}else{
+					return $this->ajaxErrorResult(lang('E-030201', 'E-030201'));
+				}
+			}else{
+				return $this->ajaxErrorResult(lang('E-030106'), 'E-030106');
+			}
+		}else{
+			return $this->fetch();
+		}
 	}
 	
 	
