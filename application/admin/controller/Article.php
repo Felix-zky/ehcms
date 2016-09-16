@@ -23,15 +23,14 @@ class Article extends Init{
 	 * 获取文章列表
 	 */
 	public function index(){
-		if (input('pages')){
-			$param = input('get.');
-			
-			if (is_int($param['pages']) && $param['pages'] > 0){
-				$article = db('article')->page($param['page'], 20)->select();
+		$pages = (int)input('param.pages');
+		if ($pages){
+			if ($pages > 0){
+				$article = db('article')->page($pages, 20)->select();
 				
 				if (count($article) > 0){
 					$data = [
-						'pages' => $article,
+						'articles' => $article,
 						'count' => db('article')->count()
 					];
 					
