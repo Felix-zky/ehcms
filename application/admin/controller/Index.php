@@ -2,18 +2,25 @@
 namespace app\admin\controller;
 
 class Index extends Init{
+	
 	public function __construct(){
 		parent::__construct();
 		
 		$this->view->engine->layout(FALSE);
 	}
 	
+	/**
+	 * 后台首页，读取桌面图标。
+	 */
 	public function index(){
 		//查询桌面图标
 		$this->assign('desktop', db('admin_desktop')->select());
 		return $this->fetch();
 	}
 	
+	/**
+	 * 异步方法，读取应用菜单。
+	 */
 	public function getMenu(){
 		$post = input('');
 		
