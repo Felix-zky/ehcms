@@ -36,10 +36,10 @@ class Article extends Init{
 					
 					return $this->ajaxSuccessResult($data);
 				}else{
-					return $this->ajaxErrorResult(lang('E-030201', 'E-030201'));
+					return $this->ajaxErrorResult('E-030201');
 				}
 			}else{
-				return $this->ajaxErrorResult(lang('E-030106'), 'E-030106');
+				return $this->ajaxErrorResult('E-030106');
 			}
 		}else{
 			return $this->fetch();
@@ -62,7 +62,7 @@ class Article extends Init{
 		if (request()->isPost()){
 			
 		}else{
-			$this->ajaxErrorResult(lang('E-03002'), 'E-03002');
+			$this->ajaxErrorResult('E-03002');
 		}
 	}
 	

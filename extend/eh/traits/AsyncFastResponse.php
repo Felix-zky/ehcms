@@ -9,8 +9,13 @@ trait AsyncFastResponse{
 	 * 参数的设置请参照ThinkPHP Jump->result()
 	 */
 	protected function ajaxSuccessResult($msg = '成功', $data = '', $code = 1){
-		$this->ajaxResultMsgIsData($msg, $data);
-		return $this->result($data, $code, $msg, 'json');
+		//如果msg等于字符串类型且通过正则验证，则将返回信息替换，目前正则验证S-开头（区分大小写），后面跟6个数字，且数字结尾。
+		if (is_string($msg) && preg_match('/^S-\d{6}$/', $msg)){
+			$msg = lang($msg);
+		}else{
+			$this->ajaxResultMsgIsData($msg, $data);
+		}
+		return $this->result($data, $code, $msg);
 	}
 	
 	/**
@@ -18,9 +23,15 @@ trait AsyncFastResponse{
 	 *
 	 * 参数的设置请参照ThinkPHP Jump->result()
 	 */
-	protected function ajaxErrorResult($msg = '失败', $code = 0, $data = ''){
-		$this->ajaxResultMsgIsData($msg, $data);
-		return $this->result($data, $code, $msg, 'json');
+	protected function ajaxErrorResult($msg = '失败', $data = '', $code = 0){
+		//如果msg等于字符串类型且通过正则验证，则将错误信息以及code替换，目前正则验证E-开头（区分大小写），后面跟6个数字，且数字结尾。
+		if (is_string($msg) && preg_match('/^E-\d{6}$/', $msg)){
+			$code = $msg;
+			$msg = lang($msg);
+		}else{
+			$this->ajaxResultMsgIsData($msg, $data);
+		}
+		return $this->result($data, $code, $msg, 'html');
 	}
 	
 	/**
@@ -40,5 +51,4 @@ trait AsyncFastResponse{
 			$msg = '';
 		}
 	}
-	
 }
