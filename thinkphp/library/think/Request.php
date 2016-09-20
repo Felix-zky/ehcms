@@ -83,7 +83,6 @@ class Request
     protected $request = [];
     protected $route   = [];
     protected $put;
-    protected $delete;
     protected $session = [];
     protected $file    = [];
     protected $cookie  = [];
@@ -94,7 +93,6 @@ class Request
      * @var array 资源类型
      */
     protected $mimeType = [
-        'html' => 'text/html,application/xhtml+xml,*/*',
         'xml'  => 'application/xml,text/xml,application/x-xml',
         'json' => 'application/json,text/x-json,application/jsonrequest,text/json',
         'js'   => 'text/javascript,application/javascript,application/x-javascript',
@@ -108,6 +106,7 @@ class Request
         'jpg'  => 'image/jpg,image/jpeg,image/pjpeg',
         'gif'  => 'image/gif',
         'csv'  => 'text/csv',
+        'html' => 'text/html,application/xhtml+xml,*/*',
     ];
 
     protected $content;
@@ -116,6 +115,8 @@ class Request
     protected $filter;
     // Hook扩展方法
     protected static $hook = [];
+    // 绑定的属性
+    protected $bind = [];
 
     /**
      * 架构函数
@@ -129,7 +130,9 @@ class Request
                 $this->$name = $item;
             }
         }
-        $this->filter = Config::get('default_filter');
+        if (is_null($this->filter)) {
+            $this->filter = Config::get('default_filter');
+        }
     }
 
     public function __call($method, $args)
@@ -237,9 +240,9 @@ class Request
         $options['server']      = $server;
         $options['url']         = $server['REQUEST_URI'];
         $options['baseUrl']     = $info['path'];
-        $options['pathinfo']    = ltrim($info['path'], '/');
+        $options['pathinfo']    = '/' == $info['path'] ? '/' : ltrim($info['path'], '/');
         $options['method']      = $server['REQUEST_METHOD'];
-        $options['domain']      = $server['HTTP_HOST'];
+        $options['domain']      = $info['scheme'] . '://' . $server['HTTP_HOST'];
         $options['content']     = $content;
         self::$instance         = new self($options);
         return self::$instance;
@@ -490,6 +493,7 @@ class Request
         } elseif (!$this->method) {
             if (isset($_POST[Config::get('var_method')])) {
                 $this->method = strtoupper($_POST[Config::get('var_method')]);
+                $this->{$this->method}($_POST);
             } elseif (isset($_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'])) {
                 $this->method = strtoupper($_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE']);
             } else {
@@ -599,11 +603,6 @@ class Request
      */
     public function param($name = '', $default = null, $filter = null)
     {
-        if (is_array($name)) {
-            // 设置param
-            $this->param = array_merge($this->param, $name);
-            return;
-        }
         if (empty($this->param)) {
             $method = $this->method(true);
             // 自动获取请求变量
@@ -612,16 +611,21 @@ class Request
                     $vars = $this->post(false);
                     break;
                 case 'PUT':
-                    $vars = $this->put(false);
-                    break;
                 case 'DELETE':
-                    $vars = $this->delete(false);
+                case 'PATCH':
+                    $vars = $this->put(false);
                     break;
                 default:
                     $vars = [];
             }
             // 当前请求参数和URL地址中的参数合并
-            $this->param = array_merge($this->route(false), $this->get(false), $vars);
+            $this->param = array_merge($this->get(false), $vars, $this->route(false));
+        }
+        if (true === $name) {
+            // 获取包含文件上传信息的数组
+            $file = $this->file();
+            $data = array_merge($this->param, $file);
+            return $this->input($data, '', $default, $filter);
         }
         return $this->input($this->param, $name, $default, $filter);
     }
@@ -637,6 +641,7 @@ class Request
     public function route($name = '', $default = null, $filter = null)
     {
         if (is_array($name)) {
+            $this->param        = [];
             return $this->route = array_merge($this->route, $name);
         }
         return $this->input($this->route, $name, $default, $filter);
@@ -652,10 +657,12 @@ class Request
      */
     public function get($name = '', $default = null, $filter = null)
     {
-        if (is_array($name)) {
-            return $this->get = array_merge($this->get, $name);
-        } elseif (empty($this->get)) {
+        if (empty($this->get)) {
             $this->get = $_GET;
+        }
+        if (is_array($name)) {
+            $this->param      = [];
+            return $this->get = array_merge($this->get, $name);
         }
         return $this->input($this->get, $name, $default, $filter);
     }
@@ -670,10 +677,12 @@ class Request
      */
     public function post($name = '', $default = null, $filter = null)
     {
-        if (is_array($name)) {
-            return $this->post = array_merge($this->post, $name);
-        } elseif (empty($this->post)) {
+        if (empty($this->post)) {
             $this->post = $_POST;
+        }
+        if (is_array($name)) {
+            $this->param       = [];
+            return $this->post = array_merge($this->post, $name);
         }
         return $this->input($this->post, $name, $default, $filter);
     }
@@ -688,9 +697,6 @@ class Request
      */
     public function put($name = '', $default = null, $filter = null)
     {
-        if (is_array($name)) {
-            return $this->put = is_null($this->put) ? $name : array_merge($this->put, $name);
-        }
         if (is_null($this->put)) {
             $content = file_get_contents('php://input');
             if (strpos($content, '":')) {
@@ -699,6 +705,11 @@ class Request
                 parse_str($content, $this->put);
             }
         }
+        if (is_array($name)) {
+            $this->param      = [];
+            return $this->put = is_null($this->put) ? $name : array_merge($this->put, $name);
+        }
+
         return $this->input($this->put, $name, $default, $filter);
     }
 
@@ -712,13 +723,20 @@ class Request
      */
     public function delete($name = '', $default = null, $filter = null)
     {
-        if (is_array($name)) {
-            return $this->delete = is_null($this->delete) ? $name : array_merge($this->delete, $name);
-        }
-        if (is_null($this->delete)) {
-            parse_str(file_get_contents('php://input'), $this->delete);
-        }
-        return $this->input($this->delete, $name, $default, $filter);
+        return $this->put($name, $default, $filter);
+    }
+
+    /**
+     * 设置获取获取PATCH参数
+     * @access public
+     * @param string|array      $name 变量名
+     * @param mixed             $default 默认值
+     * @param string|array      $filter 过滤方法
+     * @return mixed
+     */
+    public function patch($name = '', $default = null, $filter = null)
+    {
+        return $this->put($name, $default, $filter);
     }
 
     /**
@@ -730,12 +748,14 @@ class Request
      */
     public function request($name = '', $default = null, $filter = null)
     {
-        if (is_array($name)) {
-            return $this->request = array_merge($this->request, $name);
-        } elseif (empty($this->request)) {
+        if (empty($this->request)) {
             $this->request = $_REQUEST;
         }
-        return $this->input($this->request ?: $_REQUEST, $name, $default, $filter);
+        if (is_array($name)) {
+            $this->param          = [];
+            return $this->request = array_merge($this->request, $name);
+        }
+        return $this->input($this->request, $name, $default, $filter);
     }
 
     /**
@@ -748,10 +768,11 @@ class Request
      */
     public function session($name = '', $default = null, $filter = null)
     {
+        if (empty($this->session)) {
+            $this->session = Session::get();
+        }
         if (is_array($name)) {
             return $this->session = array_merge($this->session, $name);
-        } elseif (empty($this->session)) {
-            $this->session = Session::get();
         }
         return $this->input($this->session, $name, $default, $filter);
     }
@@ -766,10 +787,11 @@ class Request
      */
     public function cookie($name = '', $default = null, $filter = null)
     {
+        if (empty($this->cookie)) {
+            $this->cookie = $_COOKIE;
+        }
         if (is_array($name)) {
             return $this->cookie = array_merge($this->cookie, $name);
-        } elseif (empty($this->cookie)) {
-            $this->cookie = $_COOKIE;
         }
         return $this->input($this->cookie, $name, $default, $filter);
     }
@@ -784,10 +806,11 @@ class Request
      */
     public function server($name = '', $default = null, $filter = null)
     {
+        if (empty($this->server)) {
+            $this->server = $_SERVER;
+        }
         if (is_array($name)) {
             return $this->server = array_merge($this->server, $name);
-        } elseif (empty($this->server)) {
-            $this->server = $_SERVER;
         }
         return $this->input($this->server, false === $name ? false : strtoupper($name), $default, $filter);
     }
@@ -800,10 +823,11 @@ class Request
      */
     public function file($name = '')
     {
+        if (empty($this->file)) {
+            $this->file = isset($_FILES) ? $_FILES : [];
+        }
         if (is_array($name)) {
             return $this->file = array_merge($this->file, $name);
-        } elseif (empty($this->file)) {
-            $this->file = isset($_FILES) ? $_FILES : [];
         }
         $files = $this->file;
         if (!empty($files)) {
@@ -860,10 +884,11 @@ class Request
      */
     public function env($name = '', $default = null, $filter = null)
     {
+        if (empty($this->env)) {
+            $this->env = $_ENV;
+        }
         if (is_array($name)) {
             return $this->env = array_merge($this->env, $name);
-        } elseif (empty($this->env)) {
-            $this->env = $_ENV;
         }
         return $this->input($this->env, false === $name ? false : strtoupper($name), $default, $filter);
     }
@@ -877,9 +902,7 @@ class Request
      */
     public function header($name = '', $default = null)
     {
-        if (is_array($name)) {
-            return $this->header = array_merge($this->header, $name);
-        } elseif (empty($this->header)) {
+        if (empty($this->header)) {
             $header = [];
             $server = $this->server ?: $_SERVER;
             foreach ($server as $key => $val) {
@@ -895,6 +918,9 @@ class Request
                 $header['content-length'] = $server['CONTENT_LENGTH'];
             }
             $this->header = array_change_key_case($header);
+        }
+        if (is_array($name)) {
+            return $this->header = array_merge($this->header, $name);
         }
         if ('' === $name) {
             return $this->header;
@@ -934,6 +960,9 @@ class Request
                     return $default;
                 }
             }
+            if (is_object($data)) {
+                return $data;
+            }
         }
 
         // 解析过滤器
@@ -947,6 +976,7 @@ class Request
         $filter[] = $default;
         if (is_array($data)) {
             array_walk_recursive($data, [$this, 'filterValue'], $filter);
+            reset($data);
         } else {
             $this->filterValue($data, $name, $filter);
         }
@@ -986,7 +1016,7 @@ class Request
             if (is_callable($filter)) {
                 // 调用函数或者方法过滤
                 $value = call_user_func($filter, $value);
-            } else {
+            } elseif (is_scalar($value)) {
                 if (strpos($filter, '/')) {
                     // 正则过滤
                     if (!preg_match($filter, $value)) {
@@ -1154,7 +1184,8 @@ class Request
      */
     public function isAjax()
     {
-        return (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') ? true : false;
+        $value = $this->server('HTTP_X_REQUESTED_WITH');
+        return (!is_null($value) && strtolower($value) == 'xmlhttprequest') ? true : false;
     }
 
     /**
@@ -1164,7 +1195,7 @@ class Request
      */
     public function isPjax()
     {
-        return (isset($_SERVER['HTTP_X_PJAX']) && $_SERVER['HTTP_X_PJAX']) ? true : false;
+        return !is_null($this->server('HTTP_X_PJAX')) ? true : false;
     }
 
     /**
@@ -1213,7 +1244,7 @@ class Request
     {
         if (isset($_SERVER['HTTP_VIA']) && stristr($_SERVER['HTTP_VIA'], "wap")) {
             return true;
-        } elseif (strpos(strtoupper($_SERVER['HTTP_ACCEPT']), "VND.WAP.WML")) {
+        } elseif (isset($_SERVER['HTTP_ACCEPT']) && strpos(strtoupper($_SERVER['HTTP_ACCEPT']), "VND.WAP.WML")) {
             return true;
         } elseif (isset($_SERVER['HTTP_X_WAP_PROFILE']) || isset($_SERVER['HTTP_PROFILE'])) {
             return true;
@@ -1388,5 +1419,49 @@ class Request
             $this->content = file_get_contents('php://input');
         }
         return $this->content;
+    }
+
+    /**
+     * 生成请求令牌
+     * @access public
+     * @param string $name 令牌名称
+     * @param mixed  $type 令牌生成方法
+     * @return string
+     */
+    public function token($name = '__token__', $type = 'md5')
+    {
+        $type  = is_callable($type) ? $type : 'md5';
+        $token = call_user_func($type, $_SERVER['REQUEST_TIME_FLOAT']);
+        if ($this->isAjax()) {
+            header($name . ': ' . $token);
+        }
+        Session::set($name, $token);
+        return $token;
+    }
+
+    /**
+     * 设置当前请求绑定的对象实例
+     * @access public
+     * @param string $name 绑定的对象标识
+     * @param mixed  $obj 绑定的对象实例
+     * @return mixed
+     */
+    public function bind($name, $obj = null)
+    {
+        if (is_array($name)) {
+            $this->bind = array_merge($this->bind, $name);
+        } else {
+            $this->bind[$name] = $obj;
+        }
+    }
+
+    public function __set($name, $value)
+    {
+        $this->bind[$name] = $value;
+    }
+
+    public function __get($name)
+    {
+        return isset($this->bind[$name]) ? $this->bind[$name] : null;
     }
 }

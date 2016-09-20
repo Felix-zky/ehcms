@@ -12,7 +12,11 @@ class Plugin implements PluginInterface
 {
     public function activate(Composer $composer, IOInterface $io)
     {
-        $installer = new ThinkFramework($io, $composer);
-        $composer->getInstallationManager()->addInstaller($installer);
+        $manager = $composer->getInstallationManager();
+
+        $manager->addInstaller(new ThinkFramework($io, $composer));
+
+        $manager->addInstaller(new ThinkTesting($io, $composer));
+
     }
 }

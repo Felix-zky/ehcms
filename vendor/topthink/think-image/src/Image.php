@@ -9,9 +9,10 @@
 // | Author: yunwuxin <448901948@qq.com>
 // +----------------------------------------------------------------------
 
-namespace think\image;
+namespace think;
 
 use think\image\gif\Gif;
+use think\image\Exception as ImageException;
 
 class Image
 {
@@ -33,6 +34,10 @@ class Image
     const WATER_SOUTHWEST = 7; //常量，标识左下角水印
     const WATER_SOUTH     = 8; //常量，标识下居中水印
     const WATER_SOUTHEAST = 9; //常量，标识右下角水印
+    /* 翻转相关常量定义 */
+    const FLIP_X = 1; //X轴翻转
+    const FLIP_Y = 2; //Y轴翻转
+
 
     /**
      * 图像资源对象
@@ -58,7 +63,7 @@ class Image
 
         //检测图像合法性
         if (false === $info || (IMAGETYPE_GIF === $info[2] && empty($info['bits']))) {
-            throw new Exception('Illegal image file');
+            throw new ImageException('Illegal image file');
         }
 
         //设置图像信息
@@ -79,7 +84,7 @@ class Image
         }
 
         if (empty($this->im)) {
-            throw new Exception('Failed to create image resources!');
+            throw new ImageException('Failed to create image resources!');
         }
 
     }
@@ -95,18 +100,20 @@ class Image
             $file = new \SplFileInfo($file);
         }
         if (!$file->isFile()) {
-            throw new Exception('image file not exist');
+            throw new ImageException('image file not exist');
         }
         return new self($file);
     }
 
     /**
      * 保存图像
-     * @param string      $pathname 图像保存路径名称
-     * @param null|string $type     图像类型
-     * @return \SplFileInfo
+     * @param string      $pathname  图像保存路径名称
+     * @param null|string $type      图像类型
+     * @param int         $quality   图像质量
+     * @param bool        $interlace 是否对JPEG类型图像设置隔行扫描
+     * @return $this
      */
-    public function save($pathname, $type = null)
+    public function save($pathname, $type = null, $quality = 80, $interlace = true)
     {
         //自动获取图像类型
         if (is_null($type)) {
@@ -114,16 +121,20 @@ class Image
         } else {
             $type = strtolower($type);
         }
-        //JPEG图像设置隔行扫描
-        if ('jpeg' == $type || 'jpg' == $type) {
-            $type = 'jpeg';
-            imageinterlace($this->im, 1);
-        }
         //保存图像
-        if ('gif' == $type && !empty($this->gif)) {
+        if ('jpeg' == $type || 'jpg' == $type) {
+            //JPEG图像设置隔行扫描
+            imageinterlace($this->im, $interlace);
+            imagejpeg($this->im, $pathname, $quality);
+        } elseif ('gif' == $type && !empty($this->gif)) {
             $this->gif->save($pathname);
+        } elseif ('png' == $type) {
+            //设定保存完整的 alpha 通道信息
+            imagesavealpha($this->im, true);
+            //ImagePNG生成图像的质量范围从0到9的
+            imagepng($this->im, $pathname, min((int)($quality / 10), 9));
         } else {
-            $fun = "image{$type}";
+            $fun = 'image' . $type;
             $fun($this->im, $pathname);
         }
 
@@ -136,7 +147,7 @@ class Image
      */
     public function width()
     {
-        return (int)$this->info['width'];
+        return $this->info['width'];
     }
 
     /**
@@ -145,7 +156,7 @@ class Image
      */
     public function height()
     {
-        return (int)$this->info['height'];
+        return $this->info['height'];
     }
 
     /**
@@ -172,7 +183,64 @@ class Image
      */
     public function size()
     {
-        return [(int)$this->info['width'], (int)$this->info['height']];
+        return [$this->info['width'], $this->info['height']];
+    }
+
+    /**
+     * 旋转图像
+     * @param int $degrees 顺时针旋转的度数
+     * @return $this
+     */
+    public function rotate($degrees = 90)
+    {
+        do {
+            $img = imagerotate($this->im, -$degrees, imagecolorallocatealpha($this->im, 0, 0, 0, 127));
+            imagedestroy($this->im);
+            $this->im = $img;
+        } while (!empty($this->gif) && $this->gifNext());
+
+        $this->info['width']  = imagesx($this->im);
+        $this->info['height'] = imagesy($this->im);
+
+        return $this;
+    }
+
+    /**
+     * 翻转图像
+     * @param integer $direction 翻转轴,X或者Y
+     * @return $this
+     */
+    public function flip($direction = self::FLIP_X)
+    {
+        //原图宽度和高度
+        $w = $this->info['width'];
+        $h = $this->info['height'];
+
+        do {
+
+            $img = imagecreatetruecolor($w, $h);
+
+            switch ($direction) {
+                case self::FLIP_X:
+                    for ($y = 0; $y < $h; $y++) {
+                        imagecopy($img, $this->im, 0, $h - $y - 1, 0, $y, $w, 1);
+                    }
+                    break;
+                case self::FLIP_Y:
+                    for ($x = 0; $x < $w; $x++) {
+                        imagecopy($img, $this->im, $w - $x - 1, 0, $x, 0, 1, $h);
+                    }
+                    break;
+                default:
+                    throw new ImageException('不支持的翻转类型');
+            }
+
+            imagedestroy($this->im);
+            $this->im = $img;
+
+        } while (!empty($this->gif) && $this->gifNext());
+
+        return $this;
     }
 
     /**
@@ -204,8 +272,8 @@ class Image
             //设置新图像
             $this->im = $img;
         } while (!empty($this->gif) && $this->gifNext());
-        $this->info['width']  = $width;
-        $this->info['height'] = $height;
+        $this->info['width']  = (int)$width;
+        $this->info['height'] = (int)$height;
         return $this;
     }
 
@@ -293,15 +361,15 @@ class Image
                     imagedestroy($this->im); //销毁原图
                     $this->im = $img;
                 } while (!empty($this->gif) && $this->gifNext());
-                $this->info['width']  = $width;
-                $this->info['height'] = $height;
+                $this->info['width']  = (int)$width;
+                $this->info['height'] = (int)$height;
                 return $this;
             /* 固定 */
             case self::THUMB_FIXED:
                 $x = $y = 0;
                 break;
             default:
-                throw new Exception('不支持的缩略图裁剪类型');
+                throw new ImageException('不支持的缩略图裁剪类型');
         }
         /* 裁剪图像 */
         $this->crop($w, $h, $x, $y, $width, $height);
@@ -314,17 +382,18 @@ class Image
      *
      * @param  string $source 水印图片路径
      * @param int     $locate 水印位置
+     * @param int     $alpha  透明度
      * @return $this
      */
-    public function water($source, $locate = self::WATER_SOUTHEAST)
+    public function water($source, $locate = self::WATER_SOUTHEAST, $alpha = 100)
     {
         if (!is_file($source)) {
-            throw new Exception('水印图像不存在');
+            throw new ImageException('水印图像不存在');
         }
         //获取水印图像信息
         $info = getimagesize($source);
         if (false === $info || (IMAGETYPE_GIF === $info[2] && empty($info['bits']))) {
-            throw new Exception('非法水印文件');
+            throw new ImageException('非法水印文件');
         }
         //创建水印图像资源
         $fun   = 'imagecreatefrom' . image_type_to_extension($info[2], false);
@@ -382,7 +451,7 @@ class Image
                 if (is_array($locate)) {
                     list($x, $y) = $locate;
                 } else {
-                    throw new Exception('不支持的水印位置类型');
+                    throw new ImageException('不支持的水印位置类型');
                 }
         }
         do {
@@ -393,7 +462,7 @@ class Image
             imagefill($src, 0, 0, $color);
             imagecopy($src, $this->im, 0, 0, $x, $y, $info[0], $info[1]);
             imagecopy($src, $water, 0, 0, 0, 0, $info[0], $info[1]);
-            imagecopymerge($this->im, $src, $x, $y, 0, 0, $info[0], $info[1], 100);
+            imagecopymerge($this->im, $src, $x, $y, 0, 0, $info[0], $info[1], $alpha);
             //销毁零时图片资源
             imagedestroy($src);
         } while (!empty($this->gif) && $this->gifNext());
@@ -414,14 +483,14 @@ class Image
      * @param  integer $angle  文字倾斜角度
      *
      * @return $this
-     * @throws Exception
+     * @throws ImageException
      */
     public function text($text, $font, $size, $color = '#00000000',
                          $locate = self::WATER_SOUTHEAST, $offset = 0, $angle = 0)
     {
 
         if (!is_file($font)) {
-            throw new Exception("不存在的字体文件：{$font}");
+            throw new ImageException("不存在的字体文件：{$font}");
         }
         //获取文字信息
         $info = imagettfbbox($size, $angle, $font, $text);
@@ -483,7 +552,7 @@ class Image
                     $x += $posx;
                     $y += $posy;
                 } else {
-                    throw new Exception('不支持的文字位置类型');
+                    throw new ImageException('不支持的文字位置类型');
                 }
         }
         /* 设置偏移量 */
@@ -502,7 +571,7 @@ class Image
                 $color[3] = 0;
             }
         } elseif (!is_array($color)) {
-            throw new Exception('错误的颜色值');
+            throw new ImageException('错误的颜色值');
         }
         do {
             /* 写入文字 */
@@ -524,9 +593,11 @@ class Image
         $this->gif->image($img);
         $next = $this->gif->nextImage();
         if ($next) {
+            imagedestroy($this->im);
             $this->im = imagecreatefromstring($next);
             return $next;
         } else {
+            imagedestroy($this->im);
             $this->im = imagecreatefromstring($this->gif->image());
             return false;
         }

@@ -11,6 +11,9 @@
 
 namespace think;
 
+use think\Config;
+use think\Debug;
+use think\Env;
 use think\response\Json as JsonResponse;
 use think\response\Jsonp as JsonpResponse;
 use think\response\Redirect as RedirectResponse;
@@ -93,6 +96,11 @@ class Response
         // 处理输出数据
         $data = $this->getContent();
 
+        // Trace调试注入
+        if (Env::get('app_trace', Config::get('app_trace'))) {
+            Debug::inject($this, $data);
+        }
+
         if (!headers_sent() && !empty($this->header)) {
             // 发送状态码
             http_response_code($this->code);
@@ -170,14 +178,14 @@ class Response
     public function content($content)
     {
         if (null !== $content && !is_string($content) && !is_numeric($content) && !is_callable([
-                $content,
-                '__toString',
-            ])
+            $content,
+            '__toString',
+        ])
         ) {
             throw new \InvalidArgumentException(sprintf('variable type error： %s', gettype($content)));
         }
 
-        $this->content = (string)$content;
+        $this->content = (string) $content;
 
         return $this;
     }
@@ -248,7 +256,7 @@ class Response
         $this->header['Content-Type'] = $contentType . '; charset=' . $charset;
         return $this;
     }
-    
+
     /**
      * 获取头部信息
      * @param string $name 头部名称
@@ -274,18 +282,18 @@ class Response
      */
     public function getContent()
     {
-        if ($this->content == null) {
+        if (null == $this->content) {
             $content = $this->output($this->data);
 
             if (null !== $content && !is_string($content) && !is_numeric($content) && !is_callable([
-                    $content,
-                    '__toString',
-                ])
+                $content,
+                '__toString',
+            ])
             ) {
                 throw new \InvalidArgumentException(sprintf('variable type error： %s', gettype($content)));
             }
 
-            $this->content = (string)$content;
+            $this->content = (string) $content;
         }
         return $this->content;
     }

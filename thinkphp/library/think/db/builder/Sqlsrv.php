@@ -31,6 +31,22 @@ class Sqlsrv extends Builder
      */
     protected function parseOrder($order)
     {
+        if (is_array($order)) {
+            $array = [];
+            foreach ($order as $key => $val) {
+                if (is_numeric($key)) {
+                    if (false === strpos($val, '(')) {
+                        $array[] = $this->parseKey($val);
+                    } elseif ('[rand]' == $val) {
+                        $array[] = $this->parseRand();
+                    }
+                } else {
+                    $sort    = in_array(strtolower(trim($val)), ['asc', 'desc']) ? ' ' . $val : '';
+                    $array[] = $this->parseKey($key) . ' ' . $sort;
+                }
+            }
+            $order = implode(',', $array);
+        }
         return !empty($order) ? ' ORDER BY ' . $order : ' ORDER BY rand()';
     }
 

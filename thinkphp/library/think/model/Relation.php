@@ -43,6 +43,10 @@ class Relation
     protected $alias;
     // 当前关联的JOIN类型
     protected $joinType;
+    // 关联模型查询对象
+    protected $query;
+    // 关联查询条件
+    protected $where;
 
     /**
      * 架构函数
@@ -103,7 +107,7 @@ class Relation
                 $result                          = $this->belongsToManyQuery($relation, $this->middle, $foreignKey, $localKey, $condition)->select();
                 foreach ($result as $set) {
                     $pivot = [];
-                    foreach ($set->toArray() as $key => $val) {
+                    foreach ($set->getData() as $key => $val) {
                         if (strpos($key, '__')) {
                             list($name, $attr) = explode('__', $key, 2);
                             if ('pivot' == $name) {
@@ -168,7 +172,8 @@ class Relation
                     }
 
                     if (!empty($range)) {
-                        $data = $this->eagerlyOneToMany($model, [
+                        $this->where[$foreignKey] = ['in', $range];
+                        $data                     = $this->eagerlyOneToMany($model, [
                             $foreignKey => [
                                 'in',
                                 $range,
@@ -303,7 +308,7 @@ class Relation
     protected function match($model, $relation, &$result)
     {
         // 重新组装模型数据
-        foreach ($result->toArray() as $key => $val) {
+        foreach ($result->getData() as $key => $val) {
             if (strpos($key, '__')) {
                 list($name, $attr) = explode('__', $key, 2);
                 if ($name == $relation) {
@@ -334,7 +339,10 @@ class Relation
     {
         $foreignKey = $this->foreignKey;
         // 预载入关联查询 支持嵌套预载入
-        $list = $model->where($where)->where($closure)->with($subRelation)->select();
+        if ($closure) {
+            call_user_func_array($closure, [ & $model]);
+        }
+        $list = $model->where($where)->with($subRelation)->select();
 
         // 组装模型数据
         $data = [];
@@ -364,7 +372,7 @@ class Relation
         $data = [];
         foreach ($list as $set) {
             $pivot = [];
-            foreach ($set->toArray() as $key => $val) {
+            foreach ($set->getData() as $key => $val) {
                 if (strpos($key, '__')) {
                     list($name, $attr) = explode('__', $key, 2);
                     if ('pivot' == $name) {
@@ -409,7 +417,7 @@ class Relation
         $this->localKey   = $localKey;
         $this->alias      = $alias;
         $this->joinType   = $joinType;
-
+        $this->query      = (new $model)->db();
         // 返回关联的模型对象
         return $this;
     }
@@ -433,7 +441,7 @@ class Relation
         $this->localKey   = $otherKey;
         $this->alias      = $alias;
         $this->joinType   = $joinType;
-
+        $this->query      = (new $model)->db();
         // 返回关联的模型对象
         return $this;
     }
@@ -455,7 +463,7 @@ class Relation
         $this->foreignKey = $foreignKey;
         $this->localKey   = $localKey;
         $this->alias      = $alias;
-
+        $this->query      = (new $model)->db();
         // 返回关联的模型对象
         return $this;
     }
@@ -481,7 +489,7 @@ class Relation
         $this->throughKey = $throughKey;
         $this->localKey   = $localKey;
         $this->alias      = $alias;
-
+        $this->query      = (new $model)->db();
         // 返回关联的模型对象
         return $this;
     }
@@ -505,7 +513,7 @@ class Relation
         $this->localKey   = $localKey;
         $this->middle     = $table;
         $this->alias      = $alias;
-
+        $this->query      = (new $model)->db();
         // 返回关联的模型对象
         return $this;
     }
@@ -597,7 +605,7 @@ class Relation
             // 保存关联表数据
             $model = new $this->model;
             $id    = $model->save($data);
-        } elseif (is_numeric($data)) {
+        } elseif (is_numeric($data) || is_string($data)) {
             // 根据关联表主键直接写入中间表
             $id = $data;
         } elseif ($data instanceof Model) {
@@ -629,7 +637,7 @@ class Relation
     {
         if (is_array($data)) {
             $id = $data;
-        } elseif (is_numeric($data)) {
+        } elseif (is_numeric($data) || is_string($data)) {
             // 根据关联表主键直接写入中间表
             $id = $data;
         } elseif ($data instanceof Model) {
@@ -638,14 +646,16 @@ class Relation
             $id         = $data->$relationFk;
         }
         // 删除中间表数据
-        $pk                       = $this->parent->getPk();
-        $pivot[$this->localKey]   = $this->parent->$pk;
-        $pivot[$this->foreignKey] = is_array($id) ? ['in', $id] : $id;
-        $query                    = clone $this->parent->db();
+        $pk                     = $this->parent->getPk();
+        $pivot[$this->localKey] = $this->parent->$pk;
+        if (isset($id)) {
+            $pivot[$this->foreignKey] = is_array($id) ? ['in', $id] : $id;
+        }
+        $query = clone $this->parent->db();
         $query->table($this->middle)->where($pivot)->delete();
 
         // 删除关联表数据
-        if ($relationDel) {
+        if (isset($id) && $relationDel) {
             $model = $this->model;
             $model::destroy($id);
         }
@@ -653,14 +663,14 @@ class Relation
 
     public function __call($method, $args)
     {
-        if ($this->model) {
-            $model = new $this->model;
-            $db    = $model->db();
+        if ($this->query) {
             switch ($this->type) {
                 case self::HAS_MANY:
-                    if (isset($this->parent->{$this->localKey})) {
+                    if (isset($this->where)) {
+                        $this->query->where($this->where);
+                    } elseif (isset($this->parent->{$this->localKey})) {
                         // 关联查询带入关联条件
-                        $db->where($this->foreignKey, $this->parent->{$this->localKey});
+                        $this->query->where($this->foreignKey, $this->parent->{$this->localKey});
                     }
                     break;
                 case self::HAS_MANY_THROUGH:
@@ -671,13 +681,18 @@ class Relation
                     $pk           = (new $this->model)->getPk();
                     $throughKey   = $this->throughKey;
                     $modelTable   = $this->parent->getTable();
-                    $result       = $db->field($alias . '.*')->alias($alias)
+                    $result       = $this->query->field($alias . '.*')->alias($alias)
                         ->join($throughTable, $throughTable . '.' . $pk . '=' . $alias . '.' . $throughKey)
                         ->join($modelTable, $modelTable . '.' . $this->localKey . '=' . $throughTable . '.' . $this->foreignKey)
                         ->where($throughTable . '.' . $this->foreignKey, $this->parent->{$this->localKey});
                     break;
             }
-            return call_user_func_array([$db, $method], $args);
+            $result = call_user_func_array([$this->query, $method], $args);
+            if ($result instanceof \think\db\Query) {
+                return $this;
+            } else {
+                return $result;
+            }
         } else {
             throw new Exception('method not exists:' . __CLASS__ . '->' . $method);
         }
