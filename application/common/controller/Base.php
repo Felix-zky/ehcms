@@ -5,7 +5,7 @@ use think\Controller;
 use think\Lang;
 class Base extends Controller{
 	//加载异步快速反馈功能
-	use \eh\traits\AsyncFastResponse;
+	use \eh\traits\FastResponse;
 	
 	public function __construct(){
 		parent::__construct();
