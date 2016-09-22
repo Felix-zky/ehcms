@@ -1,15 +1,17 @@
 <?php
-namespace eh\EhUrl;
+namespace eh;
 
 class EhUrl{
-	private $_url;
 	
-	public function __construct(){
-		$this->_url = include '';
+	private static $eh_url = [];
+	
+	public static function load($file){
+		$url = include $file;
+		self::$eh_url = self::$eh_url + $url;
 	}
 	
-	public static function get($key){
-		return !empty($this->_url[$key]) ? $this->_url[$key] : $key;
+	public static function get($key, $vars = '', $suffix = true, $domain = false){
+		return !empty($this->_url[$key]) ? url($this->_url[$key], $vars, $suffix, $domain) : $key;
 	}
 	
 }
