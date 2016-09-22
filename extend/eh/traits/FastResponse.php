@@ -19,7 +19,7 @@ trait FastResponse{
 		//如果请求来自AJAX，那么返回result返回json格式，并且判断url是否存在，不存在则不传递。
 		if (request()->isAjax()){
 			if ($url != null){
-				$data['redirect_url'] = $url;
+				$data['redirect_url'] = url($url);
 				$data['redirect_wait'] = $wait;
 			}
 			return $this->result($data, $code, $msg, 'json');
