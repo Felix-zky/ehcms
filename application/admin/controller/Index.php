@@ -46,7 +46,7 @@ class Index extends Init{
 		
 		$menu = array_values($menu);
 		
-		return $this->ajaxSuccessResult($menu);
+		return $this->successResult($menu);
 	}
 }
 

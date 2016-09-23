@@ -13,7 +13,7 @@ class Init extends Base{
 		
 		//由于后台绝大部分页面需要登陆后操作，所有默认登录检测。
 		if ($this->noCheckUserLogin != 1){
-			$this->checkUserLogin();
+			//$this->checkUserLogin();
 		}
 	}
 	

@@ -54,7 +54,7 @@ define(['layer', 'jquery', 'laypage'], function(dialog){
 			htmlElement = (htmlElement && $(htmlElement).length > 0) || $('#html-preview');
 			markdownElement = (markdownElement && $(markdownElement).length > 0) || $('#markdown');
 			htmlElement.height(markdownElement.innerHeight());
-		}
+		},
 
 		/**
 		 * 分页生成

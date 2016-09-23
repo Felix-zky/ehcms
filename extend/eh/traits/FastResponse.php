@@ -11,7 +11,7 @@ trait FastResponse{
 		if (is_string($msg) && preg_match('/^S-\d{6}$/', $msg)){
 			$msg = lang($msg);
 		}else{
-			$this->ResultMsgIsData($msg, $data);
+			$this->msgIsData($msg, $data);
 		}
 		
 		if (is_array($url)){
