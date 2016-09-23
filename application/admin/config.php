@@ -9,6 +9,6 @@ return [
 		'__LIB_JS__' => '/static/lib/js'
 	],
 	'url_convert' => false
-]
+];
 
 ?>

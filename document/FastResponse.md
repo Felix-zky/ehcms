@@ -23,7 +23,7 @@ $msg = array && $msg[isMsg] != TRUE, $url = null, $data = ''
 ```php
 $msg = string, $url = 'U-xxxx', $data = ''
 ```  
-$msg保持不变，$url将被识别为地址标识符，会使用eh_url助手函数对标识符进行解析。
+$msg保持不变，$url将被识别为地址标识符，会使用eh_url助手函数对标识符进行解析。请参照[URL配置包](./UrlConfig.md)
 
 情况四：
 ```php

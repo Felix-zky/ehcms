@@ -13,7 +13,7 @@ class Init extends Base{
 		
 		//由于后台绝大部分页面需要登陆后操作，所有默认登录检测。
 		if ($this->noCheckUserLogin != 1){
-			//$this->checkUserLogin();
+			$this->checkUserLogin();
 		}
 	}
 	
@@ -23,8 +23,7 @@ class Init extends Base{
 	private function checkUserLogin(){
 		//管理员状态检查及用户状态检查
 		if (!session('?eh_admin') || action('member/User/checkUserLogin', [], 'event')){
-			cookie('redirectUrl', url());
-			$this->redirect('Login/index');
+			$this->redirect(eh_url('U-010301'));
 		}
 	}
 

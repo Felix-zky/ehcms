@@ -28,10 +28,10 @@ class Login extends Init{
 				return $result;
 			}else{
 				session('eh_admin', 1);
-				$this->ajaxSuccessResult('S-010201');
+				return $this->successResult('S-020101', 'U-020101');
 			}
 		}else{
-			return $this->ajaxErrorResult('E-020102', 'aaaaa');
+			return $this->errorResult('E-020102');
 		}
 	}
 }

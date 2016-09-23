@@ -11,7 +11,7 @@ class EhUrl{
 	}
 	
 	public static function get($key, $vars = '', $suffix = true, $domain = false){
-		return !empty($this->_url[$key]) ? url($this->_url[$key], $vars, $suffix, $domain) : $key;
+		return !empty(self::$eh_url[$key]) ? url(self::$eh_url[$key], $vars, $suffix, $domain) : $key;
 	}
 	
 }

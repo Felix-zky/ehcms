@@ -25,19 +25,19 @@ class User{
 			
 		//未填写用户名或密码
 		if (!$post['username'] || !$post['password']){
-			return $this->ajaxErrorResult('E-020101');
+			return $this->errorResult('E-020101');
 		}
 			
 		$member = db('member')->where(['username', $post['username']])->find();
 			
 		//根据用户查询，无法查找到用户
 		if (!$member || !is_array($member)){
-			return $this->ajaxErrorResult('E-020103');
+			return $this->errorResult('E-020103');
 		}
 			
 		//密码验证不通过
 		if (!$this->checkPassword($post['password'], $member['password'])){
-			return $this->ajaxErrorResult('E-020104');
+			return $this->errorResult('E-020104');
 		}
 		
 		cookie('user_id', $member['id']);
