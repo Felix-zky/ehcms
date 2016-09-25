@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<title>{$metaTitle | default='ehcms内容管理系统'}</title>
+	<link rel="stylesheet" type="text/css" href="__CSS__/style.css" />
+	<link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/animate.css/3.5.2/animate.min.css" />
+	<script type="text/javascript" src="http://cdn.bootcss.com/require.js/2.2.0/require.min.js" charset="utf-8"></script>
+	<script type="text/javascript">
+		require.config({
+			baseUrl: '__LIB_JS__',
+			paths: {
+				'js': '__JS__',
+				'eh': 'eh/eh',
+				'eh.xhr': 'eh/xhr',
+				'layer': 'layer/layer.init',
+				'laypage': 'laypage/laypage.init',
+				'laypage.min': 'laypage/laypage.min',
+				'jquery': [
+					'http://cdn.bootcss.com/jquery/1.12.4/jquery.min',
+					'jquery/jquery.min'
+				],
+				/** 弹窗 */
+				'layer.min': [
+					'http://cdn.bootcss.com/layer/2.3/layer',
+					'layer/layer.min'
+				],
+				/** 表单验证 */
+				'validate': [
+					'http://cdn.bootcss.com/jquery-validate/1.15.1/jquery.validate.min',
+					'validate/validate.min'
+				],
+				/** 表单验证中文语言包，直接加载语言包，无需加载validation，语言包自动会将validation加载进去。 */
+				'validate.zh': [
+					'validate/validate.zh'
+				]
+			},
+			shim: {
+				'validate.zh': {
+					deps: ['validate']
+				}
+			}
+		});
+	</script>
+</head>
+<body id="admin-login-index">
+	<section class="login">
+		<h1><img src="__IMAGES__/logo_default.png" alt="ehcms"></h1>
+		<form>
+			<input type="text" placeholder="请输入用户名">
+			<input type="password" placeholder="请输入密码">
+			<button>登录</button>
+		</form>
+	</section>
+	<script type="text/javascript">
+		require(['js/login']);
+	</script>
+</body>
+</html>
