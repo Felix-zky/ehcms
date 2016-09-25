@@ -3,6 +3,12 @@
  */
 define(['layer', 'jquery', 'eh'], function(dialog){
 	var xhr = {
+		/** 数据返回成功处理方式标识 */
+		doneState:{
+			'message': 1,
+			'messageRedirect': 2
+		},
+
 		/**
 		 * 异步GET请求
 		 *
@@ -116,9 +122,18 @@ define(['layer', 'jquery', 'eh'], function(dialog){
 	 * @param  {Object} data 执行结果
 	 */
 	function executeDone(done, data, sign, xhrObj){
-		if (!done) {
+		if (!done || done === xhr.doneState.messgae) {
 			dialog.msg(data.msg || '请求成功');
 			return false;
+		}else if {done === xhr.doneState.messageRedirect}{
+			if (data.redirectUrl) {
+				var wait = data.redirectWait || 3;
+				dialog.msg((data.msg || '请求成功') + wait + '秒后自动跳转', {time: wait * 1000}, function(){
+					location.href = data.redirectUrl;
+				});
+			}else{
+				dialog.msg(data.msg || '请求成功');
+			}
 		}
 
 		if (data.code == 1) {

@@ -13,6 +13,7 @@
 				'js': '__JS__',
 				'eh': 'eh/eh',
 				'eh.xhr': 'eh/xhr',
+				'eh.form': 'eh/form',
 				'layer': 'layer/layer.init',
 				'laypage': 'laypage/laypage.init',
 				'laypage.min': 'laypage/laypage.min',
@@ -47,8 +48,8 @@
 	<section class="login">
 		<h1><img src="__IMAGES__/logo_default.png" alt="ehcms"></h1>
 		<form>
-			<input type="text" placeholder="请输入用户名">
-			<input type="password" placeholder="请输入密码">
+			<input id="username" type="text" name="username" placeholder="请输入用户名">
+			<input id="password" type="password" name="password" placeholder="请输入密码">
 			<button>登录</button>
 		</form>
 	</section>
