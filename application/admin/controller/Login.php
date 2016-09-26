@@ -4,7 +4,6 @@ namespace app\admin\controller;
 class Login extends Init{
 	
 	public function __construct(){
-		$this->noCheckUserLogin = 1;
 		parent::__construct();
 	
 		$this->view->engine->layout(FALSE);
@@ -28,7 +27,7 @@ class Login extends Init{
 				return $result;
 			}else{
 				session('eh_admin', 1);
-				return $this->successResult('S-020101', 'U-020101');
+				return $this->successResult('S-020101', 'U-010201');
 			}
 		}else{
 			return $this->errorResult('E-020102');

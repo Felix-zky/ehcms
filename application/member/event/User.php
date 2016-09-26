@@ -1,7 +1,8 @@
 <?php
 namespace app\member\event;
 
-class User{
+use app\common\controller\Base;
+class User extends Base{
 	use \eh\traits\Password;
 	
 	/**
@@ -28,7 +29,7 @@ class User{
 			return $this->errorResult('E-020101');
 		}
 			
-		$member = db('member')->where(['username', $post['username']])->find();
+		$member = db('member')->where('username', $post['username'])->find();
 			
 		//根据用户查询，无法查找到用户
 		if (!$member || !is_array($member)){

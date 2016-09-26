@@ -24,7 +24,7 @@ define(['layer', 'jquery', 'eh'], function(dialog){
 					executeDone(done, data, sign, xhrObj);
 				},
 				function(xhrObj, sign, statusText){
-					executeFail(fail, xhrObj, sign, statusText);
+					executeFail(fail, xhrObj, sign);
 				}
 			);
 		},
@@ -39,7 +39,7 @@ define(['layer', 'jquery', 'eh'], function(dialog){
 					executeDone(done, data, sign, xhrObj);
 				},
 				function(xhrObj, sign, statusText){
-					executeFail(fail, xhrObj, sign, statusText);
+					executeFail(fail, xhrObj, sign);
 				}
 			);
 		},
@@ -61,7 +61,7 @@ define(['layer', 'jquery', 'eh'], function(dialog){
 					executeDone(done, data, sign, xhrObj);
 				},
 				function(xhrObj, sign, statusText){
-					executeFail(fail, xhrObj, sign, statusText);
+					executeFail(fail, xhrObj, sign);
 				}
 			);
 		},
@@ -83,7 +83,7 @@ define(['layer', 'jquery', 'eh'], function(dialog){
 					executeDone(done, data, sign, xhrObj);
 				},
 				function(xhrObj, sign, statusText){
-					executeFail(fail, xhrObj, sign, statusText);
+					executeFail(fail, xhrObj, sign);
 				}
 			);
 		},
@@ -109,7 +109,7 @@ define(['layer', 'jquery', 'eh'], function(dialog){
 					executeDone(done, data, sign, xhrObj);
 				},
 				function(xhrObj, sign, statusText){
-					executeFail(fail, xhrObj, sign, statusText);
+					executeFail(fail, xhrObj, sign);
 				}
 			);
 		}
@@ -122,24 +122,41 @@ define(['layer', 'jquery', 'eh'], function(dialog){
 	 * @param  {Object} data 执行结果
 	 */
 	function executeDone(done, data, sign, xhrObj){
-		if (!done || done === xhr.doneState.messgae) {
-			dialog.msg(data.msg || '请求成功');
-			return false;
-		}else if {done === xhr.doneState.messageRedirect}{
-			if (data.redirectUrl) {
-				var wait = data.redirectWait || 3;
-				dialog.msg((data.msg || '请求成功') + wait + '秒后自动跳转', {time: wait * 1000}, function(){
-					location.href = data.redirectUrl;
-				});
+		done = done || {};
+
+		//先对服务端返回的状态码进行判断
+		if (data.code == 1) {
+			//如果使用者自定义了处理方案，则直接使用。
+			if (typeof done.success == 'function') {
+				done.success(data);
+				return false;
 			}else{
-				dialog.msg(data.msg || '请求成功');
+				var msg = (typeof done.success == 'string' && done.success) || data.msg || '服务器返回正确';
+				var icon = 6;
+			}
+		}else {
+			//如果使用者自定义了处理方案，则直接使用。
+			if (typeof done.fail == 'function') {
+				done.fail(data);
+				return false;
+			}else{
+				var msg = ((typeof done.fail == 'string' && done.fail) || data.msg || '服务器返回错误') + (eh.debug == 1 ? '（' + data.code + '）' : '');
+				var icon = 5;
 			}
 		}
 
-		if (data.code == 1) {
-			typeof done.success == 'function' ? done.success(data) : dialog.msg(done.success || data.msg, {icon: 6});
-		}else {
-			typeof done.fail == 'function' ? done.fail(data) : dialog.msg(done.fail || (data.msg + '(' + data.code + ')'), {icon: 5});
+		//根据用户指定的处理方式，对结果进行处理。
+		if ((typeof done == 'object' && $.isEmptyObject(done)) || done === xhr.doneState.messgae) {
+			dialog.msg(msg, {icon: icon});
+		}else if (done === xhr.doneState.messageRedirect){
+			if (data.data.redirect_url) {
+				var wait = data.data.redirect_wait || 3;
+				dialog.msg(msg + '，' + wait + '秒后自动跳转', {time: wait * 1000, icon: icon}, function(){
+					location.href = data.data.redirect_url;
+				});
+			}else{
+				dialog.msg(msg, {icon: icon});
+			}
 		}
 	}
 
@@ -149,7 +166,7 @@ define(['layer', 'jquery', 'eh'], function(dialog){
 	 * @param  {Mixed}  fail 回调函数或函数数组
 	 * @param  {Object} data 执行结果
 	 */
-	function executeFail(fail, xhrObj, sign, statusText){
+	function executeFail(fail, xhrObj, sign){
 		//根据服务器返回的状态码，判断错误类型。
 		var statusText;
 
