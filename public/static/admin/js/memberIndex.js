@@ -1,3 +1,4 @@
-define(['layer', 'jquery', 'eh.xhr', 'laytpl'], function(diolog, laypage){
+define(['layer', 'jquery', 'eh.xhr', 'eh.list', 'laytpl'], function(){
 	
+	eh.list.renderPage({pages:50});
 });

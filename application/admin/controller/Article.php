@@ -34,12 +34,12 @@ class Article extends Init{
 						'count' => db('article')->count()
 					];
 					
-					return $this->ajaxSuccessResult($data);
+					return $this->successResult($data);
 				}else{
-					return $this->ajaxErrorResult('E-030201');
+					return $this->errorResult('E-030201');
 				}
 			}else{
-				return $this->ajaxErrorResult('E-030106');
+				return $this->errorResult('E-030106');
 			}
 		}else{
 			return $this->fetch();
@@ -62,7 +62,7 @@ class Article extends Init{
 		if (request()->isPost()){
 			
 		}else{
-			$this->ajaxErrorResult('E-03002');
+			$this->errorResult('E-03002');
 		}
 	}
 	

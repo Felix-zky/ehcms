@@ -1,19 +1,164 @@
 <header>
-	<div class="pull-right">
+	<div class="pull-left">
 		<button class="btn btn-success" id="header-button-submit-form">添加新会员</button>
-		<button class="btn btn-success" id="header-button-submit-form">全选当页会员</button>
-		<button class="btn btn-success" id="header-button-submit-form">删除所选会员</button>
+	</div>
+	<div class="pull-right">
+		<button class="btn btn-info" id="header-button-submit-form">全选当页会员</button>
+		<button class="btn btn-danger" id="header-button-submit-form">删除所选会员</button>
 	</div>
 </header>
+<style type="text/css">
+	ul{
+		padding-top: 50px;
+		position: relative;
+	}
+	li{
+		height: 50px;
+		line-height: 50px;
+		border-bottom: 1px solid #ccc;
+		width: 100%;
+	}
+	li:nth-child(n+2):hover{
+		background-color: rgba(0, 0, 0, 0.1);
+	}
+	li:first-child{
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+	p{
+		text-align: center;
+	}
+	p:last-child{
+		line-height: 44px;
+	}
+	button{
+		padding-left: 25px !important;
+		padding-right: 25px !important;
+	}
+</style>
 <section class="iframe-main">
 	<div class="list-main">
-		<ul></ul>
+		<ul>
+			<li class="row">
+				<p class="col-sm-1"><input type="checkbox" /></p>
+				<p class="col-sm-1">编号</p>
+				<p class="col-sm-4">用户名</p>
+				<p class="col-sm-3">注册时间</p>
+				<p class="col-sm-3">操作</p>
+			</li>
+			<li class="row">
+				<p class="col-sm-1"><input type="checkbox" name="delete[]" /></p>
+				<p class="col-sm-1">1</p>
+				<p class="col-sm-4">admin</p>
+				<p class="col-sm-3">2016-09-26 20:20:00</p>
+				<p class="col-sm-3">
+					<button class="btn btn-info btn-sm">编辑</button>
+					<button class="btn btn-danger btn-sm">删除</button>
+				</p>
+			</li>
+			<li class="row">
+				<p class="col-sm-1"><input type="checkbox" name="delete[]" /></p>
+				<p class="col-sm-1">1</p>
+				<p class="col-sm-4">admin</p>
+				<p class="col-sm-3">2016-09-26 20:20:00</p>
+				<p class="col-sm-3">
+					<button class="btn btn-info btn-sm">编辑</button>
+					<button class="btn btn-danger btn-sm">删除</button>
+				</p>
+			</li>
+			<li class="row">
+				<p class="col-sm-1"><input type="checkbox" name="delete[]" /></p>
+				<p class="col-sm-1">1</p>
+				<p class="col-sm-4">admin</p>
+				<p class="col-sm-3">2016-09-26 20:20:00</p>
+				<p class="col-sm-3">
+					<button class="btn btn-info btn-sm">编辑</button>
+					<button class="btn btn-danger btn-sm">删除</button>
+				</p>
+			</li>
+			<li class="row">
+				<p class="col-sm-1"><input type="checkbox" name="delete[]" /></p>
+				<p class="col-sm-1">1</p>
+				<p class="col-sm-4">admin</p>
+				<p class="col-sm-3">2016-09-26 20:20:00</p>
+				<p class="col-sm-3">
+					<button class="btn btn-info btn-sm">编辑</button>
+					<button class="btn btn-danger btn-sm">删除</button>
+				</p>
+			</li>
+			<li class="row">
+				<p class="col-sm-1"><input type="checkbox" name="delete[]" /></p>
+				<p class="col-sm-1">1</p>
+				<p class="col-sm-4">admin</p>
+				<p class="col-sm-3">2016-09-26 20:20:00</p>
+				<p class="col-sm-3">
+					<button class="btn btn-info btn-sm">编辑</button>
+					<button class="btn btn-danger btn-sm">删除</button>
+				</p>
+			</li>
+			<li class="row">
+				<p class="col-sm-1"><input type="checkbox" name="delete[]" /></p>
+				<p class="col-sm-1">1</p>
+				<p class="col-sm-4">admin</p>
+				<p class="col-sm-3">2016-09-26 20:20:00</p>
+				<p class="col-sm-3">
+					<button class="btn btn-info btn-sm">编辑</button>
+					<button class="btn btn-danger btn-sm">删除</button>
+				</p>
+			</li>
+			<li class="row">
+				<p class="col-sm-1"><input type="checkbox" name="delete[]" /></p>
+				<p class="col-sm-1">1</p>
+				<p class="col-sm-4">admin</p>
+				<p class="col-sm-3">2016-09-26 20:20:00</p>
+				<p class="col-sm-3">
+					<button class="btn btn-info btn-sm">编辑</button>
+					<button class="btn btn-danger btn-sm">删除</button>
+				</p>
+			</li>
+			<li class="row">
+				<p class="col-sm-1"><input type="checkbox" name="delete[]" /></p>
+				<p class="col-sm-1">1</p>
+				<p class="col-sm-4">admin</p>
+				<p class="col-sm-3">2016-09-26 20:20:00</p>
+				<p class="col-sm-3">
+					<button class="btn btn-info btn-sm">编辑</button>
+					<button class="btn btn-danger btn-sm">删除</button>
+				</p>
+			</li>
+			<li class="row">
+				<p class="col-sm-1"><input type="checkbox" name="delete[]" /></p>
+				<p class="col-sm-1">1</p>
+				<p class="col-sm-4">admin</p>
+				<p class="col-sm-3">2016-09-26 20:20:00</p>
+				<p class="col-sm-3">
+					<button class="btn btn-info btn-sm">编辑</button>
+					<button class="btn btn-danger btn-sm">删除</button>
+				</p>
+			</li>
+			<li class="row">
+				<p class="col-sm-1"><input type="checkbox" name="delete[]" /></p>
+				<p class="col-sm-1">1</p>
+				<p class="col-sm-4">admin</p>
+				<p class="col-sm-3">2016-09-26 20:20:00</p>
+				<p class="col-sm-3">
+					<button class="btn btn-info btn-sm">编辑</button>
+					<button class="btn btn-danger btn-sm">删除</button>
+				</p>
+			</li>
+		</ul>
 	</div>
 
-	<div id="list-pages">
-	</div>
+	<div id="list-pages"></div>
 </section>
 
 <script type="text/javascript">
-	require(['js/memebrIndex']);
+	require(['js/memberIndex']);
+</script>
+
+<script type="text/html" id="tpl-member-list">
+	{{# for(var i = 0, len = d.length; i < len; i++){ }}
+		
+	{{# } }}
 </script>
