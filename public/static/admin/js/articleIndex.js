@@ -17,7 +17,7 @@ define(['layer', 'jquery', 'dotdotdot', 'eh.xhr', 'laytpl'], function(diolog, la
 			}
 		});
 
-
+		getArticleList();
 	});
 
 	//执行内容恢复并重新截取
