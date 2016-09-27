@@ -6,8 +6,12 @@ class Member extends Init{
 		parent::__construct();
 	}
 	
-	public function index($pages){
-		echo $pages;
+	public function index($page = 1){
+		$page = is_numeric($page) ? $page : 1;
+		$member = db('member')->field('password', TRUE)->page($page, 15)->select();
+		if (!$member){
+			
+		}
 		return $this->fetch();
 	}
 }
