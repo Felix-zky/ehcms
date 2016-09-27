@@ -14,10 +14,24 @@ trait FastResponse{
 			$this->msgIsData($msg, $data);
 		}
 		
-		if (is_array($url)){
-			$this->urlIsData($url, $data);
-		}else if (preg_match('/^U-\d{6}$/', $url)){
-			$url = eh_url($url);
+		if ($url === FALSE){
+			if (request()->isAjax()){
+				return $this->result($data, $code, $msg, 'json');
+			}else{
+				if (is_array($data)){
+					foreach ($data as $key=>$value){
+						$this->assign($key, $value);
+					}
+				}
+				$msg != '' && $this->assign('eh_success_msg', $msg); 
+				return false;
+			}	
+		}else if ($url != null){
+			if (is_array($url)){
+				$this->urlIsData($url, $data);
+			}else if (preg_match('/^U-\d{6}$/', $url)){
+				$url = eh_url($url);
+			}
 		}
 		
 		//如果请求来自AJAX，那么返回result返回json格式，并且判断url是否存在，不存在则不传递。
@@ -43,10 +57,26 @@ trait FastResponse{
 			$this->msgIsData($msg, $data);
 		}
 		
-		if (is_array($url)){
-			$this->urlIsData($url, $data);
-		}else if (preg_match('/^U-\d{6}$/', $url)){
-			$url = eh_url($url);
+		if ($url === FALSE){
+			if (request()->isAjax()){
+				return $this->result($data, $code, $msg, 'json');
+			}else{
+				if (is_array($data)){
+					foreach ($data as $key=>$value){
+						$this->assign($key, $value);
+					}
+				}
+
+				$this->assign('eh_error_msg', $msg);
+				$this->assign('eh_error_code', $code);
+				return false;
+			}	
+		}else if ($url != null){
+			if (is_array($url)){
+				$this->urlIsData($url, $data);
+			}else if (preg_match('/^U-\d{6}$/', $url)){
+				$url = eh_url($url);
+			}
 		}
 		
 		if (request()->isAjax()){
