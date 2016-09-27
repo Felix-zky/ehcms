@@ -1,9 +1,5 @@
 define(['laypage', 'laytpl', 'jquery', 'eh'], function(laypage, laytpl){
 	var list = {}, //声明
-		defaultPageOption = { //默认分页生成参数
-			cont: 'page-list',
-			hash: 'page'
-		};
 
 	list = {
 		/**
@@ -26,18 +22,7 @@ define(['laypage', 'laytpl', 'jquery', 'eh'], function(laypage, laytpl){
 			laytpl($('#' + option.tplID).html()).render(option.data, function(result){
 
 			});
-		},
-
-		/**
-		 * 渲染分页组件
-		 *
-		 * @param  {Object} option 分页配置，至少需要传递总页数参数，其他不传使用默认配置。
-		 */
-		list.renderPage = function(option){
-			option = (option && typeof option == 'object') ? $.extend(defaultPageOption, option) : eh.debugPrint('配置不能为空，至少需要传递总页数。');
-
-			laypage(option);
-		};
+		}
 	};
 
 	/**

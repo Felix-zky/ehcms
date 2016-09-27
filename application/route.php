@@ -16,5 +16,6 @@ return [
     	'admin/Department' => 'admin/Department',
     	'admin/Member'     => 'admin/Member',
     	'admin/Setting'    => 'admin/Setting'
-    ]
+    ],
+    'admin/Member/index/:pages' => ['admin/Member/index', ['method' => 'get'], ['pages' => '\d+']]
 ];

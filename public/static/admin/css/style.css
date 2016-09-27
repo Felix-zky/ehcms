@@ -9475,6 +9475,13 @@ header > div.pull-left button:last-child,
 header > div.pull-right button:last-child {
   margin-right: 0;
 }
+.list-main {
+  width: 100%;
+  height: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 0 15px;
+}
 #list-pages {
   background-color: #FFF;
   padding: 20px 15px 0 0;
@@ -9500,10 +9507,12 @@ form em.help-block {
   }
 }
 section.iframe-main {
-  padding: 0 15px;
   background-color: #FFF;
   overflow-x: hidden;
   overflow-y: auto;
+}
+i {
+  margin-right: 5px;
 }
 .fa.form-control-feedback {
   line-height: 34px !important;
@@ -9558,12 +9567,7 @@ section.iframe-main {
 #admin-article-index .list-header ul li:first-child {
   border-left: none;
 }
-#admin-article-index .list-main {
-  width: 100%;
-}
 #admin-article-index .list-main ul {
-  overflow-y: auto;
-  overflow-x: hidden;
   margin: 10px 0;
 }
 #admin-article-index .list-main li {

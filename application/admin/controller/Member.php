@@ -6,7 +6,8 @@ class Member extends Init{
 		parent::__construct();
 	}
 	
-	public function index(){
+	public function index($pages){
+		echo $pages;
 		return $this->fetch();
 	}
 }

@@ -1,4 +1,16 @@
-define(['layer', 'jquery', 'eh.xhr', 'eh.list', 'laytpl'], function(){
+define(['layer', 'jquery', 'eh.xhr'], function(){
 	
-	eh.list.renderPage({pages:50});
+	$(function(){
+		eh.setListHeight();
+		eh.pageRender({
+			pages: 50, 
+			jump: function(obj, first){
+				if (!first) {
+					var index = eh.addLoadTips(obj.curr, $('.list-main li:gt(0)'));
+					eh.xhr.post();
+				}
+			}
+		});
+	});
+	
 });

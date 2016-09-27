@@ -3,7 +3,7 @@
  *
  * @return {Object} eh 函数库对象
  */
-define(['layer', 'jquery', 'laypage'], function(dialog){
+define(['layer', 'laypage', 'jquery'], function(dialog, laypage){
 	var eh = {}; //函数库名称
 
 	eh = {
@@ -45,6 +45,24 @@ define(['layer', 'jquery', 'laypage'], function(dialog){
 		 */
 		setIframeMainHeight: function(){
 			$('.iframe-main').height($(window).outerHeight() - $('header').outerHeight(true));
+		},
+
+		/**
+		 * 后台iframe页面内容区列表高度，目前统一命名：list-mian
+		 * 减掉的80像素是分页的高度，在列表页需要预留出分页的位置
+		 */
+		setListHeight: function(){
+			$('.list-main').height(($('.iframe-main').outerHeight() - 80));
+		},
+
+		/**
+		 * 后台数据加载状态（默认水平+垂直居中）
+		 */
+		addLoadTips: function(pages, element){
+			pages = pages || 1;
+			element.length >= 1 && element.remove();
+			var str = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i><span style="font-size:18px; vertical-align:top;">第'+ pages +'页数据正在加载，请稍等！</span>';
+			return layer.msg(str, {time: false});
 		},
 
 		/**
