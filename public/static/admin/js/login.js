@@ -1,4 +1,4 @@
-define(['jquery', 'eh.xhr', 'eh.form', 'validate.zh', 'layer'], function(){
+define(['jquery', 'eh.xhr', 'eh.form', 'validate.zh'], function(){
 
 	$(function(){
 		//多动画随机展现登录框

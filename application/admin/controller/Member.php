@@ -9,9 +9,13 @@ class Member extends Init{
 	public function index($page = 1){
 		$page = is_numeric($page) ? $page : 1;
 		$member = db('member')->field('password', TRUE)->page($page, 15)->select();
-		if (!$member){
-			
+		
+		if ($member){
+			$result = $this->successResult(['member'=>$member], FALSE);
+		}else {
+			$result = $this->errorResult('E-020201', FALSE);
 		}
-		return $this->fetch();
+		
+		return $result !== FALSE ? $result : $this->fetch();
 	}
 }

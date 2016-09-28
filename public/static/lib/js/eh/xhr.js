@@ -1,7 +1,7 @@
 /**
  * XMLHttpRequest-异步请求组件
  */
-define(['layer', 'jquery', 'eh'], function(dialog){
+define(['jquery', 'layer', 'eh'], function($, dialog){
 	var xhr = {
 		/** 数据返回成功处理方式标识 */
 		doneState:{
