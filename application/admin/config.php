@@ -8,8 +8,7 @@ return [
 		'__LIB_CSS__' => '/static/lib/css',
 		'__LIB_JS__' => '/static/lib/js'
 	],
-	'url_convert' => false,
-	'url_common_param' => true
+	'url_convert' => false
 ];
 
 ?>
