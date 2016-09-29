@@ -25,7 +25,7 @@ trait FastResponse{
 						$this->assign($key, $value);
 					}
 				}
-				$msg != '' && $this->assign('eh_success_msg', $msg); 
+				$msg != '' && $this->assign('ehSuccessMsg', $msg); 
 				return FALSE;
 			}
 		//$mix不等于null的情况下才对其进行解析。
@@ -73,8 +73,8 @@ trait FastResponse{
 					}
 				}
 
-				$this->assign('eh_error_msg', $msg);
-				$this->assign('eh_error_code', $code);
+				$this->assign('ehErrorMsg', $msg);
+				$this->assign('ehErrorCode', $code);
 				return FALSE;
 			}	
 		}else if ($mix != null){

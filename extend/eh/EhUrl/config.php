@@ -4,7 +4,8 @@ return [
 	'U-010201' => 'admin/Index/index',
 	'U-010301' => 'admin/Login/index',
 	'U-010302' => 'admin/Login/checkUser',
-	'U-010401' => 'admin/Article/index'
+	'U-010401' => 'admin/Article/index',
+	'U-010501' => 'admin/Member/index',
 		
 	// 02用户
 	

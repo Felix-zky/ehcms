@@ -27,7 +27,7 @@
 	li:nth-child(n+2) p:last-child{
 		font-size: 0;
 	}
-	li:first-child{
+	li.list-header{
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -40,21 +40,19 @@
 	}
 </style>
 <section class="iframe-main">
-	<form action="/admin/Member" method="delete">
-		<input type="text" name="id" value="5">
-		<input type="submit" value="提交">
-	</form>
-
 	<div class="list-main">
 		<ul>
-			<li class="row">
+			<li class="row" class="list-header">
 				<p class="col-sm-1"><input type="checkbox" /></p>
 				<p class="col-sm-1">编号</p>
 				<p class="col-sm-4">用户名</p>
 				<p class="col-sm-3">注册时间</p>
 				<p class="col-sm-3">操作</p>
 			</li>
-			<li class="row">
+			{notempty name="ehErrorMsg"}
+				<li class="row"><p class="col-sm-12">{$ehErrorMsg}</p></li>
+			{/notempty}
+			<!-- <li class="row">
 				<p class="col-sm-1"><input type="checkbox" name="delete[]" /></p>
 				<p class="col-sm-1">1</p>
 				<p class="col-sm-4">admin</p>
@@ -63,11 +61,11 @@
 					<button class="btn btn-primary btn-sm"><i class="fa fa-edit"></i>编辑</button>
 					<button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i>删除</button>
 				</p>
-			</li>
+			</li> -->
 		</ul>
 	</div>
 
-	<div id="list-pages"></div>
+	<div id="list-pages" data-url = "{:eh_url('U-010501', 'page=1')}"></div>
 </section>
 
 <script type="text/javascript">

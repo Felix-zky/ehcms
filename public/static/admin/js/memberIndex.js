@@ -7,7 +7,7 @@ define(['layer', 'jquery', 'eh.xhr'], function(){
 			jump: function(obj, first){
 				if (!first) {
 					var index = eh.addLoadTips(obj.curr, $('.list-main li:gt(0)'));
-					eh.xhr.post();
+					eh.xhr.get('/admin/Member/index');
 				}
 			}
 		});

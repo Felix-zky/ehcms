@@ -6,16 +6,28 @@ class Member extends Init{
 		parent::__construct();
 	}
 	
-	public function index($page = 1){
-		$page = is_numeric($page) ? $page : 1;
-		$member = db('member')->field('password', TRUE)->page($page, 15)->select();
+	public function index($page = NULL){
 		
-		if ($member){
-			$result = $this->successResult(['member'=>$member], FALSE);
-		}else {
-			$result = $this->errorResult('E-020201', FALSE);
+		if ($page != NULL){
+			$page = is_numeric($page) ? $page : 1;
+			
+			$member = db('member')->field('password', TRUE)->page($page, 15)->select();
+			
+			if ($member){
+				$result = $this->successResult(['member'=>$member], FALSE);
+			}else {
+				$result = $this->errorResult('E-020201', FALSE);
+			}
 		}
 		
-		return $result !== FALSE ? $result : $this->fetch();
+		if (!request()->isAjax()){
+			$pages = ceil(db('member')->count());
+			
+			if ($pages > 0){
+				$this->assign('pages', $pages);
+			}
+		}
+		
+		return !empty($result) ? $result : $this->fetch();
 	}
 }
