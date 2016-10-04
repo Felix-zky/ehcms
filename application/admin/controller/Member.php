@@ -6,28 +6,35 @@ class Member extends Init{
 		parent::__construct();
 	}
 	
-	public function index($page = NULL){
-		
-		if ($page != NULL){
-			$page = is_numeric($page) ? $page : 1;
+	public function index(){
+		$pages = ceil(db('member')->count());
 			
-			$member = db('member')->field('password', TRUE)->page($page, 15)->select();
-			
-			if ($member){
-				$result = $this->successResult(['member'=>$member], FALSE);
-			}else {
-				$result = $this->errorResult('E-020201', FALSE);
-			}
+		if ($pages > 0){
+			$this->successResult(['pages' => $pages]);
 		}
 		
-		if (!request()->isAjax()){
-			$pages = ceil(db('member')->count());
-			
-			if ($pages > 0){
-				$this->assign('pages', $pages);
-			}
-		}
+		return $this->fetch();
+	}
+	
+	public function getMemberList($page = 1){
+		echo $page;
+// 		if (!request()->isAjax()){
+// 			return $this->errorResult('E-010101');
+// 		}
 		
-		return !empty($result) ? $result : $this->fetch();
+// 		if (!request()->isPost()){
+// 			return $this->errorResult('E-010102');
+// 		}
+		
+// 		$page = is_numeric(input('post.page')) || 1;
+	
+// 		$member = db('member')->field('password', TRUE)->page($page, 15)->select();
+	
+// 		if ($member){
+// 			return $this->successResult(['member'=>$member]);
+// 		}else {
+// 			return $this->errorResult('E-020201');
+// 		}
+		
 	}
 }

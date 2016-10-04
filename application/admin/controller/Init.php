@@ -2,10 +2,15 @@
 namespace app\admin\controller;
 
 use app\common\controller\Base;
+use think\Lang;
 
 class Init extends Base{
 	public function __construct(){
 		parent::__construct();
+
+		//加载语言包，先固定使用zh-cn，后期改多语言。
+		Lang::load(APP_PATH . 'admin/lang/zh-cn/error.php');
+		Lang::load(APP_PATH . 'admin/lang/zh-cn/success.php');
 		
 		$this->view->engine->layout('layout/layout');
 		

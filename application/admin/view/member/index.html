@@ -9,7 +9,6 @@
 </header>
 <style type="text/css">
 	ul{
-		padding-top: 50px;
 		position: relative;
 	}
 	li{
@@ -49,9 +48,6 @@
 				<p class="col-sm-3">注册时间</p>
 				<p class="col-sm-3">操作</p>
 			</li>
-			{notempty name="ehErrorMsg"}
-				<li class="row"><p class="col-sm-12">{$ehErrorMsg}</p></li>
-			{/notempty}
 			<!-- <li class="row">
 				<p class="col-sm-1"><input type="checkbox" name="delete[]" /></p>
 				<p class="col-sm-1">1</p>
@@ -65,7 +61,7 @@
 		</ul>
 	</div>
 
-	<div id="list-pages" data-url = "{:eh_url('U-010501', 'page=1')}"></div>
+	<div id="list-pages" data-url = "{:eh_url('U-010501')}"></div>
 </section>
 
 <script type="text/javascript">
