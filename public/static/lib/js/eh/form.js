@@ -146,6 +146,7 @@ define(['jquery', 'validate.zh', 'eh'], function(){
 	 */
 	function validateParam(sign){
 		switch(sign){
+			/** bootstrap框架专用，用于常用表单。 */
 			case 'bootstrap':
 				return {
 					errorElement: "em",
@@ -183,6 +184,14 @@ define(['jquery', 'validate.zh', 'eh'], function(){
 						$( element ).parents( ".form-group" ).addClass( "has-success" ).removeClass( "has-error" );
 						$( element ).next( "span" ).addClass( "fa-check" ).removeClass( "fa-close" );
 					}
+				};
+				break;
+			/** 仅提交触发验证，一般此方法配合validate.checkForm使用。 */
+			case 'submit':
+				return {
+					onkeyup: false,
+					onfocusout: false,
+					onclick: false
 				};
 				break;
 			default:
