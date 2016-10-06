@@ -42,7 +42,7 @@ class User extends Base{
 		}
 		
 		cookie('user_id', $member['id']);
-		cookie('user_sign', md5($member['id'].$member['username'].$member['password'].'eh'.$member['add_time']));
+		cookie('user_sign', md5($member['id'].$member['username'].$member['password'].'eh'.$member['create_time']));
 		
 		return TRUE;
 	}
