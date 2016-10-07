@@ -8,7 +8,7 @@ trait FastResponse{
 	 */
 	protected function successResult($msg = '成功', $mix = FALSE, $data = [], $wait = 3, $code = 1){
 		//如果msg等于字符串类型且通过正则验证，则将返回信息替换，目前正则验证S-开头（区分大小写），后面跟6个数字，且数字结尾。
-		if (is_string($msg) && preg_match('/^S-\d{6}$/', $msg)){
+		if (is_string($msg) && preg_match('/^S-\d{6,8}$/', $msg)){
 			$msg = lang($msg);
 		}elseif (is_array($msg)){
 			if (empty($msg['lang_name'])){
@@ -32,7 +32,7 @@ trait FastResponse{
 				$msg != '' && $this->assign('ehSuccessMsg', $msg);
 				return FALSE;
 			}
-		}else if (preg_match('/^U-\d{6}$/', $mix)){
+		}else if (preg_match('/^U-\d{6,8}$/', $mix)){
 			$mix = eh_url($mix);
 		}else if (is_array($mix)){
 			//如果为数组则赋值给$data，自身赋值为NULL。
@@ -57,7 +57,7 @@ trait FastResponse{
 	 */
 	protected function errorResult($msg = '失败', $mix = FALSE, $data = [], $wait = 3, $code = 0){
 		//如果msg等于字符串类型且通过正则验证，则将错误信息以及code替换，目前正则验证E-开头（区分大小写），后面跟6个数字，且数字结尾。
-		if (is_string($msg) && preg_match('/^E-\d{6}$/', $msg)){
+		if (is_string($msg) && preg_match('/^E-\d{6,8}$/', $msg)){
 			$code = $msg;
 			$msg = lang($msg);
 		}elseif (is_array($msg)){
@@ -83,7 +83,7 @@ trait FastResponse{
 				$this->assign('ehErrorCode', $code);
 				return FALSE;
 			}	
-		}else if (preg_match('/^U-\d{6}$/', $mix)){
+		}else if (preg_match('/^U-\d{6,8}$/', $mix)){
 			$mix = eh_url($mix);
 		}else if (is_array($mix)){
 			//如果为数组则赋值给$data，自身赋值为NULL。
