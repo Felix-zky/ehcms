@@ -29,13 +29,23 @@
 URL地址存放位置为：extend/eh/EhUrl/config.php
 
 ### 官方各标识说明文档
-#### 一、后台
+#### 一、后台模块
 由于后台的正确、错误、URL地址3类标识各写为一个文件，故内部需按控制器对标识进行分配。具体划分规则为：[后台各标识分配说明](./adminSignRules)
 - [后台错误提示](./adminErrorSign.md)
 - [后台正确提示](./adminSuccessSign.md)
-- [后台URL地址](./adminUrlSign)
 
 #### 二、首页模块
+- [首页错误提示](./indexErrorSign.md)
+- [首页正确提示](./indexSuccessSign.md)
+
 #### 三、用户模块
+- [用户错误提示](./memberErrorSign.md)
+- [用户正确提示](./memberSuccessSign.md)
+
 #### 四、文章模块
+- [文章错误提示](./articleErrorSign.md)
+- [文章正确提示](./articleSuccessSign.md)
+
 #### 五、资源模块
+- [资源错误提示](./resourceErrorSign.md)
+- [资源正确提示](./resourceSuccessSign.md)
