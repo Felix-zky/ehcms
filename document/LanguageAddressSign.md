@@ -28,9 +28,20 @@
 正确标识存放位置为：application/** 模块名 **/lang/zh-cn/success.php
 URL地址存放位置为：extend/eh/EhUrl/config.php
 
-### 官方各标识说明文档
+### 标识生成-模块分配方案
+方案适用全部标识的生成分配
+
+| 编号 | 模块名称 | 模块说明 |
+| :---: |:---|:---|
+| 01 | admin | 后台模块 |
+| 02 | index | 首页模块 |
+| 03 | member | 用户模块 |
+| 04 | article | 文章模块 |
+| 05 | resource | 资源模块 |
+
+
+### 各模块正确及错误标识文档
 #### 一、后台模块
-由于后台的正确、错误、URL地址3类标识各写为一个文件，故内部需按控制器对标识进行分配。具体划分规则为：[后台各标识分配说明](./adminSignRules)
 - [后台错误提示](./adminErrorSign.md)
 - [后台正确提示](./adminSuccessSign.md)
 
@@ -49,3 +60,6 @@ URL地址存放位置为：extend/eh/EhUrl/config.php
 #### 五、资源模块
 - [资源错误提示](./resourceErrorSign.md)
 - [资源正确提示](./resourceSuccessSign.md)
+
+### URL地址标识文档
+- [URL地址](./urlConfig.md)
