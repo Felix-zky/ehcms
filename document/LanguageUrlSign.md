@@ -24,6 +24,9 @@
 **例：**E-9010101，U-905020102等等。模块的标识可以从01开始，无需考虑官方已有模块。由于第一位追加了一个数字9。在官方模块不超过900个的情况下，是不可能冲突的。
 
 ### 各标识存放的位置
+错误及正确的标识一般为模块独自使用，故存在于各模块下，可以减少加载文件体积，由总父类控制器根据当前访问的控制器名称来指定加载。其他模块需要用到亦可以额外加载。  
+URL一般需要相互调用，故写在一个文件配置文件中，总父类控制器加载。
+
 错误标识存放位置为：application/**模块名**/lang/zh-cn/error.php  
 正确标识存放位置为：application/**模块名**/lang/zh-cn/success.php  
 URL地址存放位置为：extend/eh/EhUrl/config.php
@@ -41,26 +44,28 @@ URL地址存放位置为：extend/eh/EhUrl/config.php
 | 05 | resource | 资源模块 |
 
 
-### 各模块正确及错误标识文档
+### 各模块正确、错误、URL标识文档
 #### 一、后台模块
-- [后台错误提示](./adminErrorSign.md)
-- [后台正确提示](./adminSuccessSign.md)
+- [后台错误提示](./sign/language/adminError.md)
+- [后台正确提示](./sign/language/adminSuccess.md)
+- [后台URL地址](./sign/url/adminUrl.md)
 
 #### 二、首页模块
-- [首页错误提示](./indexErrorSign.md)
-- [首页正确提示](./indexSuccessSign.md)
+- [首页错误提示](./sign/language/indexError.md)
+- [首页正确提示](./sign/language/indexSuccess.md)
+- [首页URL地址](./sign/url/indexUrl.md)
 
 #### 三、用户模块
-- [用户错误提示](./memberErrorSign.md)
-- [用户正确提示](./memberSuccessSign.md)
+- [用户错误提示](./sign/language/memberError.md)
+- [用户正确提示](./sign/language/memberSuccess.md)
+- [用户URL地址](./sign/url/memberUrl.md)
 
 #### 四、文章模块
-- [文章错误提示](./articleErrorSign.md)
-- [文章正确提示](./articleSuccessSign.md)
+- [文章错误提示](./sign/language/articleError.md)
+- [文章正确提示](./sign/language/articleSuccess.md)
+- [文章URL地址](./sign/url/articleUrl.md)
 
 #### 五、资源模块
-- [资源错误提示](./resourceErrorSign.md)
-- [资源正确提示](./resourceSuccessSign.md)
-
-### URL地址标识文档
-- [URL地址](./urlConfig.md)
+- [资源错误提示](./sign/language/resourceError.md)
+- [资源正确提示](./sign/language/resourceSuccess.md)
+- [资源URL地址](./sign/url/resourceUrl.md)
