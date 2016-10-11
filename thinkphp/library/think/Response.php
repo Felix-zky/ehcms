@@ -11,9 +11,11 @@
 
 namespace think;
 
+use think\Cache;
 use think\Config;
 use think\Debug;
 use think\Env;
+use think\Request;
 use think\response\Json as JsonResponse;
 use think\response\Jsonp as JsonpResponse;
 use think\response\Redirect as RedirectResponse;
@@ -109,6 +111,16 @@ class Response
                 header($name . ':' . $val);
             }
         }
+        if (200 == $this->code) {
+            $cache = Request::instance()->getCache();
+            if ($cache) {
+                header('Cache-Control: max-age=' . $cache[1] . ',must-revalidate');
+                header('Last-Modified:' . gmdate('D, d M Y H:i:s') . ' GMT');
+                header('Expires:' . gmdate('D, d M Y H:i:s', $_SERVER['REQUEST_TIME'] + $cache[1]) . ' GMT');
+                $header['Content-Type'] = $this->header['Content-Type'];
+                Cache::set($cache[0], [$data, $header], $cache[1]);
+            }
+        }
         echo $data;
 
         if (function_exists('fastcgi_finish_request')) {
@@ -116,6 +128,8 @@ class Response
             fastcgi_finish_request();
         }
 
+        // 监听response_end
+        Hook::listen('response_end', $this);
     }
 
     /**

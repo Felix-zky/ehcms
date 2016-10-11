@@ -79,31 +79,34 @@ class App
     {
         is_null($request) && $request = Request::instance();
 
-        $config = self::initCommon();
-        if (defined('BIND_MODULE')) {
-            // 模块/控制器绑定
-            BIND_MODULE && Route::bind(BIND_MODULE);
-        } elseif ($config['auto_bind_module']) {
-            // 入口自动绑定
-            $name = pathinfo($request->baseFile(), PATHINFO_FILENAME);
-            if ($name && 'index' != $name && is_dir(APP_PATH . $name)) {
-                Route::bind($name);
-            }
-        }
-
-        $request->filter($config['default_filter']);
         try {
-
-            // 开启多语言机制
-            if ($config['lang_switch_on']) {
-                // 获取当前语言
-                $request->langset(Lang::detect());
-                // 加载系统语言包
-                Lang::load(THINK_PATH . 'lang' . DS . $request->langset() . EXT);
-                if (!$config['app_multi_module']) {
-                    Lang::load(APP_PATH . 'lang' . DS . $request->langset() . EXT);
+            $config = self::initCommon();
+            if (defined('BIND_MODULE')) {
+                // 模块/控制器绑定
+                BIND_MODULE && Route::bind(BIND_MODULE);
+            } elseif ($config['auto_bind_module']) {
+                // 入口自动绑定
+                $name = pathinfo($request->baseFile(), PATHINFO_FILENAME);
+                if ($name && 'index' != $name && is_dir(APP_PATH . $name)) {
+                    Route::bind($name);
                 }
             }
+
+            $request->filter($config['default_filter']);
+
+            if ($config['lang_switch_on']) {
+                // 开启多语言机制 检测当前语言
+                Lang::detect();
+            } else {
+                // 读取默认语言
+                Lang::range($config['default_lang']);
+            }
+            $request->langset(Lang::range());
+            // 加载系统语言包
+            Lang::load([
+                THINK_PATH . 'lang' . DS . $request->langset() . EXT,
+                APP_PATH . 'lang' . DS . $request->langset() . EXT,
+            ]);
 
             // 获取应用调度信息
             $dispatch = self::$dispatch;
@@ -214,16 +217,37 @@ class App
     public static function invokeMethod($method, $vars = [])
     {
         if (is_array($method)) {
-            $class   = is_object($method[0]) ? $method[0] : new $method[0];
+            $class   = is_object($method[0]) ? $method[0] : new $method[0](Request::instance());
             $reflect = new \ReflectionMethod($class, $method[1]);
         } else {
             // 静态方法
             $reflect = new \ReflectionMethod($method);
         }
         $args = self::bindParams($reflect, $vars);
-        // 记录执行信息
+
         self::$debug && Log::record('[ RUN ] ' . $reflect->__toString(), 'info');
         return $reflect->invokeArgs(isset($class) ? $class : null, $args);
+    }
+
+    /**
+     * 调用反射执行类的实例化 支持依赖注入
+     * @access public
+     * @param string    $class 类名
+     * @param array     $vars  变量
+     * @return mixed
+     */
+    public static function invokeClass($class, $vars = [])
+    {
+        $reflect     = new \ReflectionClass($class);
+        $constructor = $reflect->getConstructor();
+        if ($constructor) {
+            $args = self::bindParams($constructor, $vars);
+        } else {
+            $args = [];
+        }
+
+        self::$debug && Log::record('[ RUN ] ' . $reflect->__toString(), 'info');
+        return $reflect->newInstanceArgs($args);
     }
 
     /**
@@ -254,9 +278,9 @@ class App
                 $class = $param->getClass();
                 if ($class) {
                     $className = $class->getName();
-                    if (isset($vars[$name]) && $vars[$name] instanceof $className) {
-                        $args[] = $vars[$name];
-                        unset($vars[$name]);
+                    $bind      = Request::instance()->$name;
+                    if ($bind instanceof $className) {
+                        $args[] = $bind;
                     } else {
                         $args[] = method_exists($className, 'instance') ? $className::instance() : new $className();
                     }
@@ -444,12 +468,18 @@ class App
             $path = APP_PATH . $module;
             // 加载模块配置
             $config = Config::load(CONF_PATH . $module . 'config' . CONF_EXT);
-
+            // 读取数据库配置文件
+            $filename = CONF_PATH . $module . 'database' . CONF_EXT;
+            Config::load($filename, 'database');
             // 读取扩展配置文件
-            if ($config['extra_config_list']) {
-                foreach ($config['extra_config_list'] as $name => $file) {
-                    $filename = CONF_PATH . $module . $file . CONF_EXT;
-                    Config::load($filename, is_string($name) ? $name : pathinfo($filename, PATHINFO_FILENAME));
+            if (is_dir(CONF_PATH . $module . 'extra')) {
+                $dir   = CONF_PATH . $module . 'extra';
+                $files = scandir($dir);
+                foreach ($files as $file) {
+                    if (strpos($file, CONF_EXT)) {
+                        $filename = $dir . DS . $file;
+                        Config::load($filename, pathinfo($file, PATHINFO_FILENAME));
+                    }
                 }
             }
 
@@ -469,7 +499,7 @@ class App
             }
 
             // 加载当前模块语言包
-            if ($config['lang_switch_on'] && $module) {
+            if ($module) {
                 Lang::load($path . 'lang' . DS . Request::instance()->langset() . EXT);
             }
         }

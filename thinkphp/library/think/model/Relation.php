@@ -318,11 +318,7 @@ class Relation
             }
         }
 
-        if (!isset($list[$relation])) {
-            // 设置关联模型属性
-            $list[$relation] = [];
-        }
-        $result->setAttr($relation, (new $model($list[$relation]))->isUpdate(true));
+        $result->setAttr($relation, !isset($list[$relation]) ? null : (new $model($list[$relation]))->isUpdate(true));
     }
 
     /**
@@ -554,7 +550,7 @@ class Relation
             case self::BELONGS_TO:
             case self::HAS_MANY:
                 if ($data instanceof Model) {
-                    $data = $data->toArray();
+                    $data = $data->getData();
                 }
                 // 保存关联表数据
                 $data[$this->foreignKey] = $this->parent->{$this->localKey};
@@ -604,7 +600,8 @@ class Relation
         if (is_array($data)) {
             // 保存关联表数据
             $model = new $this->model;
-            $id    = $model->save($data);
+            $model->save($data);
+            $id = $model->getLastInsID();
         } elseif (is_numeric($data) || is_string($data)) {
             // 根据关联表主键直接写入中间表
             $id = $data;
@@ -681,11 +678,14 @@ class Relation
                     $pk           = (new $this->model)->getPk();
                     $throughKey   = $this->throughKey;
                     $modelTable   = $this->parent->getTable();
-                    $result       = $this->query->field($alias . '.*')->alias($alias)
+                    $this->query->field($alias . '.*')->alias($alias)
                         ->join($throughTable, $throughTable . '.' . $pk . '=' . $alias . '.' . $throughKey)
                         ->join($modelTable, $modelTable . '.' . $this->localKey . '=' . $throughTable . '.' . $this->foreignKey)
                         ->where($throughTable . '.' . $this->foreignKey, $this->parent->{$this->localKey});
                     break;
+                case self::BELONGS_TO_MANY:
+                    // TODO
+
             }
             $result = call_user_func_array([$this->query, $method], $args);
             if ($result instanceof \think\db\Query) {
