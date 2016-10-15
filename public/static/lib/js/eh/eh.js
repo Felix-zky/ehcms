@@ -77,6 +77,7 @@ define(['layer', 'laypage', 'jquery'], function(dialog, laypage){
 		/**
 		 * 分页生成
 		 * 默认采用hash做异步分页，可以使用option参数对默认值进行覆盖。
+		 * 一般该函数仅做异步使用，同步跳转使用服务端创建。
 		 *
 		 * @param {Object} option 分页参数
 		 */

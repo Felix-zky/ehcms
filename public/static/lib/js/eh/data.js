@@ -1,37 +1,46 @@
-define(['laypage', 'laytpl', 'jquery', 'eh'], function(laypage, laytpl){
-	var list = {}, //声明
+define(['laytpl', 'jquery', 'eh'], function(){
+	var data = {}, //声明
 
-	list = {
+	data = {
 		/**
-		 * 渲染列表组件
+		 * 渲染数据到模板
 		 *
 		 * @param {Object} option 参数对象集合
 		 * 包含以下成员:
 		 * tplID  {String} 需要渲染的模板
 		 * data   {Object} 渲染的数据
-		 * [view] {String} 视图容器的ID，默认为lists
+		 * [view] {String} 视图容器的ID，默认为data-render
 		 */
-		renderList : function(option){
+		render: function(option){
 
-			if (listParamCheck(option) !== true) {
+			if (renderParamCheck(option) !== true) {
 				eh.debugPrint(eh.error);
 				eh.error = '';
 				return false;
 			}
 
 			laytpl($('#' + option.tplID).html()).render(option.data, function(result){
-
+				$('#' + option.view || 'data-render').html(result);
 			});
+			
 		}
+
+		/**
+		 * 数据双向绑定
+		 */
+		
+		/**
+		 * 双向数据修改器
+		 */
 	};
 
 	/**
-	 * 列表参数检查
+	 * 检查数据渲染参数
 	 *
 	 * @param  {Object}  option 参数对象集合
 	 * @return {Boolean}        检查是否通过
 	 */
-	function listParamCheck(option){
+	function renderParamCheck(option){
 
 		//参数不是对象
 		if (typeof option != 'object') {
@@ -59,7 +68,5 @@ define(['laypage', 'laytpl', 'jquery', 'eh'], function(laypage, laytpl){
 		return true;
 	}
 
-	eh.list = list;
-
-	return list;
+	eh.data = data;
 });
