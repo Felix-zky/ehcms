@@ -97,7 +97,7 @@ define(['jquery', 'validate.zh', 'eh' , 'layer'], function(){
 				return false;
 			}
 
-			layer.alert(error, {title: '存在以下错误，请修正后再次提交！'});
+			layer.alert(error, {title: '发生错误 - 请修正后再次提交'});
 			return false;
 		},
 

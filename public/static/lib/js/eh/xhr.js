@@ -6,9 +6,11 @@ define(['jquery', 'layer', 'eh'], function($, dialog){
 		/** 数据返回成功处理方式标识 */
 		doneState:{
 			'message': 1, //仅提示信息
-			'messageRedirect': 2,
-			'messageRefresh': 3,
+			'messageRedirect': 2, //提示信息并跳转（有返回跳转地址的情况下）
+			'messageRefresh': 3, //提示信息并刷新页面。
 		},
+		/** 用于关闭弹窗 */
+		layerIndex:null, 
 
 		/**
 		 * 异步GET请求
@@ -45,7 +47,7 @@ define(['jquery', 'layer', 'eh'], function($, dialog){
 			);
 		},
 		/**
-		 * 异步PUT请求（配合ThinkPHP的资源路由）
+		 * 异步PUT请求（主要配合ThinkPHP的资源路由）
 		 *
 		 * 参数同上
 		 */
@@ -67,7 +69,7 @@ define(['jquery', 'layer', 'eh'], function($, dialog){
 			);
 		},
 		/**
-		 * 异步DELETE请求（配合ThinkPHP的资源路由）
+		 * 异步DELETE请求（主要配合ThinkPHP的资源路由）
 		 *
 		 * 参数同上
 		 */
@@ -113,19 +115,21 @@ define(['jquery', 'layer', 'eh'], function($, dialog){
 					executeFail(fail, xhrObj, sign);
 				}
 			);
-		}
+		},
 
 		/**
 		 * post快捷方式 messageRedirect
 		 */
 		postMessageRedirect: function(url, data, layerIndex){
+			layerIndex && setLayerClose(layerIndex);
 			this.post(url, data, '', this.doneState.messageRedirect);
-		}
+		},
 
 		/**
 		 * post快捷方式 messageRefresh
 		 */
 		postMessageRefresh: function(url, data, layerIndex){
+			layerIndex && setLayerClose(layerIndex);
 			this.post(url, data, '', this.doneState.messageRefresh);
 		}
 	};
@@ -160,13 +164,15 @@ define(['jquery', 'layer', 'eh'], function($, dialog){
 			}
 		}
 
+		xhr.layerIndex != null && layerClose(xhr.layerIndex);
+
 		//根据用户指定的处理方式，对结果进行处理。
 		if ((typeof done == 'object' && $.isEmptyObject(done)) || done === xhr.doneState.message) {
 			dialog.msg(msg, {icon: icon});
 		}else if (done === xhr.doneState.messageRedirect){
 			if (data.data.redirect_url) {
 				var wait = data.data.redirect_wait || 3;
-				dialog.msg(msg + '，' + wait + '秒后自动跳转', {time: wait * 1000, icon: icon}, function(){
+				dialog.msg(msg + '，' + wait + '秒后自动跳转<a id="eh-xhr-redirect-url" href="' + data.data.redirect_url + '">立即跳转</a>', {time: wait * 1000, icon: icon}, function(){
 					location.href = data.data.redirect_url;
 				});
 			}else{
@@ -202,6 +208,32 @@ define(['jquery', 'layer', 'eh'], function($, dialog){
 			return false;
 		}else{
 			typeof fail == 'function' ? fail(data) : dialog.msg(fail, {icon: 5});
+		}
+	}
+
+	/**
+	 * 设置是否需要关键弹窗
+	 *
+	 * @param {Number} index layer返回的编号
+	 */
+	function setLayerClose(index){
+		xhr.layerIndex = index;
+	}
+
+	/**
+	 * 关闭指定或者全部layer弹窗，并清除保存的编号。
+	 *
+	 * @param {Number} index layer返回的编号
+	 */
+	function layerClose(index){
+		if (!index) {
+			return false;
+		}
+
+		if (index == 'all') {
+			layer.closeAll();
+		}else{
+			layer.close(index);
 		}
 	}
 
