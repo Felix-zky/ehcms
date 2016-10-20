@@ -1,4 +1,4 @@
-define(['jquery', 'validate.zh', 'eh'], function(){
+define(['jquery', 'validate.zh', 'eh' , 'layer'], function(){
 
 	validateInit();
 
@@ -75,17 +75,29 @@ define(['jquery', 'validate.zh', 'eh'], function(){
 		 * 获取验证错误并生成列表
 		 *
 		 * @param  {Object} errorMap validate
+		 * @param  {String} [type]   生成错误的方式
 		 * @return {String}          生成后的错误列表
 		 */
-		validateError: function(errorMap){
-			var i = 1, str = ['以下内容错误，请修改后提交：'];
+		validateError: function(errorMap, type){
+			var i = 1, str = [], error;
 
 			$.each(errorMap, function(index, val){
 				str.push(i + '、' + val);
 				i++;
 			});
 
-			return str.join('<br />');
+			error = str.join('<br />');
+
+			if (type) {
+				switch(type){
+					case 'return':
+						return error;
+						break;
+				}
+			}
+
+			layer.alert(error, {title: '存在以下错误，请修正后再次提交！'});
+			return false;
 		},
 
 		/**

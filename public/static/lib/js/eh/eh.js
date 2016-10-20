@@ -10,6 +10,8 @@ define(['layer', 'laypage', 'jquery'], function(dialog, laypage){
 
 		debug : 0, //站点处于调试状态，所有eh函数内部错误（包括传值错误）都将以弹窗显性提示；正式上线需要将该参数设置为0，错误将在控制台输出。这并不影响函数内设置的与用户的交互提醒。
 		error : '', //全局错误提醒容器，方便函数在返回false的同时，可以返回错误信息。尽量不要以该属性是否有空来判断是否有错误。
+		suffix: '.html', //网站后缀，多用于后台异步生成地址使用，如果网站使用shtml后缀，可以直接修改该变量，但需要其他的后缀，请另行自定义，以免发生冲突。
+		adminEdit: 'edit' + this.suffix, //用于服务端使用了资源路由且编辑页面需要同步跳转过去的情况下。
 
 		/**
 		 * 内部函数错误提醒
@@ -90,10 +92,59 @@ define(['layer', 'laypage', 'jquery'], function(dialog, laypage){
 		 	},option);
 
 			laypage(option);
+		},
+
+		/**
+		 * 快捷设置并打开一个页面层，这个函数不是必用函数，只是设置了一些默认变量，方便一些而已。可以自行使用弹出层进行页面弹窗。
+		 * 主要用于一些表单的填写，不允许页面滚动的情况下。
+		 * 
+		 * @param {Object} option 页面弹出层自定义参数
+		 */
+		openPage: function(option){
+			defaultOption = {
+				type: 1,
+				scrollbar: false,
+				shift: 1,
+				shade: 0.5,
+				btn: ['确定', '取消']
+			},
+			offsetRegExp = /^\d*(?=px$)|^auto$/; //偏移量设置规则
+
+			//验证偏移量传参是否正确
+			if (option.offset) {
+				if (typeof offset == 'string') {
+					if(offsetRegExp.exec(offset) == null){
+						this.debugPrint('纵向（垂直）偏移量设置不正确。例：100px');
+						return false;
+					}
+				}else if (typeof offset == 'object') {
+					for (var i = 0; i < 2; i++){
+						if(offsetRegExp.exec(offset[i]) == null){
+							this.debugPrint(i == 0 ? '纵向（垂直）' : '横向（水平）' + '偏移量设置不正确。例：100px');
+							return false;
+						}
+					}
+				}
+			}
+
+			//弹出的内容必须指向DOM
+			if (!option.content) {
+				this.debugPrint('必须设置DOM！');
+				return false;
+			}
+
+			//如果content为字符串则自动以ID类型获取它的对象并验证。
+			if (typeof option.content == 'string') {
+				option.content = $('#' + option.content);
+				if (option.content.length == 0) {
+					this.debugPrint('无法识别DOM！');
+					return false;
+				}
+			}
+
+			return layer.open($.extend(defaultOption, option));
 		}
 	};
 
 	window.eh = eh;
-
-	return eh;
 });
