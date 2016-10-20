@@ -5,8 +5,9 @@ define(['jquery', 'layer', 'eh'], function($, dialog){
 	var xhr = {
 		/** 数据返回成功处理方式标识 */
 		doneState:{
-			'message': 1,
-			'messageRedirect': 2
+			'message': 1, //仅提示信息
+			'messageRedirect': 2,
+			'messageRefresh': 3,
 		},
 
 		/**
@@ -113,6 +114,20 @@ define(['jquery', 'layer', 'eh'], function($, dialog){
 				}
 			);
 		}
+
+		/**
+		 * post快捷方式 messageRedirect
+		 */
+		postMessageRedirect: function(url, data, layerIndex){
+			this.post(url, data, '', this.doneState.messageRedirect);
+		}
+
+		/**
+		 * post快捷方式 messageRefresh
+		 */
+		postMessageRefresh: function(url, data, layerIndex){
+			this.post(url, data, '', this.doneState.messageRefresh);
+		}
 	};
 
 	/**
@@ -146,7 +161,7 @@ define(['jquery', 'layer', 'eh'], function($, dialog){
 		}
 
 		//根据用户指定的处理方式，对结果进行处理。
-		if ((typeof done == 'object' && $.isEmptyObject(done)) || done === xhr.doneState.messgae) {
+		if ((typeof done == 'object' && $.isEmptyObject(done)) || done === xhr.doneState.message) {
 			dialog.msg(msg, {icon: icon});
 		}else if (done === xhr.doneState.messageRedirect){
 			if (data.data.redirect_url) {
