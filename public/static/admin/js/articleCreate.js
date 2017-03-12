@@ -86,7 +86,7 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 		 * 键盘按钮抬起立即解析markdown标记并生成新的预览内容
 		 */
 		$('#markdown').keyup(function(){
-			$('#html-preview .html-content').html(md.render($(this).val()));
+			$('#html-preview .html-content').html(md.render(format($(this).val())));
 			textareaHeight = this.scrollHeight,
 			previewHeight = $('#html-preview .html-content').innerHeight();
 		});
@@ -173,4 +173,91 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 			}
 		});
 	});
+
+	function format(str){
+		var tocResult = toc(str);
+		if (!!tocResult == true) {
+			str = tocResult;
+		}
+		return str;
+	}
+
+	function toc(str){
+		if (!str) {
+			return false;
+		}
+
+		var tocReg = /\[TOC[=\d,]*\]/,
+		tocIndex = 0,
+		tocLength = 0,
+		sign = ['+ ', '  - ', '    * ', '      * ', '        * ', '          * '],
+		toc,
+		tocs = new Array(),
+		newTocs = new Array(),
+		reg = new Array(),
+		result = null,
+		resultStr = '';
+
+		toc = tocReg.exec(str);
+		if (toc == null) {
+			return false;
+		}
+
+		toc = toc[0];
+
+		if (toc == '[TOC]') {
+			tocs = [1,2,3,4,5,6];
+		}else if (/=/.test(toc)) {
+			tocs = toc.replace(/\[TOC=?/, '').replace(']', '').split(',').sort();
+		}
+		if (!tocs[0]) {
+			return false;
+		}
+		for (var t = 0; t < tocs.length; t++){
+			reg[t] = '#{' + tocs[t] + '}';
+		}
+		reg = reg.join('|');
+		reg = new RegExp("(\\s|^)(" + reg + ") .*","g");
+
+		result = str.match(reg);
+		if (result == null) {
+			return false;
+		}
+
+		for (var t = 0; t < tocs.length; t++){
+			for (var r = 0; r < result.length; r++){
+				if (/#+ /g.exec(result[r])[0].replace(' ', '').split('').length == tocs[t]){
+					newTocs[newTocs.length] = tocs[t];
+					break;
+				}
+			}
+		}
+
+		tocs = newTocs;
+
+		for (var i = 0; i < result.length; i++){
+			var currentIndex = -1;
+
+			for (var t = 0; t < tocs.length; t++){
+				if (/#+ /g.exec(result[i])[0].replace(' ', '').split('').length == tocs[t]){
+					currentIndex = t;
+					break;
+				}
+			}
+
+			if (currentIndex == -1) {
+				continue;
+			}
+
+			if (currentIndex < tocIndex || (currentIndex == (tocIndex + 1) && tocLength > 0)) {
+				tocIndex = currentIndex;
+				tocLength = 1;
+				resultStr += sign[tocIndex] + result[i].replace(/\s*#+ ?/, '').replace(/ ?#+/, '') + '\n';
+			}else if (currentIndex == tocIndex) {
+				tocLength++;
+				resultStr += sign[tocIndex] + result[i].replace(/\s*#+ ?/, '').replace(/ ?#+/, '') + '\n';
+			}
+		}
+		return str.replace(toc, resultStr);
+	}
 });
