@@ -54,10 +54,7 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 				}
 				eh.xhr.post('/article/index', eh.form.extractData(option), '', done);
 			}else{
-				layer.alert(eh.form.validateError(validate.errorMap), function(index){
-					layer.close(index);
-					validate.focusInvalid();
-				});
+				eh.form.validateError(validate.errorMap);
 			}
 		});
 

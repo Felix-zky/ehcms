@@ -35,7 +35,7 @@ body .layer-ext-special .subtitle{
 	font-weight: normal;
 }
 body .layui-layer-page{
-	overflow: auto;
+	overflow: auto !important;
 }
 body .layui-layer-page .layui-layer-content > div,body .layui-layer-page .layui-layer-content > p{
 	padding: 15px;
