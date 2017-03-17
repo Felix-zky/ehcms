@@ -32,7 +32,7 @@ trait FastResponse{
 				$msg != '' && $this->assign('ehSuccessMsg', $msg);
 				return FALSE;
 			}
-		}else if (preg_match('/^U-\d{6,8}$/', $mix)){
+		}else if (is_string($mix) && preg_match('/^U-\d{6,8}$/', $mix)){
 			$mix = eh_url($mix);
 		}else if (is_array($mix)){
 			//如果为数组则赋值给$data，自身赋值为NULL。

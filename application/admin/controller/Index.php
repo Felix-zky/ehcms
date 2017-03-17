@@ -24,7 +24,7 @@ class Index extends Init{
 	public function getMenu(){
 		$post = input('post.');
 		
-		$level1 = db('admin_menu')->where('module_id', $post['moduleID'])->order('sort desc')->select();
+		$level1 = db('admin_menu')->where(['module_id' => $post['moduleID'], 'parent_id' => 0])->order('sort desc')->select();
 		
 		foreach ($level1 as $l1){
 			$parentID[] = $l1['id'];

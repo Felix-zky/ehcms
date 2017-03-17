@@ -11,11 +11,13 @@
 
 namespace app\resource\controller;
 
+use think\Db;
 /**
  * 资源模块-上传资源
  *
  */
 class Uploader extends Base{
+	use \eh\traits\FastResponse;
 	//图片类型的编号及允许范围
 	const TYPE_IMAGE_NUMBER = 1;
 	
@@ -33,7 +35,7 @@ class Uploader extends Base{
 		$type = $this->checkExtension($post['extension']);
 		
 		if (!!$type === FALSE){
-			return $this->ajaxErrorResult('该后缀类型不允许上传');
+			return $this->errorResult('该后缀类型不允许上传');
 		}
 		
 		//组合文件上传目录
@@ -50,23 +52,23 @@ class Uploader extends Base{
 				'type'      => $type
 			];
 			
-			if (db('resource_transfer')->insert($data) == 1){
+			if (Db::name('resource_transfer')->insert($data) == 1){
 				$response = [
-					'id' => db()->getLastInsID(),
+					'id' => Db::name('resource_transfer')->getLastInsID(),
 					'path_name' => $data['path_name'],
 					'file_name' => $info->getFilename()
 				];
 				
-				return $this->ajaxSuccessResult('资源上传成功!', $response);
+				return $this->successResult('资源上传成功!', $response);
 			}else{
 				if (@unlink('.' . $data['path_name'])){
-					return $this->ajaxErrorResult('数据入库失败！');
+					return $this->errorResult('数据入库失败！');
 				}else{
-					return $this->ajaxErrorResult('数据入库失败，资源无法清除，请手动删除！');
+					return $this->errorResult('数据入库失败，资源无法清除，请手动删除！');
 				}
 			}
 		}else {
-			return $this->ajaxErrorResult('资源上传失败!（' . $file->getError() . '）');
+			return $this->errorResult('资源上传失败!（' . $file->getError() . '）');
 		}
 	}
 	

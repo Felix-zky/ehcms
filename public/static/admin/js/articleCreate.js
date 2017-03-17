@@ -122,6 +122,9 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 				extensions: 'gif,jpg,jpeg,bmp,png',
 				mimeTypes: 'image/*'
 			},
+			formData: {
+				_ajax: 1
+			},
 			fileNumLimit: 1,
 			auto: true,
 			compress: false

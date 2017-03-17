@@ -408,7 +408,6 @@ define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash'],function(la
 	 * 打开新的iframe页面
 	 */
 	function openiframe(data){
-		console.log(data);
 		var content = laytpl($('#menu-tree').html()).render(data);
 
 		return layer.open({
