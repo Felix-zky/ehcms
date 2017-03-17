@@ -14,7 +14,7 @@ class Index extends Init{
 	 */
 	public function index(){
 		//查询桌面图标
-		$this->assign('desktop', db('admin_desktop')->select());
+		//$this->assign('desktop', db('admin_desktop')->select());
 		return $this->fetch();
 	}
 	
@@ -22,9 +22,9 @@ class Index extends Init{
 	 * 异步方法，读取应用菜单。
 	 */
 	public function getMenu(){
-		$post = input('');
+		$post = input('post.');
 		
-		$level1 = db('admin_menu')->where('id', 'in', $post['ids'])->order('sort desc')->select();
+		$level1 = db('admin_menu')->where('module_id', $post['moduleID'])->order('sort desc')->select();
 		
 		foreach ($level1 as $l1){
 			$parentID[] = $l1['id'];

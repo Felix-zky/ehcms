@@ -80,8 +80,8 @@ define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash'],function(la
 		$('#desktop-icon').on('dblclick', 'li', function() {
 			var icon = $(this).find('img').attr('src'),
 				name = $(this).find('span').html();
-
-			var xhr = $.post('/admin/Index/getMenu', {ids: $(this).data('top-menu-ids')}, '', "json");
+				
+			var xhr = $.post('/admin/Index/getMenu', {moduleID: $(this).data('module-id')}, '', "json");
 
 			xhr.done(function(response){
 				if (response.code == 1){

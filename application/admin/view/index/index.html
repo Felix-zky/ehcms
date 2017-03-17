@@ -9,9 +9,10 @@
 <body class="desktop">
 	<div id="desktop-icon">
 		<ul>
-			{foreach $desktop as $d}
-				<li data-top-menu-ids = "{$d.top_menu_ids}"><div class="icon-img"><img src="__IMAGES__/{$d.icon}" /></div><div class="icon-name"><span>{$d.name}</span></div></li>
-			{/foreach}
+			<li data-module-id="1"><div class="icon-img"><img src="__IMAGES__/setting.png" /></div><div class="icon-name"><span>系统设置</span></div></li>
+			<li data-module-id="2"><div class="icon-img"><img src="__IMAGES__/module.png" /></div><div class="icon-name"><span>模块管理</span></div></li>
+			<li data-module-id="3"><div class="icon-img"><img src="__IMAGES__/article.png" /></div><div class="icon-name"><span>文章管理</span></div></li>
+			<li data-module-id="4"><div class="icon-img"><img src="__IMAGES__/member.png" /></div><div class="icon-name"><span>会员管理</span></div></li>
 		</ul>
 	</div>
 	<div id="taskbar">
