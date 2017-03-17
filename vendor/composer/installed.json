@@ -38,49 +38,6 @@
         "description": "captcha package for thinkphp5"
     },
     {
-        "name": "topthink/think-installer",
-        "version": "v1.0.10",
-        "version_normalized": "1.0.10.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/top-think/think-installer.git",
-            "reference": "ae50760ebd7c687c7a8573db2cfa94a41e5100e3"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://packagist.phpcomposer.com/files/top-think/think-installer/ae50760ebd7c687c7a8573db2cfa94a41e5100e3.zip",
-            "reference": "ae50760ebd7c687c7a8573db2cfa94a41e5100e3",
-            "shasum": ""
-        },
-        "require": {
-            "composer-plugin-api": "^1.0"
-        },
-        "require-dev": {
-            "composer/composer": "1.0.*@dev"
-        },
-        "time": "2016-09-23 04:04:44",
-        "type": "composer-plugin",
-        "extra": {
-            "class": "think\\composer\\Plugin"
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "think\\composer\\": "src"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "Apache-2.0"
-        ],
-        "authors": [
-            {
-                "name": "yunwuxin",
-                "email": "448901948@qq.com"
-            }
-        ]
-    },
-    {
         "name": "topthink/think-image",
         "version": "v1.0.7",
         "version_normalized": "1.0.7.0",
@@ -123,18 +80,61 @@
         "description": "The ThinkPHP5 Image Package"
     },
     {
+        "name": "topthink/think-installer",
+        "version": "v1.0.11",
+        "version_normalized": "1.0.11.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/top-think/think-installer.git",
+            "reference": "4c6e1ebecd1afce3f4ccc47e147d61bbe1bf641d"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/top-think/think-installer/4c6e1ebecd1afce3f4ccc47e147d61bbe1bf641d.zip",
+            "reference": "4c6e1ebecd1afce3f4ccc47e147d61bbe1bf641d",
+            "shasum": ""
+        },
+        "require": {
+            "composer-plugin-api": "^1.0"
+        },
+        "require-dev": {
+            "composer/composer": "1.0.*@dev"
+        },
+        "time": "2016-12-01 09:08:45",
+        "type": "composer-plugin",
+        "extra": {
+            "class": "think\\composer\\Plugin"
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "think\\composer\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "Apache-2.0"
+        ],
+        "authors": [
+            {
+                "name": "yunwuxin",
+                "email": "448901948@qq.com"
+            }
+        ]
+    },
+    {
         "name": "topthink/framework",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
         "source": {
             "type": "git",
             "url": "https://github.com/top-think/framework.git",
-            "reference": "f756bb804e2a8d3565b39a6fc8f769a6bd704391"
+            "reference": "fdde40adaedb4e5b31f65663859a7241658922d6"
         },
         "dist": {
             "type": "zip",
-            "url": "https://packagist.phpcomposer.com/files/top-think/framework/f756bb804e2a8d3565b39a6fc8f769a6bd704391.zip",
-            "reference": "f756bb804e2a8d3565b39a6fc8f769a6bd704391",
+            "url": "https://files.phpcomposer.com/files/top-think/framework/fdde40adaedb4e5b31f65663859a7241658922d6.zip",
+            "reference": "fdde40adaedb4e5b31f65663859a7241658922d6",
             "shasum": ""
         },
         "require": {
@@ -147,10 +147,9 @@
             "phpdocumentor/reflection-docblock": "^2.0",
             "phploc/phploc": "2.*",
             "phpunit/phpunit": "4.8.*",
-            "sebastian/phpcpd": "2.*",
-            "squizlabs/php_codesniffer": "2.*"
+            "sebastian/phpcpd": "2.*"
         },
-        "time": "2016-11-22 09:24:44",
+        "time": "2017-03-15 03:06:25",
         "type": "think-framework",
         "installation-source": "dist",
         "autoload": {

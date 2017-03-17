@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006~2016 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2006~2017 http://thinkphp.cn All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
@@ -16,19 +16,25 @@ use think\Model;
 class Pivot extends Model
 {
 
+    /** @var Model */
+    public $parent;
+
     /**
-     * 架构函数
+     * 构造函数
      * @access public
-     * @param array|object $data 数据
-     * @param string $table 中间数据表名
+     * @param Model        $parent
+     * @param array|object $data  数据
+     * @param string       $table 中间数据表名
      */
-    public function __construct($data = [], $table = '')
+    public function __construct(Model $parent, $data = [], $table = '')
     {
         if (is_object($data)) {
             $this->data = get_object_vars($data);
         } else {
             $this->data = $data;
         }
+
+        $this->parent = $parent;
 
         $this->table = $table;
     }
