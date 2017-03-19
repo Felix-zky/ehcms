@@ -1,4 +1,37 @@
-define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 'eh.form', 'eh.xhr', 'layer'], function($, WebUploader, Messenger, remarkable, hljs){
+define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 'eh.form', 'eh.xhr', 'layer', 'jquery.contextMenu'], function($, WebUploader, Messenger, remarkable, hljs){
+
+	var contentMenuItemsConfigure = {
+			'upload': {
+				icon: 'cloud-upload'
+			},
+			'space': {
+				icon: 'folder-open-o'
+			}
+		},
+		contentMenuSign = {};
+
+	/**
+	 * 生成右键菜单图标以及后边快捷键
+	 */
+	function createMenuIconAndkeyboard(sign, items){
+		$.each(items, function(index) {
+			var current = contentMenuItemsConfigure[index],
+				keyboard = (this.name && current.keyboard) && '<span class="keyboard">' + current.keyboard + '</span>' || '';
+
+			this.name && this.$node.html('<i class="fa fa-' + current.icon + '"></i><span>' + this.name + '</span>' + keyboard);
+		});
+
+		contentMenuSign[sign] = 1;
+	}
+
+	/**
+	 * 检查当前右键菜单是否已生成图标和快捷方式（确保生成单例）
+	 */
+	function checkContentMenuSign(sign){
+		var sign = sign.replace('.','');
+
+		return contentMenuSign[sign] && true || sign;
+	}
 
 	$(function(){
 		var textareaHeight, previewHeight, validate;
@@ -16,6 +49,38 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 			messages: {
 				title: '文章标题必须设置',
 				markdown: 'markdown不能为空'
+			}
+		});
+
+		/**
+		 * 右键事件
+		 */
+		$.contextMenu({
+			selector: '#markdown',
+			items: {
+				upload: {
+					name: '批量上传'
+				},
+				sep1: "---------",
+				space: {
+					name: '资源空间'
+				}
+			},
+			callback: function(itemKey, opt){
+				switch (itemKey){
+					case 'upload':
+						alert('123');
+						break;
+					case 'space':
+						alert('456');
+						break;
+				}	
+			},
+			events: {
+				show: function(options){
+					var sign = checkContentMenuSign(options.ns);
+					sign === true || createMenuIconAndkeyboard(sign, options.items);
+				}
 			}
 		});
 
