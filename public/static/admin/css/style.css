@@ -9635,3 +9635,37 @@ i {
   overflow: hidden;
   display: block;
 }
+#admin-resource-index .webuploader-pick,
+#admin-resource-index .webuploader-pick-hover {
+  background-color: inherit;
+}
+#admin-resource-index .iframe-main {
+  padding: 0 15px;
+}
+#admin-resource-index .iframe-main #tip {
+  text-align: center;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+#admin-resource-index .iframe-main #uploader ul li {
+  height: 140px;
+  width: 100%;
+  overflow: hidden;
+  padding: 10px 0;
+  border-bottom: 1px dashed #ccc;
+}
+#admin-resource-index .iframe-main #uploader ul li img {
+  height: 120px;
+  margin-right: 20px;
+}
+#admin-resource-index .iframe-main #uploader ul li p {
+  line-height: 30px;
+}
+#admin-resource-index .iframe-main #uploader ul li p input {
+  display: inline-block;
+}
+#admin-resource-index .iframe-main #uploader ul li .pull-right {
+  line-height: 120px;
+}

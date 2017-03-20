@@ -1,17 +1,109 @@
 <header>
 	<div class="pull-left">
-		<button class="btn btn-default" {notempty name="accept"}data-type="{$accept}"{/notempty}>选择文件</button>
+		<div id="select-file" {notempty name="accept"}data-type="{$accept}"{/notempty}>
+			<button class="btn btn-default"><i class="fa fa-search"></i>选择文件</button>
+		</div>
 	</div>
 	<div class="pull-right">
-		<button class="btn btn-danger">开始上传</button>
+		<button class="btn btn-danger"><i class="fa fa-cloud-upload"></i>全部上传</button>
+		<button class="btn btn-danger"><i class="fa fa-trash"></i>全部删除</button>
 	</div>
 </header>
 <section class="iframe-main">
+	<div id="tip">
+		<p>暂无任何文件</p>
+		<p>请点击左上方“选择文件”按钮添加文件</p>
+	</div>
+	<div id="uploader">
+		<ul></ul>
+	</div>
 </section>
 <script type="text/javascript">
-	require(['jquery', 'layer'], function(){
+	require(['jquery', 'webuploader', 'laytpl', 'layer'], function($, WebUploader, laytpl){
 		$(function(){
-			
+			var type = $('#select-file').data('type');
+			var uploaderOption = {
+				swf: '/static/lib/js/webuploader/Uploader.swf',
+				server: '/resource/Uploader/receiver',
+				pick: '#select-file',
+				formData: {
+					_ajax: 1
+				},
+				compress: false
+			};
+
+			if (type) {
+				switch(type){
+					case 'image':
+					uploaderOption.accept = {
+						title: 'Images',
+						extensions: 'gif,jpg,jpeg,bmp,png',
+						mimeTypes: 'image/*'
+					};
+					break;
+				}
+			}
+
+			/**
+			 * 实例化资源上传组件并配置参数
+			 */
+			var uploader = new WebUploader.Uploader(uploaderOption);
+
+
+			/**
+			 * 缩略图进入列队触发
+			 */
+			uploader.on('fileQueued', function(file){
+				var m = 1024*1024, size, data = {};
+
+				if (file.size >= m) {
+					size = (file.size / m).toFixed(2) + 'MB';
+				}else if (file.size > 100) {
+					size = (file.size / 1024).toFixed(2) + 'KB';
+				}else{
+					size = file.size + 'B';
+				}
+
+				data = {
+					id: file.id,
+					name: file.name,
+					type: file.ext,
+					size: size
+				};
+
+				uploader.makeThumb(file, function(error, ret){
+					if (!error) {
+						data.img = ret;
+					}
+
+					laytpl($('#file').html()).render(data, function(response){
+						$('#uploader ul').append(response);
+						$('#tip').hide();
+					});
+				}, 120, 120);
+			});
+
+			$('#uploader ul').on('click', '.delete', function() {
+				var id = $(this).parents('li').data('id');
+				console.log(uploader.Queue);
+				uploader.removeFile(id, true);
+				console.log(uploader.getFiles());
+			});
 		});
 	});
+</script>
+<script type="text/html" id="file">
+	<li data-id='{{d.id}}'>
+		<img src="{{d.img}}" class="pull-left">
+		<div class="pull-left">
+			<p>文件名：{{d.name}}</p>
+			<p>文件类型：{{d.type}}</p>
+			<p>文件大小：{{d.size}}</p>
+			<p>当前状态：<span>未上传</span></p>
+		</div>
+		<div class="pull-right">
+			<button class="btn btn-primary start"><i class="fa fa-upload"></i>上传</button>
+			<button class="btn btn-primary delete"><i class="fa fa-remove"></i>删除</button>
+		</div>
+	</li>
 </script>
