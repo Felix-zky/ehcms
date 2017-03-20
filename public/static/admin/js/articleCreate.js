@@ -69,7 +69,14 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 			callback: function(itemKey, opt){
 				switch (itemKey){
 					case 'upload':
-						alert('123');
+						layer.open({
+							type:2,
+							title: false,
+							resize: false,
+							move: false,
+							area: ['80%', '80%'],
+							content: '/admin/resource/index/accept/image.html'
+						});
 						break;
 					case 'space':
 						alert('456');

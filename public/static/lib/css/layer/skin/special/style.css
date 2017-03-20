@@ -2,9 +2,12 @@ html #layui_layer_skinspecialstylecss{
 	display:none; position: absolute; width:1989px;
 }
 body .layer-ext-special{
-	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
 	border-radius: 10px;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+body .layui-layer-content{
 	overflow: hidden;
+	border-radius: 10px;
 }
 body .layer-ext-special.no-border-radius{
 	border-radius: 0;

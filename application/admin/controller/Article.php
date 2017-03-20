@@ -13,12 +13,7 @@ namespace app\admin\controller;
 /**
  * 文章模块后台控制器
  */
-class Article extends Init{
-	
-	public function __construct(){
-		parent::__construct();
-	}
-	
+class Article extends Init{	
 	/**
 	 * 获取文章列表
 	 */
