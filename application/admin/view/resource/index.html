@@ -34,7 +34,15 @@
 				formData: {
 					_ajax: 1
 				},
-				compress: false
+				compress: false,
+				thumb:{
+					width: 120,
+					height: 120,
+					quality: 100,
+					allowMagnify: false,
+					crop: false,
+					type: ''
+				}
 			};
 
 			if (type) {
@@ -85,7 +93,7 @@
 						$('#uploader ul').append(response);
 						$('#tip').hide();
 					});
-				}, 120, 120);
+				});
 			});
 
 			//上传进度（单文件）

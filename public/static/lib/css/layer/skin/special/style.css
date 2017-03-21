@@ -5,6 +5,9 @@ body .layer-ext-special{
 	border-radius: 10px;
 	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
 }
+body .layui-layer-iframe{
+	overflow: visible;
+}
 body .layui-layer-content{
 	overflow: hidden;
 	border-radius: 10px;
