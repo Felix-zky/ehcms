@@ -5,11 +5,16 @@
 		</div>
 	</div>
 	<div class="pull-right">
-		<button class="btn btn-danger"><i class="fa fa-cloud-upload"></i>全部上传</button>
-		<button class="btn btn-danger"><i class="fa fa-trash"></i>全部删除</button>
+		<button class="btn btn-danger" id="start-all"><i class="fa fa-cloud-upload"></i>全部上传</button>
+		<button class="btn btn-danger" id="delete-all"><i class="fa fa-trash"></i>全部删除</button>
 	</div>
 </header>
 <section class="iframe-main">
+	<div class="progress">
+		<div class="progress-bar" style="width: 60%;">
+			60%
+		</div>
+	</div>
 	<div id="tip">
 		<p>暂无任何文件</p>
 		<p>请点击左上方“选择文件”按钮添加文件</p>
@@ -24,7 +29,7 @@
 			var type = $('#select-file').data('type');
 			var uploaderOption = {
 				swf: '/static/lib/js/webuploader/Uploader.swf',
-				server: '/resource/Uploader/receiver',
+				server: '/aaaa',
 				pick: '#select-file',
 				formData: {
 					_ajax: 1
@@ -83,11 +88,43 @@
 				}, 120, 120);
 			});
 
+			//上传进度（单文件）
+			uploader.on('uploadProgress', function(file, percentage){
+
+			}
+
+			//上传成功（单文件）
+			uploader.on('uploadSuccess', function(file, percentage){
+
+			}
+
+			//上传开始（全部）
+			uploader.on('startUpload', function(file, percentage){
+
+			}
+
+			//上传结束（全部）
+			uploader.on('uploadFinished', function(file, percentage){
+
+			}
+
+			//上传开始（单文件）
+			uploader.on('uploadStart', function(file, percentage){
+
+			}
+
 			$('#uploader ul').on('click', '.delete', function() {
-				var id = $(this).parents('li').data('id');
-				console.log(uploader.Queue);
+				var li = $(this).parents('li'),
+					id = li.data('id');
 				uploader.removeFile(id, true);
-				console.log(uploader.getFiles());
+				li.remove();
+			});
+
+			$('#start-all').click(function() {
+				if (!uploader.isInProgress()) {
+					$(this).attr('disabled','disabled');
+					uploader.upload();
+				}
 			});
 		});
 	});
