@@ -4,7 +4,13 @@
 	}
 
 	.iframe-main{
-		padding: 0 15px;
+		padding: 15px 15px 0 15px;
+		.progress{
+			display: none;
+			.progress-bar{
+				min-width: 35px;
+			}
+		}
 		#tip{
 			text-align: center;
 			.horizontal-center-center;
@@ -17,6 +23,7 @@
 					overflow: hidden;
 					padding: 10px 0;
 					border-bottom: 1px dashed #ccc;
+					position: relative;
 					img{
 						height: 120px;
 						width: 120px;
@@ -27,6 +34,20 @@
 					}
 					.pull-right{
 						line-height: 120px;
+					}
+					.li-progress{
+						position: absolute;
+						top: 0;
+						left: 0;
+						height: 140px;
+						width: 100%;
+						display: none;
+						.li-progress-bar{
+							height: 100%;
+							width: 10%;
+							opacity: 0.5;
+							background-color: #337ab7;
+						}
 					}
 				}
 			}

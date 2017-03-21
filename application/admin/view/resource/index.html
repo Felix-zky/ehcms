@@ -11,8 +11,8 @@
 </header>
 <section class="iframe-main">
 	<div class="progress">
-		<div class="progress-bar" style="width: 60%;">
-			60%
+		<div class="progress-bar">
+			0%
 		</div>
 	</div>
 	<div id="tip">
@@ -29,7 +29,7 @@
 			var type = $('#select-file').data('type');
 			var uploaderOption = {
 				swf: '/static/lib/js/webuploader/Uploader.swf',
-				server: '/aaaa',
+				server: '/resource/Uploader/receiver',
 				pick: '#select-file',
 				formData: {
 					_ajax: 1
@@ -90,32 +90,35 @@
 
 			//上传进度（单文件）
 			uploader.on('uploadProgress', function(file, percentage){
-
-			}
-
-			//上传成功（单文件）
-			uploader.on('uploadSuccess', function(file, percentage){
-
-			}
+				$('#' + file + 'li-progress-bar').css({
+					width: percentage
+				});
+			});
 
 			//上传开始（全部）
-			uploader.on('startUpload', function(file, percentage){
-
-			}
+			uploader.on('startUpload', function(){
+				$('.progress').show();
+			});
 
 			//上传结束（全部）
-			uploader.on('uploadFinished', function(file, percentage){
+			uploader.on('uploadFinished', function(){
 
-			}
+			});
 
 			//上传开始（单文件）
-			uploader.on('uploadStart', function(file, percentage){
+			uploader.on('uploadStart', function(file){
+				$('#' + file + 'li-progress').show();
+			});
 
-			}
+			//上传成功（单文件）
+			uploader.on('uploadSuccess', function(file, response){
+				totalProgress();
+			});
 
 			$('#uploader ul').on('click', '.delete', function() {
 				var li = $(this).parents('li'),
-					id = li.data('id');
+					id = li.attr('id');
+				//console.log(uploader.getFiles('inited'));
 				uploader.removeFile(id, true);
 				li.remove();
 			});
@@ -127,10 +130,14 @@
 				}
 			});
 		});
+
+		function totalProgress(){
+			//uploader
+		}
 	});
 </script>
 <script type="text/html" id="file">
-	<li data-id='{{d.id}}'>
+	<li id='{{d.id}}'>
 		<img src="{{d.img}}" class="pull-left">
 		<div class="pull-left">
 			<p>文件名：{{d.name}}</p>
@@ -141,6 +148,9 @@
 		<div class="pull-right">
 			<button class="btn btn-primary start"><i class="fa fa-upload"></i>上传</button>
 			<button class="btn btn-primary delete"><i class="fa fa-remove"></i>删除</button>
+		</div>
+		<div class="li-progress">
+			<div class="li-progress-bar"></div>
 		</div>
 	</li>
 </script>

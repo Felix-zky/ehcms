@@ -9640,7 +9640,13 @@ i {
   background-color: inherit;
 }
 #admin-resource-index .iframe-main {
-  padding: 0 15px;
+  padding: 15px 15px 0 15px;
+}
+#admin-resource-index .iframe-main .progress {
+  display: none;
+}
+#admin-resource-index .iframe-main .progress .progress-bar {
+  min-width: 35px;
 }
 #admin-resource-index .iframe-main #tip {
   text-align: center;
@@ -9655,17 +9661,30 @@ i {
   overflow: hidden;
   padding: 10px 0;
   border-bottom: 1px dashed #ccc;
+  position: relative;
 }
 #admin-resource-index .iframe-main #uploader ul li img {
   height: 120px;
+  width: 120px;
   margin-right: 20px;
 }
 #admin-resource-index .iframe-main #uploader ul li p {
   line-height: 30px;
 }
-#admin-resource-index .iframe-main #uploader ul li p input {
-  display: inline-block;
-}
 #admin-resource-index .iframe-main #uploader ul li .pull-right {
   line-height: 120px;
+}
+#admin-resource-index .iframe-main #uploader ul li .li-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 140px;
+  width: 100%;
+  display: none;
+}
+#admin-resource-index .iframe-main #uploader ul li .li-progress .li-progress-bar {
+  height: 100%;
+  width: 10%;
+  opacity: 0.5;
+  background-color: #337ab7;
 }
