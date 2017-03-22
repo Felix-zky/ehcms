@@ -26,7 +26,7 @@
 	</div>
 </section>
 <script type="text/javascript">
-	require(['jquery', 'webuploader', 'laytpl', 'layer'], function($, WebUploader, laytpl){
+	require(['jquery', 'webuploader', 'laytpl', 'layer', 'eh'], function($, WebUploader, laytpl){
 		$(function(){
 			var type = $('#select-file').data('type');
 			var uploaderOption = {
@@ -108,6 +108,7 @@
 			//上传开始（全部）
 			uploader.on('startUpload', function(){
 				$('.progress').show();
+				eh.setIframeMainHeight();
 			});
 
 			//上传结束（全部）
