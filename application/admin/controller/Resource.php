@@ -8,4 +8,7 @@ class Resource extends Init{
 		return $this->fetch();
 	}
 	
+	public function uploader(){
+		
+	}
 }
