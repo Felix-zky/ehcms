@@ -32,14 +32,13 @@ class Uploader extends Base{
 		$file = request()->file('file');
 		$post = input('post.');
 		
-		$type = $this->checkExtension($post['extension']);
+// 		$type = $this->checkExtension($post['extension']);
 		
-		if (!!$type === FALSE){
-			return $this->errorResult('该后缀类型不允许上传');
-		}
+// 		if (!!$type === FALSE){
+// 			return $this->errorResult('该后缀类型不允许上传');
+// 		}
 		
 		//组合文件上传目录
-		$post = input('post.');
 		$path = 'uploader';
 		
 		$info = $file->move($path);

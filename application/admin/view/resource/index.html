@@ -1,20 +1,22 @@
 <header>
-	<div class="pull-left">
-		<div id="select-file" {notempty name="accept"}data-type="{$accept}"{/notempty}>
-			<button class="btn btn-default"><i class="fa fa-search"></i>选择文件</button>
+	<div class="clearfix">
+		<div class="pull-left">
+			<div id="select-file" {notempty name="accept"}data-type="{$accept}"{/notempty}>
+				<button class="btn btn-default"><i class="fa fa-search"></i>选择文件</button>
+			</div>
+		</div>
+		<div class="pull-right">
+			<button class="btn btn-danger" id="start-all"><i class="fa fa-cloud-upload"></i>全部上传</button>
+			<button class="btn btn-danger" id="delete-all"><i class="fa fa-trash"></i>全部删除</button>
 		</div>
 	</div>
-	<div class="pull-right">
-		<button class="btn btn-danger" id="start-all"><i class="fa fa-cloud-upload"></i>全部上传</button>
-		<button class="btn btn-danger" id="delete-all"><i class="fa fa-trash"></i>全部删除</button>
-	</div>
-</header>
-<section class="iframe-main">
 	<div class="progress">
 		<div class="progress-bar">
 			0%
 		</div>
 	</div>
+</header>
+<section class="iframe-main">
 	<div id="tip">
 		<p>暂无任何文件</p>
 		<p>请点击左上方“选择文件”按钮添加文件</p>
@@ -98,8 +100,8 @@
 
 			//上传进度（单文件）
 			uploader.on('uploadProgress', function(file, percentage){
-				$('#' + file + 'li-progress-bar').css({
-					width: percentage
+				$('#' + file.id + ' .li-progress-bar').css({
+					width: percentage * 100 + '%'
 				});
 			});
 
@@ -110,12 +112,12 @@
 
 			//上传结束（全部）
 			uploader.on('uploadFinished', function(){
-
+				console.log('结束');
 			});
 
 			//上传开始（单文件）
 			uploader.on('uploadStart', function(file){
-				$('#' + file + 'li-progress').show();
+				$('#' + file.id + ' .li-progress').show();
 			});
 
 			//上传成功（单文件）
@@ -140,13 +142,15 @@
 		});
 
 		function totalProgress(){
-			//uploader
+			console.log(123)
 		}
 	});
 </script>
 <script type="text/html" id="file">
 	<li id='{{d.id}}'>
-		<img src="{{d.img}}" class="pull-left">
+		<div class="img-box pull-left">
+			<img src="{{d.img}}">
+		</div>
 		<div class="pull-left">
 			<p>文件名：{{d.name}}</p>
 			<p>文件类型：{{d.type}}</p>

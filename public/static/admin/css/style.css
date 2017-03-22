@@ -9639,13 +9639,12 @@ i {
 #admin-resource-index .webuploader-pick-hover {
   background-color: inherit;
 }
-#admin-resource-index .iframe-main {
-  padding: 15px 15px 0 15px;
-}
-#admin-resource-index .iframe-main .progress {
+#admin-resource-index .progress {
   display: none;
+  margin-top: 10px;
+  margin-bottom: 0;
 }
-#admin-resource-index .iframe-main .progress .progress-bar {
+#admin-resource-index .progress .progress-bar {
   min-width: 35px;
 }
 #admin-resource-index .iframe-main #tip {
@@ -9655,6 +9654,9 @@ i {
   top: 50%;
   transform: translate(-50%, -50%);
 }
+#admin-resource-index .iframe-main #uploader {
+  padding: 15px;
+}
 #admin-resource-index .iframe-main #uploader ul li {
   height: 140px;
   width: 100%;
@@ -9663,10 +9665,18 @@ i {
   border-bottom: 1px dashed #ccc;
   position: relative;
 }
-#admin-resource-index .iframe-main #uploader ul li img {
-  height: 120px;
-  width: 120px;
+#admin-resource-index .iframe-main #uploader ul li .img-box {
   margin-right: 20px;
+  position: relative;
+  width: 120px;
+  height: 120px;
+  overflow: hidden;
+}
+#admin-resource-index .iframe-main #uploader ul li .img-box img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 #admin-resource-index .iframe-main #uploader ul li p {
   line-height: 30px;

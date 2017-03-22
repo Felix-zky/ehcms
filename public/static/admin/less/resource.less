@@ -3,19 +3,22 @@
 		background-color: inherit;
 	}
 
-	.iframe-main{
-		padding: 15px 15px 0 15px;
-		.progress{
-			display: none;
-			.progress-bar{
-				min-width: 35px;
-			}
+	.progress{
+		display: none;
+		margin-top: 10px;
+		margin-bottom: 0;
+		.progress-bar{
+			min-width: 35px;
 		}
+	}
+
+	.iframe-main{
 		#tip{
 			text-align: center;
 			.horizontal-center-center;
 		}
 		#uploader{
+			padding: 15px;
 			ul{
 				li{
 					height: 140px;
@@ -24,10 +27,15 @@
 					padding: 10px 0;
 					border-bottom: 1px dashed #ccc;
 					position: relative;
-					img{
-						height: 120px;
-						width: 120px;
+					.img-box{
 						margin-right: 20px;
+						position: relative;
+						width: 120px;
+						height: 120px;
+						overflow: hidden;
+						img{
+							.horizontal-center-center;
+						}
 					}
 					p{
 						line-height: 30px;
