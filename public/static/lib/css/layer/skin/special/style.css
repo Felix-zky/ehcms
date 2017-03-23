@@ -114,3 +114,10 @@ body .layer-ext-special .layui-layer-ico7 {
 body .layer-ext-special .layui-layer-setwin{
 	top: 20px;
 }
+
+body .layui-layer-page.layui-layer-dialog{
+	min-width: 200px;
+}
+body .layui-layer-page.layui-layer-dialog .layui-layer-content{
+	padding: 20px 20px 20px 60px;
+}

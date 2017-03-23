@@ -9681,6 +9681,12 @@ i {
 #admin-resource-index .iframe-main #uploader ul li p {
   line-height: 30px;
 }
+#admin-resource-index .iframe-main #uploader ul li p span.success {
+  color: #4cae4c;
+}
+#admin-resource-index .iframe-main #uploader ul li p span.fail {
+  color: #d43f3a;
+}
 #admin-resource-index .iframe-main #uploader ul li .pull-right {
   line-height: 120px;
 }
@@ -9697,4 +9703,7 @@ i {
   width: 10%;
   opacity: 0.5;
   background-color: #337ab7;
+  -webkit-transition: width 0.6s ease;
+  -o-transition: width 0.6s ease;
+  transition: width 0.6s ease;
 }

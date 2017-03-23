@@ -27,6 +27,8 @@
 </section>
 <script type="text/javascript">
 	require(['jquery', 'webuploader', 'laytpl', 'layer', 'eh'], function($, WebUploader, laytpl){
+		var queueNum = 0, completeNum = 0;
+		var uploader;
 		$(function(){
 			var type = $('#select-file').data('type');
 			var uploaderOption = {
@@ -62,7 +64,7 @@
 			/**
 			 * 实例化资源上传组件并配置参数
 			 */
-			var uploader = new WebUploader.Uploader(uploaderOption);
+			uploader = new WebUploader.Uploader(uploaderOption);
 
 
 			/**
@@ -107,8 +109,13 @@
 
 			//上传开始（全部）
 			uploader.on('startUpload', function(){
-				$('.progress').show();
-				eh.setIframeMainHeight();
+				queueNum = uploader.getStats().queueNum;
+				if (queueNum > 0) {
+					$('.progress').show();
+					eh.setIframeMainHeight();
+				}else{
+					layer.msg('队列中没有任何文件', {icon: 5});
+				}
 			});
 
 			//上传结束（全部）
@@ -123,6 +130,50 @@
 
 			//上传成功（单文件）
 			uploader.on('uploadSuccess', function(file, response){
+				var li = $('#' + file.id);
+				li.find('.li-progress').hide();
+				li.find('.info p:eq(3)').append('<span class="success">上传成功</span>').find('span:eq(0)').remove();
+				var index = layer.open({
+					type: 1,
+					content: '<i class="layui-layer-ico layui-layer-ico6"></i>上传成功',
+					offset: '35px',
+					time: 3000,
+					shade: false,
+					skin: 'layui-layer-dialog layui-layer-border ' + layer.cache.skin + ' ' + layer.cache.skin + '-msg',
+					title: false,
+					closeBtn: false,
+					btn: false,
+					fixed: false,
+					success: function(layero){
+						li.append(layero);
+					}
+				});
+			});
+
+			//上传失败（单文件）
+			uploader.on('uploadError', function(file, response){
+				var li = $('#' + file.id);
+				li.find('.li-progress').hide();
+				li.find('.info p:eq(3)').append('<span class="fail">上传失败</span>').find('span:eq(0)').remove();
+				var index = layer.open({
+					type: 1,
+					content: '<i class="layui-layer-ico layui-layer-ico5"></i>上传失败',
+					offset: '35px',
+					time: 3000,
+					shade: false,
+					skin: 'layui-layer-dialog layui-layer-border ' + layer.cache.skin + ' ' + layer.cache.skin + '-msg',
+					title: false,
+					closeBtn: false,
+					btn: false,
+					fixed: false,
+					success: function(layero){
+						li.append(layero);
+					}
+				});
+			});
+
+			uploader.on('uploadComplete', function(file){
+				completeNum++;
 				totalProgress();
 			});
 
@@ -136,14 +187,16 @@
 
 			$('#start-all').click(function() {
 				if (!uploader.isInProgress()) {
-					$(this).attr('disabled','disabled');
+					//$(this).attr('disabled','disabled');
 					uploader.upload();
 				}
 			});
 		});
 
 		function totalProgress(){
-			console.log(123)
+			var stats = uploader.getStats();
+			var progress = (100 / queueNum * completeNum) + '%';
+			$('.progress-bar').width(progress).html(progress);
 		}
 	});
 </script>
@@ -152,11 +205,11 @@
 		<div class="img-box pull-left">
 			<img src="{{d.img}}">
 		</div>
-		<div class="pull-left">
+		<div class="pull-left info">
 			<p>文件名：{{d.name}}</p>
 			<p>文件类型：{{d.type}}</p>
 			<p>文件大小：{{d.size}}</p>
-			<p>当前状态：<span>未上传</span></p>
+			<p>当前状态：<span class="init">未上传</span></p>
 		</div>
 		<div class="pull-right">
 			<button class="btn btn-primary start"><i class="fa fa-upload"></i>上传</button>
