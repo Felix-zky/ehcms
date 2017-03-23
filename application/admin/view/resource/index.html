@@ -1,11 +1,13 @@
 <header>
 	<div class="clearfix">
 		<div class="pull-left">
-			<div id="select-file" {notempty name="accept"}data-type="{$accept}"{/notempty}>
+			<div class="pull-left" id="select-file" {notempty name="accept"}data-type="{$accept}"{/notempty}>
 				<button class="btn btn-default"><i class="fa fa-search"></i>选择文件</button>
 			</div>
+			<h5 class="pull-left">上传目录：xxxxx > oooo</h5>
 		</div>
 		<div class="pull-right">
+			<button class="btn btn-danger" id="restart-all"><i class="fa fa-refresh"></i>仅上传失败文件</button>
 			<button class="btn btn-danger" id="start-all"><i class="fa fa-cloud-upload"></i>全部上传</button>
 			<button class="btn btn-danger" id="delete-all"><i class="fa fa-trash"></i>全部删除</button>
 		</div>
@@ -14,6 +16,10 @@
 		<div class="progress-bar">
 			0%
 		</div>
+	</div>
+	<div class="progress-info">
+		<p class="pull-left"></p>
+		<p class="pull-right">上传进度：<span class="complete">0</span>/<span class="queue"></span></p>
 	</div>
 </header>
 <section class="iframe-main">
@@ -29,6 +35,7 @@
 	require(['jquery', 'webuploader', 'laytpl', 'layer', 'eh'], function($, WebUploader, laytpl){
 		var queueNum = 0, completeNum = 0;
 		var uploader;
+		var transitionEnd = 'transitionend webkitTransitionEnd oTransitionEnd otransitionend MSTransitionEnd';
 		$(function(){
 			var type = $('#select-file').data('type');
 			var uploaderOption = {
@@ -65,7 +72,6 @@
 			 * 实例化资源上传组件并配置参数
 			 */
 			uploader = new WebUploader.Uploader(uploaderOption);
-
 
 			/**
 			 * 缩略图进入列队触发
@@ -110,8 +116,10 @@
 			//上传开始（全部）
 			uploader.on('startUpload', function(){
 				queueNum = uploader.getStats().queueNum;
+				$('.progress-info').find('span.queue').html(queueNum);
 				if (queueNum > 0) {
-					$('.progress').show();
+					$('.progress-info p:eq(0)').html('<i class="fa fa-spinner fa-spin fa-fw"></i>正在上传第<span class="progress"></span>个文件');
+					$('.progress, .progress-info').show();
 					eh.setIframeMainHeight();
 				}else{
 					layer.msg('队列中没有任何文件', {icon: 5});
@@ -120,18 +128,31 @@
 
 			//上传结束（全部）
 			uploader.on('uploadFinished', function(){
-				console.log('结束');
+				$('.progress-bar').one(transitionEnd, function(){
+					var stats = uploader.getStats();
+					queueNum = 0;
+					completeNum = 0;
+					$('.progress-info p:eq(0)').html('上传结束，成功 ' + stats.successNum + ' 个文件，失败 ' + stats.uploadFailNum + ' 个文件！');
+					if (stats.uploadFailNum > 0) {
+						$('#restart-all').show();
+					}
+				});
 			});
 
 			//上传开始（单文件）
 			uploader.on('uploadStart', function(file){
-				$('#' + file.id + ' .li-progress').show();
+				var li = $('#' + file.id);
+				li.find('.li-progress').show();
+				li.find('button.start').remove();
+				li.find('button.restart').hide();
 			});
 
 			//上传成功（单文件）
 			uploader.on('uploadSuccess', function(file, response){
 				var li = $('#' + file.id);
-				li.find('.li-progress').hide();
+				li.find('.li-progress-bar').one(transitionEnd, function(){
+					li.find('.li-progress').hide();
+				});
 				li.find('.info p:eq(3)').append('<span class="success">上传成功</span>').find('span:eq(0)').remove();
 				var index = layer.open({
 					type: 1,
@@ -153,7 +174,9 @@
 			//上传失败（单文件）
 			uploader.on('uploadError', function(file, response){
 				var li = $('#' + file.id);
-				li.find('.li-progress').hide();
+				li.find('.li-progress-bar').one(transitionEnd, function(){
+					li.find('.li-progress').hide();
+				});
 				li.find('.info p:eq(3)').append('<span class="fail">上传失败</span>').find('span:eq(0)').remove();
 				var index = layer.open({
 					type: 1,
@@ -172,9 +195,21 @@
 				});
 			});
 
+			//上传完成（单文件）
 			uploader.on('uploadComplete', function(file){
 				completeNum++;
 				totalProgress();
+				$('.progress-info').find('span.complete').html(completeNum);
+				var progress = completeNum + 1;
+				if (queueNum >= progress){
+					$('.progress-info').find('span.progress').html(progress);
+				}
+
+				var li = $('#' + file.id);
+
+				if (file.getStatus() == 'error') {
+					li.find('button.restart').show();
+				}
 			});
 
 			$('#uploader ul').on('click', '.delete', function() {
@@ -190,6 +225,13 @@
 					//$(this).attr('disabled','disabled');
 					uploader.upload();
 				}
+			});
+
+			$('#restart-all').click(function(){
+				$('.progress-bar').width(0).html('0%');
+				$('.progress-bar').one(transitionEnd, function(){
+					uploader.retry();
+				});
 			});
 		});
 
@@ -213,6 +255,7 @@
 		</div>
 		<div class="pull-right">
 			<button class="btn btn-primary start"><i class="fa fa-upload"></i>上传</button>
+			<button class="btn btn-danger restart"><i class="fa fa-upload"></i>重新上传</button>
 			<button class="btn btn-primary delete"><i class="fa fa-remove"></i>删除</button>
 		</div>
 		<div class="li-progress">

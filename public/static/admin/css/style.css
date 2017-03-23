@@ -9639,13 +9639,23 @@ i {
 #admin-resource-index .webuploader-pick-hover {
   background-color: inherit;
 }
-#admin-resource-index .progress {
+#admin-resource-index header .progress {
   display: none;
   margin-top: 10px;
   margin-bottom: 0;
 }
-#admin-resource-index .progress .progress-bar {
+#admin-resource-index header .progress .progress-bar {
   min-width: 35px;
+}
+#admin-resource-index header .progress-info {
+  margin-top: 5px;
+  display: none;
+}
+#admin-resource-index header h5 {
+  margin-left: 10px;
+}
+#admin-resource-index header #restart-all {
+  display: none;
 }
 #admin-resource-index .iframe-main #tip {
   text-align: center;
@@ -9690,6 +9700,9 @@ i {
 #admin-resource-index .iframe-main #uploader ul li .pull-right {
   line-height: 120px;
 }
+#admin-resource-index .iframe-main #uploader ul li .pull-right .restart {
+  display: none;
+}
 #admin-resource-index .iframe-main #uploader ul li .li-progress {
   position: absolute;
   top: 0;
@@ -9703,7 +9716,7 @@ i {
   width: 10%;
   opacity: 0.5;
   background-color: #337ab7;
-  -webkit-transition: width 0.6s ease;
-  -o-transition: width 0.6s ease;
-  transition: width 0.6s ease;
+  -webkit-transition: width 1.5s ease;
+  -o-transition: width 1.5s ease;
+  transition: width 1.5s ease;
 }

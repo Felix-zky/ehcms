@@ -2,16 +2,26 @@
 	.webuploader-pick, .webuploader-pick-hover{
 		background-color: inherit;
 	}
-
-	.progress{
-		display: none;
-		margin-top: 10px;
-		margin-bottom: 0;
-		.progress-bar{
-			min-width: 35px;
+	header{
+		.progress{
+			display: none;
+			margin-top: 10px;
+			margin-bottom: 0;
+			.progress-bar{
+				min-width: 35px;
+			}
+		}
+		.progress-info{
+			margin-top: 5px;
+			display: none;
+		}
+		h5{
+			margin-left: 10px;
+		}
+		#restart-all{
+			display: none;
 		}
 	}
-
 	.iframe-main{
 		#tip{
 			text-align: center;
@@ -50,6 +60,9 @@
 					}
 					.pull-right{
 						line-height: 120px;
+						.restart{
+							display: none;
+						}
 					}
 					.li-progress{
 						position: absolute;
@@ -63,9 +76,9 @@
 							width: 10%;
 							opacity: 0.5;
 							background-color: #337ab7;
-							-webkit-transition: width 0.6s ease;
-							-o-transition: width 0.6s ease;
-							transition: width 0.6s ease;
+							-webkit-transition: width 1.5s ease;
+							-o-transition: width 1.5s ease;
+							transition: width 1.5s ease;
 						}
 					}
 				}
