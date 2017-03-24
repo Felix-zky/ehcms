@@ -9654,7 +9654,8 @@ i {
 #admin-resource-index header h5 {
   margin-left: 10px;
 }
-#admin-resource-index header #restart-all {
+#admin-resource-index header #restart-all,
+#admin-resource-index header #delete-error-all {
   display: none;
 }
 #admin-resource-index .iframe-main #tip {
