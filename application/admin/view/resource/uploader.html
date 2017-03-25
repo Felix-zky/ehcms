@@ -1,0 +1,307 @@
+<header>
+	<div class="clearfix">
+		<div class="pull-left">
+			<div class="pull-left" id="select-file" {notempty name="accept"}data-type="{$accept}"{/notempty} {notempty name="fileMax"}data-file-max="{$fileMax}"{/notempty}>
+				<button class="btn btn-default"><i class="fa fa-search"></i>选择文件</button>
+			</div>
+			<h5 class="pull-left">上传目录：xxxxx > oooo</h5>
+		</div>
+		<div class="pull-right">
+			<button class="btn btn-danger" id="restart-all"><i class="fa fa-refresh"></i>上传失败文件</button>
+			<button class="btn btn-danger" id="delete-error-all"><i class="fa fa-trash"></i>删除失败文件</button>
+			<button class="btn btn-danger" id="start-all" disabled="disabled"><i class="fa fa-cloud-upload"></i>全部上传</button>
+			<button class="btn btn-danger" id="delete-all" disabled="disabled"><i class="fa fa-trash"></i>全部删除</button>
+		</div>
+	</div>
+	<div class="progress">
+		<div class="progress-bar">
+			0%
+		</div>
+	</div>
+	<div class="progress-info">
+		<p class="pull-left"></p>
+		<p class="pull-right">上传进度：<span class="complete">0</span>/<span class="queue"></span></p>
+	</div>
+</header>
+<section class="iframe-main">
+	<div id="tip">
+		<p>暂无任何文件</p>
+		<p>请点击左上方“选择文件”按钮添加文件</p>
+	</div>
+	<div id="uploader">
+		<ul></ul>
+	</div>
+</section>
+<script type="text/javascript">
+	require(['jquery', 'webuploader', 'laytpl', 'layer', 'eh'], function($, WebUploader, laytpl){
+		var queueNum = 0, completeNum = 0;
+		var uploader;
+		var transitionEnd = 'transitionend webkitTransitionEnd oTransitionEnd otransitionend MSTransitionEnd';
+		$(function(){
+			var type = $('#select-file').data('type');
+			var uploaderOption = {
+				swf: '/static/lib/js/webuploader/Uploader.swf',
+				server: '/resource/Uploader/receiver',
+				pick: '#select-file',
+				formData: {
+					_ajax: 1
+				},
+				compress: false,
+				thumb:{
+					width: 120,
+					height: 120,
+					quality: 100,
+					allowMagnify: false,
+					crop: false,
+					type: ''
+				},
+				fileSingleSizeLimit: $('#select-file').data('file-max') || 1024*1024
+			};
+
+			if (type) {
+				switch(type){
+					case 'image':
+					uploaderOption.accept = {
+						title: 'Images',
+						extensions: 'gif,jpg,jpeg,bmp,png',
+						mimeTypes: 'image/*'
+					};
+					break;
+				}
+			}
+
+			/**
+			 * 实例化资源上传组件并配置参数
+			 */
+			uploader = new WebUploader.Uploader(uploaderOption);
+
+			/**
+			 * 缩略图进入列队触发
+			 */
+			uploader.on('fileQueued', function(file){
+				var m = 1024*1024, size, data = {};
+
+				$('#start-all, #delete-all').removeAttr('disabled');
+				if ($('.progress').is(':visible')) {
+					$('.progress, .progress-info').hide();
+					eh.setIframeMainHeight();
+				}
+				if ($('.progress-bar').width() > 35) {
+					$('.progress-bar').width(0).html('0%');
+				}
+
+				if (file.size >= m) {
+					size = (file.size / m).toFixed(2) + 'MB';
+				}else if (file.size > 100) {
+					size = (file.size / 1024).toFixed(2) + 'KB';
+				}else{
+					size = file.size + 'B';
+				}
+				
+				data = {
+					id: file.id,
+					name: file.name,
+					type: file.ext,
+					size: size
+				};
+
+				uploader.makeThumb(file, function(error, ret){
+					if (!error) {
+						data.img = ret;
+					}
+
+					laytpl($('#file').html()).render(data, function(response){
+						$('#uploader ul').append(response);
+						$('#tip').hide();
+					});
+				});
+			});
+
+			//上传进度（单文件）
+			uploader.on('uploadProgress', function(file, percentage){
+				$('#' + file.id + ' .li-progress-bar').css({
+					width: percentage * 100 + '%'
+				});
+			});
+
+			//上传开始（全部）
+			uploader.on('startUpload', function(){
+				$('.progress-info p:eq(0)').html('<i class="fa fa-spinner fa-spin fa-fw"></i>正在上传第<span class="progressNum">1</span>个文件');
+				$('.progress, .progress-info').show();
+				eh.setIframeMainHeight();
+			});
+
+			//上传结束（全部）
+			uploader.on('uploadFinished', function(){
+				$('.progress-bar').one(transitionEnd, function(){
+					var stats = uploader.getStats();
+					queueNum = 0;
+					completeNum = 0;
+					$('.progress-info p:eq(0)').html('上传结束，成功 ' + stats.successNum + ' 个文件，失败 ' + stats.uploadFailNum + ' 个文件！');
+					if (uploader.getFiles('inited', 'complete', 'error', 'invalid').length > 0) {
+						$('#delete-all').removeAttr('disabled');
+					}
+					if (stats.uploadFailNum > 0) {
+						$('#restart-all, #delete-error-all').show();
+					}
+				});
+			});
+
+			//上传开始（单文件）
+			uploader.on('uploadStart', function(file){
+				var li = $('#' + file.id);
+				li.find('.li-progress').show();
+				li.find('button.start').remove();
+				li.find('button.restart').hide();
+			});
+
+			//上传成功（单文件）
+			uploader.on('uploadSuccess', function(file, response){
+				var li = $('#' + file.id);
+				li.find('.li-progress-bar').one(transitionEnd, function(){
+					li.find('.li-progress').hide();
+					li.find('.li-progress-bar').width(0);
+				});
+				li.find('.info p:eq(3)').append('<span class="success">上传成功</span>').find('span:eq(0)').remove();
+				var index = layer.open({
+					type: 1,
+					content: '<i class="layui-layer-ico layui-layer-ico6"></i>上传成功',
+					offset: '35px',
+					time: 3000,
+					shade: false,
+					skin: 'layui-layer-dialog layui-layer-border ' + layer.cache.skin + ' ' + layer.cache.skin + '-msg',
+					title: false,
+					closeBtn: false,
+					btn: false,
+					fixed: false,
+					success: function(layero){
+						li.append(layero);
+					}
+				});
+			});
+
+			//上传失败（单文件）
+			uploader.on('uploadError', function(file, response){
+				var li = $('#' + file.id);
+				li.find('.li-progress-bar').one(transitionEnd, function(){
+					li.find('.li-progress').hide();
+					li.find('.li-progress-bar').width(0);
+				});
+				li.find('.info p:eq(3)').append('<span class="fail">上传失败</span>').find('span:eq(0)').remove();
+				var index = layer.open({
+					type: 1,
+					content: '<i class="layui-layer-ico layui-layer-ico5"></i>上传失败',
+					offset: '35px',
+					time: 3000,
+					shade: false,
+					skin: 'layui-layer-dialog layui-layer-border ' + layer.cache.skin + ' ' + layer.cache.skin + '-msg',
+					title: false,
+					closeBtn: false,
+					btn: false,
+					fixed: false,
+					success: function(layero){
+						li.append(layero);
+					}
+				});
+			});
+
+			//上传完成（单文件）
+			uploader.on('uploadComplete', function(file){
+				completeNum++;
+				totalProgress();
+				$('.progress-info').find('span.complete').html(completeNum);
+				var progress = completeNum + 1;
+				if (queueNum >= progress){
+					$('.progress-info').find('span.progressNum').html(progress);
+				}
+
+				var li = $('#' + file.id);
+
+				if (file.getStatus() == 'error') {
+					li.find('button.restart').show();
+				}
+			});
+
+			//文件删除（单文件）
+			uploader.on('fileDequeued', function(file){
+				$('#' + file.id).remove();
+				if (uploader.getFiles('inited').length == 0){
+					$('#start-all').attr('disabled', 'disabled');
+				}
+				if (uploader.getFiles('inited', 'complete', 'error', 'invalid').length == 0){
+					$('#delete-all').attr('disabled', 'disabled');
+				}
+			});
+
+			$('#delete-error-all').click(function() {
+				var errorFiles = uploader.getFiles('error', 'invalid');
+				if (errorFiles.length > 0) {
+					$('#restart-all, #delete-error-all, .progress, .progress-info').hide();
+					eh.setIframeMainHeight();
+					for (var i = 0; i < errorFiles.length; i++) {
+						uploader.removeFile(errorFiles[i], true);
+					}
+				}
+			});
+
+			$('#uploader ul').on('click', '.delete', function() {
+				uploader.removeFile($(this).parents('li').attr('id'), true);
+			});
+
+			$('#start-all').click(function() {
+				if (!uploader.isInProgress()) {
+					queueNum = uploader.getFiles('inited').length;
+					if (queueNum > 0) {
+						$(this).attr('disabled', 'disabled');
+						$('#delete-all').attr('disabled', 'disabled');
+						$('.progress-info').find('span.queue').html(queueNum);
+						uploader.upload();
+					}else{
+						layer.msg('队列中没有任何文件', {icon: 5});
+					}
+				}
+			});
+
+			$('#restart-all').click(function(){
+				queueNum = uploader.getFiles('error').length;
+				if (queueNum > 0) {
+					$('.progress-info').find('span.queue').html(queueNum);
+					$('.progress-bar').width(0).html('0%');
+					$('#restart-all, #delete-error-all').hide();
+					$('.progress-bar').one(transitionEnd, function(){
+						uploader.retry();
+					});
+				}else{
+					layer.msg('队列中没有任何错误文件', {icon: 5});
+				}
+			});
+		});
+
+		function totalProgress(){
+			var stats = uploader.getStats();
+			var progress = parseInt(100 / queueNum * completeNum) + '%';
+			$('.progress-bar').width(progress).html(progress);
+		}
+	});
+</script>
+<script type="text/html" id="file">
+	<li id='{{d.id}}'>
+		<div class="img-box pull-left">
+			<img src="{{d.img}}">
+		</div>
+		<div class="pull-left info">
+			<p>文件名：{{d.name}}</p>
+			<p>文件类型：{{d.type}}</p>
+			<p>文件大小：{{d.size}}</p>
+			<p>当前状态：<span class="init">未上传</span></p>
+		</div>
+		<div class="pull-right">
+			<button class="btn btn-primary start"><i class="fa fa-upload"></i>上传</button>
+			<button class="btn btn-danger restart"><i class="fa fa-upload"></i>重新上传</button>
+			<button class="btn btn-primary delete"><i class="fa fa-remove"></i>删除</button>
+		</div>
+		<div class="li-progress">
+			<div class="li-progress-bar"></div>
+		</div>
+	</li>
+</script>

@@ -112,7 +112,7 @@
 		});
 	</script>
 </head>
-<body>
+<body id="{$Request.module}-{$Request.controller|lcfirst}-{$Request.action|lcfirst}">
 	{block name="header"}{/block}
 	{block name="main"}{/block}
 	{block name="footer"}{/block}

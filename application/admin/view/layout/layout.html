@@ -1,8 +1,6 @@
 {extend name="admin@layout/base" /}
 {block name="main"}
 	<div class="container-fluid">
-		<div id="{$Request.module}-{$Request.controller|lcfirst}-{$Request.action|lcfirst}">
-			{__CONTENT__}
-		</div>
+		{__CONTENT__}
 	</div>
 {/block}

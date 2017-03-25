@@ -1,4 +1,46 @@
 #admin-resource-index{
+	.layui-layer-content{
+		border-radius: 10px;
+	}
+	.iframe-main{
+		.resource-list{
+			height: 100%;
+			.resource-menu{
+				width: 20%;
+				min-width: 200px;
+				margin-right: 10px;
+				border-right: 1px solid #e7e7eb;
+				height: 100%;
+				position: relative;
+				overflow-x: hidden;
+				overflow-y: auto;
+				ul{
+					li{
+						width: 100%;
+						padding: 10px 15px;
+						cursor: pointer;
+						&.active, &:hover{
+							background-color: #f4f5f9;
+						}
+					}
+				}
+				#add-menu{
+					position: absolute;
+					left: 0;
+					bottom: 0;
+					padding: 15px;
+					border-top: 1px solid #e7e7eb;
+					button{
+						padding: 5px 60px;
+					}
+				}
+			}
+		}
+	}
+}
+
+
+#admin-resource-uploader{
 	.webuploader-pick, .webuploader-pick-hover{
 		background-color: inherit;
 	}

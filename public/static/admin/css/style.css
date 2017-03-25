@@ -9635,40 +9635,75 @@ i {
   overflow: hidden;
   display: block;
 }
-#admin-resource-index .webuploader-pick,
-#admin-resource-index .webuploader-pick-hover {
+#admin-resource-index .layui-layer-content {
+  border-radius: 10px;
+}
+#admin-resource-index .iframe-main .resource-list {
+  height: 100%;
+}
+#admin-resource-index .iframe-main .resource-list .resource-menu {
+  width: 20%;
+  min-width: 200px;
+  margin-right: 10px;
+  border-right: 1px solid #e7e7eb;
+  height: 100%;
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+#admin-resource-index .iframe-main .resource-list .resource-menu ul li {
+  width: 100%;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+#admin-resource-index .iframe-main .resource-list .resource-menu ul li.active,
+#admin-resource-index .iframe-main .resource-list .resource-menu ul li:hover {
+  background-color: #f4f5f9;
+}
+#admin-resource-index .iframe-main .resource-list .resource-menu #add-menu {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  padding: 15px;
+  border-top: 1px solid #e7e7eb;
+}
+#admin-resource-index .iframe-main .resource-list .resource-menu #add-menu button {
+  padding: 5px 60px;
+}
+#admin-resource-uploader .webuploader-pick,
+#admin-resource-uploader .webuploader-pick-hover {
   background-color: inherit;
 }
-#admin-resource-index header .progress {
+#admin-resource-uploader header .progress {
   display: none;
   margin-top: 10px;
   margin-bottom: 0;
 }
-#admin-resource-index header .progress .progress-bar {
+#admin-resource-uploader header .progress .progress-bar {
   min-width: 35px;
 }
-#admin-resource-index header .progress-info {
+#admin-resource-uploader header .progress-info {
   margin-top: 5px;
   display: none;
 }
-#admin-resource-index header h5 {
+#admin-resource-uploader header h5 {
   margin-left: 10px;
 }
-#admin-resource-index header #restart-all,
-#admin-resource-index header #delete-error-all {
+#admin-resource-uploader header #restart-all,
+#admin-resource-uploader header #delete-error-all {
   display: none;
 }
-#admin-resource-index .iframe-main #tip {
+#admin-resource-uploader .iframe-main #tip {
   text-align: center;
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
 }
-#admin-resource-index .iframe-main #uploader {
+#admin-resource-uploader .iframe-main #uploader {
   padding: 15px;
 }
-#admin-resource-index .iframe-main #uploader ul li {
+#admin-resource-uploader .iframe-main #uploader ul li {
   height: 140px;
   width: 100%;
   overflow: hidden;
@@ -9676,35 +9711,35 @@ i {
   border-bottom: 1px dashed #ccc;
   position: relative;
 }
-#admin-resource-index .iframe-main #uploader ul li .img-box {
+#admin-resource-uploader .iframe-main #uploader ul li .img-box {
   margin-right: 20px;
   position: relative;
   width: 120px;
   height: 120px;
   overflow: hidden;
 }
-#admin-resource-index .iframe-main #uploader ul li .img-box img {
+#admin-resource-uploader .iframe-main #uploader ul li .img-box img {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
 }
-#admin-resource-index .iframe-main #uploader ul li p {
+#admin-resource-uploader .iframe-main #uploader ul li p {
   line-height: 30px;
 }
-#admin-resource-index .iframe-main #uploader ul li p span.success {
+#admin-resource-uploader .iframe-main #uploader ul li p span.success {
   color: #4cae4c;
 }
-#admin-resource-index .iframe-main #uploader ul li p span.fail {
+#admin-resource-uploader .iframe-main #uploader ul li p span.fail {
   color: #d43f3a;
 }
-#admin-resource-index .iframe-main #uploader ul li .pull-right {
+#admin-resource-uploader .iframe-main #uploader ul li .pull-right {
   line-height: 120px;
 }
-#admin-resource-index .iframe-main #uploader ul li .pull-right .restart {
+#admin-resource-uploader .iframe-main #uploader ul li .pull-right .restart {
   display: none;
 }
-#admin-resource-index .iframe-main #uploader ul li .li-progress {
+#admin-resource-uploader .iframe-main #uploader ul li .li-progress {
   position: absolute;
   top: 0;
   left: 0;
@@ -9712,7 +9747,7 @@ i {
   width: 100%;
   display: none;
 }
-#admin-resource-index .iframe-main #uploader ul li .li-progress .li-progress-bar {
+#admin-resource-uploader .iframe-main #uploader ul li .li-progress .li-progress-bar {
   height: 100%;
   width: 10%;
   opacity: 0.5;

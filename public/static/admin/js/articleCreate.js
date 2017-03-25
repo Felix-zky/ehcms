@@ -58,28 +58,22 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 		$.contextMenu({
 			selector: '#markdown',
 			items: {
-				upload: {
-					name: '批量上传'
-				},
-				sep1: "---------",
 				space: {
 					name: '资源空间'
 				}
 			},
 			callback: function(itemKey, opt){
 				switch (itemKey){
-					case 'upload':
+					case 'space':
 						layer.open({
 							type:2,
 							title: false,
 							resize: false,
 							move: false,
-							area: ['80%', '80%'],
-							content: '/admin/resource/index/accept/image.html'
+							area: ['100%', '100%'],
+							closeBtn: false,
+							content: '/admin/resource/index/iframe/1.html'
 						});
-						break;
-					case 'space':
-						alert('456');
 						break;
 				}	
 			},

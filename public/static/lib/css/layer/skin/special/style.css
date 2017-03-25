@@ -10,7 +10,6 @@ body .layui-layer-iframe{
 }
 body .layui-layer-content{
 	overflow: hidden;
-	border-radius: 10px;
 }
 body .layer-ext-special.no-border-radius{
 	border-radius: 0;
@@ -26,7 +25,8 @@ body .layer-ext-special .layui-layer-title{
 	line-height: normal;
 	font-size: 14px;
 	text-align: center;
-
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
 }
 body .layer-ext-special .layui-layer-title img.icon{
 	width: 18px;
@@ -41,7 +41,7 @@ body .layer-ext-special .subtitle{
 	font-weight: normal;
 }
 body .layui-layer-page{
-	overflow: auto !important;
+	overflow: hidden;
 }
 body .layui-layer-page .layui-layer-content > div,body .layui-layer-page .layui-layer-content > p{
 	padding: 15px;
