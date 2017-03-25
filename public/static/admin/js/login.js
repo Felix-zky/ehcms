@@ -31,7 +31,7 @@ define(['jquery', 'eh.xhr', 'eh.form', 'validate.zh'], function(){
 			if (validate.checkForm() == false){
 				layer.alert(eh.form.validateError(validate.errorMap));
 			}else{
-				eh.xhr.post($('form').attr('action'), eh.form.extractData(), '', eh.xhr.doneState.messageRedirect);
+				eh.xhr.post($('form').attr('action'), eh.form.extractData(), eh.xhr.doneState.messageRedirect);
 			}
 			return false;
 		});

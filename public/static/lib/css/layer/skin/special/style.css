@@ -115,6 +115,10 @@ body .layer-ext-special .layui-layer-setwin{
 	top: 20px;
 }
 
+body .layui-layer-prompt{
+	border-radius: 10px;
+}
+
 body .layui-layer-page.layui-layer-dialog{
 	min-width: 200px;
 }

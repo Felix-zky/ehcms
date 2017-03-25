@@ -9641,7 +9641,7 @@ i {
 #admin-resource-index .iframe-main .resource-list {
   height: 100%;
 }
-#admin-resource-index .iframe-main .resource-list .resource-menu {
+#admin-resource-index .iframe-main .resource-list .resource-group {
   width: 20%;
   min-width: 200px;
   margin-right: 10px;
@@ -9651,23 +9651,23 @@ i {
   overflow-x: hidden;
   overflow-y: auto;
 }
-#admin-resource-index .iframe-main .resource-list .resource-menu ul li {
+#admin-resource-index .iframe-main .resource-list .resource-group ul li {
   width: 100%;
   padding: 10px 15px;
   cursor: pointer;
 }
-#admin-resource-index .iframe-main .resource-list .resource-menu ul li.active,
-#admin-resource-index .iframe-main .resource-list .resource-menu ul li:hover {
+#admin-resource-index .iframe-main .resource-list .resource-group ul li.active,
+#admin-resource-index .iframe-main .resource-list .resource-group ul li:hover {
   background-color: #f4f5f9;
 }
-#admin-resource-index .iframe-main .resource-list .resource-menu #add-menu {
+#admin-resource-index .iframe-main .resource-list .resource-group #add-group {
   position: absolute;
   left: 0;
   bottom: 0;
   padding: 15px;
   border-top: 1px solid #e7e7eb;
 }
-#admin-resource-index .iframe-main .resource-list .resource-menu #add-menu button {
+#admin-resource-index .iframe-main .resource-list .resource-group #add-group button {
   padding: 5px 60px;
 }
 #admin-resource-uploader .webuploader-pick,
