@@ -1,4 +1,4 @@
-define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash'],function(laytpl){
+define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash', 'eh'],function(laytpl){
 		var	screenHeight = window.screen.height,
 		contentMenuItemsConfigure = {
 			'open': {
@@ -40,6 +40,7 @@ define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash'],function(la
 		taskbarTimeIndex,
 		iframeActiveList = [];
 
+		eh.noRightKey();
 	$(document).ready(function(){
 		$('body').on('mousedown', '.layui-layer-page', function(){
 			if ($(this).css('z-index') < layer.zIndex && $(this).attr('times') != iframeActiveList[0]){

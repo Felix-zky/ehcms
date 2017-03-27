@@ -144,6 +144,15 @@ define(['layer', 'laypage', 'jquery'], function(dialog, laypage){
 			}
 
 			return layer.open($.extend(defaultOption, option));
+		},
+
+		/**
+		 * 禁用右键
+		 */
+		noRightKey : function(){
+			$(document).on('contextmenu', function(){
+				return false;
+			});
 		}
 	};
 

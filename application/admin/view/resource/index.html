@@ -11,15 +11,34 @@
 		<div class="pull-left resource-group">
 			<ul>
 				<li class="active">全部资源({$count})</li>
-				<li data-id = "0"><span class="name">未分组</span>({$notGroupedCount})</li>
+				<li data-id="0"><span class="menu-click"><span class="name">未分组</span>(<span class="count">{$notGroupedCount}</span>)</span></li>
 				{foreach $group as $v}
-					<li data-id = "{$v.id}"><i class="fa {notempty name="v.children"}fa-plus-square{else /}fa-minus-square{/notempty}"></i><span class="name">{$v.name}</span>({$v.count})</li>
+					<li data-id="{$v.id}"><i class="fa {notempty name="v.children"}fa-plus-square{else /}fa-minus-square{/notempty}"></i><span class="menu-click"><span class="name">{$v.name}</span>(<span class="count">{$v.count}</span>)</span>
+					{notempty name="v.children"}
+						<ul class="children">
+							{foreach $v.children as $vc}
+							<li data-id="{$vc.id}"><span class="menu-click"><span class="name">{$vc.name}</span>(<span class="count">{$vc.count}</span>)</span></li>
+							{/foreach}
+						</ul>
+					{/notempty}
+					</li>
 				{/foreach}
 			</ul>
 			<div id="add-group"><button class="btn btn-success btn-xs">新增资源目录</button></div>
 		</div>
-		<div class="pull-right resource-box">
-			
+		<div class="pull-right resource-box container-fluid">
+			{notempty name="resource"}
+				<ul class="row">
+					{foreach $resource as $v}
+						<li data-id="{$v.id}" class="col-sm-3">
+							<div class="img">
+								<img src="{eq name="v.type" value="1"}{$v.path_name}{/eq}" alt="{$v.file_name}">
+							</div>
+							<p>{$v.file_name}</p>
+						</li>
+					{/foreach}
+				</ul>
+			{/notempty}
 		</div>
 	</div>
 </section>
@@ -29,12 +48,92 @@
 <script type="text/html" id="create-children">
 	<li data-id="{{d.id}}">{{d.name}}(0)</li>
 </script>
+{css href="__LIB_CSS__/jquery.contentMenu.custom.css"}
 <script type="text/javascript">
-	require(['jquery', 'layer', 'eh.xhr'], function(){
-		$(function(){
-			var uploaderIndex;
+	require(['jquery', 'layer', 'eh.xhr', 'jquery.contextMenu'], function(){
+		var contentMenuItemsConfigure = {
+			'createChilderenMenu': {
+				icon: 'pencil-square'
+			},
+			'deleteMenu': {
+				icon: 'trash-o'
+			}
+		},
+		contentMenuSign = {};
 
-			$('.resource-box').width($(window).outerWidth() - $('.resource-group').outerWidth(true));
+		$(function(){
+			var uploaderIndex,
+				top = 0,
+				parentMenuID = 0;
+
+			resourceImageWidth();
+
+			$('.resource-group > ul').css({
+				'padding-bottom': $('#add-group').outerHeight() + 10
+			});
+
+			$(window).resize(function() {
+				top = $('.iframe-main').height() - $('#add-group').outerHeight();
+				$('#add-group').css({
+					top: top
+				});
+			});
+
+			$(window).resize();
+
+			$.contextMenu({
+				selector: '.resource-group ul > li:gt(1)',
+				items: {
+					createChilderenMenu: {
+						name: '创建子菜单'
+					},
+					sep1: "---------",
+					deleteMenu: {
+						name: '删除菜单'
+					}
+				},
+				zIndex: 100000000, //确保遮罩层和弹出菜单在layer弹窗之上。
+				callback: function(itemKey, opt){
+					switch (itemKey){
+						case 'createChilderenMenu':
+						var that = $(this),
+							id = $(this).data('id');
+
+						that.removeClass('open');
+
+						if (!id) {
+							layer.msg('当前菜单禁止添加子菜单');
+							return false;
+						}
+
+						layer.prompt({
+							title: '正在添加 <span style="color: #d43f3a;">' + that.find('span.name').html() + '</span> 的子菜单'
+						}, function(value, index){
+							layer.close(index);
+							eh.xhr.createCommon('/admin/resource/addGroup', {name: value, parentID: id}, {name: value}, that, 'create-children');
+						});
+						break;
+					}	
+				},
+				events: {
+					show: function(options){
+						$(this).addClass('open');
+						var sign = checkContentMenuSign(options.ns);
+						sign === true || createMenuIconAndkeyboard(sign, options.items);
+					},
+					hide: function(){
+						$(this).removeClass('open');
+					}
+				}
+			});
+
+			$('.resource-group').scroll(function() {
+				$('#add-group').css({
+					top: top + $(this).scrollTop()
+				});
+			});
+
+			$('.resource-box').width($(window).outerWidth() - $('.resource-group').outerWidth(true) - 10);
 
 			$('#open-uploader').click(function() {
 				uploaderIndex = layer.open({
@@ -57,6 +156,47 @@
 			$('#close-iframe').click(function() {
 				parent.layer.close(parent.layer.getFrameIndex(window.name));
 			});
+
+			$('.resource-group ul > li:gt(1) .fa-plus-square').click(function(){
+				var li = $(this).parent('li');
+				if (li.hasClass('open-children')) {
+					li.find('ul').hide();
+					li.removeClass('open-children');
+					$(this).removeClass('fa-minus-square').addClass('fa-plus-square');
+				}else if(li.find('li').length > 0){
+					li.find('ul').show();
+					li.addClass('open-children');
+					$(this).removeClass('fa-plus-square').addClass('fa-minus-square');
+				}
+			});
 		});
+
+
+		/**
+		 * 检查当前右键菜单是否已生成图标和快捷方式（确保生成单例）
+		 */
+		function checkContentMenuSign(sign){
+			var sign = sign.replace('.','');
+
+			return contentMenuSign[sign] && true || sign;
+		}
+		/**
+		 * 生成右键菜单图标以及后边快捷键
+		 */
+		function createMenuIconAndkeyboard(sign, items){
+			$.each(items, function(index) {
+				var current = contentMenuItemsConfigure[index],
+					keyboard = (this.name && current.keyboard) && '<span class="keyboard">' + current.keyboard + '</span>' || '';
+
+				this.name && this.$node.html('<i class="fa fa-' + current.icon + '"></i><span>' + this.name + '</span>' + keyboard);
+			});
+
+			contentMenuSign[sign] = 1;
+		}
+
+		function resourceImageWidth(){
+			console.log($('.resource-box li:eq(0)').outerWidth());
+			$('.resource-box .img').height($('.resource-box .img:eq(0)').width());
+		}
 	});
 </script>

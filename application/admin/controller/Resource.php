@@ -24,9 +24,13 @@ class Resource extends Init{
 					'name' => $v['name'],
 					'count' => $v['resource_count']
 				];
+				$group[$v['parent_id']]['count'] += $v['resource_count'];
 			}
 		}
 		
+		$resource = ResourceModel::where('uid', cookie('user_id'))->limit(16)->select();
+		
+		$this->assign('resource', $resource);
 		$this->assign('count', $count);
 		$this->assign('notGroupedCount', $notGroupedCount);
 		$this->assign('group', $group);
@@ -58,9 +62,9 @@ class Resource extends Init{
 			$data['parent_id'] = $parentID;
 		}
 		
-		$id = db('resource_group')->insert($data);
+		$id = db('resource_group')->insertGetId($data);
 		
-		if ($id == 1){
+		if ($id > 0){
 			$this->successResult('目录添加成功', ['id' => $id]);
 		}else{
 			$this->errorResult('目录添加失败');
