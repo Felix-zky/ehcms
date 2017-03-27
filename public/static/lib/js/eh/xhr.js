@@ -338,7 +338,7 @@ define(['jquery', 'laytpl', 'layer', 'eh'], function($, laytpl){
 		 * @param  {[type]} tplID     [description]
 		 * @param  {[type]} func      [description]
 		 */
-		createCommon: function(url, data, json, parentObj, tplID, index, func){
+		createCommon: function(url, data, json, parentObj, tplID, func){
 			xhr.msgLayerIndex || this.loadPrompt();
 
 			if (typeof parentObj == 'string') {
@@ -348,8 +348,6 @@ define(['jquery', 'laytpl', 'layer', 'eh'], function($, laytpl){
 			var success = function(response){
 				this.msgLayerIndex && layerClose(this.msgLayerIndex);
 				this.msgLayerIndex = null;
-
-				index && layerClose(index);
 
 				layer.msg(response.msg || '创建成功！', {icon: 6});
 
@@ -367,7 +365,11 @@ define(['jquery', 'laytpl', 'layer', 'eh'], function($, laytpl){
 					}
 
 					laytpl($('#' + tplID).html()).render($.extend(json, response.data || {}), function(html){
-						parentObj.prepend(html);
+						if (func.prepend === true){
+							parentObj.prepend(html);
+						}else{
+							parentObj.append(html);
+						}
 					});
 
 					if (typeof func.after == 'function') {

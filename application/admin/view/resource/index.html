@@ -10,12 +10,11 @@
 	<div class="resource-list">
 		<div class="pull-left resource-group">
 			<ul>
-				<li class="active">全部资源(50)</li>
-				<li>未分组(5)</li>
-				<li><i class="fa fa-plus-square"></i>资源一级目录(10)</li>
-				<li><i class="fa fa-plus-square"></i>资源一级目录(15)</li>
-				<li><i class="fa fa-plus-square"></i>资源一级目录(10)</li>
-				<li><i class="fa fa-plus-square"></i>资源一级目录(10)</li>
+				<li class="active">全部资源({$count})</li>
+				<li data-id = "0"><span class="name">未分组</span>({$notGroupedCount})</li>
+				{foreach $group as $v}
+					<li data-id = "{$v.id}"><i class="fa {notempty name="v.children"}fa-plus-square{else /}fa-minus-square{/notempty}"></i><span class="name">{$v.name}</span>({$v.count})</li>
+				{/foreach}
 			</ul>
 			<div id="add-group"><button class="btn btn-success btn-xs">新增资源目录</button></div>
 		</div>
@@ -51,7 +50,7 @@
 			$('#add-group').click(function(){
 				layer.prompt({title: '请输入新目录名称'}, function(value, index){
 					layer.close(index);
-					eh.xhr.createCommon('/admin/resource/addGroup', {name: value}, {name: value}, 'resource-group ul', 'create-parent');
+					eh.xhr.createCommon('/admin/resource/addGroup', {name: value}, {name: value}, '.resource-group ul', 'create-parent');
 				});
 			});
 

@@ -1,9 +1,35 @@
 <?php
 namespace app\admin\controller;
 
+use app\admin\model\Resource as ResourceModel;
+use app\admin\model\ResourceGroup;
 class Resource extends Init{
 	
 	public function index(){
+		$result = ResourceGroup::withCount('resource')->where('uid', cookie('user_id'))->select();
+		
+		$count = ResourceModel::where('uid', cookie('user_id'))->count();
+		$notGroupedCount = ResourceModel::where(['uid' => cookie('user_id'), 'group_id' => 0])->count();
+		
+		foreach ($result as $v){
+			if ($v['parent_id'] == 0){
+				$group[$v['id']] = [
+					'id' => $v['id'],
+					'name' => $v['name'],
+					'count' => $v['resource_count']
+				];
+			}else{
+				$group[$v['parent_id']]['children'][] = [
+					'id' => $v['id'],
+					'name' => $v['name'],
+					'count' => $v['resource_count']
+				];
+			}
+		}
+		
+		$this->assign('count', $count);
+		$this->assign('notGroupedCount', $notGroupedCount);
+		$this->assign('group', $group);
 		input('iframe') && $this->assign('iframe', 1);
 		return $this->fetch();
 	}
