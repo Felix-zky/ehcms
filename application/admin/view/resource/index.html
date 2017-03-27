@@ -77,6 +77,8 @@
 				$('#add-group').css({
 					top: top
 				});
+
+				$('.resource-box').width($(window).outerWidth() - $('.resource-group').outerWidth(true) - 10);
 			});
 
 			$(window).resize();
@@ -132,8 +134,6 @@
 					top: top + $(this).scrollTop()
 				});
 			});
-
-			$('.resource-box').width($(window).outerWidth() - $('.resource-group').outerWidth(true) - 10);
 
 			$('#open-uploader').click(function() {
 				uploaderIndex = layer.open({
@@ -195,8 +195,7 @@
 		}
 
 		function resourceImageWidth(){
-			console.log($('.resource-box li:eq(0)').outerWidth());
-			$('.resource-box .img').height($('.resource-box .img:eq(0)').width());
+			$('.resource-box .img').height($('.resource-box li:eq(0)').outerWidth());
 		}
 	});
 </script>

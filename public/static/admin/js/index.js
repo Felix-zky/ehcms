@@ -438,6 +438,7 @@ define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash', 'eh'],funct
 
 					layero.css({
 						height: ($(window).height() - 40) + 'px',
+						'border-radius': 0
 					});
 
 					layero.find('.layui-layer-content').css({
@@ -452,6 +453,7 @@ define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash', 'eh'],funct
 					layero.css({
 						width: Math.ceil($(window).width() * .7) + 'px',
 						height: Math.ceil($(window).height() * .8) + 'px',
+						'border-radius': '10px'
 					});
 
 					layero.find('.layui-layer-content').css({

@@ -9703,6 +9703,7 @@ i {
 #admin-resource-index .iframe-main .resource-box li .img {
   width: 100%;
   overflow: hidden;
+  position: relative;
 }
 #admin-resource-index .iframe-main .resource-box li .img img {
   max-width: 100%;
@@ -9711,6 +9712,11 @@ i {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+}
+#admin-resource-index .iframe-main .resource-box li p {
+  margin-top: 10px;
+  width: 100%;
+  overflow: hidden;
 }
 #admin-resource-uploader .webuploader-pick,
 #admin-resource-uploader .webuploader-pick-hover {
