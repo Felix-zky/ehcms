@@ -34,7 +34,7 @@
 							<div class="img">
 								<img src="{eq name="v.type" value="1"}{$v.path_name}{/eq}" alt="{$v.file_name}">
 							</div>
-							<p>{$v.file_name}</p>
+							<p title="{$v.file_name}">{$v.file_name}</p>
 						</li>
 					{/foreach}
 				</ul>
@@ -195,6 +195,10 @@
 		}
 
 		function resourceImageWidth(){
+			// console.log($('.resource-box li:eq(0)').width());
+			// console.log($('.resource-box li:eq(0)').outerWidth());
+			// console.log($('.resource-box .img:eq(0)').width());
+			// console.log($('.resource-box .img:eq(0)').outerWidth());
 			$('.resource-box .img').height($('.resource-box li:eq(0)').outerWidth());
 		}
 	});

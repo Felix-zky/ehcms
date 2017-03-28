@@ -9699,11 +9699,13 @@ i {
 }
 #admin-resource-index .iframe-main .resource-box li {
   overflow: hidden;
+  margin-top: 20px;
 }
 #admin-resource-index .iframe-main .resource-box li .img {
   width: 100%;
   overflow: hidden;
   position: relative;
+  border: 1px solid #e7e7eb;
 }
 #admin-resource-index .iframe-main .resource-box li .img img {
   max-width: 100%;
@@ -9717,6 +9719,8 @@ i {
   margin-top: 10px;
   width: 100%;
   overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 #admin-resource-uploader .webuploader-pick,
 #admin-resource-uploader .webuploader-pick-hover {
