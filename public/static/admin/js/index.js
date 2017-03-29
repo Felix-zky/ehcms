@@ -86,7 +86,7 @@ define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash', 'eh'],funct
 
 			xhr.done(function(response){
 				if (response.code == 1){
-					currentIframe = openiframe(response.data);
+					currentIframe = openiframe(name, response.data);
 					taskbarHtml = '<li data-index=' + currentIframe + ' class="active"><img src="' + icon + '" /><span>' + name + '</span></li>';
 
 					iframeActiveList.unshift(currentIframe);
@@ -290,7 +290,7 @@ define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash', 'eh'],funct
 					$(this).css({
 						height: ($(this).outerHeight() - childrenUI.outerHeight()) + 'px'
 					});
-					$(this).children('.row').children('i').removeClass('fa-minus-circle').addClass('fa-plus-circle');
+					$(this).children('.menu-row').find('i').removeClass('fa-minus-circle').addClass('fa-plus-circle');
 					$(this).removeClass('selected');
 					$(this).find('.selected').removeClass('selected');
 				}else{
@@ -309,7 +309,8 @@ define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash', 'eh'],funct
 					$(this).css({
 						height: ($(this).outerHeight() + childrenUI.outerHeight()) + 'px'
 					});
-					$(this).addClass('selected').siblings('li').removeClass('selected');
+					$(this).children('.menu-row').find('i').removeClass('fa-plus-circle').addClass('fa-minus-circle');
+					$(this).addClass('selected').siblings('li').removeClass('selected').children('.menu-row').find('i').removeClass('fa-minus-circle').addClass('fa-plus-circle');
 					$(this).children('.row').children('i').removeClass('fa-plus-circle').addClass('fa-minus-circle');
 				}
 			}else{
@@ -408,11 +409,12 @@ define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash', 'eh'],funct
 	/**
 	 * 打开新的iframe页面
 	 */
-	function openiframe(data){
+	function openiframe(name, data){
 		var content = laytpl($('#menu-tree').html()).render(data);
 
 		return layer.open({
 			type:1,
+			title: name || '',
 			area:['70%','80%'],
 			maxmin: true,
 			shift: 1,

@@ -28,9 +28,24 @@ class Resource extends Init{
 			}
 		}
 		
-		$resource = ResourceModel::where('uid', cookie('user_id'))->limit(16)->select();
+		$groupID = input('group');
+		if (!isset($groupID) || !is_numeric($groupID)){
+			$groupID = 'all';
+		}
+		$groupWhere = [];
+		if (is_numeric($groupID)){
+			$groupWhere = [
+				'group_id' => $groupID
+			];
+		}
 		
+		$resource = ResourceModel::where('uid', cookie('user_id'))->where($groupWhere)->paginate(16);
+		
+		
+		
+		$this->assign('groupID', $groupID);
 		$this->assign('resource', $resource);
+		$this->assign('page', $resource->render());
 		$this->assign('count', $count);
 		$this->assign('notGroupedCount', $notGroupedCount);
 		$this->assign('group', $group);
@@ -69,5 +84,13 @@ class Resource extends Init{
 		}else{
 			$this->errorResult('目录添加失败');
 		}
+	}
+	
+	public function getResource(){
+		$groupID = input('groupID') ?: 0;
+		
+		echo $groupID;
+		
+		//db('resource')->where(['uid' => cookie('user_id'), 'group_id' => $groupID]);
 	}
 }

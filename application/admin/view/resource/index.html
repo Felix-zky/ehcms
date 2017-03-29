@@ -10,14 +10,14 @@
 	<div class="resource-list">
 		<div class="pull-left resource-group">
 			<ul>
-				<li class="active">全部资源({$count})</li>
-				<li data-id="0"><span class="menu-click"><span class="name">未分组</span>(<span class="count">{$notGroupedCount}</span>)</span></li>
+				<li {eq name="groupID" value="all"}class="active"{/eq} data-id="all"><a href="/admin/resource/index/group/all.html">全部资源({$count})</a></li>
+				<li {eq name="groupID" value="0"}class="active"{/eq} data-id="0"><a href="/admin/resource/index/group/0.html"><span class="menu-click"><span class="name">未分组</span>(<span class="count">{$notGroupedCount}</span>)</span></a></li>
 				{foreach $group as $v}
-					<li data-id="{$v.id}"><i class="fa {notempty name="v.children"}fa-plus-square{else /}fa-minus-square{/notempty}"></i><span class="menu-click"><span class="name">{$v.name}</span>(<span class="count">{$v.count}</span>)</span>
+					<li {eq name="groupID" value="$v.id"}class="active"{/eq} data-id="{$v.id}"><a href="/admin/resource/index/group/{$v.id}.html"><i class="fa {notempty name="v.children"}fa-plus-square{else /}fa-minus-square{/notempty}"></i><span class="menu-click"><span class="name">{$v.name}</span>(<span class="count">{$v.count}</span>)</span></a>
 					{notempty name="v.children"}
 						<ul class="children">
 							{foreach $v.children as $vc}
-							<li data-id="{$vc.id}"><span class="menu-click"><span class="name">{$vc.name}</span>(<span class="count">{$vc.count}</span>)</span></li>
+							<li {eq name="groupID" value="$vc.id"}class="active"{/eq} data-id="{$vc.id}"><a href="/admin/resource/index/group/{$vc.id}.html"><span class="menu-click"><span class="name">{$vc.name}</span>(<span class="count">{$vc.count}</span>)</span></a></li>
 							{/foreach}
 						</ul>
 					{/notempty}
@@ -38,6 +38,9 @@
 						</li>
 					{/foreach}
 				</ul>
+				<div id="list-pages">
+					{$page}
+				</div>
 			{/notempty}
 		</div>
 	</div>
@@ -85,6 +88,8 @@
 				$('.resource-box').width($(window).outerWidth() - $('.resource-group').outerWidth(true) - 10);
 
 				$('.resource-box .img').height($('.resource-box .img:eq(0)').innerWidth());
+
+				$('.resource-box').show();
 			});
 
 			$(window).resize();
@@ -194,7 +199,7 @@
 			});
 
 			$('.resource-group ul > li:gt(1) .fa-plus-square').click(function(){
-				var li = $(this).parent('li');
+				var li = $(this).parents('li');
 				if (li.hasClass('open-children')) {
 					li.find('ul').hide();
 					li.removeClass('open-children');
@@ -204,6 +209,7 @@
 					li.addClass('open-children');
 					$(this).removeClass('fa-plus-square').addClass('fa-minus-square');
 				}
+				return false;
 			});
 
 			$('.resource-box li').click(function() {
@@ -213,6 +219,11 @@
 					$(this).find('.img').append($('#resource-box-selected').html());
 				}
 			});
+
+			var liActive = $('.resource-group .children li.active');
+			if (liActive.length > 0) {
+				liActive.parents('li').addClass('active').find('i.fa-plus-square').click();
+			}
 		});
 
 

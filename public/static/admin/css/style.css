@@ -9653,10 +9653,24 @@ i {
   overflow-x: hidden;
   overflow-y: auto;
 }
+#admin-resource-index .iframe-main .resource-list .resource-group a {
+  display: block;
+}
+#admin-resource-index .iframe-main .resource-list .resource-group a:focus {
+  outline: none;
+}
+#admin-resource-index .iframe-main .resource-list .resource-group a:hover,
+#admin-resource-index .iframe-main .resource-list .resource-group a:link,
+#admin-resource-index .iframe-main .resource-list .resource-group a:focus {
+  color: #333;
+  text-decoration: none;
+}
 #admin-resource-index .iframe-main .resource-list .resource-group ul > li {
   width: 100%;
-  padding: 10px 15px;
   cursor: pointer;
+}
+#admin-resource-index .iframe-main .resource-list .resource-group ul > li a {
+  padding: 10px 15px;
 }
 #admin-resource-index .iframe-main .resource-list .resource-group ul > li.active,
 #admin-resource-index .iframe-main .resource-list .resource-group ul > li:hover,
@@ -9673,8 +9687,10 @@ i {
 #admin-resource-index .iframe-main .resource-list .resource-group ul ul.children li {
   width: 100%;
   line-height: 35px;
-  padding: 0 15px 0 45px;
   cursor: pointer;
+}
+#admin-resource-index .iframe-main .resource-list .resource-group ul ul.children li a {
+  padding: 0 15px 0 45px;
 }
 #admin-resource-index .iframe-main .resource-list .resource-group ul ul.children li.active,
 #admin-resource-index .iframe-main .resource-list .resource-group ul ul.children li:hover,
@@ -9698,20 +9714,21 @@ i {
   overflow-x: hidden;
   overflow-y: auto;
   background-color: #FFF;
+  display: none;
 }
-#admin-resource-index .iframe-main .resource-box li {
+#admin-resource-index .iframe-main .resource-box > ul li {
   overflow: hidden;
   margin-top: 20px;
   position: relative;
   cursor: pointer;
 }
-#admin-resource-index .iframe-main .resource-box li .img {
+#admin-resource-index .iframe-main .resource-box > ul li .img {
   width: 100%;
   overflow: hidden;
   position: relative;
   border: 1px solid #e7e7eb;
 }
-#admin-resource-index .iframe-main .resource-box li .img img {
+#admin-resource-index .iframe-main .resource-box > ul li .img img {
   max-width: 100%;
   max-height: 100%;
   position: absolute;
@@ -9719,33 +9736,37 @@ i {
   top: 50%;
   transform: translate(-50%, -50%);
 }
-#admin-resource-index .iframe-main .resource-box li p {
+#admin-resource-index .iframe-main .resource-box > ul li p {
   margin: 10px auto 0;
   width: 70%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-#admin-resource-index .iframe-main .resource-box li .selected {
+#admin-resource-index .iframe-main .resource-box > ul li .selected {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
 }
-#admin-resource-index .iframe-main .resource-box li .selected .bg {
+#admin-resource-index .iframe-main .resource-box > ul li .selected .bg {
   width: 100%;
   height: 100%;
   background-color: #000;
   opacity: 0.4;
 }
-#admin-resource-index .iframe-main .resource-box li .selected i {
+#admin-resource-index .iframe-main .resource-box > ul li .selected i {
   font-size: 60px;
   color: #FFF;
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+}
+#admin-resource-index .iframe-main .resource-box #list-pages {
+  text-align: center;
+  padding: 20px 0 30px;
 }
 #admin-resource-uploader .webuploader-pick,
 #admin-resource-uploader .webuploader-pick-hover {

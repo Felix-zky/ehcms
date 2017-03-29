@@ -14,11 +14,23 @@
 				position: relative;
 				overflow-x: hidden;
 				overflow-y: auto;
+				a{
+					display: block;
+					&:focus{
+						outline:none;
+					}
+					&:hover, &:link, &:focus{
+						color: #333;
+						text-decoration: none;
+					}
+				}
 				ul{
 					> li{
 						width: 100%;
-						padding: 10px 15px;
 						cursor: pointer;
+						a{
+							padding: 10px 15px;
+						}
 						&.active, &:hover, &.open{
 							background-color: #f4f5f9;
 						}
@@ -32,8 +44,10 @@
 						li{
 							width: 100%;
 							line-height: 35px;
-							padding: 0 15px 0 45px;
 							cursor: pointer;
+							a{
+								padding: 0 15px 0 45px;
+							}
 							&.active, &:hover, &.open{
 								background-color: #e9e9e9;
 							}
@@ -59,47 +73,54 @@
 			overflow-x: hidden;
 			overflow-y: auto;
 			background-color: #FFF;
-			li{
-				overflow: hidden;
-				margin-top: 20px;
-				position: relative;
-				cursor: pointer;
-				.img{
-					width: 100%;
+			display: none;
+			> ul{
+				li{
 					overflow: hidden;
+					margin-top: 20px;
 					position: relative;
-					border: 1px solid #e7e7eb;
-					img{
-						max-width: 100%;
-						max-height: 100%;
-						.horizontal-center-center;
+					cursor: pointer;
+					.img{
+						width: 100%;
+						overflow: hidden;
+						position: relative;
+						border: 1px solid #e7e7eb;
+						img{
+							max-width: 100%;
+							max-height: 100%;
+							.horizontal-center-center;
+						}
 					}
-				}
-				p{
-					margin: 10px auto 0;
-					width: 70%;
-					overflow: hidden;
-					text-overflow: ellipsis;
-					white-space: nowrap;
-				}
-				.selected{
-					position: absolute;
-					top: 0;
-					left: 0;
-					width: 100%;
-					height: 100%;
-					.bg{
+					p{
+						margin: 10px auto 0;
+						width: 70%;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+					}
+					.selected{
+						position: absolute;
+						top: 0;
+						left: 0;
 						width: 100%;
 						height: 100%;
-						background-color: #000;
-						opacity: 0.4;
-					}
-					i{
-						font-size: 60px;
-						color: #FFF;
-						.horizontal-center-center;
+						.bg{
+							width: 100%;
+							height: 100%;
+							background-color: #000;
+							opacity: 0.4;
+						}
+						i{
+							font-size: 60px;
+							color: #FFF;
+							.horizontal-center-center;
+						}
 					}
 				}
+			}
+			#list-pages{
+				text-align: center;
+				padding: 20px 0 30px;
 			}
 		}
 	}
