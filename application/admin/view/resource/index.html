@@ -48,6 +48,12 @@
 <script type="text/html" id="create-children">
 	<li data-id="{{d.id}}">{{d.name}}(0)</li>
 </script>
+<script type="text/html" id="resource-box-selected">
+	<div class="selected">
+		<div class="bg"></div>
+		<i class="fa fa-check"></i>
+	</div>
+</script>
 {css href="__LIB_CSS__/jquery.contentMenu.custom.css"}
 <script type="text/javascript">
 	require(['jquery', 'layer', 'eh.xhr', 'jquery.contextMenu'], function(){
@@ -66,8 +72,6 @@
 				top = 0,
 				parentMenuID = 0;
 
-			resourceImageWidth();
-
 			$('.resource-group > ul').css({
 				'padding-bottom': $('#add-group').outerHeight() + 10
 			});
@@ -79,12 +83,14 @@
 				});
 
 				$('.resource-box').width($(window).outerWidth() - $('.resource-group').outerWidth(true) - 10);
+
+				$('.resource-box .img').height($('.resource-box .img:eq(0)').innerWidth());
 			});
 
 			$(window).resize();
 
 			$.contextMenu({
-				selector: '.resource-group ul > li:gt(1)',
+				selector: '.resource-group > ul > li:gt(1)',
 				items: {
 					createChilderenMenu: {
 						name: '创建子菜单'
@@ -116,6 +122,36 @@
 						});
 						break;
 					}	
+				},
+				events: {
+					show: function(options){
+						$(this).addClass('open');
+						var sign = checkContentMenuSign(options.ns);
+						sign === true || createMenuIconAndkeyboard(sign, options.items);
+					},
+					hide: function(){
+						$(this).removeClass('open');
+					}
+				}
+			});
+
+			$.contextMenu({
+				selector: '.children li',
+				items: {
+					deleteMenu: {
+						name: '删除子菜单'
+					}
+				},
+				zIndex: 100000000, //确保遮罩层和弹出菜单在layer弹窗之上。
+				callback: function(itemKey, opt){
+					switch (itemKey){
+						case 'deleteMenu':
+						layer.prompt({
+							success: function(layero){
+								console.log(layero);
+							}
+						});
+					}
 				},
 				events: {
 					show: function(options){
@@ -169,6 +205,14 @@
 					$(this).removeClass('fa-plus-square').addClass('fa-minus-square');
 				}
 			});
+
+			$('.resource-box li').click(function() {
+				if ($(this).find('.img .selected').length > 0) {
+					$(this).find('.img .selected').remove();
+				}else{
+					$(this).find('.img').append($('#resource-box-selected').html());
+				}
+			});
 		});
 
 
@@ -192,14 +236,6 @@
 			});
 
 			contentMenuSign[sign] = 1;
-		}
-
-		function resourceImageWidth(){
-			// console.log($('.resource-box li:eq(0)').width());
-			// console.log($('.resource-box li:eq(0)').outerWidth());
-			// console.log($('.resource-box .img:eq(0)').width());
-			// console.log($('.resource-box .img:eq(0)').outerWidth());
-			$('.resource-box .img').height($('.resource-box li:eq(0)').outerWidth());
 		}
 	});
 </script>
