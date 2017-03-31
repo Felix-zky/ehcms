@@ -9635,6 +9635,10 @@ i {
   overflow: hidden;
   display: block;
 }
+#admin-resource-index #cancel-all,
+#admin-resource-index #delete-all {
+  display: none;
+}
 #admin-resource-index .layui-layer-content {
   border-radius: 10px;
 }
@@ -9715,17 +9719,31 @@ i {
   overflow-y: auto;
   background-color: #FFF;
 }
+#admin-resource-index .iframe-main .resource-box > ul {
+  padding-top: 10px;
+}
 #admin-resource-index .iframe-main .resource-box > ul li {
   overflow: hidden;
-  margin-top: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   position: relative;
   cursor: pointer;
+}
+#admin-resource-index .iframe-main .resource-box > ul li:hover,
+#admin-resource-index .iframe-main .resource-box > ul li.open {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+#admin-resource-index .iframe-main .resource-box > ul li:hover .img,
+#admin-resource-index .iframe-main .resource-box > ul li.open .img {
+  border: 1px solid rgba(0, 0, 0, 0.2);
 }
 #admin-resource-index .iframe-main .resource-box > ul li .img {
   width: 100%;
   overflow: hidden;
   position: relative;
   border: 1px solid #e7e7eb;
+  background-color: #FFF;
 }
 #admin-resource-index .iframe-main .resource-box > ul li .img img {
   max-width: 100%;

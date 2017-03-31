@@ -1,4 +1,8 @@
 #admin-resource-index{
+	#cancel-all, #delete-all{
+		display: none;
+	}
+
 	.layui-layer-content{
 		border-radius: 10px;
 	}
@@ -74,16 +78,26 @@
 			overflow-y: auto;
 			background-color: #FFF;
 			> ul{
+				padding-top: 10px;
 				li{
 					overflow: hidden;
-					margin-top: 20px;
+					padding-top: 10px;
+					padding-bottom: 10px;
 					position: relative;
 					cursor: pointer;
+					&:hover, &.open{
+						background-color: rgba(0, 0, 0, 0.2);
+						border-radius: 10px;
+						.img{
+							border: 1px solid rgba(0, 0, 0, 0.2);
+						}
+					}
 					.img{
 						width: 100%;
 						overflow: hidden;
 						position: relative;
 						border: 1px solid #e7e7eb;
+						background-color: #FFF;
 						img{
 							max-width: 100%;
 							max-height: 100%;
@@ -179,7 +193,7 @@
 						line-height: 30px;
 						span{
 							&.success{
-								color: #4cae4c
+								color: #4cae4c;
 							}
 							&.fail{
 								color: #d43f3a;

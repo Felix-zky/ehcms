@@ -1,11 +1,11 @@
 <header>
 	<div class="pull-left">
 		<button class="btn btn-primary" id="open-uploader">上传新文件</button>
-		<button class="btn btn-primary" id="open-uploader">全选</button>
-		<button class="btn btn-primary" id="open-uploader">取消选择</button>
+		<button class="btn btn-info" id="select-all">全选</button>
+		<button class="btn btn-info" id="cancel-all">取消选择</button>
+		<button class="btn btn-danger" id="delete-all">删除选中资源</button>
 	</div>
 	<div class="pull-right">
-
 		{notempty name="iframe"}<button class="btn btn-danger" id="close-iframe">关闭资源空间</button>{/notempty}
 	</div>
 </header>
@@ -68,7 +68,19 @@
 				icon: 'pencil-square'
 			},
 			'deleteMenu': {
+				icon: 'trash'
+			},
+			'copyResourceName': {
+				icon: 'copy'
+			},
+			'copyResourcePath': {
+				icon: 'link'
+			},
+			'deleteResource': {
 				icon: 'trash-o'
+			},
+			'viewAttributes': {
+				icon: 'exclamation-circle'
 			}
 		},
 		contentMenuSign = {};
@@ -171,6 +183,46 @@
 				}
 			});
 
+			$.contextMenu({
+				selector: '.resource-box > ul li',
+				items: {
+					copyResourceName: {
+						name: '复制名称'
+					},
+					copyResourcePath: {
+						name: '复制路径'
+					},
+					sep1: "---------",
+					deleteResource: {
+						name: '删除资源'
+					},
+					sep2: "---------",
+					viewAttributes: {
+						name: '查看属性'
+					}
+				},
+				zIndex: 100000000, //确保遮罩层和弹出菜单在layer弹窗之上。
+				callback: function(itemKey, opt){
+					switch (itemKey){
+						case 'deleteResource':
+						layer.confirm('确认删除该资源吗？', {icon: 3, title:'重要提示'}, function(index){
+							layer.close(index);
+						});
+						break;
+					}
+				},
+				events: {
+					show: function(options){
+						$(this).addClass('open');
+						var sign = checkContentMenuSign(options.ns);
+						sign === true || createMenuIconAndkeyboard(sign, options.items);
+					},
+					hide: function(){
+						$(this).removeClass('open');
+					}
+				}
+			});
+
 			$('.resource-group').scroll(function() {
 				$('#add-group').css({
 					top: top + $(this).scrollTop()
@@ -213,18 +265,38 @@
 				return false;
 			});
 
-			$('.resource-box li').click(function() {
-				if ($(this).find('.img .selected').length > 0) {
-					$(this).find('.img .selected').remove();
-				}else{
-					$(this).find('.img').append($('#resource-box-selected').html());
-				}
-			});
-
 			var liActive = $('.resource-group .children li.active');
 			if (liActive.length > 0) {
 				liActive.parents('li').addClass('active').find('i.fa-plus-square').click();
 			}
+
+			$('.resource-box li').click(function() {
+				if ($(this).find('.img .selected').length > 0) {
+					$(this).find('.img .selected').remove();
+					if ($('.resource-box').find('.selected').length == 0) {
+						$('#cancel-all, #delete-all').hide();
+					}
+				}else{
+					$(this).find('.img').append($('#resource-box-selected').html());
+					$('#cancel-all, #delete-all').show();
+				}
+			});
+
+			$('#select-all').click(function(){
+				$('.resource-box > ul li').not(':has(".selected")').find('.img').append($('#resource-box-selected').html());
+				$('#cancel-all, #delete-all').show();
+			});
+
+			$('#cancel-all').click(function(){
+				$('.resource-box > ul li .selected').remove();
+				$('#cancel-all, #delete-all').hide();
+			});
+
+			$('#delete-all').click(function(){
+				layer.confirm('确认删除选中的 <span style="color: #d43f3a; font-weight: bold;">' + $('.resource-box > ul li .selected').length + '</span> 个资源吗？', {icon: 3, title:'重要提示'}, function(index){
+					layer.close(index);
+				});
+			});
 		});
 
 
