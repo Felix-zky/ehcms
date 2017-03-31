@@ -39,7 +39,7 @@ class Resource extends Init{
 			];
 		}
 		
-		$resource = ResourceModel::where('uid', cookie('user_id'))->where($groupWhere)->paginate(16);
+		$resource = ResourceModel::where('uid', cookie('user_id'))->where($groupWhere)->order('id desc')->paginate(16);
 		
 		
 		
@@ -86,11 +86,12 @@ class Resource extends Init{
 		}
 	}
 	
-	public function getResource(){
-		$groupID = input('groupID') ?: 0;
-		
-		echo $groupID;
-		
-		//db('resource')->where(['uid' => cookie('user_id'), 'group_id' => $groupID]);
+	public function deleteResource(){
+		$resourceID = input('resourceID');
+		if (is_numeric($resourceID)){
+			echo db('resource')->where('uid', cookie('user_id'))->fetchSql(true)->delete($resourceID);
+		}else{
+			
+		}
 	}
 }

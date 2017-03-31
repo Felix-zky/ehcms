@@ -307,18 +307,13 @@ define(['jquery', 'laytpl', 'layer', 'eh'], function($, laytpl){
 				if (typeof func == 'function') {
 					func(response, parentObj, tplID);
 				}else{
-					deleteObj.animateCss('bounceOutLeft');
-					
-					setTimeout(function(){
-						deleteObj.remove();
+					deleteObj.remove();
 
-						if (!$.isEmptyObject(response.data)) {
-							laytpl($('#' + tplID).html()).render(response.data, function(html){
-								parentObj.append(html);
-								parentObj.children().last().animateCss('bounceInRight');
-							});
-						}
-					}, 1500);
+					if (!$.isEmptyObject(response.data)) {
+						laytpl($('#' + tplID).html()).render(response.data, function(html){
+							parentObj.append(html);
+						});
+					}
 				}
 
 				xhr.msgLayerIndex && layerClose(xhr.msgLayerIndex);
