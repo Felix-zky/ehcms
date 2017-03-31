@@ -1,8 +1,11 @@
 <header>
 	<div class="pull-left">
 		<button class="btn btn-primary" id="open-uploader">上传新文件</button>
+		<button class="btn btn-primary" id="open-uploader">全选</button>
+		<button class="btn btn-primary" id="open-uploader">取消选择</button>
 	</div>
 	<div class="pull-right">
+
 		{notempty name="iframe"}<button class="btn btn-danger" id="close-iframe">关闭资源空间</button>{/notempty}
 	</div>
 </header>
@@ -88,8 +91,6 @@
 				$('.resource-box').width($(window).outerWidth() - $('.resource-group').outerWidth(true) - 10);
 
 				$('.resource-box .img').height($('.resource-box .img:eq(0)').innerWidth());
-
-				$('.resource-box').show();
 			});
 
 			$(window).resize();
