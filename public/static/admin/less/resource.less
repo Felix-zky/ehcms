@@ -16,8 +16,8 @@
 				border-right: 1px solid #e7e7eb;
 				height: 100%;
 				position: relative;
-				overflow-x: hidden;
-				overflow-y: auto;
+				padding-bottom: 61px;
+				overflow: hidden;
 				a{
 					display: block;
 					&:focus{
@@ -28,7 +28,10 @@
 						text-decoration: none;
 					}
 				}
-				ul{
+				> ul{
+					overflow-x: hidden;
+					overflow-y: auto;
+					height: 100%;
 					> li{
 						width: 100%;
 						cursor: pointer;
@@ -61,6 +64,7 @@
 				#add-group{
 					position: absolute;
 					left: 0;
+					bottom: 0;
 					padding: 15px;
 					border-top: 1px solid #e7e7eb;
 					text-align: center;

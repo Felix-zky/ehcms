@@ -14,13 +14,13 @@
 		<div class="pull-left resource-group">
 			<ul>
 				<li {eq name="groupID" value="all"}class="active"{/eq} data-id="all"><a href="/admin/resource/index/group/all.html">全部资源({$count})</a></li>
-				<li {eq name="groupID" value="0"}class="active"{/eq} data-id="0"><a href="/admin/resource/index/group/0.html"><span class="menu-click"><span class="name">未分组</span>(<span class="count">{$notGroupedCount}</span>)</span></a></li>
+				<li {eq name="groupID" value="0"}class="active"{/eq} data-id="0"><a href="/admin/resource/index/group/0.html"><span class="name">未分组</span>(<span class="count">{$notGroupedCount}</span>)</a></li>
 				{foreach $group as $v}
-					<li {eq name="groupID" value="$v.id"}class="active"{/eq} data-id="{$v.id}"><a href="/admin/resource/index/group/{$v.id}.html"><i class="fa {notempty name="v.children"}fa-plus-square{else /}fa-minus-square{/notempty}"></i><span class="menu-click"><span class="name">{$v.name}</span>(<span class="count">{$v.count}</span>)</span></a>
+					<li {eq name="groupID" value="$v.id"}class="active"{/eq} data-id="{$v.id}"><a href="/admin/resource/index/group/{$v.id}.html"><i class="fa {notempty name="v.children"}fa-plus-square{else /}fa-minus-square{/notempty}"></i><span class="name">{$v.name}</span>(<span class="count">{$v.count}</span>)</a>
 					{notempty name="v.children"}
 						<ul class="children">
 							{foreach $v.children as $vc}
-							<li {eq name="groupID" value="$vc.id"}class="active"{/eq} data-id="{$vc.id}"><a href="/admin/resource/index/group/{$vc.id}.html"><span class="menu-click"><span class="name">{$vc.name}</span>(<span class="count">{$vc.count}</span>)</span></a></li>
+							<li {eq name="groupID" value="$vc.id"}class="active"{/eq} data-id="{$vc.id}"><a href="/admin/resource/index/group/{$vc.id}.html"><span class="name">{$vc.name}</span>(<span class="count">{$vc.count}</span>)</a></li>
 							{/foreach}
 						</ul>
 					{/notempty}
@@ -49,10 +49,10 @@
 	</div>
 </section>
 <script type="text/html" id="create-parent">
-	<li data-id="{{d.id}}"><i class="fa fa-minus-square"></i>{{d.name}}(0)</li>
+	<li data-id="{{d.id}}"><a href="/admin/resource/index/group/{{d.id}}.html"><i class="fa fa-minus-square"></i><span class="name">{{d.name}}</span>(<span class="count">0</span>)</a></li>
 </script>
 <script type="text/html" id="create-children">
-	<li data-id="{{d.id}}">{{d.name}}(0)</li>
+	<li data-id="{{d.id}}"><a href="/admin/resource/index/group/{{d.id}}.html"><span class="name">{{d.name}}</span>(<span class="count">0</span>)</a></li>
 </script>
 <script type="text/html" id="resource-box-selected">
 	<div class="selected">
@@ -87,19 +87,9 @@
 
 		$(function(){
 			var uploaderIndex,
-				top = 0,
 				parentMenuID = 0;
 
-			$('.resource-group > ul').css({
-				'padding-bottom': $('#add-group').outerHeight() + 10
-			});
-
 			$(window).resize(function() {
-				top = $('.iframe-main').height() - $('#add-group').outerHeight();
-				$('#add-group').css({
-					top: top
-				});
-
 				$('.resource-box').width($(window).outerWidth() - $('.resource-group').outerWidth(true) - 10);
 
 				$('.resource-box .img').height($('.resource-box .img:eq(0)').innerWidth());
@@ -136,7 +126,17 @@
 							title: '正在添加 <span style="color: #d43f3a;">' + that.find('span.name').html() + '</span> 的子菜单'
 						}, function(value, index){
 							layer.close(index);
-							eh.xhr.createCommon('/admin/resource/addGroup', {name: value, parentID: id}, {name: value}, that, 'create-children');
+							if (that.children('ul').length != 1) {
+								that.append('<ul class="children"></ul>');
+							}
+							eh.xhr.createCommon('/admin/resource/addGroup', {name: value, parentID: id}, {
+								json: {name: value},
+								parentObj: that.children('ul.children'),
+								tplID: 'create-children',
+								after: function(){
+									that.find('i').removeClass('fa-minus-square').addClass('fa-plus-square');
+								}
+							});
 						});
 						break;
 					}	
@@ -244,7 +244,11 @@
 			$('#add-group').click(function(){
 				layer.prompt({title: '请输入新目录名称'}, function(value, index){
 					layer.close(index);
-					eh.xhr.createCommon('/admin/resource/addGroup', {name: value}, {name: value}, '.resource-group ul', 'create-parent');
+					eh.xhr.createCommon('/admin/resource/addGroup', {name: value}, {
+						json: {name: value},
+						parentObj: '.resource-group > ul',
+						tplID: 'create-parent'
+					});
 				});
 			});
 
@@ -252,7 +256,7 @@
 				parent.layer.close(parent.layer.getFrameIndex(window.name));
 			});
 
-			$('.resource-group ul > li:gt(1) .fa-plus-square').click(function(){
+			$('.resource-group > ul').on('click', '> li:gt(1) i', function(){
 				var li = $(this).parents('li');
 				if (li.hasClass('open-children')) {
 					li.find('ul').hide();

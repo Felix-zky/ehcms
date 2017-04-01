@@ -9654,8 +9654,8 @@ i {
   border-right: 1px solid #e7e7eb;
   height: 100%;
   position: relative;
-  overflow-x: hidden;
-  overflow-y: auto;
+  padding-bottom: 61px;
+  overflow: hidden;
 }
 #admin-resource-index .iframe-main .resource-list .resource-group a {
   display: block;
@@ -9669,41 +9669,47 @@ i {
   color: #333;
   text-decoration: none;
 }
-#admin-resource-index .iframe-main .resource-list .resource-group ul > li {
+#admin-resource-index .iframe-main .resource-list .resource-group > ul {
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 100%;
+}
+#admin-resource-index .iframe-main .resource-list .resource-group > ul > li {
   width: 100%;
   cursor: pointer;
 }
-#admin-resource-index .iframe-main .resource-list .resource-group ul > li a {
+#admin-resource-index .iframe-main .resource-list .resource-group > ul > li a {
   padding: 10px 15px;
 }
-#admin-resource-index .iframe-main .resource-list .resource-group ul > li.active,
-#admin-resource-index .iframe-main .resource-list .resource-group ul > li:hover,
-#admin-resource-index .iframe-main .resource-list .resource-group ul > li.open {
+#admin-resource-index .iframe-main .resource-list .resource-group > ul > li.active,
+#admin-resource-index .iframe-main .resource-list .resource-group > ul > li:hover,
+#admin-resource-index .iframe-main .resource-list .resource-group > ul > li.open {
   background-color: #f4f5f9;
 }
-#admin-resource-index .iframe-main .resource-list .resource-group ul > li.open-children {
+#admin-resource-index .iframe-main .resource-list .resource-group > ul > li.open-children {
   padding-bottom: 0;
 }
-#admin-resource-index .iframe-main .resource-list .resource-group ul ul.children {
+#admin-resource-index .iframe-main .resource-list .resource-group > ul ul.children {
   display: none;
   margin: 5px -15px 0;
 }
-#admin-resource-index .iframe-main .resource-list .resource-group ul ul.children li {
+#admin-resource-index .iframe-main .resource-list .resource-group > ul ul.children li {
   width: 100%;
   line-height: 35px;
   cursor: pointer;
 }
-#admin-resource-index .iframe-main .resource-list .resource-group ul ul.children li a {
+#admin-resource-index .iframe-main .resource-list .resource-group > ul ul.children li a {
   padding: 0 15px 0 45px;
 }
-#admin-resource-index .iframe-main .resource-list .resource-group ul ul.children li.active,
-#admin-resource-index .iframe-main .resource-list .resource-group ul ul.children li:hover,
-#admin-resource-index .iframe-main .resource-list .resource-group ul ul.children li.open {
+#admin-resource-index .iframe-main .resource-list .resource-group > ul ul.children li.active,
+#admin-resource-index .iframe-main .resource-list .resource-group > ul ul.children li:hover,
+#admin-resource-index .iframe-main .resource-list .resource-group > ul ul.children li.open {
   background-color: #e9e9e9;
 }
 #admin-resource-index .iframe-main .resource-list .resource-group #add-group {
   position: absolute;
   left: 0;
+  bottom: 0;
   padding: 15px;
   border-top: 1px solid #e7e7eb;
   text-align: center;

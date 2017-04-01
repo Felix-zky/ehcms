@@ -284,36 +284,45 @@ define(['jquery', 'laytpl', 'layer', 'eh'], function($, laytpl){
 		 * @param {String}           tplID     模板ID
 		 * @param {Function}         [func]    数据自定义处理方法
 		 */
-		deleteCommon: function(url, data, parentObj, deleteObj, tplID, func){
+		deleteCommon: function(url, data, settings){
 			xhr.msgLayerIndex || this.loadPrompt();
 
-			if (typeof parentObj == 'string') {
-				parentObj = $(parentObj);
+			if (typeof settings.parentObj == 'string') {
+				settings.parentObj = $(settings.parentObj);
 			}
 
-			if (typeof deleteObj == 'string') {
-				deleteObj = $(deleteObj);
+			if (typeof settings.deleteObj == 'string') {
+				settings.deleteObj = $(settings.deleteObj);
 			}
 
 			var success = function(response){
 				this.msgLayerIndex && layerClose(this.msgLayerIndex);
 				this.msgLayerIndex = null;
 
-				xhr.layerIndex && layerClose(xhr.layerIndex);
-				xhr.layerIndex = null;
-
 				layer.msg(response.msg || '删除成功！', {icon: 6});
 
-				if (typeof func == 'function') {
-					func(response, parentObj, tplID);
-				}else{
-					deleteObj.remove();
+				if (typeof settings.before == 'function') {
+					var res = settings.before(response, settings);
 
-					if (!$.isEmptyObject(response.data)) {
-						laytpl($('#' + tplID).html()).render(response.data, function(html){
-							parentObj.append(html);
+					if (res === false) {
+						return false;
+					}
+				}
+
+				if (typeof settings.fn == 'function') {
+					settings.fn(response);
+				}else{
+					settings.deleteObj.remove();
+
+					if (!$.isEmptyObject(response.data) && settings.parentObj.length > 0) {
+						laytpl($('#' + settings.tplID).html()).render(response.data, function(html){
+							settings.parentObj.append(html);
 						});
 					}
+				}
+
+				if (typeof settings.after == 'function') {
+					settings.after(response, settings);
 				}
 
 				xhr.msgLayerIndex && layerClose(xhr.msgLayerIndex);
@@ -333,11 +342,11 @@ define(['jquery', 'laytpl', 'layer', 'eh'], function($, laytpl){
 		 * @param  {[type]} tplID     [description]
 		 * @param  {[type]} func      [description]
 		 */
-		createCommon: function(url, data, json, parentObj, tplID, func){
+		createCommon: function(url, data, settings){
 			xhr.msgLayerIndex || this.loadPrompt();
 
-			if (typeof parentObj == 'string') {
-				parentObj = $(parentObj);
+			if (typeof settings.parentObj == 'string') {
+				settings.parentObj = $(settings.parentObj);
 			}
 
 			var success = function(response){
@@ -346,29 +355,27 @@ define(['jquery', 'laytpl', 'layer', 'eh'], function($, laytpl){
 
 				layer.msg(response.msg || '创建成功！', {icon: 6});
 
-				if (typeof func == 'function') {
-					func(response, parentObj, tplID);
+				if (typeof settings.fn == 'function') {
+					settings.fn(response);
 				}else{
-					func = func || {};
-
-					if (typeof func.before == 'function') {
-						var res = func.before(response);
+					if (typeof settings.before == 'function') {
+						var res = settings.before(response, settings);
 
 						if (res === false) {
 							return false;
 						}
 					}
 
-					laytpl($('#' + tplID).html()).render($.extend(json, response.data || {}), function(html){
-						if (func.prepend === true){
-							parentObj.prepend(html);
+					laytpl($('#' + settings.tplID).html()).render($.extend(settings.json, response.data || {}), function(html){
+						if (settings.prepend === true){
+							settings.parentObj.prepend(html);
 						}else{
-							parentObj.append(html);
+							settings.parentObj.append(html);
 						}
 					});
 
-					if (typeof func.after == 'function') {
-						func.after(response);
+					if (typeof settings.after == 'function') {
+						settings.after(response, settings);
 					}
 				}
 
