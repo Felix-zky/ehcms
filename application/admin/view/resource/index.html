@@ -33,11 +33,11 @@
 			{notempty name="resource"}
 				<ul class="row">
 					{foreach $resource as $v}
-						<li data-id="{$v.id}" class="col-sm-3">
+						<li data-id="{$v.id}" data-type="{$v.type}" data-name="{$v.file_name}" data-path="{$v.path_name}" data-ext="{$v.extension}" data-size="{$v.size}" data-width="{$v.width}" data-height="{$v.height}" data-time="{$v.create_time}" class="col-sm-3">
 							<div class="img">
-								<img src="{eq name="v.type" value="1"}{$v.path_name}{/eq}" alt="{$v.file_name}">
+								<img src='{eq name="v->getData('type')" value="1"}{$v.path_name}{/eq}' alt="{$v.file_name}" />
 							</div>
-							<p title="{$v.file_name}">{$v.file_name}</p>
+							<p title="{$v.file_name}">{$v.file_name}.{$v.extension}</p>
 						</li>
 					{/foreach}
 				</ul>
@@ -62,7 +62,7 @@
 </script>
 {css href="__LIB_CSS__/jquery.contentMenu.custom.css"}
 <script type="text/javascript">
-	require(['jquery', 'layer', 'eh.xhr', 'jquery.contextMenu'], function(){
+	require(['jquery', 'clipboard', 'layer', 'eh.xhr', 'jquery.contextMenu'], function($, clipboard){
 		var contentMenuItemsConfigure = {
 			'createChilderenMenu': {
 				icon: 'pencil-square'
@@ -204,6 +204,22 @@
 				zIndex: 100000000, //确保遮罩层和弹出菜单在layer弹窗之上。
 				callback: function(itemKey, opt){
 					switch (itemKey){
+						case 'copyResourceName':
+						layer.msg('资源名称已复制', {skin: 'layui-layer-hui', anim: 2, 'success': function(layero){
+							layero.css({
+								top: $('body').height() - layero.outerHeight() - 30,
+								left: $('.resource-box').width() / 2 - layero.outerWidth() / 2 + $('.resource-group').outerWidth(),
+							});
+						}});
+						break;
+						case 'copyResourcePath':
+						layer.msg('资源路径已复制', {skin: 'layui-layer-hui', time: 0, anim: 2, 'success': function(layero){
+							layero.css({
+								top: $('body').height() - layero.outerHeight() - 30,
+								left: $('.resource-box').width() / 2 - layero.outerWidth() / 2 + $('.resource-group').outerWidth(),
+							});
+						}});
+						break;
 						case 'deleteResource':
 						layer.confirm('确认删除该资源吗？', {icon: 3, title:'重要提示'}, function(index){
 							layer.close(index);

@@ -41,8 +41,6 @@ class Resource extends Init{
 		
 		$resource = ResourceModel::where('uid', cookie('user_id'))->where($groupWhere)->order('id desc')->paginate(16);
 		
-		
-		
 		$this->assign('groupID', $groupID);
 		$this->assign('resource', $resource);
 		$this->assign('page', $resource->render());
