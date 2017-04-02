@@ -60,7 +60,6 @@
 		<i class="fa fa-check"></i>
 	</div>
 </script>
-{css href="__LIB_CSS__/jquery.contentMenu.custom.css"}
 <script type="text/javascript">
 	require(['jquery', 'clipboard', 'layer', 'eh.xhr', 'jquery.contextMenu'], function($, clipboard){
 		var contentMenuItemsConfigure = {
@@ -83,7 +82,8 @@
 				icon: 'exclamation-circle'
 			}
 		},
-		contentMenuSign = {};
+		contentMenuSign = {},
+		clipboardName,clipboardPath;
 
 		$(function(){
 			var uploaderIndex,
@@ -187,10 +187,13 @@
 				selector: '.resource-box > ul li',
 				items: {
 					copyResourceName: {
-						name: '复制名称'
+						name: '<i class="fa fa-copy">123</i>复制名称',
+						isHtmlName: true,
+						className: 'copy-resource-name'
 					},
 					copyResourcePath: {
-						name: '复制路径'
+						name: '复制路径',
+						className: 'copy-resource-path'
 					},
 					sep1: "---------",
 					deleteResource: {
@@ -204,35 +207,46 @@
 				zIndex: 100000000, //确保遮罩层和弹出菜单在layer弹窗之上。
 				callback: function(itemKey, opt){
 					switch (itemKey){
-						case 'copyResourceName':
-						layer.msg('资源名称已复制', {skin: 'layui-layer-hui', anim: 2, 'success': function(layero){
-							layero.css({
-								top: $('body').height() - layero.outerHeight() - 30,
-								left: $('.resource-box').width() / 2 - layero.outerWidth() / 2 + $('.resource-group').outerWidth(),
-							});
-						}});
-						break;
-						case 'copyResourcePath':
-						layer.msg('资源路径已复制', {skin: 'layui-layer-hui', time: 0, anim: 2, 'success': function(layero){
-							layero.css({
-								top: $('body').height() - layero.outerHeight() - 30,
-								left: $('.resource-box').width() / 2 - layero.outerWidth() / 2 + $('.resource-group').outerWidth(),
-							});
-						}});
-						break;
 						case 'deleteResource':
 						layer.confirm('确认删除该资源吗？', {icon: 3, title:'重要提示'}, function(index){
 							layer.close(index);
 							
 						});
 						break;
+						case 'viewAttributes':
+						break;
 					}
 				},
 				events: {
 					show: function(options){
 						$(this).addClass('open');
-						var sign = checkContentMenuSign(options.ns);
-						sign === true || createMenuIconAndkeyboard(sign, options.items);
+
+						$('.copy-resource-name').attr('data-clipboard-text', options.$trigger.data('name'));
+						$('.copy-resource-path').attr('data-clipboard-text', options.$trigger.data('path'));
+
+						clipboardName && clipboardName.destroy();
+						clipboardPath && clipboardPath.destroy();
+
+						clipboardName = new clipboard('.copy-resource-name');
+						clipboardPath = new clipboard('.copy-resource-path');
+
+						clipboardName.on('success', function(e) {
+							layer.msg('资源名称已复制', {skin: 'layui-layer-hui', anim: 2, 'success': function(layero){
+								layero.css({
+									top: $('body').height() - layero.outerHeight() - 30,
+									left: $('.resource-box').width() / 2 - layero.outerWidth() / 2 + $('.resource-group').outerWidth(),
+								});
+							}});
+						});
+
+						clipboardPath.on('success', function(e) {
+							layer.msg('资源路径已复制', {skin: 'layui-layer-hui', anim: 2, 'success': function(layero){
+								layero.css({
+									top: $('body').height() - layero.outerHeight() - 30,
+									left: $('.resource-box').width() / 2 - layero.outerWidth() / 2 + $('.resource-group').outerWidth(),
+								});
+							}});
+						});
 					},
 					hide: function(){
 						$(this).removeClass('open');

@@ -53,3 +53,58 @@ ul, li{
 	bottom: 0;
 	transform: translate(-50%, 0);
 }
+
+//右键菜单
+.context-menu-list {
+	position: absolute;
+	display: inline-block;
+	min-width: 13em;
+	max-width: 26em;
+	padding: 6px 0;
+	font-family: inherit;
+	font-size: 14px;
+	background: #fff;
+	border: 1px solid #bebebe;
+	border-radius: 8px;
+	-webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, .5);
+	box-shadow: 0 2px 5px rgba(0, 0, 0, .5);
+	.context-menu-item {
+		position: relative;
+		padding: 5px 15px;
+		color: #333;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none; 
+		background-color: #fff;
+		&.context-menu-hover {
+			color: #fff;
+			cursor: pointer; 
+			background-color: #63acff;
+		}
+		&.context-menu-disabled {
+			color: #bbb;
+			cursor: default; 
+			background-color: #fff;
+			i{
+				width: 30px;
+				&.fa-fw{
+					width: auto;
+					margin-right: 10px;
+				}
+			}
+			span.keyboard{
+				position: absolute;
+				top: 0;
+				right: 15px;
+				transform: translate(0, 30%);
+			}
+		}
+	}
+
+	.context-menu-separator {
+		padding: 0; 
+		margin: .35em 0;
+		border-bottom: 1px solid #e6e6e6;
+	}
+}
