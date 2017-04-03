@@ -6,6 +6,32 @@
 	.layui-layer-content{
 		border-radius: 10px;
 	}
+
+	.layer-view-attributes{
+		.layui-layer-content{
+			border-radius: 0;
+			overflow: hidden;
+			.container-fluid{
+				background-color: #FFF;
+				p{
+					padding: 15px 0;
+					border-bottom: 1px solid #e7e7eb;
+					overflow: hidden;
+					&:first-child{
+						padding-top: 0;
+					}
+					&:last-child{
+						border-bottom: none;
+						padding-bottom: 0;
+					}
+					.col-sm-3{
+						text-align: right;
+					}
+				}
+			}
+		}
+	}
+
 	.iframe-main{
 		overflow: hidden;
 		.resource-list{
@@ -103,8 +129,6 @@
 						border: 1px solid #e7e7eb;
 						background-color: #FFF;
 						img{
-							max-width: 100%;
-							max-height: 100%;
 							.horizontal-center-center;
 						}
 					}

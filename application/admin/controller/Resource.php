@@ -87,9 +87,13 @@ class Resource extends Init{
 	public function deleteResource(){
 		$resourceID = input('resourceID');
 		if (is_numeric($resourceID)){
-			echo db('resource')->where('uid', cookie('user_id'))->fetchSql(true)->delete($resourceID);
-		}else{
+			if (db('resource')->where('uid',cookie('user_id'))->delete($resourceID) == 1){
+				$this->successResult('资源删除成功');
+			}
+		}else if (is_array($resourceID)){
 			
+		}else{
+			$this->errorResult('资源ID不存在');
 		}
 	}
 }

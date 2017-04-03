@@ -68,7 +68,7 @@
 			</p>
 			<p>
 				<span class="col-sm-3">大小：</span><span class="col-sm-9">{{ d.size }}</span>
-			<p>
+			</p>
 			{{# if(d.type == 1){ }}
 			<p>
 				<span class="col-sm-3">图片尺寸：</span><span class="col-sm-9">{{ d.pixel }}</span>
@@ -145,8 +145,6 @@
 				events: {
 					show: function(options){
 						$(this).addClass('open');
-						var sign = checkContentMenuSign(options.ns);
-						sign === true || createMenuIconAndkeyboard(sign, options.items);
 					},
 					hide: function(){
 						$(this).removeClass('open');
@@ -176,8 +174,6 @@
 				events: {
 					show: function(options){
 						$(this).addClass('open');
-						var sign = checkContentMenuSign(options.ns);
-						sign === true || createMenuIconAndkeyboard(sign, options.items);
 					},
 					hide: function(){
 						$(this).removeClass('open');
@@ -219,13 +215,18 @@
 						case 'deleteResource':
 						layer.confirm('确认删除该资源吗？', {icon: 3, title:'重要提示'}, function(index){
 							layer.close(index);
-							
+							var id = opt.$trigger.data('id');
+							eh.xhr.messageRefresh('/admin/resource/deleteResource.html', {resourceID: id}, 'delete');
 						});
 						break;
 						case 'viewAttributes':
 						layer.open({
 							type: 1,
-							content: renderAttributes(opt.$trigger)
+							title: '属性',
+							content: renderAttributes(opt.$trigger),
+							area: '500px',
+							skin: 'layer-ext-special layer-view-attributes',
+							btn: '确定'
 						});
 						break;
 					}
@@ -320,7 +321,7 @@
 				liActive.parents('li').addClass('active').find('i.fa-plus-square').click();
 			}
 
-			$('.resource-box li').click(function() {
+			$('.resource-box > ul li').click(function() {
 				if ($(this).find('.img .selected').length > 0) {
 					$(this).find('.img .selected').remove();
 					if ($('.resource-box').find('.selected').length == 0) {
@@ -350,23 +351,31 @@
 		});
 
 		function renderAttributes(obj){
-			var byte = obj.data('size'), size;
+			var byte = obj.data('size'), size, pixel;
 
-			if (byte > 100) {
-				size = (byte / 1024).toFixed(2) + 'K';
+			if (byte > (1024 * 1024 * 1024)) {
+				size = (byte / 1024 / 1024 / 1024).toFixed(2) + 'G';
 			}else if (byte > (1024 * 1024)) {
 				size = (byte / 1024 / 1024).toFixed(2) + 'M';
+			}else if (byte > 100) {
+				size = (byte / 1024).toFixed(2) + 'K';
 			}else{
 				size = byte + 'B'
 			}
 
-			size += '(' + byte + ' Byte)';
+			size += ' (' + byte + ' Byte)';
+
+			if (obj.data('width') && obj.data('height')) {
+				pixel = obj.data('width') + ' X ' + obj.data('height');
+			}else{
+				pixel = '';
+			}
 
 			var data = {
 				'type': obj.data('type'),
 				'path': obj.data('path'),
 				'size': size,
-				'pixel': obj.data('width') + 'X' + obj.data('height'),
+				'pixel': pixel,
 				'time': obj.data('time')
 			};
 

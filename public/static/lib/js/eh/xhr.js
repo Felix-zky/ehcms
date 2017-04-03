@@ -285,7 +285,7 @@ define(['jquery', 'laytpl', 'layer', 'eh'], function($, laytpl){
 		 * @param {Function}         [func]    数据自定义处理方法
 		 */
 		deleteCommon: function(url, data, settings){
-			xhr.msgLayerIndex || this.loadPrompt();
+			xhr.msgLayerIndex || this.loadPrompt(settings.loadPrompt || {type: 'delete'});
 
 			if (typeof settings.parentObj == 'string') {
 				settings.parentObj = $(settings.parentObj);
@@ -301,32 +301,29 @@ define(['jquery', 'laytpl', 'layer', 'eh'], function($, laytpl){
 
 				layer.msg(response.msg || '删除成功！', {icon: 6});
 
-				if (typeof settings.before == 'function') {
-					var res = settings.before(response, settings);
-
-					if (res === false) {
-						return false;
-					}
-				}
-
 				if (typeof settings.fn == 'function') {
 					settings.fn(response);
 				}else{
+					if (typeof settings.before == 'function') {
+						var res = settings.before(response, settings);
+
+						if (res === false) {
+							return false;
+						}
+					}
+
 					settings.deleteObj.remove();
 
-					if (!$.isEmptyObject(response.data) && settings.parentObj.length > 0) {
+					if (!$.isEmptyObject(response.data) && !$.isEmptyObject(settings.parentObj) && settings.parentObj.length > 0) {
 						laytpl($('#' + settings.tplID).html()).render(response.data, function(html){
 							settings.parentObj.append(html);
 						});
 					}
-				}
 
-				if (typeof settings.after == 'function') {
-					settings.after(response, settings);
+					if (typeof settings.after == 'function') {
+						settings.after(response, settings);
+					}
 				}
-
-				xhr.msgLayerIndex && layerClose(xhr.msgLayerIndex);
-				xhr.msgLayerIndex = null;
 			}
 
 			this.delete(url, data, {'success': success});
@@ -343,7 +340,7 @@ define(['jquery', 'laytpl', 'layer', 'eh'], function($, laytpl){
 		 * @param  {[type]} func      [description]
 		 */
 		createCommon: function(url, data, settings){
-			xhr.msgLayerIndex || this.loadPrompt();
+			xhr.msgLayerIndex || this.loadPrompt(settings.loadPrompt || {type: 'create'});
 
 			if (typeof settings.parentObj == 'string') {
 				settings.parentObj = $(settings.parentObj);
@@ -378,9 +375,6 @@ define(['jquery', 'laytpl', 'layer', 'eh'], function($, laytpl){
 						settings.after(response, settings);
 					}
 				}
-
-				xhr.msgLayerIndex && layerClose(xhr.msgLayerIndex);
-				xhr.msgLayerIndex = null;
 			}
 
 			this.post(url, data, {'success': success});
@@ -389,15 +383,22 @@ define(['jquery', 'laytpl', 'layer', 'eh'], function($, laytpl){
 		/**
 		 * 快捷方式 messageRedirect
 		 */
-		messageRedirect: function(url, data, layerIndex, submitType){
-			layerIndex && setLayerClose(layerIndex);
-			xhr.msgLayerIndex || this.loadPrompt();
+		messageRedirect: function(url, data, settings){
+			if (!settings) {
+				settings = {};
+			}else if (typeof settings == 'string') {
+				settings = {
+					submitType: settings
+				};
+			}
 
-			if (!submitType) {
+			xhr.msgLayerIndex || this.loadPrompt(settings.loadPrompt || {type: settings.submitType});
+
+			if (!settings.submitType) {
 				this.post(url, data, this.doneState.messageRedirect);
-			}else if (submitType == 'put') {
+			}else if (settings.submitType == 'put') {
 				this.put(url, data, this.doneState.messageRedirect);
-			}else if (submitType == 'delete') {
+			}else if (settings.submitType == 'delete') {
 				this.delete(url, data, this.doneState.messageRedirect);
 			}
 		},
@@ -405,15 +406,22 @@ define(['jquery', 'laytpl', 'layer', 'eh'], function($, laytpl){
 		/**
 		 * 快捷方式 messageRefresh
 		 */
-		messageRefresh: function(url, data, layerIndex, submitType){
-			layerIndex && setLayerClose(layerIndex);
-			xhr.msgLayerIndex || this.loadPrompt();
+		messageRefresh: function(url, data, settings){
+			if (!settings) {
+				settings = {};
+			}else if (typeof settings == 'string') {
+				settings = {
+					submitType: settings
+				};
+			}
 
-			if (!submitType) {
+			xhr.msgLayerIndex || this.loadPrompt(settings.loadPrompt || {type: settings.submitType});
+
+			if (!settings.submitType) {
 				this.post(url, data, this.doneState.messageRefresh);
-			}else if (submitType == 'put') {
+			}else if (settings.submitType == 'put') {
 				this.put(url, data, this.doneState.messageRefresh);
-			}else if (submitType == 'delete') {
+			}else if (settings.submitType == 'delete') {
 				this.delete(url, data, this.doneState.messageRefresh);
 			}
 		},
@@ -432,6 +440,18 @@ define(['jquery', 'laytpl', 'layer', 'eh'], function($, laytpl){
 						break;
 					case 'getList':
 						str = '正在获取第' + (option.page || 1) + '页数据，请稍等！';
+						break;
+					case 'create':
+						str = '正在新增数据，请稍等！';
+						break;
+					case 'delete':
+						str = '正在删除数据，请稍等！';
+						break;
+					case 'put':
+						str = '正在更新数据，请稍等！';
+						break;
+					case 'uploader':
+						str = '正在上传资源，请稍等！';
 						break;
 					default:
 						str = '提交中，请稍等！';
@@ -497,7 +517,7 @@ define(['jquery', 'laytpl', 'layer', 'eh'], function($, laytpl){
 		}else if (done === xhr.doneState.messageRedirect){
 			if (data.data.redirect_url) {
 				var wait = data.data.redirect_wait || 3;
-				layer.msg(msg + '，' + wait + '秒后自动跳转<a id="eh-xhr-redirect-url" href="' + data.data.redirect_url + '">立即跳转</a>', {time: wait * 1000, icon: icon}, function(){
+				layer.msg(msg + '，' + wait + '秒后自动跳转。 <a id="eh-xhr-redirect-url" href="' + data.data.redirect_url + '">立即跳转</a>', {time: wait * 1000, icon: icon}, function(){
 					location.href = data.data.redirect_url;
 				});
 			}else{
@@ -505,7 +525,7 @@ define(['jquery', 'laytpl', 'layer', 'eh'], function($, laytpl){
 			}
 		}else if (done === xhr.doneState.messageRefresh) {
 			var wait = data.data.redirect_wait || 3;
-			layer.msg(msg + '，' + wait + '秒后刷新<a id="eh-xhr-redirect-url" href="javascript:void(0);" onclick="location.reload();">立即刷新</a>', {time: wait * 1000, icon: icon}, function(){
+			layer.msg(msg + '，' + wait + '秒后刷新。 <a id="eh-xhr-redirect-url" href="javascript:void(0);" onclick="location.reload();">立即刷新</a>', {time: wait * 1000, icon: icon}, function(){
 				location.reload();
 			});
 		}
