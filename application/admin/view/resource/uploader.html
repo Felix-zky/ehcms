@@ -4,7 +4,7 @@
 			<div class="pull-left" id="select-file" {notempty name="accept"}data-type="{$accept}"{/notempty} {notempty name="fileMax"}data-file-max="{$fileMax}"{/notempty}>
 				<button class="btn btn-default"><i class="fa fa-search"></i>选择文件</button>
 			</div>
-			<h5 class="pull-left">上传目录：xxxxx > oooo</h5>
+			<h5 class="pull-left">上传目录：{$group.name}</h5>
 		</div>
 		<div class="pull-right">
 			<button class="btn btn-danger" id="restart-all"><i class="fa fa-refresh"></i>上传失败文件</button>
@@ -37,14 +37,16 @@
 		var queueNum = 0, completeNum = 0;
 		var uploader;
 		var transitionEnd = 'transitionend webkitTransitionEnd oTransitionEnd otransitionend MSTransitionEnd';
+		var groupID = {$group.id};
 		$(function(){
 			var type = $('#select-file').data('type');
 			var uploaderOption = {
 				swf: '/static/lib/js/webuploader/Uploader.swf',
-				server: '/resource/Uploader/receiver',
+				server: '/admin/Resource/uploader.html',
 				pick: '#select-file',
 				formData: {
-					_ajax: 1
+					_ajax: 1,
+					groupID: groupID
 				},
 				compress: false,
 				thumb:{

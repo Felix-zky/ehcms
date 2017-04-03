@@ -52,9 +52,60 @@ class Resource extends Init{
 	}
 	
 	public function uploader(){
-		$this->assign('groupName', input('groupName'));
-		$this->assign('groupID', input('groupID'));
-		return $this->fetch();
+		if (request()->isAjax()){
+			if (is_object(request()->file('file'))){
+				
+			}else{
+				$this->errorResult('获取上传文件失败');
+			}
+		}else{
+			$parentGroupID = input('parentGroupID');
+			$childrenGroupID = input('childrenGroupID');
+			
+			if ($parentGroupID == 'all' || $parentGroupID == 0){
+				$group = [
+					'id' => 0,
+					'name' => '未分组'
+				];
+			}elseif (empty($childrenGroupID)){
+				$result = db('resource_group')->field('name')->where(['id' => $parentGroupID, 'parent_id' => 0, 'uid' => cookie('user_id')])->find();
+				if (!$result || empty($result['name'])){
+					$group = [
+						'id' => 0,
+						'name' => '未分组'
+					];
+				}else{
+					$group = [
+						'id' => $parentGroupID,
+						'name' => $result['name']
+					];
+				}
+			}else{
+				$where = [
+					'id' => ['in', [$parentGroupID, $childrenGroupID]],
+					'uid' => cookie('user_id')
+				];
+				$result = db('resource_group')->field('name')->where($where)->order('id asc')->select();
+				if (!$result || count($result) != 2){
+					$group = [
+						'id' => 0,
+						'name' => '未分组'
+					];
+				}else{
+					foreach ($result as $v){
+						$names[] = $v['name'];
+					}
+			
+					$group = [
+						'id' => $childrenGroupID,
+						'name' => join(' > ', $names)
+					];
+				}
+			}
+			
+			$this->assign('group', $group);
+			return $this->fetch();
+		}
 	}
 	
 	public function addGroup(){
