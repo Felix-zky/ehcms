@@ -33,11 +33,11 @@
 			{notempty name="resource"}
 				<ul class="row">
 					{foreach $resource as $v}
-						<li data-id="{$v.id}" data-type="{$v->getData('type')}" data-type-name="{$v.type}" data-name="{$v.file_name}" data-path="{$v.path_name}" data-ext="{$v.extension}" data-size="{$v.size}" data-width="{$v.width}" data-height="{$v.height}" data-time="{$v.create_time}" class="col-sm-3">
+						<li data-id="{$v.id}" data-type="{$v->getData('type')}" data-type-name="{$v.type}" data-name="{$v.original_name}" data-url="{$v.url}" data-ext="{$v.extension}" data-size="{$v.size}" data-width="{$v.width}" data-height="{$v.height}" data-time="{$v.create_time}" class="col-sm-3">
 							<div class="img">
-								<img src='{eq name="v->getData('type')" value="1"}{$v.path_name}{/eq}' alt="{$v.file_name}" />
+								<img src='{eq name="v->getData('type')" value="1"}{$v.url}{/eq}' alt="{$v.original_name}" />
 							</div>
-							<p title="{$v.file_name}.{$v.extension}">{$v.file_name}.{$v.extension}</p>
+							<p title="{$v.original_name}">{$v.original_name}</p>
 						</li>
 					{/foreach}
 				</ul>
@@ -64,7 +64,10 @@
 	<div class="attributes-box container-fluid">
 		<div class="row">
 			<p>
-				<span class="col-sm-3">位置：</span><span class="col-sm-9">{{ d.path }}</span>
+				<span class="col-sm-3">名称：</span><span class="col-sm-9">{{ d.name }}</span>
+			</p>
+			<p>
+				<span class="col-sm-3">位置：</span><span class="col-sm-9">{{ d.url }}</span>
 			</p>
 			<p>
 				<span class="col-sm-3">大小：</span><span class="col-sm-9">{{ d.size }}</span>
@@ -284,7 +287,10 @@
 					resize: false,
 					move: false,
 					area: ['80%', '80%'],
-					content: '/admin/resource/uploader/' + $currentGroup + '.html'
+					content: '/admin/resource/uploader/' + $currentGroup + '.html',
+					end: function(){
+						location.reload();
+					}
 				});
 			});
 
@@ -377,7 +383,8 @@
 
 			var data = {
 				'type': obj.data('type'),
-				'path': obj.data('path'),
+				'url': obj.data('url'),
+				'name': obj.data('original_name'),
 				'size': size,
 				'pixel': pixel,
 				'time': obj.data('time')

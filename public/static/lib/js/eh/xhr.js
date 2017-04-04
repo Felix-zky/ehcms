@@ -436,25 +436,25 @@ define(['jquery', 'laytpl', 'layer', 'eh'], function($, laytpl){
 			if (!option.str) {
 				switch (option.type){
 					case 'get':
-						str = '正在获取数据，请稍等！';
+						str = '正在获取数据，请稍等。';
 						break;
 					case 'getList':
-						str = '正在获取第' + (option.page || 1) + '页数据，请稍等！';
+						str = '正在获取第' + (option.page || 1) + '页数据，请稍等。';
 						break;
 					case 'create':
-						str = '正在新增数据，请稍等！';
+						str = '正在新增数据，请稍等。';
 						break;
 					case 'delete':
-						str = '正在删除数据，请稍等！';
+						str = '正在删除数据，请稍等。';
 						break;
 					case 'put':
-						str = '正在更新数据，请稍等！';
+						str = '正在更新数据，请稍等。';
 						break;
 					case 'uploader':
-						str = '正在上传资源，请稍等！';
+						str = '正在上传资源，请稍等。';
 						break;
 					default:
-						str = '提交中，请稍等！';
+						str = '提交中，请稍等。';
 				}
 
 				str = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw" style="vertical-align: middle;"></i><span style="font-size:17px; vertical-align:middle; padding-left: 5px;">' + str + '</span>';

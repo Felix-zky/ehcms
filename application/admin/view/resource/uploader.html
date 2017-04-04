@@ -34,7 +34,7 @@
 </section>
 <script type="text/javascript">
 	require(['jquery', 'webuploader', 'laytpl', 'layer', 'eh'], function($, WebUploader, laytpl){
-		var queueNum = 0, completeNum = 0;
+		var queueNum = 0, completeNum = 0, successNum = 0, failNum = 0;
 		var uploader;
 		var transitionEnd = 'transitionend webkitTransitionEnd oTransitionEnd otransitionend MSTransitionEnd';
 		var groupID = {$group.id};
@@ -136,16 +136,17 @@
 			//上传结束（全部）
 			uploader.on('uploadFinished', function(){
 				$('.progress-bar').one(transitionEnd, function(){
-					var stats = uploader.getStats();
-					queueNum = 0;
-					completeNum = 0;
-					$('.progress-info p:eq(0)').html('上传结束，成功 ' + stats.successNum + ' 个文件，失败 ' + stats.uploadFailNum + ' 个文件！');
+					$('.progress-info p:eq(0)').html('上传结束，成功 ' + successNum + ' 个文件，失败 ' + failNum + ' 个文件！');
 					if (uploader.getFiles('inited', 'complete', 'error', 'invalid').length > 0) {
 						$('#delete-all').removeAttr('disabled');
 					}
-					if (stats.uploadFailNum > 0) {
+					if (uploader.getFiles('error').length > 0) {
 						$('#restart-all, #delete-error-all').show();
 					}
+					queueNum = 0;
+					completeNum = 0;
+					successNum = 0;
+					failNum = 0;
 				});
 			});
 
@@ -164,26 +165,50 @@
 					li.find('.li-progress').hide();
 					li.find('.li-progress-bar').width(0);
 				});
-				li.find('.info p:eq(3)').append('<span class="success">上传成功</span>').find('span:eq(0)').remove();
-				var index = layer.open({
-					type: 1,
-					content: '<i class="layui-layer-ico layui-layer-ico6"></i>上传成功',
-					offset: '35px',
-					time: 3000,
-					shade: false,
-					skin: 'layui-layer-dialog layui-layer-border ' + layer.cache.skin + ' ' + layer.cache.skin + '-msg',
-					title: false,
-					closeBtn: false,
-					btn: false,
-					fixed: false,
-					success: function(layero){
-						li.append(layero);
-					}
-				});
+
+				if (response.code != 1) {
+					failNum++;
+					file.setStatus('error', response.msg);
+					li.find('.info p:eq(3)').append('<span class="fail">' + response.msg + '</span>').find('span:eq(0)').remove();
+					var index = layer.open({
+						type: 1,
+						content: '<i class="layui-layer-ico layui-layer-ico5"></i>' + response.msg,
+						offset: '35px',
+						time: 3000,
+						shade: false,
+						skin: 'layui-layer-dialog layui-layer-border ' + layer.cache.skin + ' ' + layer.cache.skin + '-msg',
+						title: false,
+						closeBtn: false,
+						btn: false,
+						fixed: false,
+						success: function(layero){
+							li.append(layero);
+						}
+					});
+				}else{
+					successNum++;
+					li.find('.info p:eq(3)').append('<span class="success">上传成功</span>').find('span:eq(0)').remove();
+					var index = layer.open({
+						type: 1,
+						content: '<i class="layui-layer-ico layui-layer-ico6"></i>上传成功',
+						offset: '35px',
+						time: 3000,
+						shade: false,
+						skin: 'layui-layer-dialog layui-layer-border ' + layer.cache.skin + ' ' + layer.cache.skin + '-msg',
+						title: false,
+						closeBtn: false,
+						btn: false,
+						fixed: false,
+						success: function(layero){
+							li.append(layero);
+						}
+					});
+				}
 			});
 
 			//上传失败（单文件）
 			uploader.on('uploadError', function(file, response){
+				failNum++;
 				var li = $('#' + file.id);
 				li.find('.li-progress-bar').one(transitionEnd, function(){
 					li.find('.li-progress').hide();
