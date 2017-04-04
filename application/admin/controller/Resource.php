@@ -53,8 +53,16 @@ class Resource extends Init{
 	
 	public function uploader(){
 		if (request()->isAjax()){
-			if (is_object(request()->file('file'))){
+			$file = request()->file('file');
+			if (is_object($file)){
+				$resource = new \eh\Resource();
+				$result = $resource->uploader($file, ['ext' => 'png']);
 				
+				if ($result !== TRUE){
+					$this->errorResult($resource->error);
+				}else{
+					$this->successResult('上传成功');
+				}
 			}else{
 				$this->errorResult('获取上传文件失败');
 			}
