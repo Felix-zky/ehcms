@@ -82,6 +82,7 @@ class Resource{
 				
 				if (db($tableName)->insert($data) != 1){
 					$this->error = '资源存入失败';
+					$uploader = null;
 					@unlink($pathName);
 					return false;
 				}
