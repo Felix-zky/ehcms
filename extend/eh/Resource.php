@@ -5,11 +5,13 @@ class Resource{
 	private $path;
 	private $rule;
 	private $error;
+	private $table;
 	
-	public function __construct($path = '', $rule = 'date')
+	public function __construct($temporary = FALSE, $path = '', $rule = 'date')
 	{
 		$this->path = $path ?: 'uploader'.DS.cookie('user_id');
 		$this->rule = $rule;
+		$this->table = $temporary === FALSE ? 'resource' : 'resource_transfer';
 	}
 	
 	/**
@@ -23,7 +25,7 @@ class Resource{
 	 * @param int|false $replace 是否替换指定资源，默认不覆盖。
 	 * @return boolean
 	 */
-	public function uploader($file, $groupID = 0, $validate = [], $temporary = FALSE, $savename = TRUE, $replace = FALSE)
+	public function uploader($file, $groupID = 0, $validate = [], $savename = TRUE, $replace = FALSE)
 	{
 		if (is_numeric($replace)){
 			$result = db('resource')->where(['id' => $replace, 'uid' => cookie('user_id')])->find();
@@ -60,7 +62,6 @@ class Resource{
 				$pathName = $uploader->getPathname();
 				$type = $this->parseType($extension);
 				
-				$tableName = $temporary === FALSE ? 'resource' : 'resource_transfer';
 				$data = [
 					'uid' => cookie('user_id'),
 					'group_id' => $groupID,
@@ -80,7 +81,7 @@ class Resource{
 					$data['height'] = $height;
 				}
 				
-				if (db($tableName)->insert($data) != 1){
+				if (db($this->table)->insert($data) != 1){
 					$this->error = '资源存入失败';
 					$uploader = null;
 					@unlink($pathName);
@@ -92,6 +93,23 @@ class Resource{
 				$this->error = $file->getError();
 				return false;
 			}
+		}
+	}
+	
+	/**
+	 * 删除资源
+	 * @access public
+	 * @param int|array $id 资源的id编号
+	 * @param boolean $temporary 是否为临时资源库
+	 */
+	public function delete($id, $temporary = FALSE){
+		
+		if (is_numeric($id)){
+			if (db('resource')->where('uid',cookie('user_id'))->delete($resourceID) == 1){
+				return TRUE;
+			}
+		}elseif (is_array($id)){
+			
 		}
 	}
 	
