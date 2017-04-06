@@ -59,10 +59,10 @@ class Resource extends Init{
 				$resource = new \eh\Resource();
 				$result = $resource->uploader($file, (int)input('groupID'));
 				
-				if ($result !== TRUE){
-					$this->errorResult($resource->getError());
+				if ($result > 0){
+					$this->successResult('上传成功', ['resourceID' => $result]);
 				}else{
-					$this->successResult('上传成功');
+					$this->errorResult($resource->getError());
 				}
 			}else{
 				$this->errorResult('获取上传文件失败');
@@ -145,15 +145,20 @@ class Resource extends Init{
 	}
 	
 	public function deleteResource(){
-		$resourceID = input('resourceID');
-		if (is_numeric($resourceID)){
-			if (db('resource')->where('uid',cookie('user_id'))->delete($resourceID) == 1){
-				$this->successResult('资源删除成功');
-			}
-		}else if (is_array($resourceID)){
-			
+		$resource = new \eh\Resource();
+		if ($resource->delete(input('resourceID')) === TRUE){
+			$this->successResult('资源删除成功');
 		}else{
-			$this->errorResult('资源ID不存在');
+			$this->successResult($resource->getError() ?: '资源删除失败');
+		}
+	}
+	
+	public function deleteResources(){
+		$resource = new \eh\Resource();
+		if ($resource->delete(input('resourceID/a')) === TRUE){
+			$this->successResult('资源删除成功');
+		}else{
+			$this->successResult($resource->getError() ?: '资源删除失败');
 		}
 	}
 }

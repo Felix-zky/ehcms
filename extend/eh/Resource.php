@@ -1,6 +1,7 @@
 <?php
 namespace eh;
 
+use think\Db;
 class Resource{
 	private $path;
 	private $rule;
@@ -81,14 +82,15 @@ class Resource{
 					$data['height'] = $height;
 				}
 				
-				if (db($this->table)->insert($data) != 1){
+				$resourceID = db($this->table)->insertGetId($data);
+				if ($resourceID > 0){
+					return $resourceID;
+				}else{
 					$this->error = '资源存入失败';
 					$uploader = null;
 					@unlink($pathName);
 					return false;
 				}
-				
-				return true;
 			}else{
 				$this->error = $file->getError();
 				return false;
@@ -100,16 +102,40 @@ class Resource{
 	 * 删除资源
 	 * @access public
 	 * @param int|array $id 资源的id编号
-	 * @param boolean $temporary 是否为临时资源库
+	 * @return boolean
 	 */
-	public function delete($id, $temporary = FALSE){
-		
+	public function delete($id){
 		if (is_numeric($id)){
-			if (db('resource')->where('uid',cookie('user_id'))->delete($resourceID) == 1){
+			$result = Db::name($this->table)->where(['uid' => cookie('user_id'), 'id' => $id])->find();
+			
+			if (!$result){
+				$this->error = '资源不存在';
+				return FALSE;
+			}
+			
+			if (Db::name($this->table)->delete($result['id']) == 1){
+				@unlink($result['path'].DS.$result['name']);
 				return TRUE;
+			}else{
+				$this->error = '资源数据无法删除';
+				return FALSE;
 			}
 		}elseif (is_array($id)){
-			
+			$result = Db::name($this->table)->where(['uid' => cookie('user_id'), 'id' => ['in', $id]])->select();
+			if (is_array($result)){
+				foreach ($result as $v){
+					if (Db::name($this->table)->delete($v['id']) == 1){
+						@unlink($v['path'].DS.$v['name']);
+					}else{
+						$this->error = '处理'.$v['original_name'].'时出错，终止执行！';
+						return false;
+					}
+				}
+				return TRUE;
+			}else{
+				$this->error = '资源无法获取';
+				return FALSE;
+			}
 		}
 	}
 	

@@ -240,7 +240,7 @@
 						$(this).addClass('open');
 
 						$('.copy-resource-name').attr('data-clipboard-text', options.$trigger.data('name'));
-						$('.copy-resource-path').attr('data-clipboard-text', options.$trigger.data('path'));
+						$('.copy-resource-path').attr('data-clipboard-text', options.$trigger.data('url'));
 
 						clipboardName && clipboardName.destroy();
 						clipboardPath && clipboardPath.destroy();
@@ -355,6 +355,13 @@
 
 			$('#delete-all').click(function(){
 				layer.confirm('确认删除选中的 <span style="color: #d43f3a; font-weight: bold;">' + $('.resource-box > ul li .selected').length + '</span> 个资源吗？', {icon: 3, title:'重要提示'}, function(index){
+					var ids = new Array();
+					$.each($('.resource-box > ul li .selected'), function() {
+						ids.push($(this).parents('li').data('id'));
+					});
+
+					eh.xhr.messageRefresh('/admin/resource/deleteResources.html', {resourceID: ids}, 'delete');
+
 					layer.close(index);
 				});
 			});
@@ -384,7 +391,7 @@
 			var data = {
 				'type': obj.data('type'),
 				'url': obj.data('url'),
-				'name': obj.data('original_name'),
+				'name': obj.data('name'),
 				'size': size,
 				'pixel': pixel,
 				'time': obj.data('time')
