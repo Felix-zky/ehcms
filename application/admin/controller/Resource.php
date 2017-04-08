@@ -161,4 +161,8 @@ class Resource extends Init{
 			$this->successResult($resource->getError() ?: '资源删除失败');
 		}
 	}
+	
+	public function test(){
+		$this->successResult(['delete' => ['387', '388', '389']]);
+	}
 }

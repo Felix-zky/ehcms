@@ -33,7 +33,7 @@
 	</div>
 </section>
 <script type="text/javascript">
-	require(['jquery', 'webuploader', 'laytpl', 'layer', 'eh'], function($, WebUploader, laytpl){
+	require(['jquery', 'webuploader', 'laytpl', 'layer', 'eh.xhr'], function($, WebUploader, laytpl){
 		var queueNum = 0, completeNum = 0, successNum = 0, failNum = 0;
 		var uploader;
 		var transitionEnd = 'transitionend webkitTransitionEnd oTransitionEnd otransitionend MSTransitionEnd';
@@ -334,17 +334,23 @@
 				var completeArray = uploader.getFiles('complete');
 
 				if (completeArray.length > 0) {
-					var ids = new Array();
+					var ids = [],
+						deleteObjs = {};
 					$.each(completeArray, function(){
-						ids.push($('#' + $(this)[0].id).data('resource-id'));
+						var id = $(this)[0].id;
+						var resourceID = $('#' + id).data('resource-id');
+						ids.push(resourceID);
+						deleteObjs[resourceID] = id;
 					});
 
 					if (ids.length > 0) {
 						layer.confirm('队列中存在已上传成功资源，是否删除？', {icon: 3, title:'重要提示'}, function(index){
 							layer.close(index);
-							eh.xhr.deleteCommon('/admin/resource/deleteResource.html', {resourceID: ids}, {
-								
+							eh.xhr.deleteCommon('/admin/resource/deleteResources.html', {resourceID: ids}, {
+								deleteObjs: deleteObjs
 							});
+						}, function(){
+							$('#delete-all').removeAttr('disabled');
 						});
 					}
 				}
@@ -355,6 +361,9 @@
 						$('#' + $(this)[0].id).remove();
 					}
 				});
+
+				$('#start-all, #delete-all').attr('disabled', 'disabled');
+				$('#restart-all, #delete-error-all, .progress, .progress-info').hide();
 			});
 		});
 

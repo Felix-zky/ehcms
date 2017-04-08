@@ -312,14 +312,28 @@ define(['jquery', 'laytpl', 'layer', 'eh'], function($, laytpl){
 						}
 					}
 
-					if ($.isArray(settings.deleteObj)) {
+					if (!$.isEmptyObject(settings.deleteObjs)) {
+						var deleteKey = response.data.delete;
 
-					}else {
+						if ($.isArray(deleteKey) && deleteKey.length > 0) {
+							for (var i = 0; i < deleteKey.length; i++) {
+								var deleteObj = settings.deleteObjs[deleteKey[i]];
+
+								if ($.type(deleteObj) == 'string') {
+									deleteObj = $('#' + deleteObj);
+								}
+
+								if (!$.isEmptyObject(deleteObj)) {
+									deleteObj.remove();
+								}
+							}
+						}
+					}else if(!$.isEmptyObject(settings.deleteObj)){
 						settings.deleteObj.remove();
 					}
 
-					if (!$.isEmptyObject(response.data) && !$.isEmptyObject(settings.parentObj) && settings.parentObj.length > 0) {
-						laytpl($('#' + settings.tplID).html()).render(response.data, function(html){
+					if (!$.isEmptyObject(response.data.tpl) && !$.isEmptyObject(settings.parentObj) && settings.parentObj.length > 0) {
+						laytpl($('#' + settings.tplID).html()).render(response.data.tpl, function(html){
 							settings.parentObj.append(html);
 						});
 					}
