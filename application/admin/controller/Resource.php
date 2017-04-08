@@ -156,13 +156,9 @@ class Resource extends Init{
 	public function deleteResources(){
 		$resource = new \eh\Resource();
 		if ($resource->delete(input('resourceID/a')) === TRUE){
-			$this->successResult('资源删除成功');
+			$this->successResult('资源删除成功', ['delete' => $resource->getIds()]);
 		}else{
 			$this->successResult($resource->getError() ?: '资源删除失败');
 		}
-	}
-	
-	public function test(){
-		$this->successResult(['delete' => ['387', '388', '389']]);
 	}
 }

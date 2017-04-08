@@ -7,6 +7,7 @@ class Resource{
 	private $rule;
 	private $error;
 	private $table;
+	private $ids = [];
 	
 	public function __construct($temporary = FALSE, $path = '', $rule = 'date')
 	{
@@ -125,6 +126,7 @@ class Resource{
 			if (is_array($result)){
 				foreach ($result as $v){
 					if (Db::name($this->table)->delete($v['id']) == 1){
+						$this->ids[] = $v['id'];
 						@unlink($v['path'].DS.$v['name']);
 					}else{
 						$this->error = '处理'.$v['original_name'].'时出错，终止执行！';
@@ -146,6 +148,13 @@ class Resource{
 	public function getError()
 	{
 		return $this->error;
+	}
+	
+	/**
+	 * 获取已执行的ID编号
+	 */
+	public function getIds(){
+		return $this->ids;
 	}
 	
 	/**

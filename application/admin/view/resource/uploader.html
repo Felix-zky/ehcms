@@ -137,9 +137,14 @@
 			uploader.on('uploadFinished', function(){
 				$('.progress-bar').one(transitionEnd, function(){
 					$('.progress-info p:eq(0)').html('上传结束，成功 ' + successNum + ' 个文件，失败 ' + failNum + ' 个文件！');
-					if (uploader.getFiles('inited', 'complete', 'error', 'invalid').length > 0) {
+					if (uploader.getFiles('inited', 'queued', 'progress', 'interrupt', 'complete', 'error', 'invalid').length > 0) {
 						$('#delete-all').removeAttr('disabled');
 					}
+
+					if (uploader.getFiles('complete').length > 0) {
+						$('#start-all').removeAttr('disabled');
+					}
+
 					if (uploader.getFiles('error').length > 0) {
 						$('#restart-all, #delete-error-all').show();
 					}
@@ -279,24 +284,42 @@
 			});
 
 			$('#uploader ul').on('click', '.delete', function() {
-				uploader.removeFile($(this).parents('li').attr('id'), true);
+				var id = $(this).parents('li').attr('id');
+				uploader.stop(id);
+				uploader.removeFile(id, true);
 			});
 
 			$('#uploader ul').on('click', '.start', function() {
 				if (!uploader.isInProgress()) {
+					var that = $(this);
 					queueNum = 1;
 					$('#start-all, #delete-all').attr('disabled', 'disabled');
 					$('.progress-info').find('span.queue').html(queueNum);
-					uploader.upload($(this).parents('li').attr('id'));
+					if ($('.progress-bar').width() > 35) {
+						$('.progress-bar').width(0).html('0%');
+						$('.progress-bar').one(transitionEnd, function(){
+							uploader.upload(that.parents('li').attr('id'));
+						});
+					}else{
+						uploader.upload(that.parents('li').attr('id'));
+					}
 				}
 			});
 
 			$('#uploader ul').on('click', '.restart', function() {
 				if (!uploader.isInProgress()) {
+					var that = $(this);
 					queueNum = 1;
 					$('#start-all, #delete-all').attr('disabled', 'disabled');
 					$('.progress-info').find('span.queue').html(queueNum);
-					uploader.retry($(this).parents('li').attr('id'));
+					if ($('.progress-bar').width() > 35) {
+						$('.progress-bar').width(0).html('0%');
+						$('.progress-bar').one(transitionEnd, function(){
+							uploader.retry(that.parents('li').attr('id'));
+						});
+					}else{
+						uploader.retry(that.parents('li').attr('id'));
+					}
 				}
 			});
 
@@ -347,7 +370,22 @@
 						layer.confirm('队列中存在已上传成功资源，是否删除？', {icon: 3, title:'重要提示'}, function(index){
 							layer.close(index);
 							eh.xhr.deleteCommon('/admin/resource/deleteResources.html', {resourceID: ids}, {
-								deleteObjs: deleteObjs
+								fn: function(response){
+									if ($.isEmptyObject(deleteObjs)) {
+										return false;
+									}
+
+									var deleteKey = response.data.delete;
+
+									if ($.isArray(deleteKey) && deleteKey.length > 0) {
+										for (var i = 0; i < deleteKey.length; i++) {
+											var deleteID = deleteObjs[deleteKey[i]];
+
+											$('#' + deleteID).remove();
+											uploader.removeFile(deleteID, true);
+										}
+									}
+								}
 							});
 						}, function(){
 							$('#delete-all').removeAttr('disabled');
