@@ -329,19 +329,32 @@
 			});
 
 			$('#delete-all').click(function() {
-				if (uploader.getFiles('complete').length > 0) {
+				uploader.stop();
+
+				var completeArray = uploader.getFiles('complete');
+
+				if (completeArray.length > 0) {
 					var ids = new Array();
-					$.each(uploader.getFiles('complete'), function(){
+					$.each(completeArray, function(){
 						ids.push($('#' + $(this)[0].id).data('resource-id'));
 					});
 
 					if (ids.length > 0) {
-						layer.confirm('队列中全部或一部分已上传成功，是否全部删除？', {icon: 3, title:'重要提示'}, function(index){
+						layer.confirm('队列中存在已上传成功资源，是否删除？', {icon: 3, title:'重要提示'}, function(index){
 							layer.close(index);
-							//eh.xhr.messageRefresh('/admin/resource/deleteResource.html', {resourceID: ids}, 'delete');
+							eh.xhr.deleteCommon('/admin/resource/deleteResource.html', {resourceID: ids}, {
+								
+							});
 						});
 					}
 				}
+
+				$.each(uploader.getFiles('inited', 'queued', 'progress', 'error', 'interrupt', 'invalid'), function(){
+					if ($(this)[0].getStatus()) {
+						uploader.removeFile($(this)[0].id, true);
+						$('#' + $(this)[0].id).remove();
+					}
+				});
 			});
 		});
 

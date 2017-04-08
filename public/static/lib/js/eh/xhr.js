@@ -312,7 +312,11 @@ define(['jquery', 'laytpl', 'layer', 'eh'], function($, laytpl){
 						}
 					}
 
-					settings.deleteObj.remove();
+					if ($.isArray(settings.deleteObj)) {
+
+					}else {
+						settings.deleteObj.remove();
+					}
 
 					if (!$.isEmptyObject(response.data) && !$.isEmptyObject(settings.parentObj) && settings.parentObj.length > 0) {
 						laytpl($('#' + settings.tplID).html()).render(response.data, function(html){
