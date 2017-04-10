@@ -39,7 +39,7 @@ class Resource{
 			$this->path = $result['path'];
 			$savename = $result['name'];
 			
-			if (is_file($this->path.DS.$savename)){
+			if (is_file($this->path.DS.$savename.DS.'.'.$result['extension'])){
 				$uploader = $file->validate($validate)->move($this->path, $savename, TRUE);
 				if ($uploader){
 					return true;
@@ -67,8 +67,8 @@ class Resource{
 				$data = [
 					'uid' => cookie('user_id'),
 					'group_id' => $groupID,
-					'original_name' => $file->getInfo('name'),
-					'name' => $uploader->getFilename(),
+					'original_name' => strstr($file->getInfo('name'), '.', true),
+					'name' => strstr($uploader->getFilename(), '.', true),
 					'path' => $uploader->getPath(),
 					'url' => '/'.str_replace('\\', '/', $pathName),
  					'extension' => $uploader->getExtension(),
@@ -115,7 +115,7 @@ class Resource{
 			}
 			
 			if (Db::name($this->table)->delete($result['id']) == 1){
-				@unlink($result['path'].DS.$result['name']);
+				@unlink($result['path'].DS.$result['name'].'.'.$result['extension']);
 				return TRUE;
 			}else{
 				$this->error = '资源数据无法删除';
@@ -127,7 +127,7 @@ class Resource{
 				foreach ($result as $v){
 					if (Db::name($this->table)->delete($v['id']) == 1){
 						$this->ids[] = $v['id'];
-						@unlink($v['path'].DS.$v['name']);
+						@unlink($v['path'].DS.$v['name'].'.'.$v['extension']);
 					}else{
 						$this->error = '处理'.$v['original_name'].'时出错，终止执行！';
 						return false;

@@ -4,13 +4,13 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 			var li = [];
 			for (var i = 0; i < data.length; i++) {
 				if ($('#resource-' + data[i].id).length == 0) {
-					li.push('<li class="col-sm-2" id="resource-' + data[i].id + '"><div class="img"><img src="' + data[i].url + '" alt="' + data[i].name + '" /></div></li>');
+					li.push('<li class="col-sm-2" id="resource-' + data[i].id + '" data-type="' + data[i].type + '"><div class="img"><img src="' + data[i].url + '" alt="' + data[i].name + '" /></div></li>');
 				}
 			}
 			if (li.length > 0) {
 				$('#resource-list ul').append(li.join(''));
 				$('#resource-list').show();
-				$('#resource-list li').height($('#resource-list ul').width() * 0.125 - 10);
+				$('#resource-list li').height($('#resource-list ul').width() * 0.166667 - 10);
 				layer.close(resoucerIframe);
 			}
 		}
@@ -220,7 +220,15 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 		});
 
 		$('#resource-list').on('click', 'li', function() {
-			
+			if ($(this).data('type') == 1) {
+				var markdown = '![' + $(this).find('img').attr('alt') + '](' + $(this).find('img').attr('src') + ')';
+			}
+
+			$('#markdown').val($('#markdown').val() + markdown).keyup();
+		});
+
+		$(window).resize(function() {
+			$('#resource-list li').height($('#resource-list ul').width() * 0.166667 - 10);
 		});
 	});
 

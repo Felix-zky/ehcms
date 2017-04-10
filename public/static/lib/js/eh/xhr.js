@@ -535,7 +535,7 @@ define(['jquery', 'laytpl', 'layer', 'eh'], function($, laytpl){
 		}else if (done === xhr.doneState.messageRedirect){
 			if (data.data.redirect_url) {
 				var wait = data.data.redirect_wait || 3;
-				layer.msg(msg + '，' + wait + '秒后自动跳转。 <a id="eh-xhr-redirect-url" href="' + data.data.redirect_url + '">立即跳转</a>', {time: wait * 1000, icon: icon}, function(){
+				layer.msg(msg + '，' + wait + '秒后自动跳转。 <a id="eh-xhr-redirect-url" href="' + data.data.redirect_url + '">立即跳转</a>', {time: wait * 1000, icon: icon, shade: 0.01}, function(){
 					location.href = data.data.redirect_url;
 				});
 			}else{
@@ -543,7 +543,7 @@ define(['jquery', 'laytpl', 'layer', 'eh'], function($, laytpl){
 			}
 		}else if (done === xhr.doneState.messageRefresh) {
 			var wait = data.data.redirect_wait || 3;
-			layer.msg(msg + '，' + wait + '秒后刷新。 <a id="eh-xhr-redirect-url" href="javascript:void(0);" onclick="location.reload();">立即刷新</a>', {time: wait * 1000, icon: icon}, function(){
+			layer.msg(msg + '，' + wait + '秒后刷新。 <a id="eh-xhr-redirect-url" href="javascript:void(0);" onclick="location.reload();">立即刷新</a>', {time: wait * 1000, icon: icon, shade: 0.01}, function(){
 				location.reload();
 			});
 		}

@@ -36,11 +36,11 @@
 			{notempty name="resource"}
 				<ul class="row">
 					{foreach $resource as $v}
-						<li data-id="{$v.id}" data-type="{$v->getData('type')}" data-type-name="{$v.type}" data-name="{$v.original_name}" data-url="{$v.url}" data-ext="{$v.extension}" data-size="{$v.size}" data-width="{$v.width}" data-height="{$v.height}" data-time="{$v.create_time}" class="col-sm-3">
+						<li data-id="{$v.id}" data-type="{$v->getData('type')}" data-type-name="{$v.type}" data-name="{$v.original_name}.{$v.extension}" data-url="{$v.url}" data-ext="{$v.extension}" data-size="{$v.size}" data-width="{$v.width}" data-height="{$v.height}" data-time="{$v.create_time}" {notempty name="iframe"}data-no-extension-name="{$v.original_name}"{/notempty} class="col-sm-3">
 							<div class="img">
-								<img src='{eq name="v->getData('type')" value="1"}{$v.url}{/eq}' alt="{$v.original_name}" />
+								<img src='{eq name="v->getData('type')" value="1"}{$v.url}{/eq}' alt="{$v.original_name}.{$v.extension}" />
 							</div>
-							<p title="{$v.original_name}">{$v.original_name}</p>
+							<p title="{$v.original_name}.{$v.extension}">{$v.original_name}.{$v.extension}</p>
 						</li>
 					{/foreach}
 				</ul>
@@ -377,7 +377,9 @@
 						var li = $(this).parents('li');
 						data.push({
 							id: li.data('id'),
-							url: li.data('url')
+							url: li.data('url'),
+							name: li.data('no-extension-name'),
+							type: li.data('type')
 						});
 					});
 
