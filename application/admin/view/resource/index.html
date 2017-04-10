@@ -370,8 +370,18 @@
 			});
 
 			$('#import-resource').click(function() {
-				if ($.isFunction(parent.importResource)){
-					parent.importResource();
+				if ($.isFunction(parent.importResource) && $('.resource-box').find('.selected').length > 0){
+					var data = [];
+
+					$.each($('.resource-box').find('.selected'), function(){
+						var li = $(this).parents('li');
+						data.push({
+							id: li.data('id'),
+							url: li.data('url')
+						});
+					});
+
+					parent.importResource(data);
 				}
 			});
 		});

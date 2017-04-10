@@ -9701,12 +9701,28 @@ i {
   overflow: hidden;
   display: block;
 }
-#admin-article-create #resource-list li {
-  overflow: hidden;
-  border: 1px solid #e7e7eb;
-  padding: 0;
+#admin-article-create #resource-list {
+  display: none;
 }
-#admin-article-create #resource-list li img {
+#admin-article-create #resource-list ul {
+  width: 100%;
+  display: block;
+  overflow: hidden;
+}
+#admin-article-create #resource-list li {
+  padding: 0 5px;
+  width: 12.5%;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+#admin-article-create #resource-list li .img {
+  position: relative;
+  border: 1px solid #e7e7eb;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+#admin-article-create #resource-list li .img img {
   position: absolute;
   left: 50%;
   top: 50%;

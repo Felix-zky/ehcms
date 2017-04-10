@@ -1,7 +1,22 @@
 define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 'eh.form', 'eh.xhr', 'layer', 'jquery.contextMenu'], function($, WebUploader, Messenger, remarkable, hljs){
-	window.importResource = function(){
-		console.log(WebUploader);
+	window.importResource = function(data){
+		if($.isArray(data) === true){
+			var li = [];
+			for (var i = 0; i < data.length; i++) {
+				if ($('#resource-' + data[i].id).length == 0) {
+					li.push('<li class="col-sm-2" id="resource-' + data[i].id + '"><div class="img"><img src="' + data[i].url + '" alt="' + data[i].name + '" /></div></li>');
+				}
+			}
+			if (li.length > 0) {
+				$('#resource-list ul').append(li.join(''));
+				$('#resource-list').show();
+				$('#resource-list li').height($('#resource-list ul').width() * 0.125 - 10);
+				layer.close(resoucerIframe);
+			}
+		}
 	}
+
+	var resoucerIframe = 0;
 
 	$(function(){
 		var textareaHeight, previewHeight, validate;
@@ -36,7 +51,7 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 			callback: function(itemKey, opt){
 				switch (itemKey){
 					case 'space':
-						layer.open({
+						resoucerIframe = layer.open({
 							type:2,
 							title: false,
 							resize: false,
@@ -202,6 +217,10 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 				$('.logo-uploader button').html('重新上传');
 				$('#thumbnail').val('');
 			}
+		});
+
+		$('#resource-list').on('click', 'li', function() {
+			
 		});
 	});
 
