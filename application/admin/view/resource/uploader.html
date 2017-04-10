@@ -284,9 +284,24 @@
 			});
 
 			$('#uploader ul').on('click', '.delete', function() {
-				var id = $(this).parents('li').attr('id');
+				var li = $(this).parents('li'),
+					id = li.attr('id');
+
 				uploader.stop(id);
-				uploader.removeFile(id, true);
+				if (li.data('resource-id') > 0) {
+					layer.confirm('当前资源已上传，是否删除？', {icon: 3, title:'重要提示'}, function(index){
+						layer.close(index);
+						
+						eh.xhr.deleteCommon('/admin/resource/deleteResource.html', {resourceID: li.data('resource-id')}, {
+							fn: function(response){
+								$('#' + id).remove();
+								uploader.removeFile(id, true);
+							}
+						});
+					});
+				}else{
+					uploader.removeFile(id, true);
+				}
 			});
 
 			$('#uploader ul').on('click', '.start', function() {

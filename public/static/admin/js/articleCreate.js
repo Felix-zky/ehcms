@@ -1,36 +1,6 @@
 define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 'eh.form', 'eh.xhr', 'layer', 'jquery.contextMenu'], function($, WebUploader, Messenger, remarkable, hljs){
-
-	var contentMenuItemsConfigure = {
-			'upload': {
-				icon: 'cloud-upload'
-			},
-			'space': {
-				icon: 'folder-open-o'
-			}
-		},
-		contentMenuSign = {};
-
-	/**
-	 * 生成右键菜单图标以及后边快捷键
-	 */
-	function createMenuIconAndkeyboard(sign, items){
-		$.each(items, function(index) {
-			var current = contentMenuItemsConfigure[index],
-				keyboard = (this.name && current.keyboard) && '<span class="keyboard">' + current.keyboard + '</span>' || '';
-
-			this.name && this.$node.html('<i class="fa fa-' + current.icon + '"></i><span>' + this.name + '</span>' + keyboard);
-		});
-
-		contentMenuSign[sign] = 1;
-	}
-
-	/**
-	 * 检查当前右键菜单是否已生成图标和快捷方式（确保生成单例）
-	 */
-	function checkContentMenuSign(sign){
-		var sign = sign.replace('.','');
-
-		return contentMenuSign[sign] && true || sign;
+	window.importResource = function(){
+		console.log(WebUploader);
 	}
 
 	$(function(){
@@ -59,7 +29,8 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 			selector: '#markdown',
 			items: {
 				space: {
-					name: '资源空间'
+					name: '<i class="fa fa-trash"></i>资源空间',
+					isHtmlName: true
 				}
 			},
 			callback: function(itemKey, opt){
@@ -76,12 +47,6 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 						});
 						break;
 				}	
-			},
-			events: {
-				show: function(options){
-					var sign = checkContentMenuSign(options.ns);
-					sign === true || createMenuIconAndkeyboard(sign, options.items);
-				}
 			}
 		});
 

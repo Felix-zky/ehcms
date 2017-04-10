@@ -6,7 +6,10 @@
 		<button class="btn btn-danger" id="delete-all">删除选中资源</button>
 	</div>
 	<div class="pull-right">
-		{notempty name="iframe"}<button class="btn btn-danger" id="close-iframe">关闭资源空间</button>{/notempty}
+		{notempty name="iframe"}
+			<button class="btn btn-primary" id="import-resource">导入选中资源</button>
+			<button class="btn btn-danger" id="close-iframe">关闭资源空间</button>
+		{/notempty}
 	</div>
 </header>
 <section class="iframe-main">
@@ -364,6 +367,12 @@
 
 					layer.close(index);
 				});
+			});
+
+			$('#import-resource').click(function() {
+				if ($.isFunction(parent.importResource)){
+					parent.importResource();
+				}
 			});
 		});
 

@@ -9701,6 +9701,17 @@ i {
   overflow: hidden;
   display: block;
 }
+#admin-article-create #resource-list li {
+  overflow: hidden;
+  border: 1px solid #e7e7eb;
+  padding: 0;
+}
+#admin-article-create #resource-list li img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
 #admin-resource-index #cancel-all,
 #admin-resource-index #delete-all {
   display: none;
