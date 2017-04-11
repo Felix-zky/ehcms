@@ -109,7 +109,8 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 		 */
 		var md = new remarkable('full', {
 			linkify: true,
-			linkTarget: 'blank',
+			html: true,
+			xhtmlOut: true,
 			highlight: function (str, lang) {
 				if (lang && hljs.getLanguage(lang)) {
 					try {
