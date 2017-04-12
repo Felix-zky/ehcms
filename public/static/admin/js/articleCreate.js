@@ -1,4 +1,4 @@
-define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 'eh.form', 'eh.xhr', 'layer', 'jquery.contextMenu'], function($, WebUploader, Messenger, remarkable, hljs){
+define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 'codemirror-markdown', 'eh.form', 'eh.xhr', 'layer', 'jquery.contextMenu'], function($, WebUploader, Messenger, remarkable, hljs){
 	window.importResource = function(data){
 		if($.isArray(data) === true){
 			var li = [];
@@ -19,6 +19,8 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 	var resoucerIframe = 0;
 
 	$(function(){
+		//console.log(CodeMirror);
+
 		var textareaHeight, previewHeight, validate;
 
 		eh.htmlPreviewHeight();
@@ -133,6 +135,15 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 			$('#html-preview .html-content').html(md.render(format($(this).val())));
 			textareaHeight = this.scrollHeight,
 			previewHeight = $('#html-preview .html-content').innerHeight();
+		});
+
+		/**
+		 * 键盘按下Tab时不要跳出，禁止掉默认功能。
+		 */
+		$('#markdown').keydown(function(e) {
+			if (e.keyCode == 9) {
+				e.preventDefault();
+			}
 		});
 
 		/**

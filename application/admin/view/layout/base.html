@@ -8,8 +8,9 @@
 		<link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/messenger/1.5.0/css/messenger.min.css" />
 		<link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/messenger/1.5.0/css/messenger-theme-future.min.css" />
 		<link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/webuploader/0.1.1/webuploader.css" />
-		<link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/highlight.js/9.6.0/styles/monokai-sublime.min.css" />
+		<link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/highlight.js/9.6.0/styles/tomorrow.min.css" />
 		<link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/animate.css/3.5.2/animate.min.css" />
+		<link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/codemirror/5.25.0/codemirror.min.css">
 	{/block}
 	<script type="text/javascript" src="http://cdn.bootcss.com/require.js/2.2.0/require.min.js" charset="utf-8"></script>
 	<script type="text/javascript">
@@ -39,7 +40,7 @@
 				],
 				/** 弹窗 */
 				'layer.min': [
-					//'http://cdn.bootcss.com/layer/3.0.1/layer.min',
+					'http://cdn.bootcss.com/layer/3.0.1/layer.min',
 					'layer/layer.min'
 				],
 				/** 函数库 */
@@ -85,9 +86,24 @@
 				'validate.zh': [
 					'validate/validate.zh'
 				],
+				/** 复制、粘贴、剪切 */
 				'clipboard': [
 					'http://cdn.bootcss.com/clipboard.js/1.6.1/clipboard.min',
 					'clipboard.min'
+				],
+				/** codemirror的markdown代码高亮 */
+				'codemirror-markdown': [
+					'http://cdn.bootcss.com/codemirror/5.25.0/mode/markdown/markdown.min'
+				],
+				/** 个性化编辑器（选中部分处理，加粗、斜体等） */
+				'../../lib/codemirror': [
+					'http://cdn.bootcss.com/codemirror/5.25.0/codemirror.min'
+				],
+				'../xml/xml': [
+					'http://cdn.bootcss.com/codemirror/5.25.0/mode/xml/xml.min'
+				],
+				'../meta': [
+					'http://cdn.bootcss.com/codemirror/5.25.0/mode/meta.min'
 				]
 			},
 			shim: {
