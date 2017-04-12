@@ -1,4 +1,6 @@
 define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 'codemirror-markdown', 'eh.form', 'eh.xhr', 'layer', 'jquery.contextMenu'], function($, WebUploader, Messenger, remarkable, hljs){
+	var CodeMirror = require('../../lib/codemirror');
+
 	window.importResource = function(data){
 		if($.isArray(data) === true){
 			var li = [];
@@ -19,8 +21,6 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 	var resoucerIframe = 0;
 
 	$(function(){
-		//console.log(CodeMirror);
-
 		var textareaHeight, previewHeight, validate;
 
 		eh.htmlPreviewHeight();
