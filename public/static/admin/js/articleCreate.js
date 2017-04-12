@@ -23,7 +23,13 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 	$(function(){
 		var textareaHeight, previewHeight, validate;
 
-		eh.htmlPreviewHeight();
+		//eh.htmlPreviewHeight();
+
+		var markdownEditor = CodeMirror.fromTextArea(document.querySelector('#markdown'), {
+			mode: 'markdown'
+		});
+
+		//markdownEditor.setSize('100%', '100%');
 
 		/**
 		 * 设置表单验证参数
@@ -131,7 +137,7 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 		/**
 		 * 键盘按钮抬起立即解析markdown标记并生成新的预览内容
 		 */
-		$('#markdown').keyup(function(){
+		$('#markdown').change(function(){
 			$('#html-preview .html-content').html(md.render(format($(this).val())));
 			textareaHeight = this.scrollHeight,
 			previewHeight = $('#html-preview .html-content').innerHeight();

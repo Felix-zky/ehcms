@@ -44,44 +44,51 @@
 		<div class="form-group">
 			<label for="markdown" class="col-sm-1 control-label">文章内容<span class="red">*</span>：</label>
 			<div class="col-sm-10">
-				<div class="button">
-					<ul>
-						<li>h1</li>
-						<li>h2</li>
-						<li>h3</li>
-						<li>h4</li>
+				<div id="markdown-button">
+					<ul class="pull-left">
+						<li data-key="h1">h1</li>
+						<li data-key="h2">h2</li>
+						<li data-key="h3">h3</li>
+						<li data-key="h4">h4</li>
 					</ul>
-					<ul>
-						<li><i class="fa fa-bold"></i></li>
-						<li><i class="fa fa-italic"></i></li>
+					<ul class="pull-left">
+						<li data-key="bold"><i class="fa fa-bold"></i></li>
+						<li data-key="italic"><i class="fa fa-italic"></i></li>
 					</ul>
-					<ul>
-						<li><i class="fa fa-list-ul"></i></li>
-						<li><i class="fa fa-list-ol"></i></li>
+					<ul class="pull-left">
+						<li data-key="list-ul"><i class="fa fa-list-ul"></i></li>
+						<li data-key="list-ol"><i class="fa fa-list-ol"></i></li>
 					</ul>
-					<ul>
-						<li><i class="fa fa-link"></i></li>
-						<li><i class="fa fa-picture-o"></i></li>
-						<li><i class="fa fa-code"></i></li>
-						<li><i class="fa fa-minus"></i></li>
-						<li><i class="fa fa-quote-right"></i></li>
-						<li><i class="fa fa-table"></i></li>
+					<ul class="pull-left">
+						<li data-key="link"><i class="fa fa-link"></i></li>
+						<li data-key="picture"><i class="fa fa-picture-o"></i></li>
+						<li data-key="code"><i class="fa fa-code"></i></li>
+						<li data-key="space"><i class="fa fa-minus"></i></li>
+						<li data-key="quote"><i class="fa fa-quote-right"></i></li>
+						<li data-key="table"><i class="fa fa-table"></i></li>
+					</ul>
+					<ul class="pull-right editor-button-background">
+						<li><i class="screen"></i></li>
+						<li><i class="code-mode"></i></li>
+						<li><i class="column-mode"></i></li>
+						<li><i class="preview-mode"></i></li>
 					</ul>
 				</div>
-				<div class="form-markdown-left validate-style">
-					<p>MarkDown</p>
-					<textarea class="form-control" name="markdown" id="markdown" rows="15"></textarea>
-				</div>
-				<div class="form-markdown-right">
-					<p>HTML实时预览</p>
-					<p class="form-control" id="html-preview">
-						<span class="html-content"></span>
-					</p>
+				<div id="editor">
+					<div class="form-markdown-left validate-style">
+						<textarea name="markdown" id="markdown"></textarea>
+					</div>
+					<div class="form-markdown-right">
+						<p id="html-preview">
+							<span class="html-content"></span>
+						</p>
+					</div>
 				</div>
 			</div>
 		</div>
 	</form>
 </section>
+{css href="http://cdn.bootcss.com/codemirror/5.25.0/codemirror.min.css"}
 <script type="text/javascript">
 	require(['js/articleCreate']);
 </script>
