@@ -9738,7 +9738,7 @@ i {
 #admin-article-create #markdown-button ul li i {
   margin: 0;
 }
-#admin-article-create #markdown-button ul li:last-child {
+#admin-article-create #markdown-button ul li.last {
   border: none;
 }
 #admin-article-create #markdown-button ul.editor-button-background li i {
@@ -9771,25 +9771,32 @@ i {
   border: 1px solid #ccc;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
+  overflow: hidden;
 }
 #admin-article-create #editor .form-markdown-left {
   position: absolute;
   left: 0;
   top: 0;
-  padding: 5px;
+  height: 100%;
 }
 #admin-article-create #editor .form-markdown-left .form-control-feedback {
   right: 0 !important;
   top: 33px;
 }
-#admin-article-create #editor .form-markdown-left #markdown {
-  display: none;
+#admin-article-create #editor .form-markdown-left .CodeMirror pre {
+  line-height: 22px;
+}
+#admin-article-create #editor .form-markdown-left .CodeMirror-code {
+  height: 400px;
+  font-family: "微软雅黑", "宋体";
 }
 #admin-article-create #editor .form-markdown-right {
   position: absolute;
   right: 0;
   top: 0;
   border-left: 1px solid #ccc;
+  height: 100%;
+  overflow: hidden;
 }
 #admin-article-create #editor .form-markdown-right #html-preview {
   height: 400px;

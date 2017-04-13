@@ -147,7 +147,7 @@
 				i{
 					margin: 0;
 				}
-				&:last-child{
+				&.last{
 					border: none;
 				}
 			}
@@ -187,17 +187,22 @@
 		border: 1px solid #ccc;
 		border-bottom-left-radius: 5px;
 		border-bottom-right-radius: 5px;
+		overflow: hidden;
 		.form-markdown-left{
 			position: absolute;
 			left: 0;
 			top: 0;
-			padding: 5px;
+			height: 100%;
 			.form-control-feedback{
 				right: 0 !important;
 				top: 33px;
 			}
-			#markdown{
-				display: none;
+			.CodeMirror pre{
+				line-height: 22px;
+			}
+			.CodeMirror-code{
+				height: 400px;
+				font-family: "微软雅黑", "宋体";
 			}
 		}
 		.form-markdown-right{
@@ -205,6 +210,8 @@
 			right: 0;
 			top: 0;
 			border-left: 1px solid #ccc;
+			height: 100%;
+			overflow: hidden;
 			#html-preview{
 				height: 400px;
 				width: 100%;

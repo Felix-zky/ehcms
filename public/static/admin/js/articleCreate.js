@@ -1,4 +1,4 @@
-define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 'codemirror-markdown', 'eh.form', 'eh.xhr', 'layer', 'jquery.contextMenu'], function($, WebUploader, Messenger, remarkable, hljs){
+define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 'codemirror-gfm', 'eh.form', 'eh.xhr', 'layer', 'jquery.contextMenu', 'bootstrap'], function($, WebUploader, Messenger, remarkable, hljs){
 	var CodeMirror = require('../../lib/codemirror');
 
 	window.importResource = function(data){
@@ -25,11 +25,24 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 
 		//eh.htmlPreviewHeight();
 
+		$('[data-toggle="tooltip"]').tooltip();
+
 		var markdownEditor = CodeMirror.fromTextArea(document.querySelector('#markdown'), {
-			mode: 'markdown'
+			mode: 'gfm',
+			lineWrapping: 'wrap'
 		});
 
-		//markdownEditor.setSize('100%', '100%');
+		markdownEditor.setSize('100%', '100%');
+
+		markdownEditor.on('change', function(cm){
+			$('#markdown').val(cm.getValue()).change();
+		});
+
+		markdownEditor.setOption("extraKeys", {
+			"Ctrl-B": function (cm) {
+				cm.replaceSelection('123');
+			}
+		});
 
 		/**
 		 * 设置表单验证参数
@@ -139,31 +152,32 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 		 */
 		$('#markdown').change(function(){
 			$('#html-preview .html-content').html(md.render(format($(this).val())));
-			textareaHeight = this.scrollHeight,
-			previewHeight = $('#html-preview .html-content').innerHeight();
 		});
 
 		/**
 		 * 键盘按下Tab时不要跳出，禁止掉默认功能。
 		 */
-		$('#markdown').keydown(function(e) {
-			if (e.keyCode == 9) {
-				e.preventDefault();
-			}
-		});
+		// $('#markdown').keydown(function(e) {
+		// 	if (e.keyCode == 9) {
+		// 		e.preventDefault();
+		// 	}
+		// });
 
 		/**
 		 * markdown滚动，预览内容跟随滚动，由于预览内容存在样式，一般情况下会比markdown页面要长，所有判断当前滚轮位置在markdown输入框的百分比，
 		 * 预览内容同样滚动到该比例位置，基本可以保证一致性。
 		 */
-		$('#markdown').scroll(function() {
-			if (previewHeight > 0 && textareaHeight > 0) {
-				if ($(this).scrollTop() + $(this).innerHeight() == textareaHeight) {
-					$('#html-preview').scrollTop(previewHeight - $(this).outerHeight());
-				}else{
-					$('#html-preview').scrollTop($(this).scrollTop() * (previewHeight/textareaHeight));
-				}
-			}
+		$('.CodeMirror-vscrollbar').scroll(function() {
+			textareaHeight = $(this).find('div').innerHeight();
+			previewHeight = $('#html-preview .html-content').innerHeight();
+
+			$('#html-preview').scrollTop($(this).scrollTop() * (previewHeight/textareaHeight));
+
+			// if ($(this).scrollTop() + $(this).innerHeight() == textareaHeight) {
+			// 	$('#html-preview').scrollTop(previewHeight - $(this).outerHeight());
+			// }else{
+			// 	$('#html-preview').scrollTop($(this).scrollTop() * (previewHeight/textareaHeight));
+			// }
 		});
 
 		/**
