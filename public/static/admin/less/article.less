@@ -147,7 +147,7 @@
 			}
 			li{
 				display: inline-block;
-				border-right: 1px solid #ccc;
+				border-left: 1px solid #ccc;
 				width: 35px;
 				height: 35px;
 				font-size: 14px;
@@ -157,7 +157,7 @@
 				i{
 					margin: 0;
 				}
-				&.last{
+				&:first-child{
 					border: none;
 				}
 			}
@@ -228,11 +228,15 @@
 			#html-preview{
 				height: 400px;
 				width: 100%;
-				padding: 5px;
 			}
 		}
 		.form-markdown-left, .form-markdown-right{
 			width: 50%;
+			background-color: #FFF;
+			transition: width 1.5s;
+			-moz-transition: width 1.5s;
+			-webkit-transition: width 1.5s;
+			-o-transition: width 1.5s;
 		}
 	}
 }

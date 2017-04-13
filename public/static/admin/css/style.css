@@ -9737,7 +9737,7 @@ i {
 }
 #admin-article-create #markdown-button ul li {
   display: inline-block;
-  border-right: 1px solid #ccc;
+  border-left: 1px solid #ccc;
   width: 35px;
   height: 35px;
   font-size: 14px;
@@ -9748,7 +9748,7 @@ i {
 #admin-article-create #markdown-button ul li i {
   margin: 0;
 }
-#admin-article-create #markdown-button ul li.last {
+#admin-article-create #markdown-button ul li:first-child {
   border: none;
 }
 #admin-article-create #markdown-button ul.editor-button-background li i {
@@ -9814,11 +9814,15 @@ i {
 #admin-article-create #editor .form-markdown-right #html-preview {
   height: 400px;
   width: 100%;
-  padding: 5px;
 }
 #admin-article-create #editor .form-markdown-left,
 #admin-article-create #editor .form-markdown-right {
   width: 50%;
+  background-color: #FFF;
+  transition: width 1.5s;
+  -moz-transition: width 1.5s;
+  -webkit-transition: width 1.5s;
+  -o-transition: width 1.5s;
 }
 #admin-resource-index #cancel-all,
 #admin-resource-index #delete-all {

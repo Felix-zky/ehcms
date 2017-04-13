@@ -19,6 +19,7 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 	}
 
 	var resoucerIframe = 0;
+	var transitionEnd = 'transitionend webkitTransitionEnd oTransitionEnd otransitionend MSTransitionEnd';
 
 	$(function(){
 		var textareaHeight, previewHeight, validate;
@@ -130,6 +131,20 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 				"exec": function (cm) {
 					insert.call(cm, "\n* * * * *\n", "", false);
 				}
+			},
+			'resource': {
+				"bindKey": {'win': "Ctrl-R", 'mac': 'Cmd-R'},
+				"exec": function (cm) {
+					resoucerIframe = layer.open({
+						type:2,
+						title: false,
+						resize: false,
+						move: false,
+						area: ['100%', '100%'],
+						closeBtn: false,
+						content: '/admin/resource/index/iframe/1.html'
+					});
+				}
 			}
 		};
 
@@ -146,29 +161,68 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 				editorButton[key].exec(markdownEditor);
 			}else{
 				switch (key){
+					case 'toc':
+						insert.call(markdownEditor, '[TOC]');
+					break;
 					case 'screen':
-					var layero = parent.$('#layui-layer' + parent.$('#taskbar .list li.active').data('index'));
-					if (layero.find('.layui-layer-maxmin').length == 0) {
-						parent.$('#layui-layer' + parent.$('#taskbar .list li.active').data('index')).find('.layui-layer-max').click();
-						setTimeout(function(){
-							console.log($(window).height());
+						var layero = parent.$('#layui-layer' + parent.$('#taskbar .list li.active').data('index'));
+						if (layero.find('.layui-layer-maxmin').length == 0) {
+							parent.$('#layui-layer' + parent.$('#taskbar .list li.active').data('index')).find('.layui-layer-max').click();
+							setTimeout(function(){
+								console.log($(window).height());
+								$('#editor, .CodeMirror-code').height($(window).height()-50);
+							}, 300);
+						}else{
 							$('#editor, .CodeMirror-code').height($(window).height()-50);
-						}, 300);
-					}else{
-						$('#editor, .CodeMirror-code').height($(window).height()-50);
-					}
-					$(this).data('key', 'restore').find('i').removeClass('screen').addClass('restore');
-					$('#editor-box').removeClass('col-sm-10').addClass('editor-box-screen');
+						}
+						$(this).data('key', 'restore').find('i').removeClass('screen').addClass('restore');
+						$('#editor-box').removeClass('col-sm-10').addClass('editor-box-screen');
 					break;
 					case 'restore':
-					$('#editor-box').removeClass('editor-box-screen').addClass('col-sm-10');
-					$(this).data('key', 'screen').find('i').removeClass('restore').addClass('screen');
-					$('#editor, .CodeMirror-code').height(400);
+						$('#editor-box').removeClass('editor-box-screen').addClass('col-sm-10');
+						$(this).data('key', 'screen').find('i').removeClass('restore').addClass('screen');
+						$('#editor, .CodeMirror-code').height(400);
+					break;
 					case 'code-mode':
+						$('.form-markdown-left').css({
+							width: '100%',
+							'z-index': 3,
+							'border-right': '1px solid #ccc'
+						});
+						$('.form-markdown-right').css({
+							width: 0
+						});
+						$('.form-markdown-left').one(transitionEnd, function() {
+							$('.form-markdown-left').css({
+								'border': 'none'
+							});
+						});
 					break;
 					case 'column-mode':
+						$('.form-markdown-left, .form-markdown-right').css({
+							width: '50%',
+							position: 'absolute'
+						});
+						$('.form-markdown-right').css({
+							'border-left': '1px solid #ccc'
+						});
+						$('.form-markdown-left, .form-markdown-right').one(transitionEnd, function() {
+							$('.form-markdown-left, .form-markdown-right').css({
+								'z-index': 1
+							});
+							$('.form-markdown-left, .form-markdown-right').off(transitionEnd);
+						});
 					break;
 					case 'preview-mode':
+						$('.form-markdown-right').css({
+							width: '100%',
+							'z-index': 3
+						});
+						$('.form-markdown-right').one(transitionEnd, function() {
+							$('.form-markdown-right').css({
+								'border': 'none'
+							});
+						});
 					break;
 					default:
 					layer.msg('暂不支持该按钮');
@@ -193,30 +247,30 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 		/**
 		 * 右键事件
 		 */
-		$.contextMenu({
-			selector: '#markdown',
-			items: {
-				space: {
-					name: '<i class="fa fa-trash"></i>资源空间',
-					isHtmlName: true
-				}
-			},
-			callback: function(itemKey, opt){
-				switch (itemKey){
-					case 'space':
-						resoucerIframe = layer.open({
-							type:2,
-							title: false,
-							resize: false,
-							move: false,
-							area: ['100%', '100%'],
-							closeBtn: false,
-							content: '/admin/resource/index/iframe/1.html'
-						});
-						break;
-				}	
-			}
-		});
+		// $.contextMenu({
+		// 	selector: '#markdown',
+		// 	items: {
+		// 		space: {
+		// 			name: '<i class="fa fa-trash"></i>资源空间',
+		// 			isHtmlName: true
+		// 		}
+		// 	},
+		// 	callback: function(itemKey, opt){
+		// 		switch (itemKey){
+		// 			case 'space':
+		// 				resoucerIframe = layer.open({
+		// 					type:2,
+		// 					title: false,
+		// 					resize: false,
+		// 					move: false,
+		// 					area: ['100%', '100%'],
+		// 					closeBtn: false,
+		// 					content: '/admin/resource/index/iframe/1.html'
+		// 				});
+		// 				break;
+		// 		}	
+		// 	}
+		// });
 
 		/**
 		 * 清空表单按钮点击事件绑定
