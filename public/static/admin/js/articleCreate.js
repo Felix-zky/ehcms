@@ -38,9 +38,141 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 			$('#markdown').val(cm.getValue()).change();
 		});
 
-		markdownEditor.setOption("extraKeys", {
-			"Ctrl-B": function (cm) {
-				cm.replaceSelection('123');
+		var editorButton = {
+			"h1": {
+				"bindKey": {'win': "Ctrl-1", 'mac': "Cmd-1"},
+				"exec": function (cm) {
+					insert.call(cm, "# ", "", false);
+				}
+			},
+			"h2": {
+				"bindKey": {'win': "Ctrl-2", 'mac': "Cmd-2"},
+				"exec": function (cm) {
+					insert.call(cm, "## ", "", false);
+				}
+			},
+			"h3": {
+				"bindKey": {'win': "Ctrl-3", 'mac': 'Cmd-3'},
+				"exec": function (cm) {
+					insert.call(cm, "### ", "", false);
+				}
+			},
+			"h4": {
+				"bindKey": {'win': "Ctrl-4", 'mac': 'Cmd-4'},
+				"exec": function (cm) {
+					insert.call(cm, "#### ", "", false);
+				}
+			},
+			"h5": {
+				"bindKey": {'win': "Ctrl-5", 'mac': 'Cmd-5'},
+				"exec": function (cm) {
+					insert.call(cm, "##### ", "", false);
+				}
+			},
+			"h6": {
+				"bindKey": {'win': "Ctrl-6", 'mac': 'Cmd-6'},
+				"exec": function (cm) {
+					insert.call(cm, "###### ", "", false);
+				}
+			},
+			"bold": {
+				"bindKey": {'win': "Ctrl-B", 'mac': 'Cmd-B'},
+				"exec": function (cm) {
+					insert.call(cm, "**", "**", false);
+				}
+			},
+			"italic": {
+				"bindKey": {'win': "Ctrl-I", 'mac': 'Cmd-I'},
+				"exec": function (cm) {
+					insert.call(cm, "*", "*", false);
+				}
+			},
+			"code": {
+				"bindKey": {'win': "Ctrl-D", 'mac': 'Cmd-D'},
+				"exec": function (cm) {
+					var text = cm.getSelection(), cursor = cm.getCursor();
+
+					if (text.length) {
+						if (text.split("\n").length > 1) {
+							insert.call(cm, "```\n", "\n```", false);
+						} else {
+							insert.call(cm, "`", "`", false);
+						}
+					} else {
+						if (cursor.ch == 0) {
+							insert.call(cm, "```\n", "\n```", true);
+						} else {
+							insert.call(cm, "`", "`", true);
+						}
+					}
+				}
+			},
+			"ul": {
+				"bindKey": {'win': "Ctrl-U", 'mac': 'Cmd-U'},
+				"exec": function (cm) {
+					insert.call(cm, "* ", "", true);
+				}
+			},
+			"ol": {
+				"bindKey": {'win': "Ctrl-O", 'mac': "Cmd-O"},
+				"exec": function (cm) {
+					insert.call(cm, "{$line}. ", "", true);
+				}
+			},
+			"blockquote": {
+				"bindKey": {'win': "Ctrl-Q", 'mac': 'Cmd-Q'},
+				"exec": function (cm) {
+					insert.call(cm, "> ", "", true);
+				}
+			},
+			"hr": {
+				"bindKey": {'win': "Ctrl-H", 'mac': 'Cmd-H'},
+				"exec": function (cm) {
+					insert.call(cm, "\n* * * * *\n", "", false);
+				}
+			}
+		};
+
+		var extraKeys = {};
+		for (var i in editorButton) {
+			extraKeys[editorButton[i].bindKey.win] = editorButton[i].exec;
+		}
+
+		markdownEditor.setOption("extraKeys", extraKeys);
+
+		$('#markdown-button li').click(function(){
+			var key = $(this).data('key');
+			if (editorButton[key]) {
+				editorButton[key].exec(markdownEditor);
+			}else{
+				switch (key){
+					case 'screen':
+					var layero = parent.$('#layui-layer' + parent.$('#taskbar .list li.active').data('index'));
+					if (layero.find('.layui-layer-maxmin').length == 0) {
+						parent.$('#layui-layer' + parent.$('#taskbar .list li.active').data('index')).find('.layui-layer-max').click();
+						setTimeout(function(){
+							console.log($(window).height());
+							$('#editor, .CodeMirror-code').height($(window).height()-50);
+						}, 300);
+					}else{
+						$('#editor, .CodeMirror-code').height($(window).height()-50);
+					}
+					$(this).data('key', 'restore').find('i').removeClass('screen').addClass('restore');
+					$('#editor-box').removeClass('col-sm-10').addClass('editor-box-screen');
+					break;
+					case 'restore':
+					$('#editor-box').removeClass('editor-box-screen').addClass('col-sm-10');
+					$(this).data('key', 'screen').find('i').removeClass('restore').addClass('screen');
+					$('#editor, .CodeMirror-code').height(400);
+					case 'code-mode':
+					break;
+					case 'column-mode':
+					break;
+					case 'preview-mode':
+					break;
+					default:
+					layer.msg('暂不支持该按钮');
+				}
 			}
 		});
 
@@ -260,7 +392,12 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 		});
 
 		$(window).resize(function() {
-			$('#resource-list li').height($('#resource-list ul').width() * 0.166667 - 10);
+			if ($('#resource-list li').length > 0) {
+				$('#resource-list li').height($('#resource-list ul').width() * 0.166667 - 10);
+			}
+
+
+			$('.editor-box-screen #editor, .editor-box-screen .CodeMirror-code').height($(window).height()-50);
 		});
 	});
 
@@ -350,4 +487,60 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 		}
 		return str.replace(toc, resultStr);
 	}
+
+	function insert(text) {
+		var selection = this.getSelection(),
+		cursor = this.getCursor(),
+		cursorCoords = this.cursorCoords(true, 'local'),
+		scrollInfo = this.getScrollInfo(),
+		start, end, _start, line = 0,
+		length;
+		this.focus();
+
+		if (!(cursorCoords.top > scrollInfo.top && cursorCoords < scrollInfo.top + scrollInfo.clientHeight)) {
+			this.scrollIntoView({line: cursor.line, ch: 0});
+		}
+
+        if (arguments.length > 1) { //首尾添加文本
+        	start = arguments[0];
+        	end = arguments[1];
+
+            if (arguments[2]) { //按行添加
+
+
+            	/* 插入数据 */
+            	if (selection) {
+            		selection = selection.split("\n");
+            		length = selection.length;
+
+            		/* 逐行添加 */
+            		for (var i in selection) {
+            			if (!length || $.trim(selection[i])) {
+            				_start = start.replace("{$line}", ++line)
+            				.replace("{$i}", i);
+            				selection[i] = _start + selection[i] + end;
+            			}
+            		}
+
+            		this.replaceSelection(selection.join("\n"), 'around');
+            	} else {
+
+            		_start = start.replace("{$line}", 1)
+            		.replace("{$i}", 0);
+
+            		this.replaceSelection(_start + end);
+            	}
+
+            } else {
+            	if (selection) {
+            		this.replaceSelection(start + selection + end, 'around');
+            	} else {
+            		this.replaceSelection(start, 'end');
+            		this.replaceSelection(end, 'start');
+            	}
+            }
+        } else { //插入文本
+        	this.replaceSelection(text);
+        }
+    }
 });

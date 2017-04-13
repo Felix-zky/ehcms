@@ -95,6 +95,16 @@
 			display: block;
 		}
 	}
+	#editor-box.editor-box-screen{
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		padding: 0 5px;
+		background-color: #FFF;
+		z-index: 2;
+	}
 	#resource-list{
 		display: none;
 		ul{
@@ -165,6 +175,9 @@
 						display: block;
 						&.screen{
 							background-position: -3px center;
+						}
+						&.restore{
+							background-position: -43px center;
 						}
 						&.code-mode{
 							background-position: -83px center;

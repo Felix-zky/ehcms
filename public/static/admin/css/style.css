@@ -9680,6 +9680,16 @@ i {
   overflow: hidden;
   display: block;
 }
+#admin-article-create #editor-box.editor-box-screen {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  padding: 0 5px;
+  background-color: #FFF;
+  z-index: 2;
+}
 #admin-article-create #resource-list {
   display: none;
 }
@@ -9754,6 +9764,9 @@ i {
 }
 #admin-article-create #markdown-button ul.editor-button-background li i.screen {
   background-position: -3px center;
+}
+#admin-article-create #markdown-button ul.editor-button-background li i.restore {
+  background-position: -43px center;
 }
 #admin-article-create #markdown-button ul.editor-button-background li i.code-mode {
   background-position: -83px center;
