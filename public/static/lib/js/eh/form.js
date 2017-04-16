@@ -191,6 +191,10 @@ define(['jquery', 'validate.zh', 'eh', 'layer'], function(){
 				return {
 					errorElement: "em",
 					errorPlacement: function ( error, element ) {
+						if (element.hasClass('ignore-prompt')) {
+							return false;
+						}
+
 						// 添加`help-block`类到错误的元素上
 						error.addClass( "help-block" );
 
@@ -218,6 +222,10 @@ define(['jquery', 'validate.zh', 'eh', 'layer'], function(){
 						}
 					},
 					success: function ( label, element ) {
+						if ($(element).hasClass('ignore-prompt')) {
+							return false;
+						}
+
 						if ($( element ).is(':radio') || $( element ).is(':checkbox')) {
 							if ($(element).parents('.validate-box')[0]) {
 								if (!$(element).parents('.validate-box').children("span")[0]) {
@@ -237,6 +245,10 @@ define(['jquery', 'validate.zh', 'eh', 'layer'], function(){
 						label.removeClass('help-block');
 					},
 					highlight: function ( element ) {
+						if ($(element).hasClass('ignore-prompt')) {
+							return false;
+						}
+
 						if ($(element).parents('.validate-style')[0]) {
 							$(element).parents('.validate-style').addClass( "has-error" ).removeClass( "has-success" );
 							var parents = $(element).parents('.form-group');
@@ -261,6 +273,10 @@ define(['jquery', 'validate.zh', 'eh', 'layer'], function(){
 						}
 					},
 					unhighlight: function ( element ) {
+						if ($(element).hasClass('ignore-prompt')) {
+							return false;
+						}
+
 						if ($(element).parents('.validate-style')[0]) {
 							$(element).parents('.validate-style').addClass( "has-success" ).removeClass( "has-error" );
 							var parents = $(element).parents('.form-group');

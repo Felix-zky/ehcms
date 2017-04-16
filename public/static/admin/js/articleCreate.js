@@ -282,6 +282,7 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 
 			validate.resetForm();
 			eh.form.validateHighlightRemove();
+			markdownEditor.setValue('');
 		});
 
 		/**
@@ -290,7 +291,6 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 		$('#header-button-submit-form').click(function(){
 			if (validate.form()){
 				option = {
-					except: ['keywords'],
 					extend : [
 						{
 							'name': 'content',
@@ -298,14 +298,7 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 						}
 					]
 				};
-				//console.log(eh.form.extractData(option));
-				var done = {
-					fail: function(data){
-						//$('.iframe-main').prepend(data.title);
-						console.log(data);
-					}
-				}
-				eh.xhr.post('/article/index', eh.form.extractData(option), '', done);
+				eh.xhr.messageRedirect('/article/index', eh.form.extractData(option), {submitType: 'create'});
 			}else{
 				eh.form.validateError(validate.errorMap);
 			}
