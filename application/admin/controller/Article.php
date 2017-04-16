@@ -10,6 +10,7 @@
 // +----------------------------------------------------------------------
 
 namespace app\admin\controller;
+
 /**
  * 文章模块后台控制器
  */
@@ -55,7 +56,8 @@ class Article extends Init{
 	 */
 	public function save(){
 		if (request()->isPost()){
-			
+			print_r(input('param.'));
+			$this->errorResult();
 		}else{
 			$this->errorResult('E-03002');
 		}
@@ -80,5 +82,25 @@ class Article extends Init{
 	 */
 	public function recycle(){
 	
+	}
+	
+	/**
+	 * 文章资源上传，缩略图和正文资源暂一起上传，后期将缩略图分离出来做判断。
+	 */
+	public function resource(){
+		$file = request()->file('file');
+		
+		if (is_object($file)){
+			$resource = new \eh\Resource();
+			$result = $resource->uploader($file, (int)input('groupID'));
+			
+			if ($result > 0){
+				$this->successResult('上传成功', ['url' => $resource->getData('url')]);
+			}else{
+				$this->errorResult($resource->getError());
+			}
+		}else{
+			$this->errorResult('获取上传文件失败');
+		}
 	}
 }

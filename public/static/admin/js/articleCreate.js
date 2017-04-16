@@ -120,6 +120,12 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 					insert.call(cm, "{$line}. ", "", true);
 				}
 			},
+			"image": {
+				"bindKey": {'win': "Ctrl-G", 'mac': "Cmd-G"},
+				"exec": function (cm) {
+					//$('.resource-uploader').trigger();
+				}
+			},
 			"blockquote": {
 				"bindKey": {'win': "Ctrl-Q", 'mac': 'Cmd-Q'},
 				"exec": function (cm) {
@@ -298,7 +304,7 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 						}
 					]
 				};
-				eh.xhr.messageRedirect('/article/index', eh.form.extractData(option), {submitType: 'create'});
+				eh.xhr.messageRedirect('/admin/article.html', eh.form.extractData(option), {submitType: 'create'});
 			}else{
 				eh.form.validateError(validate.errorMap);
 			}
@@ -370,9 +376,29 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 		/**
 		 * 实例化资源上传组件并配置参数
 		 */
+		var resourceUploader = new WebUploader.Uploader({
+			swf: '/static/lib/js/webuploader/Uploader.swf',
+			server: '/admin/article/resource.html',
+			pick: '.resource-uploader',
+			accept: {
+				title: 'Images',
+				extensions: 'gif,jpg,jpeg,bmp,png',
+				mimeTypes: 'image/*'
+			},
+			formData: {
+				_ajax: 1
+			},
+			fileNumLimit: 1,
+			auto: true,
+			compress: false
+		});
+
+		/**
+		 * 实例化资源上传组件并配置参数
+		 */
 		var uploader = new WebUploader.Uploader({
 			swf: '/static/lib/js/webuploader/Uploader.swf',
-			server: '/resource/Uploader/receiver',
+			server: '/admin/article/resource.html',
 			pick: '.logo-uploader',
 			accept: {
 				title: 'Images',
@@ -418,7 +444,8 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 					showCloseButton: true
 				});
 				$('.logo-uploader button').html('<i class="fa fa-check"></i> 上传成功');
-				$('#thumbnail').val(file.name + '（' + response.data.file_name + '）');
+				$('#thumbnail').val(file.name);
+				$('#thumbnailUrl').val(response.data.url);
 			}else{
 				Messenger().post({
 					message: '图片：' + file.name + ' 上传失败！',

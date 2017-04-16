@@ -1,6 +1,11 @@
 <?php
 use think\Route;
 
-// 应用公共文件
-Route::post('admin/Member/list' ,'admin/Member/getMemberList');
+//注册后台普通路由
+Route::rule('admin/article/resource', 'admin/Article/resource');
+Route::post('admin/Member/list', 'admin/Member/getMemberList');
 Route::rule('admin/Resource/uploader/[:parentGroupID]/[:childrenGroupID]', 'admin/Resource/uploader', '*', [], ['parentGroupID' => '\d+|all', 'childrenGroupID' => '\d+']);
+
+
+//注册后台资源路由
+Route::resource('admin/article', 'admin/Article');

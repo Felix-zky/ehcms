@@ -8,6 +8,7 @@ class Resource{
 	private $error;
 	private $table;
 	private $ids = [];
+	private $data = [];
 	
 	public function __construct($temporary = FALSE, $path = '', $rule = 'date')
 	{
@@ -83,6 +84,7 @@ class Resource{
 					$data['height'] = $height;
 				}
 				
+				$this->data = $data;
 				$resourceID = db($this->table)->insertGetId($data);
 				if ($resourceID > 0){
 					return $resourceID;
@@ -155,6 +157,19 @@ class Resource{
 	 */
 	public function getIds(){
 		return $this->ids;
+	}
+	
+	/**
+	 * 获取执行的数据，目前只有在新增和更新后，可以获取到
+	 * @access public
+	 * @param string $key 获取数据中指定的键值。
+	 */
+	public function getData($key = ''){
+		if (!empty($key) && in_array($key, $this->data)){
+			return $this->data[$key];
+		}else{
+			return $this->data;
+		}
 	}
 	
 	/**

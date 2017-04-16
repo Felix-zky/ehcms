@@ -412,12 +412,12 @@ define(['jquery', 'laytpl', 'layer', 'eh'], function($, laytpl){
 
 			xhr.msgLayerIndex || this.loadPrompt(settings.loadPrompt || {type: settings.submitType});
 
-			if (!settings.submitType) {
-				this.post(url, data, this.doneState.messageRedirect);
-			}else if (settings.submitType == 'put') {
+			if (settings.submitType == 'put') {
 				this.put(url, data, this.doneState.messageRedirect);
 			}else if (settings.submitType == 'delete') {
 				this.delete(url, data, this.doneState.messageRedirect);
+			}else{
+				this.post(url, data, this.doneState.messageRedirect);
 			}
 		},
 
@@ -435,12 +435,12 @@ define(['jquery', 'laytpl', 'layer', 'eh'], function($, laytpl){
 
 			xhr.msgLayerIndex || this.loadPrompt(settings.loadPrompt || {type: settings.submitType});
 
-			if (!settings.submitType) {
-				this.post(url, data, this.doneState.messageRefresh);
-			}else if (settings.submitType == 'put') {
+			if (settings.submitType == 'put') {
 				this.put(url, data, this.doneState.messageRefresh);
 			}else if (settings.submitType == 'delete') {
 				this.delete(url, data, this.doneState.messageRefresh);
+			}else{
+				this.post(url, data, this.doneState.messageRefresh);
 			}
 		},
 

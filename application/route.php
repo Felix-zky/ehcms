@@ -8,13 +8,3 @@
 // +----------------------------------------------------------------------
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
-
-return [
-    '__rest__' => [
-    	'admin/Article'    => 'admin/Article',
-    	'admin/Authorize'  => 'admin/Authorize',
-    	'admin/Department' => 'admin/Department',
-    	'admin/Member'     => 'admin/Member',
-    	'admin/Setting'    => 'admin/Setting'
-    ]
-];
