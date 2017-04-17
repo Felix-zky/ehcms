@@ -44,7 +44,7 @@ trait FastResponse{
 		//此返回类型常用于提交、判断、处理后的一些提醒，会带有处理结果或者跳转地址。
 		if (request()->isAjax()){
 			if ($mix !== FALSE && $mix !== NULL){
-				$data['redirect_url'] = preg_match('/^(https?:|\/)/', $mix) ? $mix : url($mix);
+				$data['url'] = preg_match('/^(https?:|\/)/', $mix) ? $mix : url($mix);
 			}
 			return $this->result($data, $code, $msg, 'json');
 		}else{

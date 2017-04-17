@@ -533,10 +533,10 @@ define(['jquery', 'laytpl', 'layer', 'eh'], function($, laytpl){
 		if ((typeof done == 'object' && $.isEmptyObject(done)) || done === xhr.doneState.message) {
 			layer.msg(msg, {icon: icon});
 		}else if (done === xhr.doneState.messageRedirect){
-			if (data.data.redirect_url) {
+			if (data.data.url) {
 				var wait = data.data.redirect_wait || 3;
-				layer.msg(msg + '，' + wait + '秒后自动跳转。 <a id="eh-xhr-redirect-url" href="' + data.data.redirect_url + '">立即跳转</a>', {time: wait * 1000, icon: icon, shade: 0.01}, function(){
-					location.href = data.data.redirect_url;
+				layer.msg(msg + '，' + wait + '秒后自动跳转。 <a id="eh-xhr-redirect-url" href="' + data.data.url + '">立即跳转</a>', {time: wait * 1000, icon: icon, shade: 0.01}, function(){
+					location.href = data.data.url;
 				});
 			}else{
 				layer.msg(msg, {icon: icon});

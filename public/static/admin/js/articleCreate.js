@@ -408,7 +408,22 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 			eh.xhr.msgLayerIndex = null;
 
 			resourceUploader.reset();
-			
+			if (response.code == 1) {
+				Messenger().post({
+					message: '图片：' + file.name + ' 上传成功！',
+					showCloseButton: true
+				});
+
+				var text = markdownEditor.getSelection(), alt;
+				alt = text.length ? text : file.name;
+				insert.call(markdownEditor, "![" + alt + "](" + response.data.url + ")");
+			}else{
+				Messenger().post({
+					message: '图片：' + file.name + ' 上传失败！',
+					showCloseButton: true,
+					type: 'error'
+				});
+			}
 		});
 
 		/**

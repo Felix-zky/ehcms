@@ -56,8 +56,11 @@ class Article extends Init{
 	 */
 	public function save(){
 		if (request()->isPost()){
-			print_r(input('param.'));
-			$this->errorResult();
+			if (db('article')->insert(input('param.')) == 1){
+				$this->successResult('文章发布成功', '/admin/article');
+			}else{
+				$this->errorResult('文章发布失败');
+			}
 		}else{
 			$this->errorResult('E-03002');
 		}
