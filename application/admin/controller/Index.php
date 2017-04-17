@@ -24,14 +24,14 @@ class Index extends Init{
 	public function getMenu(){
 		$post = input('post.');
 		
-		$level1 = db('admin_menu')->where(['module_id' => $post['moduleID'], 'parent_id' => 0])->order('sort desc')->select();
+		$level1 = db('admin_menu')->where(['module_id' => $post['moduleID'], 'parent_id' => 0, 'is_show' => 1])->order('sort desc')->select();
 		
 		foreach ($level1 as $l1){
 			$parentID[] = $l1['id'];
 			$menu[$l1['id']]['name'] = $l1['name'];
 		}
 		
-		$level2 = db('admin_menu')->where('parent_id', 'in', $parentID)->order('sort desc')->select();
+		$level2 = db('admin_menu')->where('parent_id', 'in', $parentID)->where('is_show', 1)->order('sort desc')->select();
 
 		
 		foreach ($level2 as $l2){
