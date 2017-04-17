@@ -123,7 +123,7 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 			"image": {
 				"bindKey": {'win': "Ctrl-G", 'mac': "Cmd-G"},
 				"exec": function (cm) {
-					//$('.resource-uploader').trigger();
+					$('.resource-uploader label').click();
 				}
 			},
 			"blockquote": {
@@ -391,6 +391,24 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 			fileNumLimit: 1,
 			auto: true,
 			compress: false
+		});
+
+		/**
+		 * 资源图片开始上传触发
+		 */
+		resourceUploader.on('startUpload', function(){
+			eh.xhr.loadPrompt({'type': 'uploader'});
+		});
+
+		/**
+		 * 资源图片上传成功后触发
+		 */
+		resourceUploader.on('uploadSuccess', function(file, response){
+			eh.xhr.msgLayerIndex && layer.close(eh.xhr.msgLayerIndex);
+			eh.xhr.msgLayerIndex = null;
+
+			resourceUploader.reset();
+			
 		});
 
 		/**
