@@ -37,7 +37,7 @@ class Index extends Init{
 		foreach ($level2 as $l2){
 			$data = [
 				'name' => $l2['name'],
-				'url'  => $l2['url'],
+				'url'  => url($l2['url']),
 				'icon' => $l2['icon']
 			];
 			

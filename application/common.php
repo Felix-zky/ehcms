@@ -9,3 +9,6 @@ Route::rule('admin/Resource/uploader/[:parentGroupID]/[:childrenGroupID]', 'admi
 
 //注册后台资源路由
 Route::resource('admin/article', 'admin/Article');
+//Route::resource('admin/article', 'admin/Article');
+Route::resource('admin/document', 'admin/Document');
+//Route::resource('admin/document', 'admin/Document');

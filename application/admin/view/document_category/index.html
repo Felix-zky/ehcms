@@ -1,0 +1,36 @@
+<header>
+	<div class="pull-left">
+		<button class="btn btn-danger" id="add-category">新增文档分类</button>
+	</div>
+</header>
+<section class="iframe-main">
+	<div id="crumbs">
+		当前位置：<a href="{:url('admin/DocumentCategory/index')}">文档分类</a> > <a href="#">asdfasdf</a>
+	</div>
+	<div id="categories">
+		<table class="table table-striped table-hover">
+			<thead>
+				<tr>
+					<th width="10%">编号</th>
+					<th width="40%">分类名称</th>
+					<th width="25%">子分类</th>
+					<th width="25%">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>1</td>
+					<td>Kimath</td>
+					<td>
+						<button class="btn btn-primary btn-sm">查看子分类</button>
+						<button class="btn btn-danger btn-sm">添加子分类</button>
+					</td>
+					<td>
+						<button class="btn btn-warning btn-sm">编辑</button>
+						<button class="btn btn-danger btn-sm">删除</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</section>
