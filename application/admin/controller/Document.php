@@ -1,8 +1,7 @@
 <?php
 namespace app\admin\controller;
 
-use think\Controller;
-class Document extends Controller{
+class Document extends Init{
 	
 	public function index(){
 		return $this->fetch();

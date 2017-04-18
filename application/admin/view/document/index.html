@@ -1,0 +1,18 @@
+<header>
+	<div class="pull-left">
+		<button class="btn btn-danger" id="add-ducoment">新增文档</button>
+	</div>
+</header>
+<section class="iframe-main">
+	<script type="text/javascript">
+		require(['jquery', 'layer'], function(){
+			$('#add-ducoment').click(function() {
+				layer.open({
+					type: 2,
+					content: '/admin/document/index.html',
+					id: 123
+				});
+			});
+		});
+	</script>
+</section>

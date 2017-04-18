@@ -10086,3 +10086,26 @@ i {
   -o-transition: width 1.5s ease;
   transition: width 1.5s ease;
 }
+#admin-documentCategory-index .iframe-main {
+  padding: 0 15px;
+}
+#admin-documentCategory-index .iframe-main #crumbs {
+  background-color: #eee;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  margin-top: 10px;
+  padding: 10px 0 10px 10px;
+}
+#admin-documentCategory-index .iframe-main #crumbs a {
+  color: #23527c;
+}
+#admin-documentCategory-index .iframe-main th,
+#admin-documentCategory-index .iframe-main td {
+  text-align: center;
+}
+#admin-documentCategory-index .iframe-main td {
+  line-height: 30px;
+}
+#admin-documentCategory-index .iframe-main td:nth-child(2) {
+  text-align: left;
+}
