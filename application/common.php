@@ -11,4 +11,4 @@ Route::rule('admin/Resource/uploader/[:parentGroupID]/[:childrenGroupID]', 'admi
 Route::resource('admin/article', 'admin/Article');
 //Route::resource('admin/article', 'admin/Article');
 Route::resource('admin/document', 'admin/Document');
-//Route::resource('admin/document', 'admin/Document');
+Route::resource('admin/document_category', 'admin/DocumentCategory');

@@ -433,6 +433,7 @@ define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash', 'eh'],funct
 					height: layero.outerHeight()
 				});
 				contentWidthCompute(index);
+				layero.find('iframe').attr('name', 'layui-layer'+index);
 			},
 			full: function(layero){
 				setTimeout(function(){
