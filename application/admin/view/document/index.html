@@ -4,9 +4,94 @@
 	</div>
 </header>
 <section class="iframe-main">
+	<div class="row">
+		<div class="document col-sm-2">
+			<img src="/uploader/document/kimath.jpg">
+			<p>图书名称</p>
+		</div>
+		<div class="document col-sm-2">
+			<img src="/uploader/document/kimath.jpg">
+			<p>图书名称</p>
+		</div>
+		<div class="document col-sm-2">
+			<img src="/uploader/document/kimath.jpg">
+			<p>图书名称</p>
+		</div>
+		<div class="document col-sm-2">
+			<img src="/uploader/document/kimath.jpg">
+			<p>图书名称</p>
+		</div>
+		<div class="document col-sm-2">
+			<img src="/uploader/document/kimath.jpg">
+			<p>图书名称</p>
+		</div>
+		<div class="document col-sm-2">
+			<img src="/uploader/document/kimath.jpg">
+			<p>图书名称</p>
+		</div>
+		<div class="document col-sm-2">
+			<img src="/uploader/document/kimath.jpg">
+			<p>图书名称</p>
+		</div>
+		<div class="document col-sm-2">
+			<img src="/uploader/document/kimath.jpg">
+			<p>图书名称</p>
+		</div>
+		<div class="document col-sm-2">
+			<img src="/uploader/document/kimath.jpg">
+			<p>图书名称</p>
+		</div>
+		<div class="document col-sm-2">
+			<img src="/uploader/document/kimath.jpg">
+			<p>图书名称</p>
+		</div>
+		<div class="document col-sm-2">
+			<img src="/uploader/document/kimath.jpg">
+			<p>图书名称</p>
+		</div>
+		<div class="document col-sm-2">
+			<img src="/uploader/document/kimath.jpg">
+			<p>图书名称</p>
+		</div>
+		<div id="operation">
+			
+		</div>
+	</div>
+
 	<script type="text/javascript">
 		require(['jquery', 'layer'], function(){
-			console.log(window.name);
+			var firstLoader = 1;
+			$(window).resize(function(){
+				setTimeout(function(){
+					var width = $('.document:eq(0) img').innerWidth(),
+					height = Math.round(width / 3 * 4);
+
+					$('.document img').height(height);
+					$('#operation').css({
+						width: width + 1,
+						height: height + 1
+					});
+					firstLoader = 0;
+				}, firstLoader == 1 ? 0 : 150);
+			});
+
+			$(window).resize();
+
+			$('.document').mouseenter(function() {
+				var offsetLeft = $(this).offset().left + 15,
+					offsetTop = $(this).offset().top;
+
+				$('#operation').css({
+					left: offsetLeft,
+					top: offsetTop
+				});
+
+				$('#operation').show();
+			});
+
+			$('#operation').mouseleave(function() {
+				$('#operation').hide();
+			});
 		});
 	</script>
 </section>
