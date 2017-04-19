@@ -153,6 +153,28 @@ define(['layer', 'laypage', 'jquery'], function(dialog, laypage){
 			$(document).on('contextmenu', function(){
 				return false;
 			});
+		},
+
+		/**
+		 * 关闭iframe的父页面的左侧列表
+		 */
+		closeParentSidebar: function(){
+			var obj = parent.$('#' + window.name);
+			if (window.name && obj.length == 1) {
+				obj.find('#iframe-main .menu-tree').hide();
+				obj.find('#iframe-main .content').width(obj.find('#iframe-main').width());
+			}
+		},
+		
+		/**
+		 * 打开iframe的父页面的左侧列表
+		 */
+		openParentSidebar: function(){
+			var obj = parent.$('#' + window.name);
+			if (window.name && obj.length == 1) {
+				obj.find('#iframe-main .menu-tree').hide();
+				obj.find('#iframe-main .content').width(obj.find('#iframe-main').width() - 218);
+			}
 		}
 	};
 

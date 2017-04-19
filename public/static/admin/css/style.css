@@ -10115,6 +10115,11 @@ i {
   -o-transition: left 0.5s, top 0.5s;
   display: none;
 }
+#admin-document-index .iframe-main #operation i {
+  position: absolute;
+  color: #FFF;
+  cursor: pointer;
+}
 #admin-documentCategory-index .iframe-main {
   padding: 0 15px;
 }

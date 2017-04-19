@@ -54,13 +54,15 @@
 			<p>图书名称</p>
 		</div>
 		<div id="operation">
-			
+			<i class="fa fa-search" id="view-document" title="查看"></i>
+			<i class="fa fa-pencil-square-o" id="update-document" title="编辑"></i>
 		</div>
 	</div>
 
 	<script type="text/javascript">
 		require(['jquery', 'layer'], function(){
-			var firstLoader = 1;
+			var firstLoader = 1,
+				currentDocument = {};
 			$(window).resize(function(){
 				setTimeout(function(){
 					var width = $('.document:eq(0) img').innerWidth(),
@@ -71,6 +73,31 @@
 						width: width + 1,
 						height: height + 1
 					});
+
+					$('#operation i').css({
+						'font-size': (width + 1) / 4,
+						top: (height + 1 - ((width + 1) / 4)) / 2
+					});
+
+					$('i#view-document').css({
+						'left': (width + 1) / 6
+					});
+
+					$('i#update-document').css({
+						'right': (width + 1) / 6
+					});
+
+					if ($('.document').length > 0 && firstLoader == 1) {
+						var that = $('.document'),
+							offsetLeft = that.offset().left + 15,
+							offsetTop = that.offset().top;
+
+						$('#operation').css({
+							left: offsetLeft,
+							top: offsetTop
+						});				
+					}
+
 					firstLoader = 0;
 				}, firstLoader == 1 ? 0 : 150);
 			});
@@ -78,19 +105,38 @@
 			$(window).resize();
 
 			$('.document').mouseenter(function() {
+				$('#operation').show();
 				var offsetLeft = $(this).offset().left + 15,
 					offsetTop = $(this).offset().top;
+
+				currentDocument = $(this);
 
 				$('#operation').css({
 					left: offsetLeft,
 					top: offsetTop
-				});
-
-				$('#operation').show();
+				});				
 			});
 
 			$('#operation').mouseleave(function() {
 				$('#operation').hide();
+			});
+
+			$('#view-document').click(function() {
+				if ($.isEmptyObject(currentDocument)) {
+					return false;
+				}
+
+				parent.window.open('/document/1.html');
+			});
+
+			$('#update-document').click(function() {
+				if ($.isEmptyObject(currentDocument)) {
+					return false;
+				}
+			});
+
+			$('#add-ducoment').click(function() {
+				eh.closeParentSidebar();
 			});
 		});
 	</script>
