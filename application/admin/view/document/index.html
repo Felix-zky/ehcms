@@ -137,6 +137,14 @@
 
 			$('#add-ducoment').click(function() {
 				eh.closeParentSidebar();
+
+				layer.open({
+					type: 2,
+					title: false,
+					area: ['100%','100%'],
+					content: '/admin/document/create.html',
+					closeBtn: false
+				});
 			});
 		});
 	</script>

@@ -172,7 +172,7 @@ define(['layer', 'laypage', 'jquery'], function(dialog, laypage){
 		openParentSidebar: function(){
 			var obj = parent.$('#' + window.name);
 			if (window.name && obj.length == 1) {
-				obj.find('#iframe-main .menu-tree').hide();
+				obj.find('#iframe-main .menu-tree').show();
 				obj.find('#iframe-main .content').width(obj.find('#iframe-main').width() - 218);
 			}
 		}

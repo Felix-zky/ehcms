@@ -7,6 +7,10 @@ class Document extends Init{
 		return $this->fetch();
 	}
 	
+	public function create(){
+		return $this->fetch();
+	}
+	
 	public function edit(){
 		return $this->fetch();
 	}

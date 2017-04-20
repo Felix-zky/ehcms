@@ -1,0 +1,20 @@
+<header>
+	<div class="pull-left">
+		<button class="btn btn-danger" id="save">保存</button>
+	</div>
+	<div class="pull-right">
+		<button class="btn btn-success" id="close">关闭</button>
+	</div>
+</header>
+<section class="iframe-main">
+	<script type="text/javascript">
+		require(['jquery'], function(){
+			
+
+			$('#close').click(function(){
+				parent.eh.openParentSidebar();
+				parent.layer.close(parent.layer.getFrameIndex(window.name));
+			});
+		});
+	</script>
+</section>

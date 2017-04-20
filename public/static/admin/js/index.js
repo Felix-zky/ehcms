@@ -370,7 +370,7 @@ define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash', 'eh'],funct
 			windowWidth = layero.outerWidth();
 
 		layero.find('#iframe-main .content').css({
-			width: (windowWidth - 218) + 'px'
+			width: (windowWidth - (layero.find('.menu-tree').is(':visible') ? 218 : 0))
 		});
 	}
 
