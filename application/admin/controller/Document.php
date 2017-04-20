@@ -8,7 +8,7 @@ class Document extends Init{
 	}
 	
 	public function create(){
-		return $this->fetch();
+		return $this->fetch('editor');
 	}
 	
 	public function edit(){

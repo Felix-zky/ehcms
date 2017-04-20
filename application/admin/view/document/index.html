@@ -1,6 +1,6 @@
 <header>
 	<div class="pull-left">
-		<button class="btn btn-danger" id="add-ducoment">新增文档</button>
+		<button class="btn btn-danger" id="add-ducoment">创建新文档</button>
 	</div>
 </header>
 <section class="iframe-main">
@@ -58,94 +58,134 @@
 			<i class="fa fa-pencil-square-o" id="update-document" title="编辑"></i>
 		</div>
 	</div>
+</section>
+<script type="text/html" id="create">
+	<div class="container-fluid">
+		<div class="row">
+			<form class="form-horizontal">
+				<div class="form-group">
+					<label for="name" class="col-sm-3 control-label"><span class="red">*</span>文档名称：</label>
+					<div class="col-sm-8">
+						<input type="text" class="form-control" name="name" id="name" placeholder="请输入文档名称">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="keyword" class="col-sm-3 control-label">关键词：</label>
+					<div class="col-sm-8">
+						<input type="text" class="form-control" name="keyword" id="keyword" placeholder="请输入文档关键词">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="introduction" class="col-sm-3 control-label">文档简介：</label>
+					<div class="col-sm-8">
+						<textarea type="text" class="form-control" name="introduction" id="introduction" placeholder="请输入文档名称"></textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="password" class="col-sm-3 control-label">文档密码：</label>
+					<div class="col-sm-8">
+						<input type="text" class="form-control" name="password" id="password" placeholder="不设置为公开文档">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="cover" class="col-sm-3 control-label">文档封面：</label>
+					<div class="col-sm-8">
+						<div class="input-group">
+							<span class="input-group-btn logo-uploader">
+								<button class="btn btn-info" href="javascript:void();" type="button">上传缩略图</button>
+							</span>
+							<input type="text" class="form-control" name="cover" id="cover" placeholder="点击左侧按钮上传缩略图">
+						</div>
+					</div>
+				</div>
+				<button type="button" class="btn btn-success col-md-offset-3">立即创建</button>
+			</form>
+		</div>
+	</div>
+</script>
+<script type="text/javascript">
+	require(['jquery', 'layer'], function(){
+		var firstLoader = 1,
+		currentDocument = {};
+		$(window).resize(function(){
+			setTimeout(function(){
+				var width = $('.document:eq(0) img').innerWidth(),
+				height = Math.round(width / 3 * 4);
 
-	<script type="text/javascript">
-		require(['jquery', 'layer'], function(){
-			var firstLoader = 1,
-				currentDocument = {};
-			$(window).resize(function(){
-				setTimeout(function(){
-					var width = $('.document:eq(0) img').innerWidth(),
-					height = Math.round(width / 3 * 4);
-
-					$('.document img').height(height);
-					$('#operation').css({
-						width: width + 1,
-						height: height + 1
-					});
-
-					$('#operation i').css({
-						'font-size': (width + 1) / 4,
-						top: (height + 1 - ((width + 1) / 4)) / 2
-					});
-
-					$('i#view-document').css({
-						'left': (width + 1) / 6
-					});
-
-					$('i#update-document').css({
-						'right': (width + 1) / 6
-					});
-
-					if ($('.document').length > 0 && firstLoader == 1) {
-						var that = $('.document'),
-							offsetLeft = that.offset().left + 15,
-							offsetTop = that.offset().top;
-
-						$('#operation').css({
-							left: offsetLeft,
-							top: offsetTop
-						});				
-					}
-
-					firstLoader = 0;
-				}, firstLoader == 1 ? 0 : 150);
-			});
-
-			$(window).resize();
-
-			$('.document').mouseenter(function() {
-				$('#operation').show();
-				var offsetLeft = $(this).offset().left + 15,
-					offsetTop = $(this).offset().top;
-
-				currentDocument = $(this);
-
+				$('.document img').height(height);
 				$('#operation').css({
-					left: offsetLeft,
-					top: offsetTop
-				});				
-			});
-
-			$('#operation').mouseleave(function() {
-				$('#operation').hide();
-			});
-
-			$('#view-document').click(function() {
-				if ($.isEmptyObject(currentDocument)) {
-					return false;
-				}
-
-				parent.window.open('/document/1.html');
-			});
-
-			$('#update-document').click(function() {
-				if ($.isEmptyObject(currentDocument)) {
-					return false;
-				}
-			});
-
-			$('#add-ducoment').click(function() {
-				eh.closeParentSidebar();
-
-				layer.open({
-					type: 2,
-					title: false,
-					area: ['100%','100%'],
-					content: '/admin/document/create.html',
-					closeBtn: false
+					width: width + 1,
+					height: height + 1
 				});
+
+				$('#operation i').css({
+					'font-size': (width + 1) / 4,
+					top: (height + 1 - ((width + 1) / 4)) / 2
+				});
+
+				$('i#view-document').css({
+					'left': (width + 1) / 6
+				});
+
+				$('i#update-document').css({
+					'right': (width + 1) / 6
+				});
+
+				if ($('.document').length > 0 && firstLoader == 1) {
+					var that = $('.document'),
+					offsetLeft = that.offset().left + 15,
+					offsetTop = that.offset().top;
+
+					$('#operation').css({
+						left: offsetLeft,
+						top: offsetTop
+					});				
+				}
+
+				firstLoader = 0;
+			}, firstLoader == 1 ? 0 : 150);
+		});
+
+		$(window).resize();
+
+		$('.document').mouseenter(function() {
+			$('#operation').show();
+			var offsetLeft = $(this).offset().left + 15,
+			offsetTop = $(this).offset().top;
+
+			currentDocument = $(this);
+
+			$('#operation').css({
+				left: offsetLeft,
+				top: offsetTop
+			});				
+		});
+
+		$('#operation').mouseleave(function() {
+			$('#operation').hide();
+		});
+
+		$('#view-document').click(function() {
+			if ($.isEmptyObject(currentDocument)) {
+				return false;
+			}
+
+			parent.window.open('/document/1.html');
+		});
+
+		$('#update-document').click(function() {
+			if ($.isEmptyObject(currentDocument)) {
+				return false;
+			}
+		});
+
+		$('#add-ducoment').click(function() {
+			layer.open({
+				title: false,
+				area: '60%',
+				content: $('#create').html(),
+				btn: false
 			});
 		});
-	</script>
-</section>
+	});
+</script>
