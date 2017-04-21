@@ -5,53 +5,16 @@
 </header>
 <section class="iframe-main">
 	<div class="row">
-		<div class="document col-sm-2">
-			<img src="/uploader/document/kimath.jpg">
-			<p>图书名称</p>
-		</div>
-		<div class="document col-sm-2">
-			<img src="/uploader/document/kimath.jpg">
-			<p>图书名称</p>
-		</div>
-		<div class="document col-sm-2">
-			<img src="/uploader/document/kimath.jpg">
-			<p>图书名称</p>
-		</div>
-		<div class="document col-sm-2">
-			<img src="/uploader/document/kimath.jpg">
-			<p>图书名称</p>
-		</div>
-		<div class="document col-sm-2">
-			<img src="/uploader/document/kimath.jpg">
-			<p>图书名称</p>
-		</div>
-		<div class="document col-sm-2">
-			<img src="/uploader/document/kimath.jpg">
-			<p>图书名称</p>
-		</div>
-		<div class="document col-sm-2">
-			<img src="/uploader/document/kimath.jpg">
-			<p>图书名称</p>
-		</div>
-		<div class="document col-sm-2">
-			<img src="/uploader/document/kimath.jpg">
-			<p>图书名称</p>
-		</div>
-		<div class="document col-sm-2">
-			<img src="/uploader/document/kimath.jpg">
-			<p>图书名称</p>
-		</div>
-		<div class="document col-sm-2">
-			<img src="/uploader/document/kimath.jpg">
-			<p>图书名称</p>
-		</div>
-		<div class="document col-sm-2">
-			<img src="/uploader/document/kimath.jpg">
-			<p>图书名称</p>
-		</div>
-		<div class="document col-sm-2">
-			<img src="/uploader/document/kimath.jpg">
-			<p>图书名称</p>
+		<ul>
+		{foreach $document as $value}
+			<li data-id="{$value.id}" class="document col-sm-2">
+				<img src="{$value.cover}">
+				<p>{$value.name}</p>
+			</li>
+		{/foreach}
+		</ul>
+		<div id="pages" class="col-sm-12">
+			{$document->render()}
 		</div>
 		<div id="operation">
 			<i class="fa fa-search" id="view-document" title="查看"></i>
@@ -60,7 +23,7 @@
 	</div>
 </section>
 <script type="text/html" id="create">
-	<div class="container-fluid">
+	<div class="container-fluid create-tpl">
 		<div class="row">
 			<form class="form-horizontal">
 				<div class="form-group">
@@ -78,7 +41,7 @@
 				<div class="form-group">
 					<label for="introduction" class="col-sm-3 control-label">文档简介：</label>
 					<div class="col-sm-8">
-						<textarea type="text" class="form-control" name="introduction" id="introduction" placeholder="请输入文档名称"></textarea>
+						<textarea type="text" class="form-control" name="introduction" id="introduction" placeholder="请输入文档简介"></textarea>
 					</div>
 				</div>
 				<div class="form-group">
@@ -94,19 +57,24 @@
 							<span class="input-group-btn logo-uploader">
 								<button class="btn btn-info" href="javascript:void();" type="button">上传缩略图</button>
 							</span>
-							<input type="text" class="form-control" name="cover" id="cover" placeholder="点击左侧按钮上传缩略图">
+							<input type="text" class="form-control" id="cover" placeholder="点击左侧按钮上传缩略图" readonly>
+							<input type="hidden" name="cover" id="cover-url">
 						</div>
 					</div>
 				</div>
-				<button type="button" class="btn btn-success col-md-offset-3">立即创建</button>
+				<div class="col-sm-8 col-md-offset-3 submit">
+					<button type="button" class="btn btn-success" id="create-submit">立即创建</button>
+				</div>
 			</form>
 		</div>
 	</div>
 </script>
 <script type="text/javascript">
-	require(['jquery', 'layer'], function(){
+	require(['jquery', 'webuploader', 'messenger.future', 'layer', 'eh.form', 'eh.xhr'], function($, WebUploader, Messenger){
 		var firstLoader = 1,
-		currentDocument = {};
+		currentDocument = {},
+		createIndex;
+
 		$(window).resize(function(){
 			setTimeout(function(){
 				var width = $('.document:eq(0) img').innerWidth(),
@@ -149,11 +117,11 @@
 		$(window).resize();
 
 		$('.document').mouseenter(function() {
+			currentDocument = $(this);
+
 			$('#operation').show();
 			var offsetLeft = $(this).offset().left + 15,
 			offsetTop = $(this).offset().top;
-
-			currentDocument = $(this);
 
 			$('#operation').css({
 				left: offsetLeft,
@@ -170,7 +138,7 @@
 				return false;
 			}
 
-			parent.window.open('/document/1.html');
+			parent.window.open('/document/' + currentDocument.data('id') + '.html');
 		});
 
 		$('#update-document').click(function() {
@@ -179,12 +147,113 @@
 			}
 		});
 
+		$('body').on('click', '#create-submit', function() {
+			var index = eh.xhr.loadPrompt({str: '正在创建文档，请稍等！'});
+			eh.xhr.post('/admin/document.html', eh.form.extractData(), {
+				success: function(response){
+					layer.close(index);
+					eh.xhr.msgLayerIndex = null;
+
+					layer.close(createIndex);
+
+					eh.closeParentSidebar();
+					layer.open({
+						type: 2,
+						title: false,
+						closeBtn: false,
+						btn: false,
+						area: ['100%', '100%'],
+						content: '/admin/document/create.html',
+						end: function(){
+							location.reload();
+						}
+					});
+
+					layer.msg(response.msg, {icon: 6});
+				}
+			});
+		});
+
+		/**
+		 * 配置messenger的显示位置及样式
+		 */
+		Messenger.options = {
+			extraClasses: 'messenger-fixed messenger-on-top',
+			theme: 'future'
+		};
+
 		$('#add-ducoment').click(function() {
-			layer.open({
+			createIndex = layer.open({
+				type: 1,
 				title: false,
 				area: '60%',
 				content: $('#create').html(),
-				btn: false
+				btn: false,
+				success: function(){
+					/**
+					 * 实例化资源上传组件并配置参数
+					 */
+					var uploader = new WebUploader.Uploader({
+						swf: '/static/lib/js/webuploader/Uploader.swf',
+						server: '/admin/document/cover.html',
+						pick: '.logo-uploader',
+						accept: {
+							title: 'Images',
+							extensions: 'gif,jpg,jpeg,bmp,png',
+							mimeTypes: 'image/*'
+						},
+						formData: {
+							_ajax: 1
+						},
+						fileNumLimit: 1,
+						auto: true,
+						compress: false
+					});
+
+					/**
+					 * 缩略图进入列队触发
+					 */
+					uploader.on('fileQueued', function(file){
+						$('.webuploader-pick').next('div').hide();
+						$('#cover').val(file.name);
+						uploader.option('formData', {
+							extension: file.ext
+						})
+					});
+
+					/**
+					 * 缩略图开始上传触发
+					 */
+					uploader.on('startUpload', function(file){
+						$('.logo-uploader button').html('<i class="fa fa-spinner fa-pulse"></i> 正在上传');
+					});
+
+					/**
+					 * 缩略图上传成功后触发
+					 */
+					uploader.on('uploadSuccess', function(file, response){
+						uploader.reset();
+						$('.webuploader-pick').next('div').show();
+
+						if (response.code == 1) {
+							Messenger().post({
+								message: '图片：' + file.name + ' 上传成功！',
+								showCloseButton: true
+							});
+							$('.logo-uploader button').html('<i class="fa fa-check"></i> 上传成功');
+							$('#cover').val(file.name);
+							$('#cover-url').val(response.data.url);
+						}else{
+							Messenger().post({
+								message: '图片：' + file.name + ' 上传失败！',
+								showCloseButton: true,
+								type: 'error'
+							});
+							$('.logo-uploader button').html('重新上传');
+							$('#cover').val('');
+						}
+					});
+				}
 			});
 		});
 	});

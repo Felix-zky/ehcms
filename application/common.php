@@ -5,7 +5,7 @@ use think\Route;
 Route::rule('admin/article/resource', 'admin/Article/resource');
 Route::post('admin/Member/list', 'admin/Member/getMemberList');
 Route::rule('admin/Resource/uploader/[:parentGroupID]/[:childrenGroupID]', 'admin/Resource/uploader', '*', [], ['parentGroupID' => '\d+|all', 'childrenGroupID' => '\d+']);
-
+Route::rule('admin/document/cover', 'admin/Document/uploaderCover');
 
 //注册后台资源路由
 Route::resource('admin/article', 'admin/Article');

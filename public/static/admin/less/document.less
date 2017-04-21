@@ -1,6 +1,8 @@
 #admin-document-index{
 	.iframe-main{
-		padding: 15px 0;
+		> .row{
+			padding: 15px 0;
+		}
 		.document{
 			margin-bottom: 30px;
 			img{
@@ -30,6 +32,27 @@
 				position: absolute;
 				color: #FFF;
 				cursor: pointer;
+			}
+		}
+		#pages{
+			text-align: center;
+		}
+	}
+	.create-tpl{
+		background-color: #FFF;
+		form{
+			> div.form-group{
+				.hr-line-dashed;
+				&:first-child{
+					padding-top: 0;
+				}
+			}
+		}
+		.submit{
+			padding-left: 7px;
+			padding-top: 20px;
+			button{
+				padding: 6px 40px;
 			}
 		}
 	}

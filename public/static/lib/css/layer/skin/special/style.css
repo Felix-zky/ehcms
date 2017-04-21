@@ -9,8 +9,14 @@ body .layui-layer-iframe{
 	overflow: visible;
 }
 body .layui-layer-content{
+	border-radius: 10px;
 	overflow: hidden;
 }
+
+body .layui-layer-iframe .layui-layer-content{
+	border-radius: 0;
+}
+
 body .layer-ext-special.no-border-radius{
 	border-radius: 0;
 }
@@ -41,7 +47,7 @@ body .layer-ext-special .subtitle{
 	font-weight: normal;
 }
 body .layui-layer-page{
-	overflow: hidden;
+	overflow: visible;
 }
 body .layui-layer-page .layui-layer-content > div,body .layui-layer-page .layui-layer-content > p{
 	padding: 15px;

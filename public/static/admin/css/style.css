@@ -9033,6 +9033,14 @@ li {
   bottom: 0;
   transform: translate(-50%, 0);
 }
+.hr-line-dashed {
+  border-bottom: 1px dashed #e7eaec;
+  padding: 20px 0;
+  margin-bottom: 0;
+}
+ul.messenger.messenger-fixed {
+  z-index: 999999999 !important;
+}
 #eh-xhr-redirect-url,
 #eh-xhr-redirect-url {
   color: #333 !important;
@@ -10086,7 +10094,7 @@ i {
   -o-transition: width 1.5s ease;
   transition: width 1.5s ease;
 }
-#admin-document-index .iframe-main {
+#admin-document-index .iframe-main > .row {
   padding: 15px 0;
 }
 #admin-document-index .iframe-main .document {
@@ -10097,7 +10105,7 @@ i {
   width: 100%;
 }
 #admin-document-index .iframe-main .document p {
-  font-size: 16px;
+  font-size: 14px;
   width: 100%;
   overflow: hidden;
   white-space: nowrap;
@@ -10119,6 +10127,27 @@ i {
   position: absolute;
   color: #FFF;
   cursor: pointer;
+}
+#admin-document-index .iframe-main #pages {
+  text-align: center;
+}
+#admin-document-index .create-tpl {
+  background-color: #FFF;
+}
+#admin-document-index .create-tpl form > div.form-group {
+  border-bottom: 1px dashed #e7eaec;
+  padding: 20px 0;
+  margin-bottom: 0;
+}
+#admin-document-index .create-tpl form > div.form-group:first-child {
+  padding-top: 0;
+}
+#admin-document-index .create-tpl .submit {
+  padding-left: 7px;
+  padding-top: 20px;
+}
+#admin-document-index .create-tpl .submit button {
+  padding: 6px 40px;
 }
 #admin-documentCategory-index .iframe-main {
   padding: 0 15px;
