@@ -10149,6 +10149,84 @@ i {
 #admin-document-index .create-tpl .submit button {
   padding: 6px 40px;
 }
+#admin-document-editor .container-fluid,
+#admin-document-editor .row {
+  height: 100%;
+}
+#admin-document-editor .row {
+  border-top: 1px solid #ddd;
+}
+#admin-document-editor .row > div {
+  height: 100%;
+  background-color: #FFF;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+#admin-document-editor .row #list {
+  border-right: 1px solid #ddd;
+  padding: 0;
+}
+#admin-document-editor .row #list .top {
+  height: 35px;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 10px;
+}
+#admin-document-editor .row #list .top .pull-left,
+#admin-document-editor .row #list .top .pull-right {
+  line-height: 35px;
+}
+#admin-document-editor .row #list .top .pull-left {
+  padding: 0 20px;
+  border-right: 1px solid #ddd;
+  height: 36px;
+  background-color: #FFF;
+}
+#admin-document-editor .row #list .top .pull-right {
+  padding-right: 10px;
+  cursor: pointer;
+}
+#admin-document-editor .row #list .item {
+  clear: both;
+}
+#admin-document-editor .row #list .item > ul > li {
+  height: 30px;
+  line-height: 30px;
+  font-size: 0;
+}
+#admin-document-editor .row #list .item > ul > li:hover {
+  background-color: #F2F2F2;
+}
+#admin-document-editor .row #list .item > ul > li.active {
+  background-color: #E5E5E5;
+}
+#admin-document-editor .row #list .item > ul > li i,
+#admin-document-editor .row #list .item > ul > li a {
+  height: 30px;
+  line-height: 30px;
+  display: inline-block;
+  vertical-align: bottom;
+  font-size: 14px;
+}
+#admin-document-editor .row #list .item > ul > li i {
+  width: 24px;
+  margin: 0;
+  text-align: center;
+}
+#admin-document-editor .row #list .item > ul > li a {
+  color: #333;
+}
+#admin-document-editor .row #list .item > ul > li a:hover {
+  text-decoration: none;
+}
+#admin-document-editor .row #list .item > ul > li > ul {
+  margin-left: 30px;
+}
+#admin-document-editor .row #list .item > ul > li > ul > li > ul {
+  margin-left: 30px;
+}
+#admin-document-editor .row #setting {
+  border-left: 1px solid #ddd;
+}
 #admin-documentCategory-index .iframe-main {
   padding: 0 15px;
 }

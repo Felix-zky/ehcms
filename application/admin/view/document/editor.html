@@ -6,15 +6,51 @@
 		<button class="btn btn-success" id="close">关闭</button>
 	</div>
 </header>
-<section class="iframe-main">
-	<script type="text/javascript">
-		require(['jquery'], function(){
-			
-
-			$('#close').click(function(){
-				parent.eh.openParentSidebar();
-				parent.layer.close(parent.layer.getFrameIndex(window.name));
-			});
-		});
-	</script>
+<section class="iframe-main" id="editor">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-3" id="list">
+				<div class="top">
+					<div class="pull-left"><i class="fa fa-bars"></i>目录</div>
+					<div class="pull-right"><i class="fa fa-plus-square" data-toggle="tooltip" data-placement="left" title="添加顶级目录/章节"></i></div>
+				</div>
+				<div class="item">
+					<ul>
+						<li>
+							<i></i>
+							<a href="javascript:void(0);">dfasdfasdfasd</a>
+							<ul>
+								<li>
+									<i></i>
+									<a href="javascript:void(0);">dfasdfasdfasd</a>
+									<ul>
+										<li>
+											<i></i>
+											<a href="javascript:void(0);">dfasdfasdfasd</a>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="col-sm-6" id="detail">
+				
+			</div>
+			<div class="col-sm-3" id="setting">
+				
+			</div>
+		</div>
+	</div>
 </section>
+<script type="text/javascript">
+	require(['jquery', 'bootstrap'], function(){
+		$('[data-toggle="tooltip"]').tooltip();
+
+		$('#close').click(function(){
+			parent.eh.openParentSidebar();
+			parent.layer.close(parent.layer.getFrameIndex(window.name));
+		});
+	});
+</script>

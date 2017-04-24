@@ -10,6 +10,7 @@ class Document extends Init{
 	}
 	
 	public function create(){
+		$this->assign('actionSign', 'editor');
 		return $this->fetch('editor');
 	}
 	
@@ -23,7 +24,8 @@ class Document extends Init{
 	}
 	
 	public function edit(){
-		return $this->fetch();
+		$this->assign('actionSign', 'editor');
+		return $this->fetch('editor');
 	}
 	
 	public function update(){

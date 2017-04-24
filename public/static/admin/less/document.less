@@ -58,6 +58,88 @@
 	}
 }
 
+#admin-document-editor{
+	.container-fluid, .row{
+		height: 100%;
+	}
+	.row{
+		border-top: 1px solid #ddd;
+		> div{
+			height: 100%;
+			background-color: #FFF;
+			overflow-x: hidden;
+			overflow-y: auto;
+		}
+		#list{
+			border-right: 1px solid #ddd;
+			padding: 0;
+			.top{
+				height: 35px;
+				border-bottom: 1px solid #ddd;
+				margin-bottom: 10px;
+				.pull-left, .pull-right{
+					line-height: 35px;
+				}
+				.pull-left{
+					padding: 0 20px;
+					border-right: 1px solid #ddd;
+					height: 36px;
+					background-color: #FFF;
+				}
+				.pull-right{
+					padding-right: 10px;
+					cursor: pointer;
+				}
+			}
+			.item{
+				clear: both;
+				> ul{
+					> li{
+						height: 30px;
+						line-height: 30px;
+						font-size: 0;
+						&:hover{
+							background-color: #F2F2F2;
+						}
+						&.active{
+							background-color: #E5E5E5;
+						}
+						i, a{
+							height: 30px;
+							line-height: 30px;
+							display: inline-block;
+							vertical-align: bottom;
+							font-size: 14px;
+						}
+						i{
+							width: 24px;
+							margin: 0;
+							text-align: center;
+						}
+						a{
+							color: #333;
+							&:hover{
+								text-decoration: none;
+							}
+						}
+						> ul{
+							margin-left: 30px;
+							> li{
+								> ul{
+									margin-left: 30px;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		#setting{
+			border-left: 1px solid #ddd;
+		}
+	}
+}
+
 #admin-documentCategory-index{
 	.iframe-main{
 		padding: 0 15px;

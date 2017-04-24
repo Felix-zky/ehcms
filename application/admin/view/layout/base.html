@@ -140,7 +140,7 @@
 		});
 	</script>
 </head>
-<body id="{$Request.module}-{$Request.controller|lcfirst}-{$Request.action|lcfirst}">
+<body id="{$Request.module}-{$Request.controller|lcfirst}-{notempty name="actionSign"}{$actionSign}{else /}{$Request.action|lcfirst}{/notempty}"{notempty name="actionSign"} class="original-action-{$Request.action|lcfirst}"{/notempty}>
 	{block name="header"}{/block}
 	{block name="main"}{/block}
 	{block name="footer"}{/block}
