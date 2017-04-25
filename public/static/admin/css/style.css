@@ -10185,44 +10185,47 @@ i {
   padding-right: 10px;
   cursor: pointer;
 }
-#admin-document-editor .row #list .item {
+#admin-document-editor .row #list .items {
   clear: both;
 }
-#admin-document-editor .row #list .item > ul > li {
+#admin-document-editor .row #list .items > ul > li > ul .item {
+  padding-left: 24px;
+}
+#admin-document-editor .row #list .items > ul > li > ul > li > ul .item {
+  padding-left: 48px;
+}
+#admin-document-editor .row #list .items li {
   height: 30px;
   line-height: 30px;
   font-size: 0;
 }
-#admin-document-editor .row #list .item > ul > li:hover {
-  background-color: #F2F2F2;
-}
-#admin-document-editor .row #list .item > ul > li.active {
-  background-color: #E5E5E5;
-}
-#admin-document-editor .row #list .item > ul > li i,
-#admin-document-editor .row #list .item > ul > li a {
+#admin-document-editor .row #list .items li i,
+#admin-document-editor .row #list .items li a {
   height: 30px;
   line-height: 30px;
   display: inline-block;
   vertical-align: bottom;
   font-size: 14px;
 }
-#admin-document-editor .row #list .item > ul > li i {
+#admin-document-editor .row #list .items li i {
   width: 24px;
   margin: 0;
   text-align: center;
 }
-#admin-document-editor .row #list .item > ul > li a {
+#admin-document-editor .row #list .items li a {
   color: #333;
 }
-#admin-document-editor .row #list .item > ul > li a:hover {
+#admin-document-editor .row #list .items li a:hover {
   text-decoration: none;
 }
-#admin-document-editor .row #list .item > ul > li > ul {
-  margin-left: 30px;
+#admin-document-editor .row #list .items li.active .item {
+  background-color: #E5E5E5;
 }
-#admin-document-editor .row #list .item > ul > li > ul > li > ul {
-  margin-left: 30px;
+#admin-document-editor .row #list .items li .item {
+  cursor: pointer;
+}
+#admin-document-editor .row #list .items li .item:hover {
+  background-color: #F2F2F2;
 }
 #admin-document-editor .row #setting {
   border-left: 1px solid #ddd;

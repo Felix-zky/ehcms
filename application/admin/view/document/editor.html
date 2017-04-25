@@ -14,19 +14,25 @@
 					<div class="pull-left"><i class="fa fa-bars"></i>目录</div>
 					<div class="pull-right"><i class="fa fa-plus-square" data-toggle="tooltip" data-placement="left" title="添加顶级目录/章节"></i></div>
 				</div>
-				<div class="item">
+				<div class="items">
 					<ul>
 						<li>
-							<i></i>
-							<a href="javascript:void(0);">dfasdfasdfasd</a>
+							<div class="item">
+								<i></i>
+								<a href="http://zky.name" target="_blank">dfasdfasdfasd</a>
+							</div>
 							<ul>
 								<li>
-									<i></i>
-									<a href="javascript:void(0);">dfasdfasdfasd</a>
+									<div class="item">
+										<i></i>
+										<a href="javascript:void(0);">dfasdfasdfasd</a>
+									</div>
 									<ul>
 										<li>
-											<i></i>
-											<a href="javascript:void(0);">dfasdfasdfasd</a>
+											<div class="item">
+												<i></i>
+												<a href="javascript:void(0);">dfasdfasdfasd</a>
+											</div>
 										</li>
 									</ul>
 								</li>
@@ -51,6 +57,14 @@
 		$('#close').click(function(){
 			parent.eh.openParentSidebar();
 			parent.layer.close(parent.layer.getFrameIndex(window.name));
+		});
+
+		$('.items').on('click', '.item', function(){
+			$(this).children('a').trigger('click');
+		});
+
+		$('.items').on('click', 'a', function(e){
+			e.stopPropagation();
 		});
 	});
 </script>
