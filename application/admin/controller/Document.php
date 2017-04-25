@@ -23,7 +23,8 @@ class Document extends Init{
 		}
 	}
 	
-	public function edit(){
+	public function edit($id){
+		$this->assign('id', $id);
 		$this->assign('actionSign', 'editor');
 		return $this->fetch('editor');
 	}

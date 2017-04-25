@@ -12,7 +12,9 @@ body .layui-layer-content{
 	border-radius: 10px;
 	overflow: hidden;
 }
-
+body .layui-layer-content.no-radius{
+	border-radius: 0;
+}
 body .layui-layer-iframe .layui-layer-content{
 	border-radius: 0;
 }

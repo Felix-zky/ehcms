@@ -6,13 +6,13 @@
 		<button class="btn btn-success" id="close">关闭</button>
 	</div>
 </header>
-<section class="iframe-main" id="editor">
+<section class="iframe-main" id="editor" data-id="{$id}">
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-sm-3" id="list">
 				<div class="top">
 					<div class="pull-left"><i class="fa fa-bars"></i>目录</div>
-					<div class="pull-right"><i class="fa fa-plus-square" data-toggle="tooltip" data-placement="left" title="添加顶级目录/章节"></i></div>
+					<div class="pull-right"><i class="fa fa-plus-square" data-toggle="tooltip" data-placement="left" title="添加顶级目录/章节" id="add-item"></i></div>
 				</div>
 				<div class="items">
 					<ul>
@@ -50,8 +50,30 @@
 		</div>
 	</div>
 </section>
+<script type="text/html" id="add-item-tpl">
+	<div class="container-fluid">
+		<div class="row">
+			<form class="form-horizontal">
+				<div class="form-group">
+					<label for="inputEmail3" class="col-sm-2 control-label">名称：</label>
+					<div class="col-sm-10">
+						<input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputEmail3" class="col-sm-2 control-label">类型选择：</label>
+					<div class="col-sm-10 switch" data-on="primary" data-off="info">
+						<input type="checkbox" checked>
+					</div>
+				</div>
+				
+			</form>
+		</div>
+	</div>
+</script>
+{css href="http://cdn.bootcss.com/bootstrap-switch/3.3.4/css/bootstrap3/bootstrap-switch.min.css"}
 <script type="text/javascript">
-	require(['jquery', 'bootstrap'], function(){
+	require(['jquery', 'switch', 'bootstrap'], function($, bootstrapSwitch){
 		$('[data-toggle="tooltip"]').tooltip();
 
 		$('#close').click(function(){
@@ -59,12 +81,24 @@
 			parent.layer.close(parent.layer.getFrameIndex(window.name));
 		});
 
-		$('.items').on('click', '.item', function(){
-			$(this).children('a').trigger('click');
-		});
+		// $('.items').on('click', '.item', function(){
+		// 	$(this).children('a').trigger('click');
+		// });
 
-		$('.items').on('click', 'a', function(e){
-			e.stopPropagation();
+		// $('.items').on('click', 'a', function(e){
+		// 	e.stopPropagation();
+		// });
+		
+		$('#add-item').click(function() {
+			layer.open({
+				type: 1,
+				area: '60%',
+				title: false,
+				content: $('#add-item-tpl').html(),
+				success: function(){
+					$(':checkbox').bootstrapSwitch();
+				}
+			});
 		});
 	});
 </script>
