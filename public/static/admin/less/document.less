@@ -59,10 +59,8 @@
 }
 
 #admin-document-editor{
-	.container-fluid, .row{
+	#editor > .row{
 		height: 100%;
-	}
-	.row{
 		border-top: 1px solid #ddd;
 		> div{
 			height: 100%;
@@ -146,6 +144,16 @@
 		}
 		#setting{
 			border-left: 1px solid #ddd;
+		}
+	}
+
+	.layui-layer .container-fluid{
+		background-color: #FFF;
+		form .form-group{
+			.hr-line-dashed;
+			&:first-child{
+				padding-top: 0;
+			}
 		}
 	}
 }

@@ -10149,86 +10149,94 @@ i {
 #admin-document-index .create-tpl .submit button {
   padding: 6px 40px;
 }
-#admin-document-editor .container-fluid,
-#admin-document-editor .row {
+#admin-document-editor #editor > .row {
   height: 100%;
-}
-#admin-document-editor .row {
   border-top: 1px solid #ddd;
 }
-#admin-document-editor .row > div {
+#admin-document-editor #editor > .row > div {
   height: 100%;
   background-color: #FFF;
   overflow-x: hidden;
   overflow-y: auto;
 }
-#admin-document-editor .row #list {
+#admin-document-editor #editor > .row #list {
   border-right: 1px solid #ddd;
   padding: 0;
 }
-#admin-document-editor .row #list .top {
+#admin-document-editor #editor > .row #list .top {
   height: 35px;
   border-bottom: 1px solid #ddd;
   margin-bottom: 10px;
 }
-#admin-document-editor .row #list .top .pull-left,
-#admin-document-editor .row #list .top .pull-right {
+#admin-document-editor #editor > .row #list .top .pull-left,
+#admin-document-editor #editor > .row #list .top .pull-right {
   line-height: 35px;
 }
-#admin-document-editor .row #list .top .pull-left {
+#admin-document-editor #editor > .row #list .top .pull-left {
   padding: 0 20px;
   border-right: 1px solid #ddd;
   height: 36px;
   background-color: #FFF;
 }
-#admin-document-editor .row #list .top .pull-right {
+#admin-document-editor #editor > .row #list .top .pull-right {
   padding-right: 10px;
   cursor: pointer;
 }
-#admin-document-editor .row #list .items {
+#admin-document-editor #editor > .row #list .items {
   clear: both;
 }
-#admin-document-editor .row #list .items > ul > li > ul .item {
+#admin-document-editor #editor > .row #list .items > ul > li > ul .item {
   padding-left: 24px;
 }
-#admin-document-editor .row #list .items > ul > li > ul > li > ul .item {
+#admin-document-editor #editor > .row #list .items > ul > li > ul > li > ul .item {
   padding-left: 48px;
 }
-#admin-document-editor .row #list .items li {
+#admin-document-editor #editor > .row #list .items li {
   height: 30px;
   line-height: 30px;
   font-size: 0;
 }
-#admin-document-editor .row #list .items li i,
-#admin-document-editor .row #list .items li a {
+#admin-document-editor #editor > .row #list .items li i,
+#admin-document-editor #editor > .row #list .items li a {
   height: 30px;
   line-height: 30px;
   display: inline-block;
   vertical-align: bottom;
   font-size: 14px;
 }
-#admin-document-editor .row #list .items li i {
+#admin-document-editor #editor > .row #list .items li i {
   width: 24px;
   margin: 0;
   text-align: center;
 }
-#admin-document-editor .row #list .items li a {
+#admin-document-editor #editor > .row #list .items li a {
   color: #333;
 }
-#admin-document-editor .row #list .items li a:hover {
+#admin-document-editor #editor > .row #list .items li a:hover {
   text-decoration: none;
 }
-#admin-document-editor .row #list .items li.active .item {
+#admin-document-editor #editor > .row #list .items li.active .item {
   background-color: #E5E5E5;
 }
-#admin-document-editor .row #list .items li .item {
+#admin-document-editor #editor > .row #list .items li .item {
   cursor: pointer;
 }
-#admin-document-editor .row #list .items li .item:hover {
+#admin-document-editor #editor > .row #list .items li .item:hover {
   background-color: #F2F2F2;
 }
-#admin-document-editor .row #setting {
+#admin-document-editor #editor > .row #setting {
   border-left: 1px solid #ddd;
+}
+#admin-document-editor .layui-layer .container-fluid {
+  background-color: #FFF;
+}
+#admin-document-editor .layui-layer .container-fluid form .form-group {
+  border-bottom: 1px dashed #e7eaec;
+  padding: 20px 0;
+  margin-bottom: 0;
+}
+#admin-document-editor .layui-layer .container-fluid form .form-group:first-child {
+  padding-top: 0;
 }
 #admin-documentCategory-index .iframe-main {
   padding: 0 15px;

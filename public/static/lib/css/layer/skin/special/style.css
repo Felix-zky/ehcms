@@ -26,7 +26,7 @@ body .layer-ext-special[type="dialog"] {
 	min-width: 320px;
 }
 body .layer-ext-special-msg[type="dialog"]{min-width:200px;}
-body .layer-ext-special .layui-layer-title{ 
+body .layui-layer-title{ 
 	border-bottom: 1px solid #e5e5e5;
 	padding: 15px;
 	height: auto;
@@ -35,6 +35,9 @@ body .layer-ext-special .layui-layer-title{
 	text-align: center;
 	border-top-left-radius: 10px;
 	border-top-right-radius: 10px;
+}
+body .layui-layer-prompt .layui-layer-title{
+	padding: 15px 80px 15px 20px;
 }
 body .layer-ext-special .layui-layer-title img.icon{
 	width: 18px;
