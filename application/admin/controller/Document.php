@@ -52,4 +52,32 @@ class Document extends Init{
 		}
 	}
 	
+	public function getItems(){
+		$items = db('document_item')->where('document_id', input('document_id'))->select();
+		if ($items){
+			$data = [];
+			foreach ($items as $item){
+				$data[] = [
+					'id' => 'tree' . $item['id'],
+					'text' => $item['name'],
+					'parent' => $item['parent_id'] == 0 ? '#' : 'tree' . $item['parent_id']
+				];
+			}
+			$this->successResult(['items' => $data]);
+		}
+	}
+	
+	public function addItem(){
+		$data = input('post.');
+		
+		$data['type'] = !empty($data['type']) && $data['type'] == 'on' ? 1 : 2;
+		
+		$id = db('document_item')->insertGetId($data);
+		if ($id > 0){
+			$this->successResult($data['type'] == 1 ? '文章类型新增成功': '目录类型新增成功', ['id' => $id]);
+		}else{
+			$this->errorResult('新增失败');
+		}
+	}
+	
 }

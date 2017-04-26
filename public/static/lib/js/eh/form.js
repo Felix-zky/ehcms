@@ -47,7 +47,7 @@ define(['jquery', 'validate.zh', 'eh', 'layer'], function(){
 						extendData.push(
 							{
 								'name' : this.name,
-								'value' : $(this.element).html()
+								'value' : this.value ? this.value : $(this.element).html()
 							}
 						);
 					}

@@ -13,32 +13,7 @@
 				<div class="pull-left"><i class="fa fa-bars"></i>目录</div>
 				<div class="pull-right"><i class="fa fa-plus-square" data-toggle="tooltip" data-placement="left" title="添加顶级目录/章节" id="add-item"></i></div>
 			</div>
-			<div class="items">
-				<ul>
-					<li>
-						<div class="item">
-							<i></i>
-							<a href="http://zky.name" target="_blank">dfasdfasdfasd</a>
-						</div>
-						<ul>
-							<li>
-								<div class="item">
-									<i></i>
-									<a href="javascript:void(0);">dfasdfasdfasd</a>
-								</div>
-								<ul>
-									<li>
-										<div class="item">
-											<i></i>
-											<a href="javascript:void(0);">dfasdfasdfasd</a>
-										</div>
-									</li>
-								</ul>
-							</li>
-						</ul>
-					</li>
-				</ul>
-			</div>
+			<div id="items"></div>
 		</div>
 		<div class="col-sm-6" id="detail">
 
@@ -54,7 +29,7 @@
 				<div class="form-group">
 					<label for="name" class="col-sm-3 control-label"><span class="red">*</span>名称：</label>
 					<div class="col-sm-7">
-						<input type="name" class="form-control" id="name" placeholder="请输入名称（目录名称或文章的显示名称）">
+						<input type="name" class="form-control" name="name" id="name" placeholder="请输入名称（目录名称或文章的显示名称）">
 					</div>
 				</div>
 				<div class="form-group">
@@ -102,11 +77,11 @@
 		</div>
 	</div>
 </script>
-{css href="http://cdn.bootcss.com/bootstrap-switch/3.3.4/css/bootstrap3/bootstrap-switch.min.css"}
+{css href="http://cdn.bootcss.com/bootstrap-switch/3.3.4/css/bootstrap3/bootstrap-switch.min.css,http://cdn.bootcss.com/jstree/3.3.4/themes/default/style.min.css"}
 <script type="text/javascript">
-	require(['jquery', 'switch', 'bootstrap'], function($, bootstrapSwitch){
+	require(['jquery', 'switch', 'jstree', 'bootstrap', 'eh.form', 'eh.xhr'], function($, bootstrapSwitch, jstree){
 		$('[data-toggle="tooltip"]').tooltip();
-
+		
 		$(':checkbox').bootstrapSwitch();
 
 		$('#close').click(function(){
@@ -114,13 +89,26 @@
 			parent.layer.close(parent.layer.getFrameIndex(window.name));
 		});
 
-		// $('.items').on('click', '.item', function(){
-		// 	$(this).children('a').trigger('click');
-		// });
+		var documentID = $('#editor').data('id'),
+			items,
+			itemsData;
+		eh.xhr.post('/admin/document/getItems.html', {document_id : documentID}, {
+			'success': function(response){
+				itemsData = response.data.items || {};
 
-		// $('.items').on('click', 'a', function(e){
-		// 	e.stopPropagation();
-		// });
+				items = $.jstree.create('#items', {
+					'core': {
+						'data': itemsData,
+						'check_callback': true,
+						'themes': {
+							'icons': false
+						},
+						'multiple' : false
+					},
+					'plugins': ['wholerow']
+				});
+			}
+		});
 		
 		$('#add-item').click(function() {
 			layer.open({
@@ -129,7 +117,30 @@
 				title: false,
 				content: $('#add-item-tpl'),
 				btn: '提交',
-				yes: function(){
+				yes: function(index){
+					var data = eh.form.extractData(
+						{
+							returnType: 'all',
+							extend: [
+								{'name': 'document_id', 'value': documentID}
+							]
+						},
+						'#add-item-tpl form'
+					);
+
+					eh.xhr.post('/admin/document/addItem.html', data.param, {
+						'success': function(response){
+							layer.close(index);
+							layer.msg(response.msg);
+
+							var res = response.data;
+							if (res.id > 0) {
+								items.create_node("#", {id: 'tree' + res.id, 'text': data.json.name}, 'last', function(node){
+									items.select_node(node);
+								});
+							}
+						}
+					});
 					return false;
 				}
 			});
