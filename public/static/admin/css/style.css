@@ -10227,16 +10227,20 @@ i {
 #admin-document-editor #editor > .row #setting {
   border-left: 1px solid #ddd;
 }
-#admin-document-editor .layui-layer .container-fluid {
+#admin-document-editor #add-item-tpl {
+  display: none;
   background-color: #FFF;
 }
-#admin-document-editor .layui-layer .container-fluid form .form-group {
+#admin-document-editor #add-item-tpl form .form-group {
   border-bottom: 1px dashed #e7eaec;
   padding: 20px 0;
   margin-bottom: 0;
 }
-#admin-document-editor .layui-layer .container-fluid form .form-group:first-child {
+#admin-document-editor #add-item-tpl form .form-group:first-child {
   padding-top: 0;
+}
+#admin-document-editor #add-item-tpl form .form-group:nth-last-child(1) {
+  border-bottom: none;
 }
 #admin-documentCategory-index .iframe-main {
   padding: 0 15px;

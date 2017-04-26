@@ -47,25 +47,58 @@
 
 		</div>
 	</div>
-</section>
-<script type="text/html" id="add-item-tpl">
-	<div class="container-fluid">
+
+	<div id="add-item-tpl">
 		<div class="row">
 			<form class="form-horizontal">
 				<div class="form-group">
-					<label for="inputEmail3" class="col-sm-3 control-label"><span class="red">*</span>名称：</label>
+					<label for="name" class="col-sm-3 control-label"><span class="red">*</span>名称：</label>
 					<div class="col-sm-7">
-						<input type="email" class="form-control" id="inputEmail3" placeholder="请输入名称（目录名称或文章的显示名称）">
+						<input type="name" class="form-control" id="name" placeholder="请输入名称（目录名称或文章的显示名称）">
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="inputEmail3" class="col-sm-3 control-label"><span class="red">*</span>类型选择：</label>
+					<label class="col-sm-3 control-label"><span class="red">*</span>类型选择：</label>
 					<div class="col-sm-7">
-						<input type="checkbox" checked data-on-color="info" data-off-color="success" data-on-text="文章" data-off-text="目录">
+						<input type="checkbox" name="type" checked data-on-color="info" data-off-color="success" data-on-text="文章" data-off-text="目录">
 					</div>
 				</div>
-				
 			</form>
+		</div>
+	</div>
+</section>
+
+<script type="text/html" id="add-item-article">
+	<div class="form-group">
+		<label for="article-id" class="col-sm-3 control-label"><span class="red">*</span>文章编号：</label>
+		<div class="col-sm-7">
+			<input type="text" class="form-control" id="article-id" name="article_id" placeholder="请输入文章的编号">
+		</div>
+	</div>
+</script>
+<script type="text/html" id="add-item-catalog">
+	<div class="form-group">
+		<label for="article-id" class="col-sm-3 control-label">目录概述：</label>
+		<div class="col-sm-7">
+			<textarea name="summary" placeholder="请输入目录概述"></textarea>
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="article-id" class="col-sm-3 control-label">目录概述图：</label>
+		<div class="col-sm-7">
+			<div class="input-group">
+				<span class="input-group-btn logo-uploader">
+					<button class="btn btn-info" href="javascript:void();" type="button">上传概述图</button>
+				</span>
+				<input class="form-control" type="text" id="summary-picture" placeholder="点击左侧按钮上传概述图" readonly />
+				<input type="hidden" name="summary_picture" id="summary-picture-url">
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label"><span class="red">*</span>显示目录：</label>
+		<div class="col-sm-7">
+			<input type="checkbox" name="show_children_catalog" checked data-on-color="success" data-on-text="是" data-off-text="否">
 		</div>
 	</div>
 </script>
@@ -73,6 +106,8 @@
 <script type="text/javascript">
 	require(['jquery', 'switch', 'bootstrap'], function($, bootstrapSwitch){
 		$('[data-toggle="tooltip"]').tooltip();
+
+		$(':checkbox').bootstrapSwitch();
 
 		$('#close').click(function(){
 			parent.eh.openParentSidebar();
@@ -90,11 +125,12 @@
 		$('#add-item').click(function() {
 			layer.open({
 				type: 1,
-				area: '60%',
+				area: '50%',
 				title: false,
-				content: $('#add-item-tpl').html(),
-				success: function(){
-					$(':checkbox').bootstrapSwitch();
+				content: $('#add-item-tpl'),
+				btn: '提交',
+				yes: function(){
+					return false;
 				}
 			});
 		});

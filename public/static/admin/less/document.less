@@ -147,12 +147,16 @@
 		}
 	}
 
-	.layui-layer .container-fluid{
+	#add-item-tpl{
+		display: none;
 		background-color: #FFF;
 		form .form-group{
 			.hr-line-dashed;
 			&:first-child{
 				padding-top: 0;
+			}
+			&:nth-last-child(1){
+				border-bottom: none;
 			}
 		}
 	}
