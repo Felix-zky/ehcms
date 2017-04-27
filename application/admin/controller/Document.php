@@ -69,12 +69,29 @@ class Document extends Init{
 	
 	public function addItem(){
 		$data = input('post.');
+		$returnData = [];
 		
-		$data['type'] = !empty($data['type']) && $data['type'] == 'on' ? 1 : 2;
+		if (!empty($data['type']) && $data['type'] == 'on'){
+			$data['type'] = 1;
+			$successMsg = '文章类型新增成功';
+			
+			if (is_numeric($data['name'])){
+				$data['relation_id'] = $data['name'];
+				$result = db('article')->field('title')->where('id', $data['name'])->find();
+				if ($result){
+					$data['name'] = $result['title'];
+					$returnData['name'] = $result['title'];
+				}
+			}
+		}else{
+			$data['type'] = 2;
+			$successMsg = '目录类型新增成功';
+		}
 		
 		$id = db('document_item')->insertGetId($data);
 		if ($id > 0){
-			$this->successResult($data['type'] == 1 ? '文章类型新增成功': '目录类型新增成功', ['id' => $id]);
+			$returnData['id'] = $id;
+			$this->successResult($successMsg, $returnData);
 		}else{
 			$this->errorResult('新增失败');
 		}

@@ -29,7 +29,7 @@
 				<div class="form-group">
 					<label for="name" class="col-sm-3 control-label"><span class="red">*</span>名称：</label>
 					<div class="col-sm-7">
-						<input type="name" class="form-control" name="name" id="name" placeholder="请输入名称（目录名称或文章的显示名称）">
+						<input type="name" class="form-control" name="name" id="name" placeholder="请输入名称（填写数字且类型为文章自动识别文章名）">
 					</div>
 				</div>
 				<div class="form-group">
@@ -135,7 +135,8 @@
 
 							var res = response.data;
 							if (res.id > 0) {
-								items.create_node("#", {id: 'tree' + res.id, 'text': data.json.name}, 'last', function(node){
+								items.create_node("#", {id: 'tree' + res.id, 'text': response.data.name ? response.data.name : data.json.name}, 'last', function(node){
+									items.deselect_all();
 									items.select_node(node);
 								});
 							}
