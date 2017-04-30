@@ -20,9 +20,9 @@
 		</div>
 		<div class="col-sm-3" id="setting">
 			<div class="top">
-				<div class="pull-right"><i class="fa fa-cogs"></i>目录</div>
+				<div class="pull-right"><i class="fa fa-cogs"></i><span></span></div>
 			</div>
-			<div id="#setting-form">
+			<div id="setting-form">
 				<form></form>
 			</div>
 		</div>
@@ -54,43 +54,31 @@
 
 <script type="text/html" id="add-item-article">
 	<div class="form-group">
-		<label for="article-id" class="col-sm-3 control-label"><span class="red">*</span>文章编号：</label>
-		<div class="col-sm-7">
-			<input type="text" class="form-control" id="article-id" name="article_id" placeholder="请输入文章的编号">
-		</div>
+		<label for="article-id" class="control-label"><span class="red">*</span>文章编号：</label>
+		<input type="text" class="form-control" id="article-id" name="article_id" placeholder="请输入文章的编号">
 	</div>
-	<div class="col-sm-12">
-		<button class="btn btn-danger" type="submit">修改文章配置</button>
-	</div>
+	<button class="btn btn-danger" type="submit">修改文章配置</button>
 </script>
 <script type="text/html" id="add-item-catalog">
 	<div class="form-group">
-		<label for="article-id" class="col-sm-3 control-label">目录概述：</label>
-		<div class="col-sm-7">
-			<textarea name="summary" placeholder="请输入目录概述"></textarea>
+		<label for="article-id" class="control-label">目录概述：</label>
+		<textarea name="summary" placeholder="请输入目录概述"></textarea>
+	</div>
+	<div class="form-group">
+		<label for="article-id" class="control-label">目录概述图：</label>
+		<div class="input-group">
+			<span class="input-group-btn logo-uploader">
+				<button class="btn btn-info" href="javascript:void();" type="button">上传概述图</button>
+			</span>
+			<input class="form-control" type="text" id="summary-picture" placeholder="点击左侧按钮上传概述图" readonly />
+			<input type="hidden" name="summary_picture" id="summary-picture-url">
 		</div>
 	</div>
 	<div class="form-group">
-		<label for="article-id" class="col-sm-3 control-label">目录概述图：</label>
-		<div class="col-sm-7">
-			<div class="input-group">
-				<span class="input-group-btn logo-uploader">
-					<button class="btn btn-info" href="javascript:void();" type="button">上传概述图</button>
-				</span>
-				<input class="form-control" type="text" id="summary-picture" placeholder="点击左侧按钮上传概述图" readonly />
-				<input type="hidden" name="summary_picture" id="summary-picture-url">
-			</div>
-		</div>
+		<label class="control-label"><span class="red">*</span>显示目录：</label>
+		<input type="checkbox" name="show_children_catalog" checked data-on-color="success" data-on-text="是" data-off-text="否">
 	</div>
-	<div class="form-group">
-		<label class="col-sm-3 control-label"><span class="red">*</span>显示目录：</label>
-		<div class="col-sm-7">
-			<input type="checkbox" name="show_children_catalog" checked data-on-color="success" data-on-text="是" data-off-text="否">
-		</div>
-	</div>
-	<div class="col-sm-12">
-		<button class="btn btn-danger" type="submit">修改目录配置</button>
-	</div>
+	<button class="btn btn-danger" type="submit">修改目录配置</button>
 </script>
 {css href="http://cdn.bootcss.com/bootstrap-switch/3.3.4/css/bootstrap3/bootstrap-switch.min.css,http://cdn.bootcss.com/jstree/3.3.4/themes/default/style.min.css"}
 <script type="text/javascript">
@@ -167,6 +155,12 @@
 
 				items.element.on('select_node.jstree', function(node, selected) {
 					var type = selected.node.li_attr['data-type'];
+					if (type == 1) {
+						$('#setting .top span').html('文章配置');
+						$('#setting-form form').html($('#add-item-article').html());
+					}else if (type ==2) {
+						$('#setting .top span').html('目录配置');
+					}
 				});
 			}
 		});
