@@ -10201,6 +10201,9 @@ i {
 }
 #admin-document-editor #editor > .row #setting {
   border-left: 1px solid #ddd;
+  padding: 0;
+}
+#admin-document-editor #editor > .row #setting form {
   padding: 0 15px;
 }
 #admin-document-editor #editor > .row #setting .red {

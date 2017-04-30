@@ -100,4 +100,17 @@ class Document extends Init{
 		}
 	}
 	
+	public function getArticle(){
+		$itemID = input('id');
+		$item = db('document_item')->field('relation_id')->where('id', input('id'))->find();
+		$article = db('article')->field('content')->where('id', $item['relation_id'])->find();
+		
+		$data = [
+			'article_id' => $item['relation_id'],
+			'content' => $article['content']
+		];
+		
+		$this->successResult($data);
+	}
+	
 }

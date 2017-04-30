@@ -15,9 +15,7 @@
 			</div>
 			<div id="items"></div>
 		</div>
-		<div class="col-sm-7" id="detail">
-
-		</div>
+		<div class="col-sm-7" id="detail"></div>
 		<div class="col-sm-3" id="setting">
 			<div class="top">
 				<div class="pull-right"><i class="fa fa-cogs"></i><span></span></div>
@@ -55,7 +53,7 @@
 <script type="text/html" id="add-item-article">
 	<div class="form-group">
 		<label for="article-id" class="control-label"><span class="red">*</span>文章编号：</label>
-		<input type="text" class="form-control" id="article-id" name="article_id" placeholder="请输入文章的编号">
+		<input type="text" class="form-control" id="article-id" name="article_id" value="{{d.article_id}}">
 	</div>
 	<button class="btn btn-danger" type="submit">修改文章配置</button>
 </script>
@@ -82,7 +80,7 @@
 </script>
 {css href="http://cdn.bootcss.com/bootstrap-switch/3.3.4/css/bootstrap3/bootstrap-switch.min.css,http://cdn.bootcss.com/jstree/3.3.4/themes/default/style.min.css"}
 <script type="text/javascript">
-	require(['jquery', 'switch', 'jstree', 'jquery.contextMenu', 'bootstrap', 'eh.form', 'eh.xhr'], function($, bootstrapSwitch, jstree){
+	require(['jquery', 'switch', 'jstree', 'laytpl', 'jquery.contextMenu', 'bootstrap', 'eh.form', 'eh.xhr'], function($, bootstrapSwitch, jstree, laytpl){
 		$('[data-toggle="tooltip"]').tooltip();
 		
 		$(':checkbox').bootstrapSwitch();
@@ -154,10 +152,21 @@
 				});
 
 				items.element.on('select_node.jstree', function(node, selected) {
-					var type = selected.node.li_attr['data-type'];
+					var type = selected.node.li_attr['data-type'],
+						reg = /\d+/,
+						id = reg.exec(selected.node.id)[0];
+
 					if (type == 1) {
 						$('#setting .top span').html('文章配置');
-						$('#setting-form form').html($('#add-item-article').html());
+
+						eh.xhr.post('/admin/document/getArticle.html', {'id': id}, {
+							'success': function(response){
+								$('#detail').html(response.data.content);
+								laytpl($('#add-item-article').html()).render(response.data, function(render){
+									$('#setting-form form').html(render);
+								});
+							}
+						});
 					}else if (type ==2) {
 						$('#setting .top span').html('目录配置');
 					}
