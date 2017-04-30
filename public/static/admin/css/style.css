@@ -10182,50 +10182,38 @@ i {
   padding-right: 10px;
   cursor: pointer;
 }
-#admin-document-editor #editor > .row #list .items {
-  clear: both;
-}
-#admin-document-editor #editor > .row #list .items > ul > li > ul .item {
-  padding-left: 24px;
-}
-#admin-document-editor #editor > .row #list .items > ul > li > ul > li > ul .item {
-  padding-left: 48px;
-}
-#admin-document-editor #editor > .row #list .items li {
-  height: 30px;
-  line-height: 30px;
-  font-size: 0;
-}
-#admin-document-editor #editor > .row #list .items li i,
-#admin-document-editor #editor > .row #list .items li a {
-  height: 30px;
-  line-height: 30px;
-  display: inline-block;
-  vertical-align: bottom;
-  font-size: 14px;
-}
-#admin-document-editor #editor > .row #list .items li i {
-  width: 24px;
-  margin: 0;
-  text-align: center;
-}
-#admin-document-editor #editor > .row #list .items li a {
-  color: #333;
-}
-#admin-document-editor #editor > .row #list .items li a:hover {
-  text-decoration: none;
-}
-#admin-document-editor #editor > .row #list .items li.active .item {
-  background-color: #E5E5E5;
-}
-#admin-document-editor #editor > .row #list .items li .item {
-  cursor: pointer;
-}
-#admin-document-editor #editor > .row #list .items li .item:hover {
+#admin-document-editor #editor > .row #items .context-menu-active .jstree-wholerow {
   background-color: #F2F2F2;
+}
+#admin-document-editor #editor > .row #items .jstree-wholerow {
+  height: 30px;
+}
+#admin-document-editor #editor > .row #items .jstree-wholerow-hovered {
+  background-color: #F2F2F2;
+}
+#admin-document-editor #editor > .row #items .jstree-wholerow-clicked {
+  background: none;
+  background-color: #E5E5E5 !important;
+}
+#admin-document-editor #editor > .row #items .jstree-anchor {
+  height: 30px;
+  line-height: 30px;
 }
 #admin-document-editor #editor > .row #setting {
   border-left: 1px solid #ddd;
+  padding: 0;
+}
+#admin-document-editor #editor > .row #setting .top {
+  height: 35px;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 10px;
+}
+#admin-document-editor #editor > .row #setting .top .pull-right {
+  line-height: 35px;
+  padding: 0 20px;
+  border-left: 1px solid #ddd;
+  height: 36px;
+  background-color: #FFF;
 }
 #admin-document-editor #add-item-tpl {
   display: none;

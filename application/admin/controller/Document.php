@@ -60,7 +60,10 @@ class Document extends Init{
 				$data[] = [
 					'id' => 'tree' . $item['id'],
 					'text' => $item['name'],
-					'parent' => $item['parent_id'] == 0 ? '#' : 'tree' . $item['parent_id']
+					'parent' => $item['parent_id'] == 0 ? '#' : 'tree' . $item['parent_id'],
+					'li_attr' => [
+						'data-type' => $item['type']
+					]
 				];
 			}
 			$this->successResult(['items' => $data]);

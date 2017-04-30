@@ -8,18 +8,23 @@
 </header>
 <section class="iframe-main" id="editor" data-id="{$id}">
 	<div class="row">
-		<div class="col-sm-3" id="list">
+		<div class="col-sm-2" id="list">
 			<div class="top">
 				<div class="pull-left"><i class="fa fa-bars"></i>目录</div>
 				<div class="pull-right"><i class="fa fa-plus-square" data-toggle="tooltip" data-placement="left" title="添加顶级目录/章节" id="add-item"></i></div>
 			</div>
 			<div id="items"></div>
 		</div>
-		<div class="col-sm-6" id="detail">
+		<div class="col-sm-7" id="detail">
 
 		</div>
 		<div class="col-sm-3" id="setting">
-
+			<div class="top">
+				<div class="pull-right"><i class="fa fa-cogs"></i>目录</div>
+			</div>
+			<div id="#setting-form">
+				<form></form>
+			</div>
 		</div>
 	</div>
 
@@ -41,6 +46,10 @@
 			</form>
 		</div>
 	</div>
+
+	<div id="update-item-tpl">
+		
+	</div>
 </section>
 
 <script type="text/html" id="add-item-article">
@@ -49,6 +58,9 @@
 		<div class="col-sm-7">
 			<input type="text" class="form-control" id="article-id" name="article_id" placeholder="请输入文章的编号">
 		</div>
+	</div>
+	<div class="col-sm-12">
+		<button class="btn btn-danger" type="submit">修改文章配置</button>
 	</div>
 </script>
 <script type="text/html" id="add-item-catalog">
@@ -76,10 +88,13 @@
 			<input type="checkbox" name="show_children_catalog" checked data-on-color="success" data-on-text="是" data-off-text="否">
 		</div>
 	</div>
+	<div class="col-sm-12">
+		<button class="btn btn-danger" type="submit">修改目录配置</button>
+	</div>
 </script>
 {css href="http://cdn.bootcss.com/bootstrap-switch/3.3.4/css/bootstrap3/bootstrap-switch.min.css,http://cdn.bootcss.com/jstree/3.3.4/themes/default/style.min.css"}
 <script type="text/javascript">
-	require(['jquery', 'switch', 'jstree', 'bootstrap', 'eh.form', 'eh.xhr'], function($, bootstrapSwitch, jstree){
+	require(['jquery', 'switch', 'jstree', 'jquery.contextMenu', 'bootstrap', 'eh.form', 'eh.xhr'], function($, bootstrapSwitch, jstree){
 		$('[data-toggle="tooltip"]').tooltip();
 		
 		$(':checkbox').bootstrapSwitch();
@@ -87,6 +102,48 @@
 		$('#close').click(function(){
 			parent.eh.openParentSidebar();
 			parent.layer.close(parent.layer.getFrameIndex(window.name));
+		});
+
+		$.contextMenu({
+			selector: 'li.jstree-node[data-type="2"]',
+			items: {
+				createChild: {
+					name: '<i class="fa fa-pencil-square"></i>创建子目录/文章',
+					isHtmlName: true
+				},
+				sep1: "---------",
+				delete: {
+					name: '<i class="fa fa-trash"></i>删除目录',
+					isHtmlName: true
+				}
+			},
+			zIndex: 100000000,
+			callback: function(itemKey, opt){
+				switch (itemKey){
+					case 'createChild':
+						addWindow(this);
+						break;
+					case 'delete':
+						break;
+				}
+			}
+		});
+
+		$.contextMenu({
+			selector: 'li.jstree-node[data-type="1"]',
+			items: {
+				delete: {
+					name: '<i class="fa fa-trash"></i>删除文章',
+					isHtmlName: true
+				}
+			},
+			zIndex: 100000000,
+			callback: function(itemKey, opt){
+				switch (itemKey){
+					case 'delete':
+						break;
+				}
+			}
 		});
 
 		var documentID = $('#editor').data('id'),
@@ -107,10 +164,19 @@
 					},
 					'plugins': ['wholerow']
 				});
+
+				items.element.on('select_node.jstree', function(node, selected) {
+					var type = selected.node.li_attr['data-type'];
+				});
 			}
 		});
 		
 		$('#add-item').click(function() {
+			addWindow();
+		});
+
+
+		function addWindow(par){
 			layer.open({
 				type: 1,
 				area: '50%',
@@ -118,12 +184,24 @@
 				content: $('#add-item-tpl'),
 				btn: '提交',
 				yes: function(index){
+					var extend = [
+						{'name': 'document_id', 'value': documentID}
+					];
+
+					if (par) {
+						var reg = /\d+/,
+							parentID = reg.exec(par.attr('id'))[0];
+
+						extend.push({
+							'name': 'parent_id',
+							'value': parentID
+						})
+					}
+
 					var data = eh.form.extractData(
 						{
 							returnType: 'all',
-							extend: [
-								{'name': 'document_id', 'value': documentID}
-							]
+							extend: extend
 						},
 						'#add-item-tpl form'
 					);
@@ -131,11 +209,11 @@
 					eh.xhr.post('/admin/document/addItem.html', data.param, {
 						'success': function(response){
 							layer.close(index);
-							layer.msg(response.msg);
+							layer.msg(response.msg, {'icon': 6});
 
 							var res = response.data;
 							if (res.id > 0) {
-								items.create_node("#", {id: 'tree' + res.id, 'text': response.data.name ? response.data.name : data.json.name}, 'last', function(node){
+								items.create_node(par ? par : "#", {id: 'tree' + res.id, 'text': response.data.name ? response.data.name : data.json.name, 'li_attr': {'data-type': data.json.type == 'on' ? 1 : 2}}, 'last', function(node){
 									items.deselect_all();
 									items.select_node(node);
 								});
@@ -145,6 +223,6 @@
 					return false;
 				}
 			});
-		});
+		}
 	});
 </script>
