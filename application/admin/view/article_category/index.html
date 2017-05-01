@@ -1,0 +1,67 @@
+<header>
+	<div class="pull-left">
+		<button class="btn btn-danger" id="add-category">新增文章分类</button>
+	</div>
+</header>
+<section class="iframe-main">
+	<div id="crumbs">
+		当前位置：<a href="{:url('admin/DocumentCategory/index')}">文章分类</a> > <a href="#">asdfasdf</a>
+	</div>
+	<div id="categories">
+		<table class="table table-striped table-hover table-bordered">
+			<thead>
+				<tr>
+					<th width="10%">编号</th>
+					<th width="40%">分类名称</th>
+					<th width="25%">子分类</th>
+					<th width="25%">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>1</td>
+					<td>Kimath</td>
+					<td>
+						<button class="btn btn-primary btn-sm">查看子分类</button>
+						<button class="btn btn-danger btn-sm">添加子分类</button>
+					</td>
+					<td>
+						<button class="btn btn-warning btn-sm">编辑</button>
+						<button class="btn btn-danger btn-sm">删除</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</section>
+<div id="add-category-tpl">
+	<div class="container-fluid">
+		<div class="row">
+			<form class="form-horizontal">
+				<div class="form-group">
+					<label for="name" class="col-sm-3 control-label"><span class="red">*</span>分类名称：</label>
+					<div class="col-sm-8">
+						<input type="text" class="form-control" id="name" placeholder="请输入分类名称">
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-8 col-sm-offset-3">
+						<button class="btn btn-danger">提交</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	require(['jquery', 'layer', 'eh.xhr'], function(){
+		$('#add-category').click(function() {
+			layer.open({
+				type: 1,
+				area: '60%',
+				title: false,
+				content: $('#add-category-tpl')
+			});
+		});
+	});
+</script>

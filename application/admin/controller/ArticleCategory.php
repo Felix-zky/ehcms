@@ -1,8 +1,7 @@
 <?php
 namespace app\admin\controller;
 
-use think\Controller;
-class ArticleCategory extends Controller{
+class ArticleCategory extends Init{
 	
 	public function index(){
 		return $this->fetch();

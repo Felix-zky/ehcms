@@ -9055,6 +9055,9 @@ ul.messenger.messenger-fixed {
   padding-bottom: 4px !important;
   text-decoration: none !important;
 }
+.layui-layer-content .container-fluid {
+  background-color: #FFF;
+}
 .context-menu-list {
   position: absolute;
   display: inline-block;
@@ -9831,6 +9834,43 @@ i {
   -moz-transition: width 1.5s;
   -webkit-transition: width 1.5s;
   -o-transition: width 1.5s;
+}
+#admin-articleCategory-index .iframe-main {
+  padding: 0 15px;
+}
+#admin-articleCategory-index .iframe-main #crumbs {
+  background-color: #eee;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  margin-top: 10px;
+  padding: 10px 0 10px 10px;
+}
+#admin-articleCategory-index .iframe-main #crumbs a {
+  color: #23527c;
+}
+#admin-articleCategory-index .iframe-main th,
+#admin-articleCategory-index .iframe-main td {
+  text-align: center;
+}
+#admin-articleCategory-index .iframe-main td {
+  line-height: 30px;
+}
+#admin-articleCategory-index .iframe-main td:nth-child(2) {
+  text-align: left;
+}
+#admin-articleCategory-index #add-category-tpl {
+  display: none;
+}
+#admin-articleCategory-index #add-category-tpl .form-group {
+  border-bottom: 1px dashed #e7eaec;
+  padding: 20px 0;
+  margin-bottom: 0;
+}
+#admin-articleCategory-index #add-category-tpl .form-group:last-child {
+  border-bottom: none;
+}
+#admin-articleCategory-index #add-category-tpl button {
+  padding: 6px 50px;
 }
 #admin-resource-index #cancel-all,
 #admin-resource-index #delete-all {
