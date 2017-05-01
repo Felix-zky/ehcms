@@ -7,6 +7,7 @@ Route::post('admin/Member/list', 'admin/Member/getMemberList');
 Route::rule('admin/Resource/uploader/[:parentGroupID]/[:childrenGroupID]', 'admin/Resource/uploader', '*', [], ['parentGroupID' => '\d+|all', 'childrenGroupID' => '\d+']);
 Route::rule('admin/document/cover', 'admin/Document/uploaderCover');
 Route::rule('admin/article_category/parent_id/:parent_id', 'admin/ArticleCategory/index', 'get', [], ['parent' => '\d+']);
+Route::get('admin/article/getcategory', 'admin/Article/getCategory');
 
 //注册后台资源路由
 Route::resource('admin/article', 'admin/Article');

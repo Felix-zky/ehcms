@@ -47,6 +47,7 @@ class Article extends Init{
 	 * 新增文章
 	 */
 	public function create(){
+		$this->assign('category', $this->getCategory());
 		$this->assign('saveUrl', url('save'));
 		return $this->fetch();
 	}
@@ -104,6 +105,16 @@ class Article extends Init{
 			}
 		}else{
 			$this->errorResult('获取上传文件失败');
+		}
+	}
+	
+	public function getCategory(){
+		$parentID = input('parent_id') ?: 0;
+		$result = db('article_category')->where('parent_id', $parentID)->order('id', 'desc')->select();
+		if (request()->isAjax()){
+			$this->successResult(['category' => $result]);
+		}else{
+			return $result;
 		}
 	}
 }

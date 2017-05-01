@@ -96,9 +96,20 @@
 					'http://cdn.bootcss.com/clipboard.js/1.6.1/clipboard.min',
 					'clipboard.min'
 				],
+				/** 树形菜单 */
 				'jstree': [
 					'http://cdn.bootcss.com/jstree/3.3.4/jstree.min',
 					'jstree.min'
+				],
+				/** 下拉菜单组件 */
+				'bootstrap-select': [
+					'http://cdn.bootcss.com/bootstrap-select/1.12.1/js/bootstrap-select.min',
+					'bootstrap-select/bootstrap-select.min'
+				],
+				/** 下拉菜单组件中文语言包 */
+				'bootstrap-select-zh': [
+					'http://cdn.bootcss.com/bootstrap-select/1.12.1/js/i18n/defaults-zh_CN.min',
+					'bootstrap-select/zh_CN.min'
 				],
 				/** codemirror的markdown代码高亮 */
 				'codemirror-gfm': [
@@ -137,6 +148,12 @@
 				},
 				jstree: {
 					deps:['jquery']
+				},
+				'bootstrap-select': {
+					deps: ['jquery']
+				},
+				'bootstrap-select-zh': {
+					deps: ['bootstrap-select']
 				}
 			}
 		});

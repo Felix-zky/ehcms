@@ -1,6 +1,7 @@
 <?php
 namespace app\admin\controller;
 
+use think\Db;
 class Document extends Init{
 	
 	public function index(){
@@ -54,8 +55,8 @@ class Document extends Init{
 	
 	public function getItems(){
 		$items = db('document_item')->where('document_id', input('document_id'))->select();
+		$data = [];
 		if ($items){
-			$data = [];
 			foreach ($items as $item){
 				$data[] = [
 					'id' => 'tree' . $item['id'],
@@ -66,8 +67,9 @@ class Document extends Init{
 					]
 				];
 			}
-			$this->successResult(['items' => $data]);
 		}
+		
+		$this->successResult(['items' => $data]);
 	}
 	
 	public function addItem(){
@@ -80,10 +82,14 @@ class Document extends Init{
 			
 			if (is_numeric($data['name'])){
 				$data['relation_id'] = $data['name'];
-				$result = db('article')->field('title')->where('id', $data['name'])->find();
+				$result = Db('article')->field('title')->where(['id' => $data['name'], 'document_id' => 0])->find();
 				if ($result){
 					$data['name'] = $result['title'];
 					$returnData['name'] = $result['title'];
+					
+					Db('article')->where('id', $data['relation_id'])->update(['document_id' => $data['document_id']]);
+				}else{
+					$this->errorResult('文章不存在或已被其他文档使用');
 				}
 			}
 		}else{

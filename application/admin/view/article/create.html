@@ -36,6 +36,21 @@
 				</div>
 			</div>
 		</div>
+		<div class="form-group">
+			<label for="description" class="col-sm-1 control-label">文章分类：</label>
+			<input type="hidden" name="category_id" id="category-id">
+			<div class="col-sm-5">
+				<select class="selectpicker show-tick form-control" data-title="请选择一级分类" data-icon-base="fa" data-tick-icon="fa-check">
+					{foreach $category as $v}
+						<option value="{$v.id}">{$v.name}</option>
+					{/foreach}
+				</select>
+			</div>
+			<div class="col-sm-5">
+				<select class="selectpicker show-tick form-control" data-title="请选择二级分类" data-icon-base="fa" data-tick-icon="fa-check">
+				</select>
+			</div>
+		</div>
 		<div class="form-group" id="resource-list">
 			<label class="col-sm-1 control-label">资源列表：</label>
 			<div class="col-sm-10">
@@ -92,7 +107,12 @@
 		</div>
 	</form>
 </section>
-{css href="http://cdn.bootcss.com/codemirror/5.25.0/codemirror.min.css"}
+{css href="http://cdn.bootcss.com/codemirror/5.25.0/codemirror.min.css,http://cdn.bootcss.com/bootstrap-select/1.12.1/css/bootstrap-select.min.css"}
+<script type="text/html" id="category-tpl">
+	{{# for(var i = 0, len = d.category.length; i < len; i++){ }}
+		<option value="{{d.category[i].id}}">{{d.category[i].name}}</option>
+	{{# } }}
+</script>
 <script type="text/javascript">
 	require(['js/articleCreate']);
 </script>

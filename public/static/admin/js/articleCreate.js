@@ -1,4 +1,4 @@
-define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 'codemirror-gfm', 'eh.form', 'eh.xhr', 'layer', 'jquery.contextMenu', 'bootstrap'], function($, WebUploader, Messenger, remarkable, hljs){
+define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 'codemirror-gfm', 'eh.form', 'eh.xhr', 'layer', 'jquery.contextMenu', 'bootstrap', 'bootstrap-select-zh'], function($, WebUploader, Messenger, remarkable, hljs){
 	var CodeMirror = require('../../lib/codemirror');
 
 	window.importResource = function(data){
@@ -25,6 +25,26 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 		var textareaHeight, previewHeight, validate;
 
 		//eh.htmlPreviewHeight();
+
+		$('.selectpicker').selectpicker({
+			size: 8,
+			dropupAuto: false
+		});
+
+		$('.selectpicker').on('changed.bs.select', function(){
+			var index = $(this).parents('.col-sm-5').index();
+			if (index == 2) {
+				eh.xhr.getCommon('/admin/article/getCategory.html', {'parent_id': $(this).val()}, {
+					'parentObj': $('.selectpicker:eq(1)'),
+					'tplID': 'category-tpl',
+					'after': function(){
+						$('.selectpicker:eq(1)').selectpicker('refresh');
+					}
+				});
+			}
+
+			$(this).parents('.form-group').find('#category-id').val($(this).val());
+		});
 
 		$('[data-toggle="tooltip"]').tooltip();
 

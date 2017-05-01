@@ -127,49 +127,55 @@ define(['jquery', 'laytpl', 'layer', 'eh'], function($, laytpl){
 		 * @param {String} url 请求地址
 		 * @param {Object} [varname] [description]
 		 */
-		getCommon: function(url, msg, data, tplID, viewObj, func){
+		getCommon: function(url, data, settings){
 			var option = {};
 
-			if (typeof data == 'object' && data.page){
-				option.page = data.page;
+			settings = settings || {};
+
+			if (settings.page){
+				option.page = settings.page;
 			}
 
-			if (msg == 'get' || msg == 'getList') {
-				option.type = msg;
-			}else if (!!msg) {
-				option.str = msg;
+			if (settings.msg == 'get' || settings.msg == 'getList') {
+				option.type = settings.msg;
+			}else if (!!settings.msg) {
+				option.str = settings.msg;
 			}else{
 				option.type = 'get';
 			}
 
-			if (typeof viewObj == 'string') {
-				viewObj = $(viewObj);
+			if (typeof settings.parentObj == 'string') {
+				settings.parentObj = $(settings.parentObj);
 			}
 
 			xhr.msgLayerIndex || this.loadPrompt(option);
 
 			var success = function(response){
-				func = func || {};
-
-				if (typeof func == 'function') {
-					func(parentObj, json, response);
+				if (typeof settings.fn == 'function') {
+					settings.fn(parentObj, json, response);
 				}else{
-					if (typeof func.before == 'function') {
-						var res = func.before(response);
+					if (typeof settings.before == 'function') {
+						var res = settings.before(response);
 
 						if (res === false) {
 							return false;
 						}
 					}
 
-					if (func.render !== false) {
-						laytpl($('#' + tplID).html()).render(response.data, function(html){
-							viewObj.html(html);
+					if (settings.render !== false) {
+						laytpl($('#' + settings.tplID).html()).render($.extend(settings.json, response.data || {}), function(html){
+							if (settings.prepend == true) {
+								settings.parentObj.prepend(html);
+							}else if (settings.append == true) {
+								settings.parentObj.append(html);
+							}else{
+								settings.parentObj.html(html);
+							}
 						});
 					}
 
-					if (typeof func.after == 'function') {
-						func.after(response);
+					if (typeof settings.after == 'function') {
+						settings.after(response);
 					}
 				}
 
