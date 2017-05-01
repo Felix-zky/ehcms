@@ -48,7 +48,7 @@ trait FastResponse{
 			}
 			return $this->result($data, $code, $msg, 'json');
 		}else{
-			return $this->success($msg, $mix || NULL, $data, $wait);
+			return $this->success($msg, $mix ?: NULL, $data, $wait);
 		}
 	}
 	
