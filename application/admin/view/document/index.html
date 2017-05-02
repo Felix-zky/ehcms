@@ -45,6 +45,21 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label for="description" class="col-sm-3 control-label">文档分类：</label>
+					<input type="hidden" name="category_id" id="category-id">
+					<div class="col-sm-4">
+						<select class="selectpicker show-tick form-control" data-title="请选择一级分类" data-icon-base="fa" data-tick-icon="fa-check">
+							{foreach $category as $v}
+							<option value="{$v.id}">{$v.name}</option>
+							{/foreach}
+						</select>
+					</div>
+					<div class="col-sm-4">
+						<select class="selectpicker show-tick form-control" data-title="请选择二级分类" data-icon-base="fa" data-tick-icon="fa-check">
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
 					<label for="password" class="col-sm-3 control-label">文档密码：</label>
 					<div class="col-sm-8">
 						<input type="text" class="form-control" name="password" id="password" placeholder="不设置为公开文档">
@@ -69,8 +84,14 @@
 		</div>
 	</div>
 </script>
+{css href="http://cdn.bootcss.com/bootstrap-select/1.12.1/css/bootstrap-select.min.css"}
+<script type="text/html" id="category-tpl">
+	{{# for(var i = 0, len = d.category.length; i < len; i++){ }}
+		<option value="{{d.category[i].id}}">{{d.category[i].name}}</option>
+	{{# } }}
+</script>
 <script type="text/javascript">
-	require(['jquery', 'webuploader', 'messenger.future', 'layer', 'eh.form', 'eh.xhr'], function($, WebUploader, Messenger){
+	require(['jquery', 'webuploader', 'messenger.future', 'layer', 'eh.form', 'eh.xhr', 'bootstrap', 'bootstrap-select-zh'], function($, WebUploader, Messenger){
 		var firstLoader = 1,
 		currentDocument = {},
 		createIndex;
@@ -243,6 +264,26 @@
 							$('.logo-uploader button').html('重新上传');
 							$('#cover').val('');
 						}
+					});
+
+					$('.selectpicker').selectpicker({
+						size: 8,
+						dropupAuto: false
+					});
+
+					$('.selectpicker').on('changed.bs.select', function(){
+						var index = $(this).parents('.col-sm-4').index();
+						if (index == 2) {
+							eh.xhr.getCommon('/admin/document/getCategory.html', {'parent_id': $(this).val()}, {
+								'parentObj': $('.selectpicker:eq(1)'),
+								'tplID': 'category-tpl',
+								'after': function(){
+									$('.selectpicker:eq(1)').selectpicker('refresh');
+								}
+							});
+						}
+
+						$(this).parents('.form-group').find('#category-id').val($(this).val());
 					});
 				}
 			});

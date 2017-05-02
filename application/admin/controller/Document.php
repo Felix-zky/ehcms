@@ -6,6 +6,7 @@ class Document extends Init{
 	
 	public function index(){
 		$document = db('document')->field('id, name, cover')->order('id', 'desc')->paginate(18);
+		$this->assign('category', $this->getCategory());
 		$this->assign('document', $document);
 		return $this->fetch();
 	}
@@ -117,6 +118,16 @@ class Document extends Init{
 		];
 		
 		$this->successResult($data);
+	}
+	
+	public function getCategory(){
+		$parentID = input('parent_id') ?: 0;
+		$result = db('document_category')->where('parent_id', $parentID)->order('id', 'desc')->select();
+		if (request()->isAjax()){
+			$this->successResult(['category' => $result]);
+		}else{
+			return $result;
+		}
 	}
 	
 }
