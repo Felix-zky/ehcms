@@ -57,7 +57,7 @@ class Article extends Init{
 	 */
 	public function save(){
 		if (request()->isPost()){
-			if (db('article')->insert(input('param.')) == 1){
+			if (db('article')->insert(array_merge(input('param.'), ['uid' => cookie('user_id')])) == 1){
 				$this->successResult('文章发布成功', '/admin/article');
 			}else{
 				$this->errorResult('文章发布失败');

@@ -18,8 +18,9 @@ class Document extends Init{
 	
 	public function save(){
 		$data = input('param.');
-		if (db('document')->insert($data) == 1){
-			$this->successResult('文档新增成功，请继续编辑文档内容！');
+		$id = db('document')->insertGetId($data);
+		if ($id > 0){
+			$this->successResult('文档新增成功，请继续编辑文档内容！', ['id' => $id]);
 		}else{
 			$this->errorResult('文档新增失败');
 		}

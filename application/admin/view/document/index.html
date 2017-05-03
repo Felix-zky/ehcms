@@ -179,7 +179,7 @@
 
 					layer.close(createIndex);
 
-					openEditor('create');
+					openEditor(response.data.id + '/edit');
 
 					layer.msg(response.msg, {icon: 6});
 				}
