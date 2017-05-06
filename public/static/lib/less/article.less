@@ -130,13 +130,12 @@
 
 	th {
 		text-align: left;
-		border-bottom: 2px solid #e1e4e5;
+		border-bottom: 1px solid #e1e4e5;
 	}
 
 	th, td {
 		font-size: 90%;
 		padding: 5px 15px;
-		border: none;
 	}
 
 	tr:hover td {
@@ -160,6 +159,8 @@
 	}
 
 	td{
+		border-top: none;
+		border-right: none;
 		background-color: #f3f6f6;
 		border-bottom: 1px solid #e1e4e5;
 		border-left: 1px solid #e1e4e5;
@@ -224,5 +225,23 @@
 
 	blockquote > :last-child {
 		margin-bottom: 0;
+	}
+
+	ul{
+		li{
+			list-style-type: disc;
+		}
+		> li {
+			> ul {
+				> li{
+					list-style-type: circle;
+					> ul {
+						> li {
+							list-style-type: square;
+						}
+					}
+				}
+			}
+		}
 	}
 }

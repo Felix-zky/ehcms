@@ -10420,13 +10420,12 @@ i {
 }
 #detail th {
   text-align: left;
-  border-bottom: 2px solid #e1e4e5;
+  border-bottom: 1px solid #e1e4e5;
 }
 #detail th,
 #detail td {
   font-size: 90%;
   padding: 5px 15px;
-  border: none;
 }
 #detail tr:hover td {
   background-color: #f1f1f1;
@@ -10444,6 +10443,8 @@ i {
   border-bottom-right-radius: 3px;
 }
 #detail td {
+  border-top: none;
+  border-right: none;
   background-color: #f3f6f6;
   border-bottom: 1px solid #e1e4e5;
   border-left: 1px solid #e1e4e5;
@@ -10497,4 +10498,13 @@ i {
 }
 #detail blockquote > :last-child {
   margin-bottom: 0;
+}
+#detail ul li {
+  list-style-type: disc;
+}
+#detail ul > li > ul > li {
+  list-style-type: circle;
+}
+#detail ul > li > ul > li > ul > li {
+  list-style-type: square;
 }
