@@ -33,6 +33,11 @@
 					'http://cdn.bootcss.com/jquery/1.12.4/jquery.min',
 					'jquery/jquery.min'
 				],
+				/** 单、复选框增强插件 */
+				'iCheck': [
+					'http://cdn.bootcss.com/iCheck/1.0.2/icheck.min',
+					'iCheck.min'
+				],
 				/** 右键菜单 */
 				'jquery.contextMenu': [
 					'http://cdn.bootcss.com/jquery-contextmenu/2.2.3/jquery.contextMenu.min',
@@ -135,6 +140,9 @@
 			shim: {
 				layer: {
 					deps:['jquery']
+				},
+				'iCheck': {
+					deps: ['jquery']
 				},
 				'messenger.future': {
 					deps: ['messenger'],

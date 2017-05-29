@@ -1,0 +1,48 @@
+<section class="iframe-main">
+	<div class="row">
+		<table class="table table-striped table-hover table-bordered">
+			<thead>
+				<tr>
+					<th width="20%">名称</th>
+					<th width="50%">值</th>
+					<th width="30%">key</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>网站名称</td>
+					<td><input type="text" name="site_name" class="form-control"></td>
+					<td>site_name</td>
+				</tr>
+				<tr>
+					<td>网站URL</td>
+					<td><input type="text" name="site_url" class="form-control"></td>
+					<td>site_url</td>
+				</tr>
+				<tr>
+					<td>编辑器选择</td>
+					<td><input type="radio" name="editor" value="plain" checked>富文本<input type="radio" name="editor" value="markdown">Markdown</td>
+					<td>editor</td>
+				</tr>
+			</tbody>
+		</table>
+		<!-- <form class="form-horizontal">
+			<div class="form-group">
+				<label for="name" class="col-sm-3 control-label"><span class="red">*</span>名称：</label>
+				<div class="col-sm-5">
+					<input type="name" class="form-control" name="name" id="name" placeholder="请输入名称（填写数字且类型为文章自动识别文章名）">
+				</div>
+				<p class="col-sm-2">key：site_name</p>
+			</div>
+		</form> -->
+	</div>
+</section>
+{css href="__LIB_CSS__/iCheck.blue.css"}
+<script type="text/javascript">
+	require(['jquery', 'iCheck'], function(){
+		$('input:radio').iCheck({
+			radioClass: 'iradio_square-blue',
+			increaseArea: '20%'
+		});
+	});
+</script>

@@ -10299,6 +10299,20 @@ i {
 #admin-documentCategory-index .iframe-main td:nth-child(2) {
   text-align: left;
 }
+#admin-setting-system .container-fluid,
+#admin-setting-personal .container-fluid {
+  background-color: #FFF;
+}
+#admin-setting-system .iframe-main,
+#admin-setting-personal .iframe-main {
+  width: 80%;
+  margin: 40px auto;
+}
+#admin-setting-system td,
+#admin-setting-personal td {
+  height: 34px;
+  line-height: 34px;
+}
 #detail {
   line-height: 1.7em !important;
   font-size: 16px;
