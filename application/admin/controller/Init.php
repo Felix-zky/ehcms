@@ -15,6 +15,24 @@ class Init extends Base{
 		$this->view->engine->layout('layout/layout');
 		
 		$this->checkUserLogin();
+		
+		$result = db('admin_setting')->where('uid', 0)->select();
+		
+		if ($result){
+			foreach ($result as $v){
+				$systemSetting[$v['key']] = $v['value'];
+			}
+			$this->assign('systemSetting', $systemSetting);
+		}
+		
+		$result = db('admin_setting')->where('uid', cookie('user_id'))->select();
+		
+		if ($result){
+			foreach ($result as $v){
+				$personalSetting[$v['key']] = $v['value'];
+			}
+			$this->assign('personalSetting', $personalSetting);
+		}
 	}
 	
 	/**

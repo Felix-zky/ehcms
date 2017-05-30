@@ -5,44 +5,57 @@
 				<tr>
 					<th width="20%">名称</th>
 					<th width="50%">值</th>
-					<th width="30%">key</th>
+					<th width="30%">关键词</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
 					<td>网站名称</td>
-					<td><input type="text" name="site_name" class="form-control"></td>
+					<td><input type="text" name="site_name" class="form-control" value="{$systemSetting.site_name}"></td>
 					<td>site_name</td>
 				</tr>
 				<tr>
 					<td>网站URL</td>
-					<td><input type="text" name="site_url" class="form-control"></td>
+					<td><input type="text" name="site_url" class="form-control" value="{$systemSetting.site_url}"></td>
 					<td>site_url</td>
 				</tr>
 				<tr>
 					<td>编辑器选择</td>
-					<td><input type="radio" name="editor" value="plain" checked>富文本<input type="radio" name="editor" value="markdown">Markdown</td>
-					<td>editor</td>
+					<td><input type="radio" name="editor_type" value="plain" {eq name="systemSetting.editor_type" value="plain"}checked{/eq}>富文本<input type="radio" name="editor_type" value="markdown" {eq name="systemSetting.editor_type" value="markdown"}checked{/eq}>Markdown</td>
+					<td>editor_type</td>
 				</tr>
 			</tbody>
 		</table>
-		<!-- <form class="form-horizontal">
-			<div class="form-group">
-				<label for="name" class="col-sm-3 control-label"><span class="red">*</span>名称：</label>
-				<div class="col-sm-5">
-					<input type="name" class="form-control" name="name" id="name" placeholder="请输入名称（填写数字且类型为文章自动识别文章名）">
-				</div>
-				<p class="col-sm-2">key：site_name</p>
-			</div>
-		</form> -->
 	</div>
 </section>
 {css href="__LIB_CSS__/iCheck.blue.css"}
 <script type="text/javascript">
-	require(['jquery', 'iCheck'], function(){
+	require(['jquery', 'layer', 'iCheck', 'eh.xhr'], function(){
 		$('input:radio').iCheck({
 			radioClass: 'iradio_square-blue',
 			increaseArea: '20%'
 		});
+
+		$('input:text').change(function() {
+			var key = $(this).attr('name'),
+				value = $(this).val();
+
+			edit(key, value);
+		});
+
+		$('input').on('ifChecked', function(event){
+			var key = $(this).attr('name'),
+				value = $(this).val();
+
+			edit(key, value);
+		});
+
+		function edit(key, value){
+			eh.xhr.put('/admin/setting/systemEdit.html', {key: key, value:value}, {
+				success: function(response){
+					layer.msg('更新成功', {skin: 'layui-layer-hui', anim: 2});
+				}
+			});
+		}
 	});
 </script>

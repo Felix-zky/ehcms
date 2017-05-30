@@ -1,0 +1,54 @@
+<section class="iframe-main">
+	<div class="row">
+		<table class="table table-striped table-hover table-bordered">
+			<thead>
+				<tr>
+					<th width="20%">名称</th>
+					<th width="50%">值</th>
+					<th width="30%">关键词</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>编辑器选择</td>
+					<td>
+						<input type="radio" name="editor_type" value="plain" {notempty name="personalSetting.editor_type"}{eq name="personalSetting.editor_type" value="plain"}checked{/eq}{else /}{eq name="systemSetting.editor_type" value="plain"}checked{/eq}{/notempty}>富文本
+						<input type="radio" name="editor_type" value="markdown" {notempty name="personalSetting.editor_type"}{eq name="personalSetting.editor_type" value="markdown"}checked{/eq}{else /}{eq name="systemSetting.editor_type" value="markdown"}checked{/eq}{/notempty}>Markdown
+					</td>
+					<td>editor_type</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</section>
+{css href="__LIB_CSS__/iCheck.blue.css"}
+<script type="text/javascript">
+	require(['jquery', 'layer', 'iCheck', 'eh.xhr'], function(){
+		$('input:radio').iCheck({
+			radioClass: 'iradio_square-blue',
+			increaseArea: '20%'
+		});
+
+		$('input:text').change(function() {
+			var key = $(this).attr('name'),
+				value = $(this).val();
+
+			edit(key, value);
+		});
+
+		$('input').on('ifChecked', function(event){
+			var key = $(this).attr('name'),
+				value = $(this).val();
+
+			edit(key, value);
+		});
+
+		function edit(key, value){
+			eh.xhr.put('/admin/setting/personalEdit.html', {key: key, value:value}, {
+				success: function(response){
+					layer.msg('更新成功', {skin: 'layui-layer-hui', anim: 2});
+				}
+			});
+		}
+	});
+</script>
