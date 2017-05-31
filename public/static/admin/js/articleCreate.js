@@ -306,9 +306,25 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 			});
 		}else{
 			var ue = UE.getEditor('editorPlain', {
+				UEDITOR_HOME_URL: '/static/lib/plugin/',
 				serverUrl: '/ueditor/controller.php',
 				autoHeightEnabled: true,
-				autoFloatEnabled: true
+				autoFloatEnabled: true,
+				topOffset: 80,
+				initialFrameHeight: 600,
+				toolbars: [[
+					'source', '|', 'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|', 'undo', 'redo', '|',
+					'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
+					'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',
+					'directionalityltr', 'directionalityrtl', 'indent', '|',
+					'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|',
+					'link', 'unlink', 'anchor', '|', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
+					'simpleupload', 'insertimage', 'emotion', 'scrawl', 'insertvideo', 'music', 'attachment', 'map', 'insertframe', 'insertcode', 'pagebreak', '|',
+					'horizontal', 'date', 'time', 'spechars', 'wordimage', '|',
+					'inserttable', 'deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow', 'insertcol', 'deletecol', 'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols', 'charts', '|',
+					'searchreplace', 'drafts'
+				]],
+				maximumWords: 20000
 			});
 		}
 		

@@ -17570,6 +17570,11 @@ UE.plugins['autofloat'] = function() {
             unsetFloating();
         }
     }
+
+    $('.iframe-main').on('scroll', function(){
+        updateFloating();
+    });
+
     var defer_updateFloating = utils.defer(function(){
         updateFloating();
     },browser.ie ? 200 : 100,true);
