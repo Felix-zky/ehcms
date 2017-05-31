@@ -5,6 +5,9 @@ use app\common\controller\Base;
 use think\Lang;
 
 class Init extends Base{
+	protected $systemSetting;
+	protected $personalSetting;
+	
 	public function __construct(){
 		parent::__construct();
 
@@ -20,18 +23,18 @@ class Init extends Base{
 		
 		if ($result){
 			foreach ($result as $v){
-				$systemSetting[$v['key']] = $v['value'];
+				$this->systemSetting[$v['key']] = $v['value'];
 			}
-			$this->assign('systemSetting', $systemSetting);
+			$this->assign('systemSetting', $this->systemSetting);
 		}
 		
 		$result = db('admin_setting')->where('uid', cookie('user_id'))->select();
 		
 		if ($result){
 			foreach ($result as $v){
-				$personalSetting[$v['key']] = $v['value'];
+				$this->personalSetting[$v['key']] = $v['value'];
 			}
-			$this->assign('personalSetting', $personalSetting);
+			$this->assign('personalSetting', $this->personalSetting);
 		}
 	}
 	

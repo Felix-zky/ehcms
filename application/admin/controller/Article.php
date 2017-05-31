@@ -49,6 +49,7 @@ class Article extends Init{
 	public function create(){
 		$this->assign('category', $this->getCategory());
 		$this->assign('saveUrl', url('save'));
+		$this->assign('editor', $this->personalSetting['editor_type'] ?: $this->systemSetting['editor_type']);
 		return $this->fetch();
 	}
 	

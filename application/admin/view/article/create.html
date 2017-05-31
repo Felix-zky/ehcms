@@ -59,50 +59,55 @@
 		</div>
 		<div class="form-group">
 			<label for="markdown" class="col-sm-1 control-label">文章内容<span class="red">*</span>：</label>
-			<div class="col-sm-10" id="editor-box">
-				<div id="markdown-button">
-					<ul class="pull-left">
-						<li data-key="h1" data-toggle="tooltip" data-placement="bottom" title="标题一(Ctrl-1)">H1</li>
-						<li data-key="h2" data-toggle="tooltip" data-placement="bottom" title="标题二(Ctrl-2)">H2</li>
-						<li data-key="h3" data-toggle="tooltip" data-placement="bottom" title="标题三(Ctrl-3)">H3</li>
-						<li data-key="h4" data-toggle="tooltip" data-placement="bottom" title="标题四(Ctrl-4)" class="hidden-xs hidden-sm">H4</li>
-					</ul>
-					<ul class="pull-left">
-						<li data-key="bold" data-toggle="tooltip" data-placement="bottom" title="加粗(Ctrl-B)"><i class="fa fa-bold"></i></li>
-						<li data-key="italic" data-toggle="tooltip" data-placement="bottom" title="斜体(Ctrl-I)"><i class="fa fa-italic"></i></li>
-					</ul>
-					<ul class="pull-left">
-						<li data-key="ul" data-toggle="tooltip" data-placement="bottom" title="无序列表(Ctrl-U)"><i class="fa fa-list-ul"></i></li>
-						<li data-key="ol" data-toggle="tooltip" data-placement="bottom" title="有序列表(Ctrl-O)"><i class="fa fa-list-ol"></i></li>
-					</ul>
-					<ul class="pull-left">
-						<li data-key="link" data-toggle="tooltip" data-placement="bottom" title="添加链接(Ctrl-L)"><i class="fa fa-link"></i></li>
-						<li data-key="image" data-toggle="tooltip" data-placement="bottom" title="添加图片(Ctrl-G)"><i class="fa fa-picture-o"></i></li>
-						<li data-key="resource" data-toggle="tooltip" data-placement="bottom" title="资源库(Ctrl-R)"><i class="fa fa-folder-open"></i></li>
-						<li data-key="code" data-toggle="tooltip" data-placement="bottom" title="代码块(Ctrl-D)"><i class="fa fa-code"></i></li>
-						<li data-key="hr" data-toggle="tooltip" data-placement="bottom" title="分割行(Ctrl-H)"><i class="fa fa-minus"></i></li>
-						<li data-key="blockquote" data-toggle="tooltip" data-placement="bottom" title="引用(Ctrl-Q)"><i class="fa fa-quote-right"></i></li>
-						<li data-key="table" data-toggle="tooltip" data-placement="bottom" title="表格(Ctrl-T)"><i class="fa fa-table"></i></li>
-						<li data-key="toc" data-toggle="tooltip" data-placement="bottom" title="章节导航"><i class="fa fa-list-alt"></i></li>
-					</ul>
-					<ul class="pull-right editor-button-background">
-						<li data-key="screen" data-toggle="tooltip" data-placement="bottom" title="全屏"><i class="screen"></i></li>
-						<li data-key="code-mode" data-toggle="tooltip" data-placement="bottom" title="代码模式"><i class="code-mode"></i></li>
-						<li data-key="column-mode" data-toggle="tooltip" data-placement="bottom" title="分栏模式"><i class="column-mode"></i></li>
-						<li data-key="preview-mode" data-toggle="tooltip" data-placement="bottom" title="视图模式"><i class="preview-mode"></i></li>
-					</ul>
-					<p class="resource-uploader" style="display: none;"></p>
-				</div>
-				<div id="editor">
-					<div class="form-markdown-left validate-style">
-						<textarea name="markdown" id="markdown" class="ignore-prompt"></textarea>
+			<div class="col-sm-10" id="editor-box" data-editor="{$editor}">
+				{eq name="editor" value="markdown"}
+					<div id="markdown-button">
+						<ul class="pull-left">
+							<li data-key="h1" data-toggle="tooltip" data-placement="bottom" title="标题一(Ctrl-1)">H1</li>
+							<li data-key="h2" data-toggle="tooltip" data-placement="bottom" title="标题二(Ctrl-2)">H2</li>
+							<li data-key="h3" data-toggle="tooltip" data-placement="bottom" title="标题三(Ctrl-3)">H3</li>
+							<li data-key="h4" data-toggle="tooltip" data-placement="bottom" title="标题四(Ctrl-4)" class="hidden-xs hidden-sm">H4</li>
+						</ul>
+						<ul class="pull-left">
+							<li data-key="bold" data-toggle="tooltip" data-placement="bottom" title="加粗(Ctrl-B)"><i class="fa fa-bold"></i></li>
+							<li data-key="italic" data-toggle="tooltip" data-placement="bottom" title="斜体(Ctrl-I)"><i class="fa fa-italic"></i></li>
+						</ul>
+						<ul class="pull-left">
+							<li data-key="ul" data-toggle="tooltip" data-placement="bottom" title="无序列表(Ctrl-U)"><i class="fa fa-list-ul"></i></li>
+							<li data-key="ol" data-toggle="tooltip" data-placement="bottom" title="有序列表(Ctrl-O)"><i class="fa fa-list-ol"></i></li>
+						</ul>
+						<ul class="pull-left">
+							<li data-key="link" data-toggle="tooltip" data-placement="bottom" title="添加链接(Ctrl-L)"><i class="fa fa-link"></i></li>
+							<li data-key="image" data-toggle="tooltip" data-placement="bottom" title="添加图片(Ctrl-G)"><i class="fa fa-picture-o"></i></li>
+							<li data-key="resource" data-toggle="tooltip" data-placement="bottom" title="资源库(Ctrl-R)"><i class="fa fa-folder-open"></i></li>
+							<li data-key="code" data-toggle="tooltip" data-placement="bottom" title="代码块(Ctrl-D)"><i class="fa fa-code"></i></li>
+							<li data-key="hr" data-toggle="tooltip" data-placement="bottom" title="分割行(Ctrl-H)"><i class="fa fa-minus"></i></li>
+							<li data-key="blockquote" data-toggle="tooltip" data-placement="bottom" title="引用(Ctrl-Q)"><i class="fa fa-quote-right"></i></li>
+							<li data-key="table" data-toggle="tooltip" data-placement="bottom" title="表格(Ctrl-T)"><i class="fa fa-table"></i></li>
+							<li data-key="toc" data-toggle="tooltip" data-placement="bottom" title="章节导航"><i class="fa fa-list-alt"></i></li>
+						</ul>
+						<ul class="pull-right editor-button-background">
+							<li data-key="screen" data-toggle="tooltip" data-placement="bottom" title="全屏"><i class="screen"></i></li>
+							<li data-key="code-mode" data-toggle="tooltip" data-placement="bottom" title="代码模式"><i class="code-mode"></i></li>
+							<li data-key="column-mode" data-toggle="tooltip" data-placement="bottom" title="分栏模式"><i class="column-mode"></i></li>
+							<li data-key="preview-mode" data-toggle="tooltip" data-placement="bottom" title="视图模式"><i class="preview-mode"></i></li>
+						</ul>
+						<p class="resource-uploader" style="display: none;"></p>
 					</div>
-					<div class="form-markdown-right">
-						<p id="html-preview">
-							<span class="html-content"></span>
-						</p>
+					<div id="editor">
+						<div class="form-markdown-left validate-style">
+							<textarea name="markdown" id="markdown" class="ignore-prompt"></textarea>
+						</div>
+						<div class="form-markdown-right">
+							<p id="html-preview">
+								<span class="html-content"></span>
+							</p>
+						</div>
 					</div>
-				</div>
+				{else /}
+					{js href="/static/lib/plugin/ueditor.config.js,/static/lib/plugin/ueditor.all.js"}
+					<div id="editorPlain"></div>
+				{/eq}
 			</div>
 		</div>
 	</form>

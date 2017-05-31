@@ -23,7 +23,8 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 	var anchor = '';
 
 	$(function(){
-		var textareaHeight, previewHeight, validate;
+		var textareaHeight, previewHeight, validate,
+			editorType = $('#editor-box').data('editor');
 
 		//eh.htmlPreviewHeight();
 
@@ -49,149 +50,150 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 
 		$('[data-toggle="tooltip"]').tooltip();
 
-		var markdownEditor = CodeMirror.fromTextArea(document.querySelector('#markdown'), {
-			mode: 'gfm',
-			lineWrapping: 'wrap'
-		});
+		if (editorType == 'markdown') {
+			var markdownEditor = CodeMirror.fromTextArea(document.querySelector('#markdown'), {
+				mode: 'gfm',
+				lineWrapping: 'wrap'
+			});
 
-		markdownEditor.setSize('100%', '100%');
+			markdownEditor.setSize('100%', '100%');
 
-		markdownEditor.on('change', function(cm){
-			$('#markdown').val(cm.getValue()).change();
-		});
+			markdownEditor.on('change', function(cm){
+				$('#markdown').val(cm.getValue()).change();
+			});
 
-		var editorButton = {
-			"h1": {
-				"bindKey": {'win': "Ctrl-1", 'mac': "Cmd-1"},
-				"exec": function (cm) {
-					insert.call(cm, "# ", "", false);
-				}
-			},
-			"h2": {
-				"bindKey": {'win': "Ctrl-2", 'mac': "Cmd-2"},
-				"exec": function (cm) {
-					insert.call(cm, "## ", "", false);
-				}
-			},
-			"h3": {
-				"bindKey": {'win': "Ctrl-3", 'mac': 'Cmd-3'},
-				"exec": function (cm) {
-					insert.call(cm, "### ", "", false);
-				}
-			},
-			"h4": {
-				"bindKey": {'win': "Ctrl-4", 'mac': 'Cmd-4'},
-				"exec": function (cm) {
-					insert.call(cm, "#### ", "", false);
-				}
-			},
-			"h5": {
-				"bindKey": {'win': "Ctrl-5", 'mac': 'Cmd-5'},
-				"exec": function (cm) {
-					insert.call(cm, "##### ", "", false);
-				}
-			},
-			"h6": {
-				"bindKey": {'win': "Ctrl-6", 'mac': 'Cmd-6'},
-				"exec": function (cm) {
-					insert.call(cm, "###### ", "", false);
-				}
-			},
-			"bold": {
-				"bindKey": {'win': "Ctrl-B", 'mac': 'Cmd-B'},
-				"exec": function (cm) {
-					insert.call(cm, "**", "**", false);
-				}
-			},
-			"italic": {
-				"bindKey": {'win': "Ctrl-I", 'mac': 'Cmd-I'},
-				"exec": function (cm) {
-					insert.call(cm, "*", "*", false);
-				}
-			},
-			"code": {
-				"bindKey": {'win': "Ctrl-D", 'mac': 'Cmd-D'},
-				"exec": function (cm) {
-					var text = cm.getSelection(), cursor = cm.getCursor();
+			var editorButton = {
+				"h1": {
+					"bindKey": {'win': "Ctrl-1", 'mac': "Cmd-1"},
+					"exec": function (cm) {
+						insert.call(cm, "# ", "", false);
+					}
+				},
+				"h2": {
+					"bindKey": {'win': "Ctrl-2", 'mac': "Cmd-2"},
+					"exec": function (cm) {
+						insert.call(cm, "## ", "", false);
+					}
+				},
+				"h3": {
+					"bindKey": {'win': "Ctrl-3", 'mac': 'Cmd-3'},
+					"exec": function (cm) {
+						insert.call(cm, "### ", "", false);
+					}
+				},
+				"h4": {
+					"bindKey": {'win': "Ctrl-4", 'mac': 'Cmd-4'},
+					"exec": function (cm) {
+						insert.call(cm, "#### ", "", false);
+					}
+				},
+				"h5": {
+					"bindKey": {'win': "Ctrl-5", 'mac': 'Cmd-5'},
+					"exec": function (cm) {
+						insert.call(cm, "##### ", "", false);
+					}
+				},
+				"h6": {
+					"bindKey": {'win': "Ctrl-6", 'mac': 'Cmd-6'},
+					"exec": function (cm) {
+						insert.call(cm, "###### ", "", false);
+					}
+				},
+				"bold": {
+					"bindKey": {'win': "Ctrl-B", 'mac': 'Cmd-B'},
+					"exec": function (cm) {
+						insert.call(cm, "**", "**", false);
+					}
+				},
+				"italic": {
+					"bindKey": {'win': "Ctrl-I", 'mac': 'Cmd-I'},
+					"exec": function (cm) {
+						insert.call(cm, "*", "*", false);
+					}
+				},
+				"code": {
+					"bindKey": {'win': "Ctrl-D", 'mac': 'Cmd-D'},
+					"exec": function (cm) {
+						var text = cm.getSelection(), cursor = cm.getCursor();
 
-					if (text.length) {
-						if (text.split("\n").length > 1) {
-							insert.call(cm, "```\n", "\n```", false);
+						if (text.length) {
+							if (text.split("\n").length > 1) {
+								insert.call(cm, "```\n", "\n```", false);
+							} else {
+								insert.call(cm, "`", "`", false);
+							}
 						} else {
-							insert.call(cm, "`", "`", false);
-						}
-					} else {
-						if (cursor.ch == 0) {
-							insert.call(cm, "```\n", "\n```", true);
-						} else {
-							insert.call(cm, "`", "`", true);
+							if (cursor.ch == 0) {
+								insert.call(cm, "```\n", "\n```", true);
+							} else {
+								insert.call(cm, "`", "`", true);
+							}
 						}
 					}
+				},
+				"ul": {
+					"bindKey": {'win': "Ctrl-U", 'mac': 'Cmd-U'},
+					"exec": function (cm) {
+						insert.call(cm, "* ", "", true);
+					}
+				},
+				"ol": {
+					"bindKey": {'win': "Ctrl-O", 'mac': "Cmd-O"},
+					"exec": function (cm) {
+						insert.call(cm, "{$line}. ", "", true);
+					}
+				},
+				"image": {
+					"bindKey": {'win': "Ctrl-G", 'mac': "Cmd-G"},
+					"exec": function (cm) {
+						$('.resource-uploader label').click();
+					}
+				},
+				"blockquote": {
+					"bindKey": {'win': "Ctrl-Q", 'mac': 'Cmd-Q'},
+					"exec": function (cm) {
+						insert.call(cm, "> ", "", true);
+					}
+				},
+				"hr": {
+					"bindKey": {'win': "Ctrl-H", 'mac': 'Cmd-H'},
+					"exec": function (cm) {
+						insert.call(cm, "\n* * * * *\n", "", false);
+					}
+				},
+				'resource': {
+					"bindKey": {'win': "Ctrl-R", 'mac': 'Cmd-R'},
+					"exec": function (cm) {
+						resoucerIframe = layer.open({
+							type:2,
+							title: false,
+							resize: false,
+							move: false,
+							area: ['100%', '100%'],
+							closeBtn: false,
+							content: '/admin/resource/index/iframe/1.html'
+						});
+					}
 				}
-			},
-			"ul": {
-				"bindKey": {'win': "Ctrl-U", 'mac': 'Cmd-U'},
-				"exec": function (cm) {
-					insert.call(cm, "* ", "", true);
-				}
-			},
-			"ol": {
-				"bindKey": {'win': "Ctrl-O", 'mac': "Cmd-O"},
-				"exec": function (cm) {
-					insert.call(cm, "{$line}. ", "", true);
-				}
-			},
-			"image": {
-				"bindKey": {'win': "Ctrl-G", 'mac': "Cmd-G"},
-				"exec": function (cm) {
-					$('.resource-uploader label').click();
-				}
-			},
-			"blockquote": {
-				"bindKey": {'win': "Ctrl-Q", 'mac': 'Cmd-Q'},
-				"exec": function (cm) {
-					insert.call(cm, "> ", "", true);
-				}
-			},
-			"hr": {
-				"bindKey": {'win': "Ctrl-H", 'mac': 'Cmd-H'},
-				"exec": function (cm) {
-					insert.call(cm, "\n* * * * *\n", "", false);
-				}
-			},
-			'resource': {
-				"bindKey": {'win': "Ctrl-R", 'mac': 'Cmd-R'},
-				"exec": function (cm) {
-					resoucerIframe = layer.open({
-						type:2,
-						title: false,
-						resize: false,
-						move: false,
-						area: ['100%', '100%'],
-						closeBtn: false,
-						content: '/admin/resource/index/iframe/1.html'
-					});
-				}
+			};
+
+			var extraKeys = {};
+			for (var i in editorButton) {
+				extraKeys[editorButton[i].bindKey.win] = editorButton[i].exec;
 			}
-		};
 
-		var extraKeys = {};
-		for (var i in editorButton) {
-			extraKeys[editorButton[i].bindKey.win] = editorButton[i].exec;
-		}
+			markdownEditor.setOption("extraKeys", extraKeys);
 
-		markdownEditor.setOption("extraKeys", extraKeys);
-
-		$('#markdown-button li').click(function(){
-			var key = $(this).data('key');
-			if (editorButton[key]) {
-				editorButton[key].exec(markdownEditor);
-			}else{
-				switch (key){
-					case 'toc':
+			$('#markdown-button li').click(function(){
+				var key = $(this).data('key');
+				if (editorButton[key]) {
+					editorButton[key].exec(markdownEditor);
+				}else{
+					switch (key){
+						case 'toc':
 						insert.call(markdownEditor, '[TOC]');
-					break;
-					case 'screen':
+						break;
+						case 'screen':
 						var layero = parent.$('#layui-layer' + parent.$('#taskbar .list li.active').data('index'));
 						if (layero.find('.layui-layer-maxmin').length == 0) {
 							parent.$('#layui-layer' + parent.$('#taskbar .list li.active').data('index')).find('.layui-layer-max').click();
@@ -204,13 +206,13 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 						}
 						$(this).data('key', 'restore').find('i').removeClass('screen').addClass('restore');
 						$('#editor-box').removeClass('col-sm-10').addClass('editor-box-screen');
-					break;
-					case 'restore':
+						break;
+						case 'restore':
 						$('#editor-box').removeClass('editor-box-screen').addClass('col-sm-10');
 						$(this).data('key', 'screen').find('i').removeClass('restore').addClass('screen');
 						$('#editor, .CodeMirror-code').height(400);
-					break;
-					case 'code-mode':
+						break;
+						case 'code-mode':
 						$('.form-markdown-left').css({
 							width: '100%',
 							'z-index': 3,
@@ -224,8 +226,8 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 								'border': 'none'
 							});
 						});
-					break;
-					case 'column-mode':
+						break;
+						case 'column-mode':
 						$('.form-markdown-left, .form-markdown-right').css({
 							width: '50%',
 							position: 'absolute'
@@ -239,8 +241,8 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 							});
 							$('.form-markdown-left, .form-markdown-right').off(transitionEnd);
 						});
-					break;
-					case 'preview-mode':
+						break;
+						case 'preview-mode':
 						$('.form-markdown-right').css({
 							width: '100%',
 							'z-index': 3
@@ -250,12 +252,66 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 								'border': 'none'
 							});
 						});
-					break;
-					default:
-					layer.msg('暂不支持该按钮');
+						break;
+						default:
+						layer.msg('暂不支持该按钮');
+					}
 				}
-			}
-		});
+			});
+
+			/**
+			 * 实例化markdown解析器
+			 */
+			var md = new remarkable('full', {
+				linkify: true,
+				html: true,
+				xhtmlOut: true,
+				highlight: function(str, lang) {
+					if (lang && hljs.getLanguage(lang)) {
+						try {
+							return hljs.highlight(lang, str).value;
+						} catch (err) {}
+					}
+
+					try {
+						return hljs.highlightAuto(str).value;
+					} catch (err) {}
+
+					return '';
+				}
+			});
+
+			/**
+			 * 键盘按钮抬起立即解析markdown标记并生成新的预览内容
+			 */
+			$('#markdown').change(function() {
+				$('#html-preview .html-content').html(md.render(format($(this).val())));
+
+				if (anchor) {
+					$.each($('#html-preview .html-content').find(anchor), function(index, val) {
+						$(this).attr('id', 'anchor' + index);
+					});
+				}
+			});
+
+			/**
+			 * markdown滚动，预览内容跟随滚动，由于预览内容存在样式，一般情况下会比markdown页面要长，所有判断当前滚轮位置在markdown输入框的百分比，
+			 * 预览内容同样滚动到该比例位置，基本可以保证一致性。
+			 */
+			$('.CodeMirror-vscrollbar').scroll(function() {
+				textareaHeight = $(this).find('div').innerHeight();
+				previewHeight = $('#html-preview .html-content').innerHeight();
+
+				$('#html-preview').scrollTop($(this).scrollTop() * (previewHeight / textareaHeight));
+			});
+		}else{
+			var ue = UE.getEditor('editorPlain', {
+				serverUrl: '/ueditor/controller.php',
+				autoHeightEnabled: true,
+				autoFloatEnabled: true
+			});
+		}
+		
 
 		/**
 		 * 设置表单验证参数
@@ -332,41 +388,6 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 		});
 
 		/**
-		 * 实例化markdown解析器
-		 */
-		var md = new remarkable('full', {
-			linkify: true,
-			html: true,
-			xhtmlOut: true,
-			highlight: function (str, lang) {
-				if (lang && hljs.getLanguage(lang)) {
-					try {
-						return hljs.highlight(lang, str).value;
-					} catch (err) {}
-				}
-
-				try {
-					return hljs.highlightAuto(str).value;
-				} catch (err) {}
-
-				return '';
-			}
-		});
-
-		/**
-		 * 键盘按钮抬起立即解析markdown标记并生成新的预览内容
-		 */
-		$('#markdown').change(function(){
-			$('#html-preview .html-content').html(md.render(format($(this).val())));
-
-			if (anchor) {
-				$.each($('#html-preview .html-content').find(anchor), function(index, val) {
-					$(this).attr('id', 'anchor' + index);
-				});
-			}
-		});
-
-		/**
 		 * 键盘按下Tab时不要跳出，禁止掉默认功能。
 		 */
 		// $('#markdown').keydown(function(e) {
@@ -375,23 +396,7 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 		// 	}
 		// });
 
-		/**
-		 * markdown滚动，预览内容跟随滚动，由于预览内容存在样式，一般情况下会比markdown页面要长，所有判断当前滚轮位置在markdown输入框的百分比，
-		 * 预览内容同样滚动到该比例位置，基本可以保证一致性。
-		 */
-		$('.CodeMirror-vscrollbar').scroll(function() {
-			textareaHeight = $(this).find('div').innerHeight();
-			previewHeight = $('#html-preview .html-content').innerHeight();
-
-			$('#html-preview').scrollTop($(this).scrollTop() * (previewHeight/textareaHeight));
-
-			// if ($(this).scrollTop() + $(this).innerHeight() == textareaHeight) {
-			// 	$('#html-preview').scrollTop(previewHeight - $(this).outerHeight());
-			// }else{
-			// 	$('#html-preview').scrollTop($(this).scrollTop() * (previewHeight/textareaHeight));
-			// }
-		});
-
+		
 		/**
 		 * 配置messenger的显示位置及样式
 		 */
