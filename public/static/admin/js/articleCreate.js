@@ -313,6 +313,7 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 				topOffset: 76,
 				initialFrameHeight: 600,
 				imageScaleEnabled: false,
+				textarea: 'content',
 				toolbars: [[
 					'source', '|', 'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|', 'undo', 'redo', '|',
 					'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
@@ -390,14 +391,19 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 		 */
 		$('#header-button-submit-form').click(function(){
 			if (validate.form()){
-				option = {
-					extend : [
+				var option = {};
+
+				if (editorType == 'markdown') {
+					option = {
+						extend : [
 						{
 							'name': 'content',
 							'element': '.html-content'
 						}
-					]
-				};
+						]
+					};
+				}
+
 				eh.xhr.messageRedirect('/admin/article.html', eh.form.extractData(option), {submitType: 'create'});
 			}else{
 				eh.form.validateError(validate.errorMap);
