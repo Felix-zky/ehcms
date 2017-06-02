@@ -1,32 +1,35 @@
 <!-- 列表主体 -->
-<section class="list-main">
-	<ul></ul>
-</section>
-
-<section id="list-pages">
-</section>
-
-<script type="text/javascript">
-	require(['js/articleIndex']);
-</script>
-
-<script type="text/html" id="tpl-article-list">
-	{{# for(var i = 0, len = d.length; i < len; i++){ }}
-		<li class="row">
-			<p class="col-sm-3 col-lg-2 number">文章编号：{{ d[i].id }}</p>
-			<p class="col-sm-9 col-lg-10 padding-clean-left add-time">发布时间：2016-08-26 11:25:33</p>
+<section class="iframe-main">
+<div class="list-main">
+	<ul>
+		{foreach $article as $v}
+		<li class="row" data-id="{$v.id}">
+			<p class="col-sm-3 col-lg-2 number">文章编号：{$v.id}</p>
+			<p class="col-sm-9 col-lg-10 padding-clean-left add-time">发布时间：{$v.create_time|date="y-m-d H:i:s",###}</p>
 			<p class="col-sm-3 col-lg-2">
-				<img src="{{ d[i].thumbnail }}" alt="{{ d[i].thumbnail_des }}" />
+				<span class="img-box">
+					<img src="{$v.thumbnail|default='__IMAGES__/question_mark.jpg'}" />
+				</span>
 			</p>
 			<p class="col-sm-9 col-lg-10 padding-clean-left">
-				<span class="title"><strong>{{ d[i].title }}</strong></span>
-				<span class="description" data-description="{{ d[i].description }}">{{ d[i].description }}</span>
+				<span class="title">{$v.title}</span>
+				<span class="description" data-description="{{ d[i].description }}">{$v.description}</span>
 			</p>
-			<p class="keywords col-sm-5 col-lg-6 col-sm-offset-3 col-lg-offset-2"><strong>关键词：</strong><span>{{ d[i].keywords }}</span></p>
+			<p class="keywords col-sm-5 col-lg-6 col-sm-offset-3 col-lg-offset-2"><strong>关键词：</strong><span>{$v.keywords}</span></p>
 			<p class="button">
 				<button class="btn btn-primary">编辑</button>
 				<button class="btn btn-danger">删除</button>
 			</p>
 		</li>
-	{{# } }}
+		{/foreach}
+	</ul>
+</div>
+
+<div id="list-pages">
+	{$article->render()}
+</div>
+</section>
+
+<script type="text/javascript">
+	//require(['js/articleIndex']);
 </script>

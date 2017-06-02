@@ -19,27 +19,10 @@ class Article extends Init{
 	 * 获取文章列表
 	 */
 	public function index(){
-		$pages = (int)input('param.pages');
-		if ($pages){
-			if ($pages > 0){
-				$article = db('article')->page($pages, 20)->select();
-				
-				if (count($article) > 0){
-					$data = [
-						'articles' => $article,
-						'count' => db('article')->count()
-					];
-					
-					return $this->successResult($data);
-				}else{
-					return $this->errorResult('E-030201');
-				}
-			}else{
-				return $this->errorResult('E-030106');
-			}
-		}else{
-			return $this->fetch();
-		}
+		$article = db('article')->field('markdown,content', true)->order('id', 'desc')->paginate(20);
+		
+		$this->assign('article', $article);
+		return $this->fetch();
 	}
 	
 	

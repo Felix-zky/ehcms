@@ -1,7 +1,6 @@
 <?php
 namespace app\admin\controller;
 
-use app\member\model\Ceshi;
 class Member extends Init{
 	public function __construct(){
 		parent::__construct();
