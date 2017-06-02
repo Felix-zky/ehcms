@@ -7,12 +7,9 @@ class Member extends Init{
 	}
 	
 	public function index(){
-		$pages = ceil(db('member')->count());
-			
-		if ($pages > 0){
-			$this->successResult(['pages' => $pages]);
-		}
+		$member = db('member')->field('id,username,is_admin,create_time')->order('id', 'desc')->paginate(20);
 		
+		$this->assign('member', $member);
 		return $this->fetch();
 	}
 	
