@@ -46,4 +46,15 @@ class User extends Base{
 		
 		return TRUE;
 	}
+	
+	/**
+	 * 获取指定用户信息
+	 */
+	public function getSingleUser($where, $field = ''){
+		if (empty($where) || !is_array($where)){
+			return false;
+		}
+	
+		return db('member')->field($field)->where($where)->find();
+	}
 }

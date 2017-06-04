@@ -152,7 +152,7 @@ define(['jquery', 'laytpl', 'layer', 'eh'], function($, laytpl){
 
 			var success = function(response){
 				if (typeof settings.fn == 'function') {
-					settings.fn(parentObj, json, response);
+					settings.fn(response, settings.parentObj, settings.json);
 				}else{
 					if (typeof settings.before == 'function') {
 						var res = settings.before(response);
