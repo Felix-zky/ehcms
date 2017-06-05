@@ -16,3 +16,5 @@ Route::resource('admin/article', 'admin/Article');
 Route::resource('admin/article_category', 'admin/ArticleCategory');
 Route::resource('admin/document', 'admin/Document');
 Route::resource('admin/document_category', 'admin/DocumentCategory');
+Route::resource('admin/goods', 'admin/Goods');
+Route::resource('admin/goods_category', 'admin/GoodsCategory');

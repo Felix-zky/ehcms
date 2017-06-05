@@ -54,9 +54,16 @@ class MemberPoint extends Init{
 			$this->errorResult('查询条件错误');
 		}
 		
-		$where = [
-			'phone|id_number' => $data
-		];
+		if (input('type') == 'card'){
+			$where = [
+				'point_card' => $data
+			];
+		}else{
+			$where = [
+					'phone|id_number' => $data
+			];
+		}
+		
 		$member = action('member/User/getSingleUser', ['where' => $where, 'field'=>'id,true_name'], 'event');
 		
 		if ($member){
