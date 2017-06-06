@@ -26,7 +26,7 @@
 						<td>{$v.name}</td>
 						{eq name="parentID" value="0"}
 						<td>
-							<a href="{:url('admin/ArticleCategory/index', ['parent_id' => $v.id])}" class="btn btn-primary btn-sm">查看子分类</a>
+							<a href="{:url('admin/GoodsCategory/index', ['parent_id' => $v.id])}" class="btn btn-primary btn-sm">查看子分类</a>
 							<button class="btn btn-danger btn-sm add-child-category" data-parent-id="{$v.id}">添加子分类</button>
 						</td>
 						{/eq}

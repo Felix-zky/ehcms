@@ -8,8 +8,10 @@ Route::rule('admin/Resource/uploader/[:parentGroupID]/[:childrenGroupID]', 'admi
 Route::rule('admin/document/cover', 'admin/Document/uploaderCover');
 Route::rule('admin/article_category/parent_id/:parent_id', 'admin/ArticleCategory/index', 'get', [], ['parent' => '\d+']);
 Route::rule('admin/document_category/parent_id/:parent_id', 'admin/DocumentCategory/index', 'get', [], ['parent' => '\d+']);
+Route::rule('admin/goods_category/parent_id/:parent_id', 'admin/GoodsCategory/index', 'get', [], ['parent' => '\d+']);
 Route::get('admin/article/getcategory', 'admin/Article/getCategory');
 Route::get('admin/document/getcategory', 'admin/Document/getCategory');
+Route::get('admin/goods/getcategory', 'admin/Goods/getCategory');
 
 //注册后台资源路由
 Route::resource('admin/article', 'admin/Article');
