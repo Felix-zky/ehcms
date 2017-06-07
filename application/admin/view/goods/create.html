@@ -1,7 +1,7 @@
 <header>
 	<div class="pull-left">
 		<button class="btn btn-danger" id="header-button-empty-form">清空表单</button>
-		<button class="btn btn-success" id="header-button-submit-form">发布文章</button>
+		<button class="btn btn-success" id="header-button-submit-form">发布商品</button>
 	</div>
 </header>
 <section class="iframe-main">
@@ -9,35 +9,68 @@
 		<div class="form-group">
 			<label for="title" class="col-sm-1 control-label">标题<span class="red">*</span>：</label>
 			<div class="col-sm-10">
-				<input type="text" class="form-control" name="title" id="title" placeholder="输入文章标题" />
+				<input type="text" class="form-control" name="title" id="title" placeholder="输入商品标题" />
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="keywords" class="col-sm-1 control-label">关键词：</label>
 			<div class="col-sm-10">
-				<input type="text" class="form-control no-validate" name="keywords" id="keywords" placeholder="输入文章关键词" />
+				<input type="text" class="form-control no-validate" name="keywords" id="keywords" placeholder="输入商品关键词" />
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="description" class="col-sm-1 control-label">描述：</label>
 			<div class="col-sm-10">
-				<textarea class="form-control no-validate" name="description" id="description" placeholder="输入文章描述"></textarea>
+				<textarea class="form-control no-validate" name="description" id="description" placeholder="输入商品描述"></textarea>
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="col-sm-1 control-label">缩略图：</label>
+			<label class="col-sm-1 control-label">封面图：</label>
 			<div class="col-sm-10">
 				<div class="input-group">
 					<span class="input-group-btn logo-uploader">
-						<button class="btn btn-info" href="javascript:void();" type="button">上传缩略图</button>
+						<button class="btn btn-info" href="javascript:void();" type="button">上传封面图</button>
 					</span>
-					<input class="form-control" type="text" id="thumbnail" placeholder="点击左侧按钮上传缩略图" readonly />
+					<input class="form-control" type="text" id="thumbnail" placeholder="点击左侧按钮上传封面图" readonly />
 					<input type="hidden" name="thumbnail" id="thumbnailUrl">
 				</div>
 			</div>
 		</div>
+		<div class="form-group" id="goods-images">
+			<label class="col-sm-1 control-label">商品组图：</label>
+			<div class="col-sm-2">
+				<img src="__IMAGES__/goods_images_default.png">
+				<span class="goods-images">
+					<button class="btn btn-info" href="javascript:void();" type="button">商品组图1</button>
+				</span>
+			</div>
+			<div class="col-sm-2">
+				<img src="__IMAGES__/goods_images_default.png">
+				<span class="goods-images">
+					<button class="btn btn-info" href="javascript:void();" type="button">商品组图2</button>
+				</span>
+			</div>
+			<div class="col-sm-2">
+				<img src="__IMAGES__/goods_images_default.png">
+				<span class="goods-images">
+					<button class="btn btn-info" href="javascript:void();" type="button">商品组图3</button>
+				</span>
+			</div>
+			<div class="col-sm-2">
+				<img src="__IMAGES__/goods_images_default.png">
+				<span class="goods-images">
+					<button class="btn btn-info" href="javascript:void();" type="button">商品组图4</button>
+				</span>
+			</div>
+			<div class="col-sm-2">
+				<img src="__IMAGES__/goods_images_default.png">
+				<span class="goods-images">
+					<button class="btn btn-info" href="javascript:void();" type="button">商品组图5</button>
+				</span>
+			</div>
+		</div>
 		<div class="form-group">
-			<label for="description" class="col-sm-1 control-label">文章分类：</label>
+			<label for="description" class="col-sm-1 control-label">商品分类：</label>
 			<input type="hidden" name="category_id" id="category-id">
 			<div class="col-sm-5">
 				<select class="selectpicker show-tick form-control" data-title="请选择一级分类" data-icon-base="fa" data-tick-icon="fa-check">
@@ -110,6 +143,116 @@
 			}
 
 			$(this).parents('.form-group').find('#category-id').val($(this).val());
+		});
+
+		/**
+		 * 设置表单验证参数
+		 */
+		validate = eh.form.checkFormData({
+			rules: {
+				title: "required",
+				markdown: "required"
+			},
+			messages: {
+				title: '商品标题必须设置',
+				markdown: 'markdown不能为空'
+			}
+		});
+
+		/**
+		 * 清空表单按钮点击事件绑定
+		 */
+		$('#header-button-empty-form').click(function(){
+			eh.form.emptyFormData();
+			$('#html-preview .html-content').html(md.render($(this).val()));
+			$('.logo-uploader btn').html('上传封面图');
+
+			validate.resetForm();
+			eh.form.validateHighlightRemove();
+			markdownEditor.setValue('');
+		});
+
+		/**
+		 * 保存表单按钮点击事件绑定
+		 */
+		$('#header-button-submit-form').click(function(){
+			if (validate.form()){
+				eh.xhr.messageRedirect('/admin/goods.html', eh.form.extractData(), {submitType: 'create'});
+			}else{
+				eh.form.validateError(validate.errorMap);
+			}
+		});
+
+		/**
+		 * 配置messenger的显示位置及样式
+		 */
+		Messenger.options = {
+			extraClasses: 'messenger-fixed messenger-on-top',
+			theme: 'future'
+		};
+
+		/**
+		 * 实例化资源上传组件并配置参数
+		 */
+		var uploader = new WebUploader.Uploader({
+			swf: '/static/lib/js/webuploader/Uploader.swf',
+			server: '/admin/goods/resource.html',
+			pick: '.logo-uploader',
+			accept: {
+				title: 'Images',
+				extensions: 'gif,jpg,jpeg,bmp,png',
+				mimeTypes: 'image/*'
+			},
+			formData: {
+				_ajax: 1
+			},
+			fileNumLimit: 1,
+			auto: true,
+			compress: false
+		});
+
+		/**
+		 * 缩略图进入列队触发
+		 */
+		uploader.on('fileQueued', function(file){
+			$('.webuploader-pick').next('div').hide();
+			$('#thumbnail').val(file.name);
+			uploader.option('formData', {
+				extension: file.ext
+			})
+		});
+
+		/**
+		 * 缩略图开始上传触发
+		 */
+		uploader.on('startUpload', function(file){
+			$('.logo-uploader button').html('<i class="fa fa-spinner fa-pulse"></i> 正在上传');
+		});
+
+		/**
+		 * 缩略图上传成功后触发
+		 */
+		uploader.on('uploadSuccess', function(file, response){
+			uploader.reset();
+			$('.webuploader-pick').next('div').show();
+
+			if (response.code == 1) {
+				Messenger().post({
+					message: '图片：' + file.name + ' 上传成功！',
+					showCloseButton: true
+				});
+				$('.logo-uploader button').html('<i class="fa fa-check"></i> 上传成功');
+				$('#thumbnail').val(file.name);
+				$('#thumbnailUrl').val(response.data.url);
+			}else{
+				Messenger().post({
+					message: '图片：' + file.name + ' 上传失败！',
+					showCloseButton: true,
+					type: 'error'
+				});
+				$('.logo-uploader button').html('重新上传');
+				$('#thumbnail').val('');
+			}
 		});
 	});
 </script>

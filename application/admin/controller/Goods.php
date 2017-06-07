@@ -16,6 +16,40 @@ class Goods extends Init{
 		return $this->fetch();
 	}
 	
+	/**
+	 * 保存（新增入库）商品
+	 */
+	public function save(){
+		if (request()->isPost()){
+			if (db('goods')->insert(array_merge(input('param.'), ['uid' => cookie('user_id'), 'create_time' => THINK_START_TIME])) == 1){
+				$this->successResult('商品发布成功', '/admin/goods');
+			}else{
+				$this->errorResult('商品发布失败');
+			}
+		}else{
+			$this->errorResult('E-03002');
+		}
+	}
+	
+	/**
+	 * 上传缩略图及商品组图
+	 */
+	public function resource(){
+		$file = request()->file('file');
+	
+		if (is_object($file)){
+			$resource = new \eh\Resource();
+			$result = $resource->uploader($file, (int)input('groupID'));
+				
+			if ($result > 0){
+				$this->successResult('上传成功', ['url' => $resource->getData('url')]);
+			}else{
+				$this->errorResult($resource->getError());
+			}
+		}else{
+			$this->errorResult('获取上传文件失败');
+		}
+	}
 	
 	public function getCategory(){
 		$parentID = input('parent_id') ?: 0;
