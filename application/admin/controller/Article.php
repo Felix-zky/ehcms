@@ -33,7 +33,8 @@ class Article extends Init{
 		$this->assign('category', $this->getCategory());
 		$this->assign('saveUrl', url('save'));
 		$this->assign('editor', $this->personalSetting['editor_type'] ?: $this->systemSetting['editor_type']);
-		return $this->fetch();
+		$this->assign('actionSign', 'editor');
+		return $this->fetch('editor');
 	}
 	
 	/**
@@ -49,6 +50,14 @@ class Article extends Init{
 		}else{
 			$this->errorResult('E-03002');
 		}
+	}
+	
+	/**
+	 * 修改文章
+	 */
+	public function edit($id){
+		$this->assign('actionSign', 'editor');
+		return $this->fetch('editor');
 	}
 	
 	/**
