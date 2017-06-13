@@ -31,7 +31,6 @@ class Article extends Init{
 	 */
 	public function create(){
 		$this->assign('category', $this->getCategory());
-		$this->assign('saveUrl', url('save'));
 		$this->assign('editor', $this->personalSetting['editor_type'] ?: $this->systemSetting['editor_type']);
 		$this->assign('actionSign', 'editor');
 		return $this->fetch('editor');
@@ -56,6 +55,28 @@ class Article extends Init{
 	 * 修改文章
 	 */
 	public function edit($id){
+		$article = db('article')->where('id', $id)->find();
+		$categoryID = $article['category_id'];
+		$categoryParentID = 0;
+		
+		if ($categoryID > 0){
+			$category = db('article_category')->where('id', $categoryID)->find();
+			$categoryParentID = $category['parent_id'];
+			if ($categoryParentID != 0){
+				$categoryChildID = $categoryID;
+				$categoryChilds = db('article_category')->where('parent_id', $categoryParentID)->select();
+				$this->assign('categoryChilds', $categoryChilds);
+				$this->assign('categoryChildID', $categoryChildID);
+			}else{
+				$categoryParentID = $categoryID;
+			}
+		}
+		
+		$this->assign('id', $id);
+		$this->assign('article', $article);
+		$this->assign('categoryParentID', $categoryParentID);
+		$this->assign('editor', $this->personalSetting['editor_type'] ?: $this->systemSetting['editor_type']);
+		$this->assign('category', $this->getCategory());
 		$this->assign('actionSign', 'editor');
 		return $this->fetch('editor');
 	}
@@ -64,7 +85,15 @@ class Article extends Init{
 	 * 更新文章
 	 */
 	public function update($id){
-		
+		if (request()->isPut()){
+			if (db('article')->where('id', $id)->update(input('param.')) == 1){
+				$this->successResult('文章更新成功', '/admin/article');
+			}else{
+				$this->errorResult('文章更新失败');
+			}
+		}else{
+			$this->errorResult('E-03002');
+		}
 	}
 	
 	/**
@@ -101,8 +130,8 @@ class Article extends Init{
 		}
 	}
 	
-	public function getCategory(){
-		$parentID = input('parent_id') ?: 0;
+	public function getCategory($parentID = 0){
+		$parentID = input('parent_id') ?: $parentID;
 		$result = db('article_category')->where('parent_id', $parentID)->order('id', 'desc')->select();
 		if (request()->isAjax()){
 			$this->successResult(['category' => $result]);

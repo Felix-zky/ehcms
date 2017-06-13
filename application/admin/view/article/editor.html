@@ -5,23 +5,23 @@
 	</div>
 </header>
 <section class="iframe-main">
-	<form class="form-horizontal">
+	<form class="form-horizontal"{notempty name="id"} data-id="{$id}"{/notempty}>
 		<div class="form-group">
 			<label for="title" class="col-sm-1 control-label">标题<span class="red">*</span>：</label>
 			<div class="col-sm-10">
-				<input type="text" class="form-control" name="title" id="title" placeholder="输入文章标题" />
+				<input type="text" class="form-control" name="title" id="title" {notempty name="article.title"}value="{$article.title}"{/notempty} placeholder="输入文章标题" />
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="keywords" class="col-sm-1 control-label">关键词：</label>
 			<div class="col-sm-10">
-				<input type="text" class="form-control no-validate" name="keywords" id="keywords" placeholder="输入文章关键词" />
+				<input type="text" class="form-control no-validate" name="keywords" id="keywords" {notempty name="article.keyword"}value="{$article.keyword}"{/notempty} placeholder="输入文章关键词" />
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="description" class="col-sm-1 control-label">描述：</label>
 			<div class="col-sm-10">
-				<textarea class="form-control no-validate" name="description" id="description" placeholder="输入文章描述"></textarea>
+				<textarea class="form-control no-validate" name="description" id="description" {notempty name="article.description"}value="{$article.description}"{/notempty} placeholder="输入文章描述"></textarea>
 			</div>
 		</div>
 		<div class="form-group">
@@ -32,7 +32,7 @@
 						<button class="btn btn-info" href="javascript:void();" type="button">上传缩略图</button>
 					</span>
 					<input class="form-control" type="text" id="thumbnail" placeholder="点击左侧按钮上传缩略图" readonly />
-					<input type="hidden" name="thumbnail" id="thumbnailUrl">
+					<input type="hidden" name="thumbnail" id="thumbnailUrl" {notempty name="article.thumbnail"}value="{$article.thumbnail}"{/notempty}>
 				</div>
 			</div>
 		</div>
@@ -41,13 +41,24 @@
 			<input type="hidden" name="category_id" id="category-id">
 			<div class="col-sm-5">
 				<select class="selectpicker show-tick form-control" data-title="请选择一级分类" data-icon-base="fa" data-tick-icon="fa-check">
-					{foreach $category as $v}
-						<option value="{$v.id}">{$v.name}</option>
-					{/foreach}
+					{notempty name="categoryParentID"}
+						{foreach $category as $v}
+							<option value="{$v.id}" {eq name="v.id" value="$categoryParentID"}selected{/eq}>{$v.name}</option>
+						{/foreach}
+					{else /}
+						{foreach $category as $v}
+							<option value="{$v.id}">{$v.name}</option>
+						{/foreach}
+					{/notempty}
 				</select>
 			</div>
 			<div class="col-sm-5">
 				<select class="selectpicker show-tick form-control" data-title="请选择二级分类" data-icon-base="fa" data-tick-icon="fa-check">
+					{notempty name="categoryChilds"}
+						{foreach $categoryChilds as $v}
+							<option value="{$v.id}" {eq name="v.id" value="$categoryChildID"}selected{/eq}>{$v.name}</option>
+						{/foreach}
+					{/notempty}
 				</select>
 			</div>
 		</div>
@@ -119,5 +130,19 @@
 	{{# } }}
 </script>
 <script type="text/javascript">
-	require(['js/articleCreate']);
+	require(['jquery', 'js/articleCreate'], function($, articleCreate){
+		$(function(){
+
+			if ($('body').hasClass('original-action-edit')) {
+				var editor = $('#editor-box').data('editor');
+				if (editor == 'markdown') {
+					//var str = "{$article.markdown}";
+					//console.log(str);
+					//articleCreate.editor.setValue("");
+				}else{
+					//articleCreate.editor.setContent("123");
+				}
+			}
+		});
+	});
 </script>

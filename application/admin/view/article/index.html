@@ -17,7 +17,7 @@
 			</p>
 			<p class="keywords col-sm-5 col-lg-6 col-sm-offset-3 col-lg-offset-2"><strong>关键词：</strong><span>{$v.keywords}</span></p>
 			<p class="button">
-				<a href="{:url('admin/article/edit', ['id' => $v.id])}" class="btn btn-primary">编辑</a>
+				<button class="btn btn-primary edit" data-url="{:url('admin/article/edit', ['id' => $v.id])}">编辑</button>
 				<button class="btn btn-danger">删除</button>
 			</p>
 		</li>
@@ -31,5 +31,10 @@
 </section>
 
 <script type="text/javascript">
-	//require(['js/articleIndex']);
+	require(['jquery'], function(){
+		$('.edit').click(function(){
+			var url = $(this).data('url');
+			$(window.frameElement).attr('src', url);
+		});
+	});
 </script>

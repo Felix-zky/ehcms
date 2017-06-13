@@ -1,5 +1,6 @@
 define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 'codemirror-gfm', 'eh.form', 'eh.xhr', 'layer', 'jquery.contextMenu', 'bootstrap', 'bootstrap-select-zh'], function($, WebUploader, Messenger, remarkable, hljs){
 	var CodeMirror = require('../../lib/codemirror');
+	var editor;
 
 	window.importResource = function(data){
 		if($.isArray(data) === true){
@@ -304,6 +305,9 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 
 				$('#html-preview').scrollTop($(this).scrollTop() * (previewHeight / textareaHeight));
 			});
+
+			
+			editor = markdownEditor;
 		}else{
 			var ue = UE.getEditor('editorPlain', {
 				UEDITOR_HOME_URL: '/static/lib/plugin/',
@@ -328,6 +332,8 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 				]],
 				maximumWords: 20000
 			});
+
+			editor = ue;
 		}
 		
 
@@ -404,7 +410,11 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 					};
 				}
 
-				eh.xhr.messageRedirect('/admin/article.html', eh.form.extractData(option), {submitType: 'create'});
+				if ($('body').hasClass('original-action-edit')) {
+					eh.xhr.messageRedirect('/admin/article/' + $('form').data('id') + '.html', eh.form.extractData(option), {submitType: 'put'});
+				}else{
+					eh.xhr.messageRedirect('/admin/article/.html', eh.form.extractData(option), {submitType: 'create'});
+				}
 			}else{
 				eh.form.validateError(validate.errorMap);
 			}
@@ -713,6 +723,10 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
             }
         } else { //插入文本
         	this.replaceSelection(text);
-        }
+        } 
+    }
+
+    return {
+    	editor: editor
     }
 });
