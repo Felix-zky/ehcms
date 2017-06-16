@@ -4,3 +4,6 @@ body{
 	padding: 10px !important;
 	font-size: 14px;
 }
+pre{
+	white-space: pre-wrap;
+}

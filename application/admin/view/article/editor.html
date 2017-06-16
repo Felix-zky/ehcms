@@ -107,7 +107,7 @@
 					</div>
 					<div id="editor">
 						<div class="form-markdown-left validate-style">
-							<textarea name="markdown" id="markdown" class="ignore-prompt"></textarea>
+							<textarea name="markdown" id="markdown" class="ignore-prompt">{$article.markdown}</textarea>
 						</div>
 						<div class="form-markdown-right">
 							<p id="html-preview">
@@ -117,7 +117,9 @@
 					</div>
 				{else /}
 					{js href="/static/lib/plugin/ueditor.config.js,/static/lib/plugin/ueditor.all.js"}
-					<div id="editorPlain"></div>
+					<script id="editorPlain" name="content" type="text/plain">
+						{$article.content}
+					</script>
 				{/eq}
 			</div>
 		</div>
@@ -132,15 +134,10 @@
 <script type="text/javascript">
 	require(['jquery', 'js/articleCreate'], function($, articleCreate){
 		$(function(){
-
 			if ($('body').hasClass('original-action-edit')) {
 				var editor = $('#editor-box').data('editor');
 				if (editor == 'markdown') {
-					//var str = "{$article.markdown}";
-					//console.log(str);
-					//articleCreate.editor.setValue("");
-				}else{
-					//articleCreate.editor.setContent("123");
+					$('#markdown').trigger('change');
 				}
 			}
 		});
