@@ -21,7 +21,7 @@ class User extends Base{
 	 * 
 	 * @return TRUE or 错误信息 
 	 */
-	public function login(){
+	public function login($type = ''){
 		$post = input('post.');
 			
 		//未填写用户名或密码
@@ -30,6 +30,10 @@ class User extends Base{
 		}
 			
 		$member = db('member')->where('username', $post['username'])->find();
+		
+		if ($type == 'admin' && $member['is_admin'] != 1){
+			return $this->errorResult('管理员账号不存在');
+		}
 			
 		//根据用户查询，无法查找到用户
 		if (!$member || !is_array($member)){

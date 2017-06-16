@@ -22,7 +22,7 @@ class Login extends Init{
 	public function checkUser(){
 		//必须使用post提交
 		if (request()->isPost()){
-			$result = action('member/User/login', [], 'event');
+			$result = action('member/User/login', ['type' => 'admin'], 'event');
 			if ($result !== TRUE){
 				return $result;
 			}else{

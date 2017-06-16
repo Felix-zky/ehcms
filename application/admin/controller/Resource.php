@@ -11,6 +11,7 @@ class Resource extends Init{
 		$count = ResourceModel::where('uid', cookie('user_id'))->count();
 		$notGroupedCount = ResourceModel::where(['uid' => cookie('user_id'), 'group_id' => 0])->count();
 		
+		$group = [];
 		foreach ($result as $v){
 			if ($v['parent_id'] == 0){
 				$group[$v['id']] = [
