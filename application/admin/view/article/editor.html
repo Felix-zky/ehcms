@@ -118,7 +118,7 @@
 				{else /}
 					{js href="/static/lib/plugin/ueditor.config.js,/static/lib/plugin/ueditor.all.js"}
 					<script id="editorPlain" name="content" type="text/plain">
-						{$article.content}
+						{notempty name="article.content"}{$article.content}{/notempty}
 					</script>
 				{/eq}
 			</div>

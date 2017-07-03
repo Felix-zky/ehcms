@@ -24,5 +24,5 @@ Route::domain('admin', function(){
 	Route::resource('goods', 'admin/Goods');
 	Route::resource('goods_category', 'admin/GoodsCategory');
 	
-	Route::rule(':controller/:action', 'admin/:controller/:action');
+	Route::rule('login/index', 'admin/Login/index');
 });

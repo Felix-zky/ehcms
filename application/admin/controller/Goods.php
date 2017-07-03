@@ -13,7 +13,8 @@ class Goods extends Init{
 	public function create(){
 		$this->assign('category', $this->getCategory());
 		$this->assign('saveUrl', url('save'));
-		return $this->fetch();
+		$this->assign('actionSign', 'editor');
+		return $this->fetch('editor');
 	}
 	
 	/**
