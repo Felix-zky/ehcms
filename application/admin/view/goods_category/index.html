@@ -46,7 +46,7 @@
 <div id="add-category-tpl">
 	<div class="container-fluid">
 		<div class="row">
-			<form class="form-horizontal" method="post" action="/admin/goods_category.html">
+			<form class="form-horizontal" method="post" action="{:url('admin/GoodsCategory/index')}">
 				<input type="hidden" value="0" id="parent-id" name="parent_id">
 				{neq name="parentID" value="0"}<input type="hidden" value="1" name="is_child">{/neq}
 				<div class="form-group">

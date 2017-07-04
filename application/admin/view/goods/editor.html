@@ -40,37 +40,42 @@
 			<label class="col-sm-1 control-label">商品组图：</label>
 			<div class="col-sm-2">
 				<img src="__IMAGES__/goods_images_default.png">
-				<span class="goods-images">
+				<span class="goods-images images1" data-id="1">
 					<button class="btn btn-info" href="javascript:void();" type="button">商品组图1</button>
 				</span>
+				<input type="hidden" name="images[]">
 			</div>
 			<div class="col-sm-2">
 				<img src="__IMAGES__/goods_images_default.png">
-				<span class="goods-images">
+				<span class="goods-images images2" data-id="2">
 					<button class="btn btn-info" href="javascript:void();" type="button">商品组图2</button>
 				</span>
+				<input type="hidden" name="images[]">
 			</div>
 			<div class="col-sm-2">
 				<img src="__IMAGES__/goods_images_default.png">
-				<span class="goods-images">
+				<span class="goods-images images3" data-id="3">
 					<button class="btn btn-info" href="javascript:void();" type="button">商品组图3</button>
 				</span>
+				<input type="hidden" name="images[]">
 			</div>
 			<div class="col-sm-2">
 				<img src="__IMAGES__/goods_images_default.png">
-				<span class="goods-images">
+				<span class="goods-images images4" data-id="4">
 					<button class="btn btn-info" href="javascript:void();" type="button">商品组图4</button>
 				</span>
+				<input type="hidden" name="images[]">
 			</div>
 			<div class="col-sm-2">
 				<img src="__IMAGES__/goods_images_default.png">
-				<span class="goods-images">
+				<span class="goods-images images5" data-id='5'>
 					<button class="btn btn-info" href="javascript:void();" type="button">商品组图5</button>
 				</span>
+				<input type="hidden" name="images[]">
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="description" class="col-sm-1 control-label">商品分类：</label>
+			<label class="col-sm-1 control-label">商品分类：</label>
 			<input type="hidden" name="category_id" id="category-id">
 			<div class="col-sm-5">
 				<select class="selectpicker show-tick form-control" data-title="请选择一级分类" data-icon-base="fa" data-tick-icon="fa-check">
@@ -85,15 +90,27 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="markdown" class="col-sm-1 control-label">销售方式<span class="red">*</span>：</label>
+			<label class="col-sm-1 control-label">销售方式<span class="red">*</span>：</label>
 			<div class="col-sm-10">
 				<input type="checkbox" name="sale_mode" id="switch" data-on-text="现金" data-off-text="积分" 	data-off-color="success" checked>
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="markdown" class="col-sm-1 control-label">商品价格<span class="red">*</span>：</label>
+			<label for="price" class="col-sm-1 control-label">商品价格<span class="red">*</span>：</label>
 			<div class="col-sm-10">
-				<input type="text" name="price" class="form-control">
+				<input type="text" name="price" id="price" class="form-control">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="discount-price" class="col-sm-1 control-label">折扣价：</label>
+			<div class="col-sm-10">
+				<input type="text" name="discount_price" id="discount-price" class="form-control">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="number" class="col-sm-1 control-label">商品数量<span class="red">*</span>：</label>
+			<div class="col-sm-10">
+				<input type="text" name="number" id="number" class="form-control">
 			</div>
 		</div>
 		<div class="form-group">
@@ -112,7 +129,10 @@
 </script>
 {css href="http://cdn.bootcss.com/bootstrap-select/1.12.1/css/bootstrap-select.min.css,http://cdn.bootcss.com/bootstrap-switch/3.3.4/css/bootstrap3/bootstrap-switch.min.css"}
 <script type="text/javascript">
-	require(['jquery', 'webuploader', 'messenger.future', 'eh.form', 'eh.xhr', 'bootstrap', 'bootstrap-select-zh', 'switch'], function($, WebUploader, Messenger){
+	require(['jquery', 'webuploader', 'messenger.future', 'eh.form', 'eh.xhr', 'bootstrap', 'bootstrap-select-zh', 'switch', 'layer'], function($, WebUploader, Messenger){
+		var goodsImagesIndex = 0,
+			goodsImagesElement = {};
+
 		var ue = UE.getEditor('editorPlain', {
 			UEDITOR_HOME_URL: '/static/lib/plugin/',
 			serverUrl: '/ueditor/controller.php',
@@ -135,6 +155,16 @@
 			'searchreplace', 'drafts'
 			]],
 			maximumWords: 20000
+		});
+
+		$('.goods-images').on('click' ,'input', function() {
+			if (goodsImagesIndex == 0) {
+				goodsImagesElement = $(this).parents('.goods-images');
+				goodsImagesIndex = goodsImagesElement.data('id');
+			}else{
+				layer.msg('图片上传中，请稍后再试！');
+				return false;
+			}
 		});
 
 		$('#switch').bootstrapSwitch();
@@ -191,7 +221,7 @@
 		 */
 		$('#header-button-submit-form').click(function(){
 			if (validate.form()){
-				eh.xhr.messageRedirect('/goods.html', eh.form.extractData(), {submitType: 'create'});
+				eh.xhr.messageRefresh('/goods.html', eh.form.extractData(), {submitType: 'create'});
 			}else{
 				eh.form.validateError(validate.errorMap);
 			}
@@ -206,7 +236,7 @@
 		};
 
 		/**
-		 * 实例化资源上传组件并配置参数
+		 * 实例化缩略图上传
 		 */
 		var uploader = new WebUploader.Uploader({
 			swf: '/static/lib/js/webuploader/Uploader.swf',
@@ -229,7 +259,7 @@
 		 * 缩略图进入列队触发
 		 */
 		uploader.on('fileQueued', function(file){
-			$('.webuploader-pick').next('div').hide();
+			$('.logo-uploader .webuploader-pick').next('div').hide();
 			$('#thumbnail').val(file.name);
 			uploader.option('formData', {
 				extension: file.ext
@@ -267,6 +297,81 @@
 				$('.logo-uploader button').html('重新上传');
 				$('#thumbnail').val('');
 			}
+		});
+
+
+		/**
+		 * 实例化缩略图上传
+		 */
+		var uploaderImages = new WebUploader.Uploader({
+			swf: '/static/lib/js/webuploader/Uploader.swf',
+			server: '/goods/resource.html',
+			pick: '.goods-images',
+			accept: {
+				title: 'Images',
+				extensions: 'gif,jpg,jpeg,bmp,png',
+				mimeTypes: 'image/*'
+			},
+			formData: {
+				_ajax: 1
+			},
+			fileNumLimit: 1,
+			auto: true,
+			compress: false
+		});
+
+		/**
+		 * 缩略图进入列队触发
+		 */
+		uploaderImages.on('fileQueued', function(file){
+			goodsImagesElement.find('.webuploader-pick').next('div').hide();
+
+			uploaderImages.option('thumb', {
+				type: file.type
+			})
+
+			uploaderImages.makeThumb(file, function(error, ret) {
+				if (!error) {
+					goodsImagesElement.prev().attr('src', ret);
+				}
+			});
+		});
+
+		/**
+		 * 缩略图开始上传触发
+		 */
+		uploaderImages.on('startUpload', function(file){
+			goodsImagesElement.find('button').html('<i class="fa fa-spinner fa-pulse"></i> 正在上传');
+		});
+
+		/**
+		 * 缩略图上传成功后触发
+		 */
+		uploaderImages.on('uploadSuccess', function(file, response){
+			uploaderImages.reset();
+			goodsImagesElement.find('.webuploader-pick').next('div').show();
+
+			if (response.code == 1) {
+				Messenger().post({
+					message: '图片：' + file.name + ' 上传成功！',
+					showCloseButton: true
+				});
+				goodsImagesElement.find('button').html('<i class="fa fa-check"></i> 上传成功');
+				goodsImagesElement.next('input').val(response.data.url);
+			}else{
+				Messenger().post({
+					message: '图片：' + file.name + ' 上传失败！',
+					showCloseButton: true,
+					type: 'error'
+				});
+				goodsImagesElement.find('button').html('重新上传');
+				goodsImagesElement.prev().attr('src', '__IMAGES__/goods_images_default.png');
+			}
+		});
+
+		uploaderImages.on('uploadComplete', function(){
+			goodsImagesIndex = 0;
+			goodsImagesElement = {};
 		});
 	});
 </script>

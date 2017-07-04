@@ -21,9 +21,13 @@ class Goods extends Init{
 	 * 保存（新增入库）商品
 	 */
 	public function save(){
+		$data = input('param.');
+		$data['sale_mode'] = !empty($data['sale_mode']) ? 1 : 2;
+		$data['images'] = implode(',', $data['images']);
+		
 		if (request()->isPost()){
-			if (db('goods')->insert(array_merge(input('param.'), ['uid' => cookie('user_id'), 'create_time' => THINK_START_TIME])) == 1){
-				$this->successResult('商品发布成功', '/admin/goods');
+			if (db('goods')->insert(array_merge($data, ['uid' => cookie('user_id'), 'create_time' => THINK_START_TIME])) == 1){
+				$this->successResult('商品发布成功');
 			}else{
 				$this->errorResult('商品发布失败');
 			}

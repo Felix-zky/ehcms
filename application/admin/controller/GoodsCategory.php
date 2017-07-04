@@ -29,7 +29,7 @@ class GoodsCategory extends Init{
 		}
 		
 		if ($id > 0){
-			$this->successResult('文章分类新增成功！', url('admin/GoodsCategory/index'), $param);
+			$this->successResult('商品分类新增成功！', url('admin/GoodsCategory/index'), $param);
 		}
 	}
 	

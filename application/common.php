@@ -15,6 +15,7 @@ Route::domain('admin', function(){
 	Route::get('article/getcategory', 'admin/Article/getCategory');
 	Route::get('document/getcategory', 'admin/Document/getCategory');
 	Route::get('goods/getcategory', 'admin/Goods/getCategory');
+	Route::rule('goods/resource', 'admin/Goods/resource');
 	
 	//注册后台资源路由
 	Route::resource('article', 'admin/Article');
