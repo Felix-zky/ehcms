@@ -17,6 +17,15 @@ class Goods extends Init{
 		return $this->fetch('editor');
 	}
 	
+	public function edit(){
+		$this->assign('actionSign', 'editor');
+		return $this->fetch('editor');
+	}
+	
+	public function update(){
+		
+	}
+	
 	/**
 	 * 保存（新增入库）商品
 	 */
