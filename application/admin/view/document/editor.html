@@ -135,7 +135,7 @@
 		var documentID = $('#editor').data('id'),
 			items,
 			itemsData;
-		eh.xhr.post('/admin/document/getItems.html', {document_id : documentID}, {
+		eh.xhr.post('/document/getItems.html', {document_id : documentID}, {
 			'success': function(response){
 				itemsData = response.data.items || {};
 
@@ -159,7 +159,7 @@
 					if (type == 1) {
 						$('#setting .top span').html('文章配置');
 
-						eh.xhr.post('/admin/document/getArticle.html', {'id': id}, {
+						eh.xhr.post('/document/getArticle.html', {'id': id}, {
 							'success': function(response){
 								$('#detail').html(response.data.content);
 								laytpl($('#add-item-article').html()).render(response.data, function(render){
@@ -209,7 +209,7 @@
 						'#add-item-tpl form'
 					);
 
-					eh.xhr.post('/admin/document/addItem.html', data.param, {
+					eh.xhr.post('/document/addItem.html', data.param, {
 						'success': function(response){
 							layer.close(index);
 							layer.msg(response.msg, {'icon': 6});

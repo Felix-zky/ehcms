@@ -17,7 +17,7 @@ class Goods extends Init{
 		return $this->fetch('editor');
 	}
 	
-	public function edit(){
+	public function edit($id){
 		$this->assign('actionSign', 'editor');
 		return $this->fetch('editor');
 	}
