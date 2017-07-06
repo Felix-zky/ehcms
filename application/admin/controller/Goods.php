@@ -4,7 +4,7 @@ namespace app\admin\controller;
 class Goods extends Init{
 	
 	public function index(){
-		$goods = db('goods')->order('id', 'desc')->paginate(20);
+		$goods = db('goods')->order('id', 'desc')->where('status', 1)->paginate(24);
 		
 		$this->assign('goods', $goods);
 		return $this->fetch();
@@ -12,18 +12,54 @@ class Goods extends Init{
 	
 	public function create(){
 		$this->assign('category', $this->getCategory());
-		$this->assign('saveUrl', url('save'));
 		$this->assign('actionSign', 'editor');
 		return $this->fetch('editor');
 	}
 	
 	public function edit($id){
+		$goods = db('goods')->where('id', $id)->find();
+		$categoryID = $goods['category_id'];
+		$categoryParentID = 0;
+		
+		if ($categoryID > 0){
+			$category = db('goods_category')->where('id', $categoryID)->find();
+			$categoryParentID = $category['parent_id'];
+			if ($categoryParentID != 0){
+				$categoryChildID = $categoryID;
+				$categoryChilds = db('goods_category')->where('parent_id', $categoryParentID)->select();
+				$this->assign('categoryChilds', $categoryChilds);
+				$this->assign('categoryChildID', $categoryChildID);
+			}else{
+				$categoryParentID = $categoryID;
+			}
+		}
+		
+		if (!empty($goods['images'])){
+			$goods['images'] = explode(',', $goods['images']);
+		}
+		
+		$this->assign('goods', $goods);
+		$this->assign('categoryParentID', $categoryParentID);
+		$this->assign('category', $this->getCategory());
+		$this->assign('goodsID', $id);
 		$this->assign('actionSign', 'editor');
 		return $this->fetch('editor');
 	}
 	
-	public function update(){
+	public function update($id){
 		
+	}
+	
+	public function delete($id){
+		$result = db('goods')->where('id', $id)->update([
+			'status' => 2
+		]);
+		
+		if ($result == 1){
+			$this->successResult('删除成功');
+		}else{
+			$this->errorResult('删除失败');
+		}
 	}
 	
 	/**
@@ -65,8 +101,8 @@ class Goods extends Init{
 		}
 	}
 	
-	public function getCategory(){
-		$parentID = input('parent_id') ?: 0;
+	public function getCategory($parentID = 0){
+		$parentID = input('parent_id') ?: $parentID;
 		$result = db('goods_category')->where('parent_id', $parentID)->order('id', 'desc')->select();
 		if (request()->isAjax()){
 			$this->successResult(['category' => $result]);

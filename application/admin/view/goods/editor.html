@@ -5,23 +5,23 @@
 	</div>
 </header>
 <section class="iframe-main">
-	<form class="form-horizontal">
+	<form class="form-horizontal" {notempty name="goodsID"}{$goodsID}{/notempty}>
 		<div class="form-group">
 			<label for="title" class="col-sm-1 control-label">标题<span class="red">*</span>：</label>
 			<div class="col-sm-10">
-				<input type="text" class="form-control" name="title" id="title" placeholder="输入商品标题" />
+				<input type="text" class="form-control" name="title" id="title" {notempty name="goods.title"}value="{$goods.title}"{/notempty} placeholder="输入商品标题" />
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="keywords" class="col-sm-1 control-label">关键词：</label>
 			<div class="col-sm-10">
-				<input type="text" class="form-control no-validate" name="keywords" id="keywords" placeholder="输入商品关键词" />
+				<input type="text" class="form-control no-validate" name="keywords" id="keywords" {notempty name="goods.keywords"}value="{$goods.title}"{/notempty} placeholder="输入商品关键词" />
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="description" class="col-sm-1 control-label">描述：</label>
 			<div class="col-sm-10">
-				<textarea class="form-control no-validate" name="description" id="description" placeholder="输入商品描述"></textarea>
+				<textarea class="form-control no-validate" name="description" id="description" {notempty name="goods.description"}value="{$goods.title}"{/notempty} placeholder="输入商品描述"></textarea>
 			</div>
 		</div>
 		<div class="form-group">
@@ -31,47 +31,47 @@
 					<span class="input-group-btn logo-uploader">
 						<button class="btn btn-info" href="javascript:void();" type="button">上传封面图</button>
 					</span>
-					<input class="form-control" type="text" id="thumbnail" placeholder="点击左侧按钮上传封面图" readonly />
-					<input type="hidden" name="thumbnail" id="thumbnailUrl">
+					<input class="form-control" type="text" id="thumbnail" {notempty name="goods.thumbnail"}value="{$goods.thumbnail}"{/notempty}  placeholder="点击左侧按钮上传封面图" readonly />
+					<input type="hidden" name="thumbnail" id="thumbnailUrl" {notempty name="goods.thumbnail"}value="{$goods.thumbnail}"{/notempty}>
 				</div>
 			</div>
 		</div>
 		<div class="form-group" id="goods-images">
 			<label class="col-sm-1 control-label">商品组图：</label>
 			<div class="col-sm-2">
-				<img src="__IMAGES__/goods_images_default.png">
+				<img src="{notempty name='goods.images[0]'}{$goods.images[0]}{else/}__IMAGES__/goods_images_default.png{/notempty}">
 				<span class="goods-images images1" data-id="1">
 					<button class="btn btn-info" href="javascript:void();" type="button">商品组图1</button>
 				</span>
-				<input type="hidden" name="images[]">
+				<input type="hidden" name="images[]" {notempty name="goods.images[0]"}value="{$goods.images[0]}"{/notempty}>
 			</div>
 			<div class="col-sm-2">
-				<img src="__IMAGES__/goods_images_default.png">
+				<img src="{notempty name='goods.images[1]'}{$goods.images[1]}{else/}__IMAGES__/goods_images_default.png{/notempty}">
 				<span class="goods-images images2" data-id="2">
 					<button class="btn btn-info" href="javascript:void();" type="button">商品组图2</button>
 				</span>
-				<input type="hidden" name="images[]">
+				<input type="hidden" name="images[]" {notempty name="goods.images[1]"}value="{$goods.images[1]}"{/notempty}>
 			</div>
 			<div class="col-sm-2">
-				<img src="__IMAGES__/goods_images_default.png">
+				<img src="{notempty name='goods.images[2]'}{$goods.images[2]}{else/}__IMAGES__/goods_images_default.png{/notempty}">
 				<span class="goods-images images3" data-id="3">
 					<button class="btn btn-info" href="javascript:void();" type="button">商品组图3</button>
 				</span>
-				<input type="hidden" name="images[]">
+				<input type="hidden" name="images[]" {notempty name="goods.images[2]"}value="{$goods.images[2]}"{/notempty}>
 			</div>
 			<div class="col-sm-2">
-				<img src="__IMAGES__/goods_images_default.png">
+				<img src="{notempty name='goods.images[3]'}{$goods.images[3]}{else/}__IMAGES__/goods_images_default.png{/notempty}">
 				<span class="goods-images images4" data-id="4">
 					<button class="btn btn-info" href="javascript:void();" type="button">商品组图4</button>
 				</span>
-				<input type="hidden" name="images[]">
+				<input type="hidden" name="images[]" {notempty name="goods.images[3]"}value="{$goods.images[3]}"{/notempty}>
 			</div>
 			<div class="col-sm-2">
-				<img src="__IMAGES__/goods_images_default.png">
+				<img src="{notempty name='goods.images[4]'}{$goods.images[4]}{else/}__IMAGES__/goods_images_default.png{/notempty}">
 				<span class="goods-images images5" data-id='5'>
 					<button class="btn btn-info" href="javascript:void();" type="button">商品组图5</button>
 				</span>
-				<input type="hidden" name="images[]">
+				<input type="hidden" name="images[]" {notempty name="goods.images[4]"}value="{$goods.images[4]}"{/notempty}>
 			</div>
 		</div>
 		<div class="form-group">
@@ -92,32 +92,32 @@
 		<div class="form-group">
 			<label class="col-sm-1 control-label">销售方式<span class="red">*</span>：</label>
 			<div class="col-sm-10">
-				<input type="checkbox" name="sale_mode" id="switch" data-on-text="现金" data-off-text="积分" 	data-off-color="success" checked>
+				<input type="checkbox" name="sale_mode" id="switch" data-on-text="现金" data-off-text="积分" 	data-off-color="success" {notempty name="goods.sale_mode"}{eq name="goods.sale_mode" value="1" }checked{/eq}{else/}checked{/notempty}>
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="price" class="col-sm-1 control-label">商品价格<span class="red">*</span>：</label>
 			<div class="col-sm-10">
-				<input type="text" name="price" id="price" class="form-control">
+				<input type="text" name="price" id="price" {notempty name="goods.price"}value="{$goods.price}"{/notempty} class="form-control">
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="discount-price" class="col-sm-1 control-label">折扣价：</label>
 			<div class="col-sm-10">
-				<input type="text" name="discount_price" id="discount-price" class="form-control">
+				<input type="text" name="discount_price" id="discount-price" {notempty name="goods.discount_price"}value="{$goods.discount_price}"{/notempty} class="form-control">
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="number" class="col-sm-1 control-label">商品数量<span class="red">*</span>：</label>
 			<div class="col-sm-10">
-				<input type="text" name="number" id="number" class="form-control">
+				<input type="text" name="number" id="number" {present name="goods.number"}value="{$goods.number}"{/present} class="form-control">
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="markdown" class="col-sm-1 control-label">商品描述<span class="red">*</span>：</label>
 			<div class="col-sm-10" id="editor-box">
 				{js href="/static/lib/plugin/ueditor.config.js,/static/lib/plugin/ueditor.all.js"}
-				<div id="editorPlain"></div>
+				<div id="editorPlain">{notempty name="goods.content"}{$goods.content}{/notempty}</div>
 			</div>
 		</div>
 	</form>

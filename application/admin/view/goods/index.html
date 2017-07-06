@@ -1,44 +1,17 @@
 <section class="iframe-main">
 	<div class="row">
 		<ul>
-			<li class="col-sm-3 col-lg-2">
-				<div class="img">
-					<img src="/uploader/1/20170704/70989f79038f04a41ca96821f3f1abe5.png">
-				</div>
-				<p>我是商品描述我是商品描述我是商品描述我是商品描述我是商品描述我是商品描述我是商品描述</p>
-			</li>
-			<li class="col-sm-3 col-lg-2">
-				<div class="img">
-					<img src="/uploader/1/20170704/70989f79038f04a41ca96821f3f1abe5.png">
-				</div>
-				<p>我是商品描述我是商品描述我是商品描述我是商品描述我是商品描述我是商品描述我是商品描述</p>
-			</li>
-			<li class="col-sm-3 col-lg-2">
-				<div class="img">
-					<img src="/uploader/1/20170704/70989f79038f04a41ca96821f3f1abe5.png">
-				</div>
-				<p>我是商品描述我是商品描述我是商品描述我是商品描述我是商品描述我是商品描述我是商品描述</p>
-			</li>
-			<li class="col-sm-3 col-lg-2">
-				<div class="img">
-					<img src="/uploader/1/20170704/70989f79038f04a41ca96821f3f1abe5.png">
-				</div>
-				<p>我是商品描述我是商品描述我是商品描述我是商品描述我是商品描述我是商品描述我是商品描述</p>
-			</li>
-			<li class="col-sm-3 col-lg-2">
-				<div class="img">
-					<img src="/uploader/1/20170704/70989f79038f04a41ca96821f3f1abe5.png">
-				</div>
-				<p>我是商品描述我是商品描述我是商品描述我是商品描述我是商品描述我是商品描述我是商品描述</p>
-			</li>
-			<li class="col-sm-3 col-lg-2">
-				<div class="img">
-					<img src="/uploader/1/20170704/70989f79038f04a41ca96821f3f1abe5.png">
-				</div>
-				<p>我是商品描述我是商品描述我是商品描述我是商品描述我是商品描述我是商品描述我是商品描述</p>
-			</li>
+			{foreach $goods as $v}
+				<li class="col-sm-3 col-lg-2">
+					<div class="img" data-id="{$v.id}">
+						<img src="{$v.thumbnail}">
+					</div>
+					<p>{$v.title}</p>
+				</li>
+			{/foreach}
 		</ul>
 		<div id="pages" class="col-sm-12">
+			{$goods->render()}
 		</div>
 		<div id="operation">
 			<i class="fa fa-pencil-square-o" id="update" title="编辑"></i>
@@ -47,7 +20,7 @@
 	</div>
 </section>
 <script type="text/javascript">
-	require(['jquery', 'dotdotdot'], function($, dotdotdot){
+	require(['jquery', 'dotdotdot', 'layer', 'eh.xhr'], function($, dotdotdot){
 		var currentDocument = {};
 
 		$('p').dotdotdot({
@@ -84,6 +57,12 @@
 				if ($.isEmptyObject(currentDocument)) {
 					return false;
 				}
+
+				layer.confirm('确认删除该商品吗？', {icon: 3, title:'提示'}, function(index){
+					eh.xhr.messageRefresh('/goods/' + currentDocument.data('id') + '.html', {}, {submitType: 'delete'});
+
+					layer.close(index);
+				});
 			});
 
 			$('#update').click(function() {
@@ -91,7 +70,7 @@
 					return false;
 				}
 
-				openEditor(currentDocument.data('id') + '/edit');
+				$(window.frameElement).attr('src', '/goods/' + currentDocument.data('id') + '/edit.html');
 			});
 		});
 
@@ -119,21 +98,6 @@
 
 			$('i#delete').css({
 				'right': (width + 1) / 6
-			});
-		}
-
-		function openEditor(param){
-			eh.closeParentSidebar();
-			layer.open({
-				type: 2,
-				title: false,
-				closeBtn: false,
-				btn: false,
-				area: ['100%', '100%'],
-				content: '/goods/' + param + '.html',
-				end: function(){
-					location.reload();
-				}
 			});
 		}
 	});
