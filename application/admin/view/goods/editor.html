@@ -5,7 +5,7 @@
 	</div>
 </header>
 <section class="iframe-main">
-	<form class="form-horizontal" {notempty name="goodsID"}{$goodsID}{/notempty}>
+	<form class="form-horizontal" {notempty name="goodsID"}data-id="{$goodsID}"{/notempty}>
 		<div class="form-group">
 			<label for="title" class="col-sm-1 control-label">标题<span class="red">*</span>：</label>
 			<div class="col-sm-10">
@@ -220,8 +220,13 @@
 		 * 保存表单按钮点击事件绑定
 		 */
 		$('#header-button-submit-form').click(function(){
+			var id = $('form').data('id');
 			if (validate.form()){
-				eh.xhr.messageRefresh('/goods.html', eh.form.extractData(), {submitType: 'create'});
+				if (id > 0) {
+					eh.xhr.messageRefresh('/goods' + id + '/.html', eh.form.extractData(), {submitType: 'update'});
+				}else{
+					eh.xhr.messageRefresh('/goods.html', eh.form.extractData(), {submitType: 'create'});
+				}
 			}else{
 				eh.form.validateError(validate.errorMap);
 			}
