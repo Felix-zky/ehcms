@@ -223,7 +223,7 @@
 			var id = $('form').data('id');
 			if (validate.form()){
 				if (id > 0) {
-					eh.xhr.messageRefresh('/goods' + id + '/.html', eh.form.extractData(), {submitType: 'update'});
+					eh.xhr.messageRedirect('/goods/' + id + '.html', eh.form.extractData(), {submitType: 'put'});
 				}else{
 					eh.xhr.messageRefresh('/goods.html', eh.form.extractData(), {submitType: 'create'});
 				}

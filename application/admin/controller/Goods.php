@@ -47,7 +47,19 @@ class Goods extends Init{
 	}
 	
 	public function update($id){
+		$data = input('param.');
+		$data['sale_mode'] = !empty($data['sale_mode']) ? 1 : 2;
+		$data['images'] = implode(',', $data['images']);
 		
+		if (request()->isPut()){
+			if (db('goods')->where('id', $id)->update($data) == 1){
+				$this->successResult('商品更新成功', ['redirect_url' => url('admin/Goods/index')]);
+			}else{
+				$this->errorResult('商品更新失败');
+			}
+		}else{
+			$this->errorResult('E-03002');
+		}
 	}
 	
 	public function delete($id){
