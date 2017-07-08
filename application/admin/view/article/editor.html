@@ -15,13 +15,13 @@
 		<div class="form-group">
 			<label for="keywords" class="col-sm-1 control-label">关键词：</label>
 			<div class="col-sm-10">
-				<input type="text" class="form-control no-validate" name="keywords" id="keywords" {notempty name="article.keyword"}value="{$article.keyword}"{/notempty} placeholder="输入文章关键词" />
+				<input type="text" class="form-control no-validate" name="keywords" id="keywords" {notempty name="article.keywords"}value="{$article.keywords}"{/notempty} placeholder="输入文章关键词" />
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="description" class="col-sm-1 control-label">描述：</label>
 			<div class="col-sm-10">
-				<textarea class="form-control no-validate" name="description" id="description" {notempty name="article.description"}value="{$article.description}"{/notempty} placeholder="输入文章描述"></textarea>
+				<textarea class="form-control no-validate" name="description" id="description" placeholder="输入文章描述">{notempty name="article.description"}{$article.description}{/notempty}</textarea>
 			</div>
 		</div>
 		<div class="form-group">
@@ -31,7 +31,7 @@
 					<span class="input-group-btn logo-uploader">
 						<button class="btn btn-info" href="javascript:void();" type="button">上传缩略图</button>
 					</span>
-					<input class="form-control" type="text" id="thumbnail" placeholder="点击左侧按钮上传缩略图" readonly />
+					<input class="form-control" type="text" id="thumbnail" placeholder="点击左侧按钮上传缩略图" {notempty name="article.thumbnail"}value="{$article.thumbnail}"{/notempty} readonly />
 					<input type="hidden" name="thumbnail" id="thumbnailUrl" {notempty name="article.thumbnail"}value="{$article.thumbnail}"{/notempty}>
 				</div>
 			</div>

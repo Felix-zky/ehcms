@@ -37,7 +37,7 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 		$('.selectpicker').on('changed.bs.select', function(){
 			var index = $(this).parents('.col-sm-5').index();
 			if (index == 2) {
-				eh.xhr.getCommon('/admin/article/getCategory.html', {'parent_id': $(this).val()}, {
+				eh.xhr.getCommon('/article/getCategory.html', {'parent_id': $(this).val()}, {
 					'parentObj': $('.selectpicker:eq(1)'),
 					'tplID': 'category-tpl',
 					'after': function(){
@@ -172,7 +172,7 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 							move: false,
 							area: ['100%', '100%'],
 							closeBtn: false,
-							content: '/admin/resource/index/iframe/1.html'
+							content: '/resource/index/iframe/1.html'
 						});
 					}
 				}
@@ -373,7 +373,7 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 		// 					move: false,
 		// 					area: ['100%', '100%'],
 		// 					closeBtn: false,
-		// 					content: '/admin/resource/index/iframe/1.html'
+		// 					content: '/resource/index/iframe/1.html'
 		// 				});
 		// 				break;
 		// 		}	
@@ -412,9 +412,9 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 				}
 
 				if ($('body').hasClass('original-action-edit')) {
-					eh.xhr.messageRedirect('/admin/article/' + $('form').data('id') + '.html', eh.form.extractData(option), {submitType: 'put'});
+					eh.xhr.messageRedirect('/article/' + $('form').data('id') + '.html', eh.form.extractData(option), {submitType: 'put'});
 				}else{
-					eh.xhr.messageRedirect('/admin/article/.html', eh.form.extractData(option), {submitType: 'create'});
+					eh.xhr.messageRedirect('/article/.html', eh.form.extractData(option), {submitType: 'create'});
 				}
 			}else{
 				eh.form.validateError(validate.errorMap);
@@ -444,7 +444,7 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 		 */
 		var resourceUploader = new WebUploader.Uploader({
 			swf: '/static/lib/js/webuploader/Uploader.swf',
-			server: '/admin/article/resource.html',
+			server: '/article/resource.html',
 			pick: '.resource-uploader',
 			accept: {
 				title: 'Images',
@@ -497,7 +497,7 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 		 */
 		var uploader = new WebUploader.Uploader({
 			swf: '/static/lib/js/webuploader/Uploader.swf',
-			server: '/admin/article/resource.html',
+			server: '/article/resource.html',
 			pick: '.logo-uploader',
 			accept: {
 				title: 'Images',
