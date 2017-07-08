@@ -23,13 +23,17 @@ class GoodsCategory extends Init{
 		
 		$id = db('goods_category')->insertGetId(['name' => $name, 'parent_id' => $parentID]);
 		
-		$param = [];
-		if (input('is_child') == 1 && $parentID > 0){
-			$param['parent_id'] = $parentID;
-		}
-		
 		if ($id > 0){
-			$this->successResult('商品分类新增成功！', url('admin/GoodsCategory/index'), $param);
+			$this->success('商品分类新增成功！');
+		}
+	}
+	
+	public function update(){
+		$id = input('id');
+		$name = input('name');
+	
+		if (db('goods_category')->where('id', $id)->update(['name' => $name]) == 1){
+			$this->success('商品分类更新成功！');
 		}
 	}
 	

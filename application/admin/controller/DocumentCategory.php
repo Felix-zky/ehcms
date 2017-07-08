@@ -22,22 +22,18 @@ class DocumentCategory extends Init{
 		
 		$id = db('document_category')->insertGetId(['name' => $name, 'parent_id' => $parentID]);
 		
-		$param = [];
-		if (input('is_child') == 1 && $parentID > 0){
-			$param['parent_id'] = $parentID;
-		}
-		
 		if ($id > 0){
-			$this->successResult('文档分类新增成功！', url('admin/DocumentCategory/index'), $param);
+			$this->success('文档分类新增成功！');
 		}
-	}
-	
-	public function edit(){
-		return $this->fetch();
 	}
 	
 	public function update(){
-		
+		$id = input('id');
+		$name = input('name');
+	
+		if (db('document_category')->where('id', $id)->update(['name' => $name]) == 1){
+			$this->success('文档分类更新成功！');
+		}
 	}
 	
 	public function delete(){

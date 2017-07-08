@@ -23,13 +23,17 @@ class ArticleCategory extends Init{
 		
 		$id = db('article_category')->insertGetId(['name' => $name, 'parent_id' => $parentID]);
 		
-		$param = [];
-		if (input('is_child') == 1 && $parentID > 0){
-			$param['parent_id'] = $parentID;
-		}
-		
 		if ($id > 0){
-			$this->successResult('文章分类新增成功！', url('admin/ArticleCategory/index'), $param);
+			$this->success('文章分类新增成功！');
+		}
+	}
+	
+	public function update(){
+		$id = input('id');
+		$name = input('name');
+	
+		if (db('article_category')->where('id', $id)->update(['name' => $name]) == 1){
+			$this->success('文章分类更新成功！');
 		}
 	}
 	
