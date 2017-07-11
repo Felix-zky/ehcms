@@ -55,3 +55,16 @@
 		</div>
 	</form>
 </section>
+<script type="text/javascript">
+	require(['jquery', 'eh.xhr', 'layer'], function(){
+		$('#header-button-submit-form').click(function() {
+			var data = $('form').serialize();
+
+			eh.xhr.put('/setting_sms/update.html', data, {
+				success: function(response){
+					var data = response.data;
+				}
+			});
+		});
+	});
+</script>
