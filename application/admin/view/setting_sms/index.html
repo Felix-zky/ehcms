@@ -8,49 +8,49 @@
 		<div class="form-group">
 			<label for="access-key-id" class="col-sm-3 control-label">Access-Key-Id：</label>
 			<div class="col-sm-8">
-				<input type="text" class="form-control" name="access_key_id" id="access-key-id" placeholder="请输入阿里云accessKeyId">
+				<input type="text" class="form-control" name="access_key_id" id="access-key-id" value="{$sms.access_key_id}" placeholder="请输入阿里云accessKeyId">
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="access-key-secret" class="col-sm-3 control-label">Access-Key-Secret：</label>
 			<div class="col-sm-8">
-				<input type="text" class="form-control" name="access_key_secret" id="access-key-secret" placeholder="请输入阿里云accessKeySecret">
+				<input type="text" class="form-control" name="access_key_secret" id="access-key-secret" value="{$sms.access_key_secret}" placeholder="请输入阿里云accessKeySecret">
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="region-id" class="col-sm-3 control-label">地域ID：</label>
 			<div class="col-sm-8">
-				<input type="text" class="form-control" name="region_id" id="region-id" placeholder="请输入阿里云地区ID">
+				<input type="text" class="form-control" name="region_id" id="region-id" value="{$sms.region_id}" placeholder="请输入阿里云地区ID">
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="sign" class="col-sm-3 control-label">签名：</label>
 			<div class="col-sm-8">
-				<input type="text" class="form-control" name="sign" id="sign" placeholder="请输入短信签名">
+				<input type="text" class="form-control" name="sign" id="sign" value="{$sms.sign}" placeholder="请输入短信签名">
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="register-id" class="col-sm-3 control-label">注册验证码：</label>
 			<div class="col-sm-8">
-				<input type="text" class="form-control" name="register_id" id="register-id" placeholder="请输入注册验证码模板ID">
+				<input type="text" class="form-control" name="register_id" id="register-id" value="{$sms.register_id}" placeholder="请输入注册验证码模板ID">
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="password-recovery-id" class="col-sm-3 control-label">密码找回验证码：</label>
 			<div class="col-sm-8">
-				<input type="text" class="form-control" name="password_recovery_id" id="password-recovery-id" placeholder="请输入密码找回验证码模板ID">
+				<input type="text" class="form-control" name="password_recovery_id" id="password-recovery-id" value="{$sms.password_recovery_id}" placeholder="请输入密码找回验证码模板ID">
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="goods-exchange-id" class="col-sm-3 control-label">商品兑换码：</label>
 			<div class="col-sm-8">
-				<input type="text" class="form-control" name="goods_exchange_id" id="goods-exchange-id" placeholder="请输入商品兑换码模板ID">
+				<input type="text" class="form-control" name="goods_exchange_id" id="goods-exchange-id" value="{$sms.goods_exchange_id}" placeholder="请输入商品兑换码模板ID">
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="goods-exchange-success-id" class="col-sm-3 control-label">商品兑换成功：</label>
 			<div class="col-sm-8">
-				<input type="text" class="form-control" name="goods_exchange_success_id" id="goods-exchange-success-id" placeholder="请输入商品兑换成功模板ID">
+				<input type="text" class="form-control" name="goods_exchange_success_id" id="goods-exchange-success-id" value="{$sms.goods_exchange_success_id}" placeholder="请输入商品兑换成功模板ID">
 			</div>
 		</div>
 	</form>
