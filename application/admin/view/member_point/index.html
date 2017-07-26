@@ -1,0 +1,93 @@
+<header>
+	<div class="pull-right">
+		<button class="btn btn-success" id="refresh">刷新</button>
+	</div>
+</header>
+<section class="iframe-main">
+	<table class="table table-striped table-bordered table-hover">
+		<thead>
+			<tr>
+				<th width="8%">编号</th>
+				<th width="15%">用户名称</th>
+				<th width="15%">执行人</th>
+				<th width="10%">积分数</th>
+				<th width="10%">剩余积分</th>
+				<th width="10%">类型</th>
+				<th width="15%">执行时间</th>
+				<th width="17%">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			{foreach $log as $v}
+				<tr>
+					<td>{$v.id}</td>
+					<td>{$v.user.username}</td>
+					<td>{$v.admin.username}</td>
+					<td>{$v.change}</td>
+					<td>{$v.after}</td>
+					<td>{$v.type}</td>
+					<td>{$v.create_time}</td>
+					<td class="hidden">{$v.before}</td>
+					<td class="hidden">{$v.remark}</td>
+					<td><button class="btn btn-primary btn-sm view">查看完整信息</button></td>
+				</tr>
+			{/foreach}
+		</tbody>
+	</table>
+	<div id="list-pages">
+		{$log->render()}
+	</div>
+</section>
+<script type="text/html" id="view">
+	<dl class="dl-horizontal">
+		<dt>编号：</dt>
+		<dd>{{d.id}}</dd>
+		<dt>用户名称：</dt>
+		<dd>{{d.user}}</dd>
+		<dt>执行人：</dt>
+		<dd>{{d.admin}}</dd>
+		<dt>修改前：</dt>
+		<dd>{{d.before}}</dd>
+		<dt>积分数：</dt>
+		<dd>{{d.change}}</dd>
+		<dt>剩余积分：</dt>
+		<dd>{{d.after}}</dd>
+		<dt>类型：</dt>
+		<dd>{{d.type}}</dd>
+		<dt>备注：</dt>
+		<dd>{{d.remark}}</dd>
+		<dt>执行时间：</dt>
+		<dd>{{d.time}}</dd>
+	</dl>
+</script>
+<script type="text/javascript">
+	require(['jquery', 'laytpl', 'layer'], function($, laytpl){
+		$('#refresh').click(function() {
+			location.reload();
+		});
+
+		$('.view').click(function() {
+			var td = $(this).parents('tr').find('td'),
+				data = {
+					'id': td[0].innerHTML,
+					'user': td[1].innerHTML,
+					'admin': td[2].innerHTML,
+					'before': td[7].innerHTML,
+					'change': td[3].innerHTML,
+					'after': td[4].innerHTML,
+					'type': td[5].innerHTML,
+					'remark': td[8].innerHTML,
+					'time': td[6].innerHTML
+				};
+
+			laytpl($('#view').html()).render(data, function(html){
+				layer.open({
+					type: 1,
+					title: '详细记录',
+					area: '500px',
+					content: html
+				});
+			});
+		});
+	});
+</script>
