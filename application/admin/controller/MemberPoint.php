@@ -8,8 +8,24 @@ class MemberPoint extends Init{
 	}
 	
 	public function edit(){
-		if (request()->isAjax()){
+		if (request()->isPost()){
+			$id = input('id');
+			$point = (int)input('point');
 			
+			if ($point > 0){
+				$result = db('member')->where('id', $id)->setInc('point', $point);
+				
+			}else if ($point < 0){
+				$result = db('member')->where('id', $id)->setDec('point', abs($point));
+			}else{
+				$this->error('积分值不正确');
+			}
+			
+			if ($result == 1){
+				$this->success('积分更新成功');
+			}else{
+				$this->error('积分更新失败');
+			}
 		}
 		
 		return $this->fetch();
@@ -71,5 +87,9 @@ class MemberPoint extends Init{
 		}else{
 			$this->errorResult('用户不存在');
 		}
+	}
+	
+	private function log(){
+		
 	}
 }

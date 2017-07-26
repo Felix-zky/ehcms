@@ -5,7 +5,7 @@
 	</div>
 </header>
 <section class="iframe-main">
-	<form class="form-horizontal" method="post" action="/admin/member_point/edit.html">
+	<form class="form-horizontal" method="post" action="/member_point/edit.html">
 		<input type="hidden" name="id" id="member-id">
 		<div class="form-group">
 			<label for="select" class="col-sm-1 control-label">选择会员</label>
@@ -30,12 +30,18 @@
 				<input type="text" name="point" class="form-control" id="point" placeholder="正数为加，负数为减">
 			</div>
 		</div>
+		<div class="form-group">
+			<label for="true-name" class="col-sm-1 control-label">备注</label>
+			<div class="col-sm-10">
+				<input type="text" name="remark" id="remark">
+			</div>
+		</div>
 	</form>
 </section>
 <script type="text/javascript">
 	require(['jquery', 'eh.xhr'], function(){
 		$('#select-member').click(function() {
-			eh.xhr.getCommon('/admin/member_point/getMember.html', {data: $('#select').val(), type: 'card'}, {fn: function(response){
+			eh.xhr.getCommon('/member_point/getmember.html', {data: $('#select').val(), type: 'card'}, {fn: function(response){
 				var data = response.data;
 
 				$('#member-id').val(data.id);
