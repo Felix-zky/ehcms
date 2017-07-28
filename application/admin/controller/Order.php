@@ -1,6 +1,7 @@
 <?php
 namespace app\admin\controller;
 
+use Think\Db;
 class Order extends Init{
 	
 	public function index(){
@@ -8,6 +9,35 @@ class Order extends Init{
 	
 		$this->assign('order', $order);
 		return $this->fetch();
+	}
+	
+	public function point(){
+		if (request()->isPost()){
+			$phone = input('phone');
+			$code = input('code');
+			
+			if (empty($phone) || empty($code)){
+				$this->errorResult('核销失败（缺少参数）');
+			}
+			
+			$order = Db::name('order')->where(['phone' =>$phone, 'exchange_code'=> $code])->find();
+			
+			if (!$order){
+				$this->errorResult('核销失败（手机号或者兑换码有误）');
+			}
+			
+			if ($order['status'] == 1){
+				$this->errorResult('核销失败（订单已兑换）');
+			}
+			
+			if (Db::name('order')->where('id', $order['id'])->update(['status' => 1, 'finish_time' => THINK_START_TIME]) == 1){
+				$this->successResult('订单核销成功');
+			}else{
+				$this->errorResult('订单核销失败');
+			}
+		}else{
+			return $this->fetch();
+		}
 	}
 	
 }

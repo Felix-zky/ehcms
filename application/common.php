@@ -17,8 +17,9 @@ Route::domain('admin', function(){
 	Route::get('goods/getcategory', 'admin/Goods/getCategory');
 	Route::rule('goods/resource', 'admin/Goods/resource');
 	Route::put('setting_sms/update', 'admin/SettingSms/update');
-	Route::get('member_point/getmember', 'admin/memberPoint/getMember');
-	Route::rule('member_point/edit', 'admin/memberPoint/edit');
+	Route::get('member_point/getmember', 'admin/MemberPoint/getMember');
+	Route::rule('member_point/edit', 'admin/MemberPoint/edit');
+	Route::rule('order/point', 'admin/Order/point');
 	
 	//注册后台资源路由
 	Route::resource('article', 'admin/Article');
