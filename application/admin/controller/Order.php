@@ -31,7 +31,11 @@ class Order extends Init{
 			}
 			
 			if (Db::name('order')->where('id', $order['id'])->update(['status' => 1, 'finish_time' => THINK_START_TIME]) == 1){
-				$this->successResult('订单核销成功');
+				if (is_numeric($order['goods_id'])){
+					$data['goods'][0] = Db::name('goods')->field('title, thumbnail')->where('id', $order['goods_id'])->find();
+				}
+				
+				$this->successResult('订单核销成功', $data);
 			}else{
 				$this->errorResult('订单核销失败');
 			}

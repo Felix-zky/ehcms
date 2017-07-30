@@ -20,8 +20,30 @@
 		</div>
 	</form>
 </section>
+<script type="text/html" id="goods">
+	<div class="box">
+		<table class="table table-striped table-bordered table-hover">
+			<thead>
+				<tr>
+					<th width="180">商品图片</th>
+					<th width="260">商品名称</th>
+					<th width="160">兑换数量</th>
+				</tr>
+			</thead>
+			<tbody>
+				{{# for(var i = 0, len = d.goods.length; i < len; i++){ }}
+				<tr>
+					<td><img src="{{d.goods[i].thumbnail}}"></td>
+					<td>{{d.goods[i].title}}</td>
+					<td>1</td>
+				</tr>
+				{{# } }}
+			</tbody>
+		</table>
+	</div>
+</script>
 <script type="text/javascript">
-	require(['jquery', 'layer', 'eh.xhr'], function(){
+	require(['jquery', 'laytpl', 'layer', 'eh.xhr'], function($, laytpl){
 
 		$('#header-button-submit-form').click(function() {
 			var index = eh.xhr.loadPrompt({'str': '正在核销...'});
@@ -32,8 +54,18 @@
 			eh.xhr.post('/order/point.html', {'phone': phone, 'code': code}, {
 				success: function(response){
 					layer.close(index);
-					layer.msg(response.msg, {'icon': 6});
 					$('#phone, #code').val('');
+
+					laytpl($('#goods').html()).render(response.data, function(html){
+						layer.open({
+							type: 1,
+							content: html,
+							area: '600px',
+							title: '核销商品列表'
+						});
+					});
+
+					layer.msg(response.msg, {'icon': 6, 'time': 1000});
 				}
 			});
 		});
