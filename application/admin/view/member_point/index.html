@@ -22,13 +22,14 @@
 				<tr>
 					<td>{$v.id}</td>
 					<td>{$v.user.username}</td>
-					<td>{$v.admin.username}</td>
+					<td>{eq name="v.admin_id" value="0"}系统{else/}{$v.admin.username}{/eq}</td>
 					<td>{$v.change}</td>
 					<td>{$v.after}</td>
 					<td>{$v.type}</td>
 					<td>{$v.create_time}</td>
 					<td class="hidden">{$v.before}</td>
 					<td class="hidden">{$v.remark}</td>
+					<td class="hidden">{$v.user.true_name}</td>
 					<td><button class="btn btn-primary btn-sm view">查看完整信息</button></td>
 				</tr>
 			{/foreach}
@@ -44,6 +45,8 @@
 		<dd>{{d.id}}</dd>
 		<dt>用户名称：</dt>
 		<dd>{{d.user}}</dd>
+		<dt>真实姓名：</dt>
+		<dd>{{d.truename}}</dd>
 		<dt>执行人：</dt>
 		<dd>{{d.admin}}</dd>
 		<dt>修改前：</dt>
@@ -77,7 +80,8 @@
 					'after': td[4].innerHTML,
 					'type': td[5].innerHTML,
 					'remark': td[8].innerHTML,
-					'time': td[6].innerHTML
+					'time': td[6].innerHTML,
+					'truename': td[9].innerHTML
 				};
 
 			laytpl($('#view').html()).render(data, function(html){

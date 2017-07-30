@@ -5,7 +5,7 @@ use think\Model;
 class PointLog extends Model{
 	
 	public function user(){
-		return $this->hasOne('member', 'id', 'uid')->field('username');
+		return $this->hasOne('member', 'id', 'uid')->field('username, true_name');
 	}
 	
 	public function admin(){

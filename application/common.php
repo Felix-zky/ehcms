@@ -19,6 +19,7 @@ Route::domain('admin', function(){
 	Route::put('setting_sms/update', 'admin/SettingSms/update');
 	Route::get('member_point/getmember', 'admin/MemberPoint/getMember');
 	Route::rule('member_point/edit', 'admin/MemberPoint/edit');
+	Route::rule('member_point/bind', 'admin/MemberPoint/bind');
 	Route::rule('order/point', 'admin/Order/point');
 	
 	//注册后台资源路由
