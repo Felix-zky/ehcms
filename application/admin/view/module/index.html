@@ -1,17 +1,11 @@
-<header>
-	<div class="pull-left">
-		<button class="btn btn-success" id="header-button-submit-form">添加模块</button>
-	</div>
-</header>
 <section class="iframe-main">
-	<table class="table table-striped table-hover">
+	<table class="table table-striped table-bordered table-hover">
 		<thead>
 			<tr>
-				<th width="15%">编号</th>
-				<th width="20%">模块名称</th>
-				<th width="15%">模块图标</th>
-				<th width="30%">已绑定菜单</th>
-				<th width="20%">操作</th>
+				<th width="20%">编号</th>
+				<th width="25%">模块名称</th>
+				<th width="20%">模块图标</th>
+				<th width="35%">操作</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -19,8 +13,7 @@
 			<tr>
 				<td>{$v.id}</td>
 				<td>{$v.name}</td>
-				<td>{$v.icon}</td>
-				<td>{$v.menus}</td>
+				<td><img src="/static/admin/images/{$v.icon}"></td>
 				<td>
 					<button class="btn btn-warning" data-id="{$v.id}">编辑</button>
 					<button class="btn btn-danger" data-id="{$v.id}">删除</button>
@@ -29,9 +22,6 @@
 			{/foreach}
 		</tbody>
 	</table>
-	<div id="list-pages">
-		{$member->render()}
-	</div>
 </section>
 
 <script type="text/javascript">

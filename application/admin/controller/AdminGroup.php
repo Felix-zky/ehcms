@@ -1,7 +1,7 @@
 <?php
 namespace app\admin\controller;
 
-class Permission extends Init{
+class AdminGroup extends Init{
 	
 	public function index(){
 		return $this->fetch();

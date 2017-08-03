@@ -29,6 +29,10 @@ Route::domain('admin', function(){
 	Route::resource('document_category', 'admin/DocumentCategory');
 	Route::resource('goods', 'admin/Goods');
 	Route::resource('goods_category', 'admin/GoodsCategory');
+	Route::resource('module', 'admin/Module');
+	Route::resource('permission', 'admin/Permission');
+	Route::resource('permission_group', 'admin/PermissionGroup');
+	Route::resource('admin_group', 'admin/AdminGroup');
 	
 	Route::rule('login/index', 'admin/Login/index');
 });
