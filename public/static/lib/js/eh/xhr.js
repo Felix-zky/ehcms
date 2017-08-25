@@ -481,10 +481,10 @@ define(['jquery', 'laytpl', 'layer', 'eh'], function($, laytpl){
 						str = '提交中，请稍等。';
 				}
 
-				str = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw" style="vertical-align: middle;"></i><span style="font-size:17px; vertical-align:middle; padding-left: 5px;">' + str + '</span>';
+				str = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw" style="vertical-align: middle;"></i><span style="font-size:17px; vertical-align:middle; padding-left: 5px; display: inline-block;">' + str + '</span>';
 			}else{
 				if (option.strStyle != false) {
-					str = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw" style="vertical-align: middle;"></i><span style="font-size:17px; vertical-align:middle; padding-left: 5px;">' + option.str + '</span>';
+					str = '<i class="fa fa-spinner fa-pulse fa-2x fa-fw" style="vertical-align: middle;"></i><span style="font-size:17px; vertical-align:middle; padding-left: 5px; display: inline-block;">' + option.str + '</span>';
 				}else{
 					str = option.str;
 				}
