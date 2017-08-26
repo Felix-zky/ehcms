@@ -11,10 +11,18 @@
 
 namespace app\admin\controller;
 
+
 class Permission extends Init{
 	
 	public function index(){
-		$permission = db('admin_permission')->select();
+		$data = db('admin_permission')
+				->field('p.id, p.name, p.key, p.is_menu, pg.name as group_name, m.name as module_name')
+				->alias('p')
+				->join('admin_permission_group pg', 'pg.id = p.group_id')
+				->join('admin_module m', 'm.id = pg.module_id')
+				->paginate(10);
+		
+		$this->assign('data', $data);
 		return $this->fetch();
 	}
 	
@@ -26,7 +34,22 @@ class Permission extends Init{
 	}
 	
 	public function save(){
+		$post = input('param.');
 		
+		$data = [
+			'group_id' => $post['group_id'],
+			'name' => $post['name'],
+			'key' => $post['key'],
+			'is_menu' => $post['is_menu'] == 'on' ? 1 : 0,
+			'menu_icon' => $post['menu_icon'],
+			'menu_url' => $post['menu_url'],
+		];
+		
+		if (db('admin_permission')->insert($data) == 1){
+			$this->successResult();
+		}else{
+			$this->errorResult();
+		}
 	}
 	
 	public function getGroup(){

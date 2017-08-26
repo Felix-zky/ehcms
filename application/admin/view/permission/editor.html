@@ -1,6 +1,6 @@
 <header>
 	<div class="pull-left">
-		<button class="btn btn-success" id="header-button-submit-form">发布权限分组</button>
+		<button class="btn btn-success" id="header-button-submit-form">发布权限</button>
 	</div>
 </header>
 <section class="iframe-main">
@@ -30,6 +30,12 @@
 			</div>
 		</div>
 		<div class="form-group">
+			<label for="key" class="col-sm-1 control-label">权限KEY<span class="red">*</span>：</label>
+			<div class="col-sm-10">
+				<input type="text" class="form-control" name="key" id="key" placeholder="输入权限KEY">
+			</div>
+		</div>
+		<div class="form-group">
 			<label for="is-menu" class="col-sm-1 control-label">是否为菜单<span class="red">*</span>：</label>
 			<div class="col-sm-10">
 				<input type="checkbox" name="is_menu" id="switch" data-on-text="是" data-off-text="否" data-off-color="success">
@@ -37,21 +43,21 @@
 		</div>
 		<div id="menu" class="animated">
 			<div class="form-group">
-				<label for="menu-name" class="col-sm-1 control-label">菜单名称<span class="red">*</span>：</label>
-				<div class="col-sm-10">
-					<input type="text" class="form-control" name="menu_name" id="menu-name" placeholder="请输入菜单名称">
-				</div>
-			</div>
-			<div class="form-group">
 				<label for="menu-icon" class="col-sm-1 control-label">菜单字体图标<span class="red">*</span>：</label>
 				<div class="col-sm-10">
 					<input type="text" class="form-control" name="menu_icon" id="menu-icon" placeholder="请输入菜单字体图标">
 				</div>
 			</div>
+			<div class="form-group">
+				<label for="menu-url" class="col-sm-1 control-label">菜单地址<span class="red">*</span>：</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" name="menu_url" id="menu-url" placeholder="请输入菜单的路由地址">
+				</div>
+			</div>
 		</div>
 	</form>
 </section>
-{css href="http://cdn.bootcss.com/bootstrap-select/1.12.1/css/bootstrap-select.min.css, http://cdn.bootcss.com/bootstrap-switch/3.3.4/css/bootstrap3/bootstrap-switch.min.css, https://cdn.bootcss.com/animate.css/3.5.2/animate.min.css"}
+{css href="http://cdn.bootcss.com/bootstrap-select/1.12.1/css/bootstrap-select.min.css, http://cdn.bootcss.com/bootstrap-switch/3.3.4/css/bootstrap3/bootstrap-switch.min.css"}
 <script type="text/javascript">
 	require(['jquery', 'vue', 'layer', 'eh.xhr', 'eh.form', 'bootstrap', 'bootstrap-select-zh', 'switch'], function($, Vue){
 		var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
@@ -102,7 +108,7 @@
 		});
 
 		$('#header-button-submit-form').click(function() {
-			eh.xhr.messageRefresh('/permission_group.html', eh.form.extractData(), {submitType: 'create'});
+			eh.xhr.messageRefresh('/permission.html', eh.form.extractData(), {submitType: 'create'});
 		});
 
 	});
