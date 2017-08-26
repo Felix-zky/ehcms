@@ -1,30 +1,108 @@
 <header>
 	<div class="pull-left">
-		<!-- <button class="btn btn-danger" id="header-button-empty-form">清空表单</button> -->
-		<button class="btn btn-success" id="header-button-submit-form">发布模块</button>
+		<button class="btn btn-success" id="header-button-submit-form">发布权限分组</button>
 	</div>
 </header>
 <section class="iframe-main">
 	<form class="form-horizontal">
 		<div class="form-group">
-			<label for="name" class="col-sm-1 control-label">模块名称<span class="red">*</span>：</label>
+			<label for="module-id" class="col-sm-1 control-label">选择模块<span class="red">*</span>：</label>
 			<div class="col-sm-10">
-				<input type="text" class="form-control" name="name" id="name" placeholder="输入模块名称" />
+				<select name="module_id" id="module-id" class="selectpicker show-tick form-control" data-title="请选择模块" data-icon-base="fa" data-tick-icon="fa-check">
+					{foreach $module as $v}
+						<option value="{$v.id}">{$v.name}</option>
+					{/foreach}
+				</select>
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="icon" class="col-sm-1 control-label">模块图片<span class="red">*</span>：</label>
+			<label for="group-id" class="col-sm-1 control-label">选择分组<span class="red">*</span>：</label>
 			<div class="col-sm-10">
-				<input type="text" class="form-control" name="icon" id="icon" placeholder="输入模块图片文件名称" />
+				<select name="group_id" id="group-id" class="selectpicker show-tick form-control" data-title="请选择分组" data-icon-base="fa" data-tick-icon="fa-check">
+					<option v-for="v in data" :value="v.id">{{v.name}}</option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="name" class="col-sm-1 control-label">权限名称<span class="red">*</span>：</label>
+			<div class="col-sm-10">
+				<input type="text" class="form-control" name="name" id="name" placeholder="输入权限名称">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="is-menu" class="col-sm-1 control-label">是否为菜单<span class="red">*</span>：</label>
+			<div class="col-sm-10">
+				<input type="checkbox" name="is_menu" id="switch" data-on-text="是" data-off-text="否" data-off-color="success">
+			</div>
+		</div>
+		<div id="menu" class="animated">
+			<div class="form-group">
+				<label for="menu-name" class="col-sm-1 control-label">菜单名称<span class="red">*</span>：</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" name="menu_name" id="menu-name" placeholder="请输入菜单名称">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="menu-icon" class="col-sm-1 control-label">菜单字体图标<span class="red">*</span>：</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" name="menu_icon" id="menu-icon" placeholder="请输入菜单字体图标">
+				</div>
 			</div>
 		</div>
 	</form>
 </section>
+{css href="http://cdn.bootcss.com/bootstrap-select/1.12.1/css/bootstrap-select.min.css, http://cdn.bootcss.com/bootstrap-switch/3.3.4/css/bootstrap3/bootstrap-switch.min.css, https://cdn.bootcss.com/animate.css/3.5.2/animate.min.css"}
 <script type="text/javascript">
-	require(['jquery', 'eh.xhr', 'eh.form'], function(){
+	require(['jquery', 'vue', 'layer', 'eh.xhr', 'eh.form', 'bootstrap', 'bootstrap-select-zh', 'switch'], function($, Vue){
+		var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+
+		var vm = new Vue({
+			el: '#group-id',
+			data: {
+				data: ''
+			},
+			watch: {
+				data: function(){
+					Vue.nextTick(function(){
+						$('#group-id').selectpicker('refresh');
+					});
+				}
+			}
+		});
+
+		$('.selectpicker').selectpicker({
+			size: 8,
+			dropupAuto: false
+		});
+
+		$('#switch').bootstrapSwitch();
+
+		$('#switch').on('switchChange.bootstrapSwitch', function(event, state){
+			if (state === true) {
+				$('#menu').removeClass('bounceOut');
+				$('#menu').addClass('bounceIn');
+			}else{
+				$('#menu').removeClass('bounceIn');
+				$('#menu').addClass('bounceOut');
+			}
+		});
+
+		$('#module-id').change(function() {
+			vm.data = '';
+
+			var moduleID = $(this).val(),
+				index = eh.xhr.loadPrompt({type: 'get'});
+
+			eh.xhr.post('/permission/getgroup.html', {'moudule_id' : moduleID}, {
+				success: function(response){
+					vm.data = response.data;
+					layer.close(index);
+				}
+			});
+		});
 
 		$('#header-button-submit-form').click(function() {
-			eh.xhr.messageRefresh('/module.html', eh.form.extractData(), {submitType: 'create'});
+			eh.xhr.messageRefresh('/permission_group.html', eh.form.extractData(), {submitType: 'create'});
 		});
 
 	});

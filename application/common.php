@@ -21,6 +21,8 @@ Route::domain('admin', function(){
 	Route::rule('member_point/edit', 'admin/MemberPoint/edit');
 	Route::rule('member_point/bind', 'admin/MemberPoint/bind');
 	Route::rule('order/point', 'admin/Order/point');
+	Route::post('permission/getgroup', 'admin/Permission/getGroup');
+	
 	
 	//注册后台资源路由
 	Route::resource('article', 'admin/Article');
