@@ -14,7 +14,7 @@ namespace app\admin\controller;
 class PermissionGroup extends Init{
 	
 	public function index(){
-		$group = model('permission_group')->paginate(10);
+		$group = model('permission_group')->order('id', 'desc')->paginate(10);
 		$this->assign('group', $group);
 		return $this->fetch();
 	}

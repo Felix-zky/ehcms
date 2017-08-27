@@ -15,11 +15,12 @@ namespace app\admin\controller;
 class Permission extends Init{
 	
 	public function index(){
-		$data = db('admin_permission')
+		$data = model('permission')
 				->field('p.id, p.name, p.key, p.is_menu, pg.name as group_name, m.name as module_name')
 				->alias('p')
 				->join('admin_permission_group pg', 'pg.id = p.group_id')
 				->join('admin_module m', 'm.id = pg.module_id')
+				->order('id', 'desc')
 				->paginate(10);
 		
 		$this->assign('data', $data);
@@ -40,10 +41,13 @@ class Permission extends Init{
 			'group_id' => $post['group_id'],
 			'name' => $post['name'],
 			'key' => $post['key'],
-			'is_menu' => $post['is_menu'] == 'on' ? 1 : 0,
-			'menu_icon' => $post['menu_icon'],
-			'menu_url' => $post['menu_url'],
+			'is_menu' => !empty($post['is_menu']) && $post['is_menu'] == 'on' ? 1 : 0
 		];
+		
+		if ($data['is_menu'] == 1){
+			$data['menu_icon'] = $post['menu_icon'];
+			$data['menu_url'] = $post['menu_url'];
+		}
 		
 		if (db('admin_permission')->insert($data) == 1){
 			$this->successResult();

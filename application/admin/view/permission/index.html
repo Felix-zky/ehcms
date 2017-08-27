@@ -2,12 +2,12 @@
 	<table class="table table-striped table-bordered table-hover">
 		<thead>
 			<tr>
-				<th width="10%">编号</th>
+				<th width="5%">编号</th>
 				<th width="15%">模块名称</th>
 				<th width="15%">权限组名称</th>
 				<th width="15%">权限名称</th>
-				<th width="15%">权限KEY</th>
-				<th width="10%">是否为菜单</th>
+				<th width="25%">权限KEY</th>
+				<th width="5%">菜单</th>
 				<th width="20%">操作</th>
 			</tr>
 		</thead>
@@ -28,6 +28,9 @@
 			{/foreach}
 		</tbody>
 	</table>
+	<div id="pages" class="col-sm-12">
+		{$data->render()}
+	</div>
 </section>
 
 <script type="text/javascript">
