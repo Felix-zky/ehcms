@@ -42,7 +42,7 @@
 			var type = $('#select-file').data('type');
 			var uploaderOption = {
 				swf: '/static/lib/js/webuploader/Uploader.swf',
-				server: '/admin/Resource/uploader.html',
+				server: '/resource/uploader.html',
 				pick: '#select-file',
 				formData: {
 					_ajax: 1,
@@ -292,7 +292,7 @@
 					layer.confirm('当前资源已上传，是否删除？', {icon: 3, title:'重要提示'}, function(index){
 						layer.close(index);
 						
-						eh.xhr.deleteCommon('/admin/resource/deleteResource.html', {resourceID: li.data('resource-id')}, {
+						eh.xhr.deleteCommon('/resource/deleteresource.html', {resourceID: li.data('resource-id')}, {
 							fn: function(response){
 								$('#' + id).remove();
 								uploader.removeFile(id, true);
@@ -384,7 +384,7 @@
 					if (ids.length > 0) {
 						layer.confirm('队列中存在已上传成功资源，是否删除？', {icon: 3, title:'重要提示'}, function(index){
 							layer.close(index);
-							eh.xhr.deleteCommon('/admin/resource/deleteResources.html', {resourceID: ids}, {
+							eh.xhr.deleteCommon('/resource/deleteresources.html', {resourceID: ids}, {
 								fn: function(response){
 									if ($.isEmptyObject(deleteObjs)) {
 										return false;

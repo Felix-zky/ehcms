@@ -16,14 +16,14 @@
 	<div class="resource-list">
 		<div class="pull-left resource-group">
 			<ul>
-				<li {eq name="groupID" value="all"}class="active"{/eq} data-id="all"><a href="/admin/resource/index/group/all.html">全部资源({$count})</a></li>
-				<li {eq name="groupID" value="0"}class="active"{/eq} data-id="0"><a href="/admin/resource/index/group/0.html"><span class="name">未分组</span>(<span class="count">{$notGroupedCount}</span>)</a></li>
+				<li {eq name="groupID" value="all"}class="active"{/eq} data-id="all"><a href="/resource/index/all.html">全部资源({$count})</a></li>
+				<li {eq name="groupID" value="0"}class="active"{/eq} data-id="0"><a href="/resource/index/0.html"><span class="name">未分组</span>(<span class="count">{$notGroupedCount}</span>)</a></li>
 				{foreach $group as $v}
-					<li {eq name="groupID" value="$v.id"}class="active"{/eq} data-id="{$v.id}"><a href="/admin/resource/index/group/{$v.id}.html"><i class="fa {notempty name="v.children"}fa-plus-square{else /}fa-minus-square{/notempty}"></i><span class="name">{$v.name}</span>(<span class="count">{$v.count}</span>)</a>
+					<li {eq name="groupID" value="$v.id"}class="active"{/eq} data-id="{$v.id}"><a href="/resource/index/{$v.id}.html"><i class="fa {notempty name="v.children"}fa-plus-square{else /}fa-minus-square{/notempty}"></i><span class="name">{$v.name}</span>(<span class="count">{$v.count}</span>)</a>
 					{notempty name="v.children"}
 						<ul class="children">
 							{foreach $v.children as $vc}
-							<li {eq name="groupID" value="$vc.id"}class="active"{/eq} data-id="{$vc.id}"><a href="/admin/resource/index/group/{$vc.id}.html"><span class="name">{$vc.name}</span>(<span class="count">{$vc.count}</span>)</a></li>
+							<li {eq name="groupID" value="$vc.id"}class="active"{/eq} data-id="{$vc.id}"><a href="/resource/index/{$vc.id}.html"><span class="name">{$vc.name}</span>(<span class="count">{$vc.count}</span>)</a></li>
 							{/foreach}
 						</ul>
 					{/notempty}
@@ -52,10 +52,10 @@
 	</div>
 </section>
 <script type="text/html" id="create-parent">
-	<li data-id="{{d.id}}"><a href="/admin/resource/index/group/{{d.id}}.html"><i class="fa fa-minus-square"></i><span class="name">{{d.name}}</span>(<span class="count">0</span>)</a></li>
+	<li data-id="{{d.id}}"><a href="/resource/index/{{d.id}}.html"><i class="fa fa-minus-square"></i><span class="name">{{d.name}}</span>(<span class="count">0</span>)</a></li>
 </script>
 <script type="text/html" id="create-children">
-	<li data-id="{{d.id}}"><a href="/admin/resource/index/group/{{d.id}}.html"><span class="name">{{d.name}}</span>(<span class="count">0</span>)</a></li>
+	<li data-id="{{d.id}}"><a href="/resource/index/{{d.id}}.html"><span class="name">{{d.name}}</span>(<span class="count">0</span>)</a></li>
 </script>
 <script type="text/html" id="resource-box-selected">
 	<div class="selected">
@@ -137,7 +137,7 @@
 							if (that.children('ul').length != 1) {
 								that.append('<ul class="children"></ul>');
 							}
-							eh.xhr.createCommon('/admin/resource/addGroup', {name: value, parentID: id}, {
+							eh.xhr.createCommon('/resource/addgroup', {name: value, parentID: id}, {
 								json: {name: value},
 								parentObj: that.children('ul.children'),
 								tplID: 'create-children',
@@ -223,7 +223,7 @@
 						layer.confirm('确认删除该资源吗？', {icon: 3, title:'重要提示'}, function(index){
 							layer.close(index);
 							var id = opt.$trigger.data('id');
-							eh.xhr.messageRefresh('/admin/resource/deleteResource.html', {resourceID: id}, 'delete');
+							eh.xhr.messageRefresh('/resource/deleteresource.html', {resourceID: id}, 'delete');
 						});
 						break;
 						case 'viewAttributes':
@@ -290,7 +290,7 @@
 					resize: false,
 					move: false,
 					area: ['80%', '80%'],
-					content: '/admin/resource/uploader/' + $currentGroup + '.html',
+					content: '/resource/uploader/' + $currentGroup + '.html',
 					end: function(){
 						location.reload();
 					}
@@ -300,7 +300,7 @@
 			$('#add-group').click(function(){
 				layer.prompt({title: '请输入新目录名称'}, function(value, index){
 					layer.close(index);
-					eh.xhr.createCommon('/admin/resource/addGroup', {name: value}, {
+					eh.xhr.createCommon('/resource/addgroup', {name: value}, {
 						json: {name: value},
 						parentObj: '.resource-group > ul',
 						tplID: 'create-parent'
@@ -363,7 +363,7 @@
 						ids.push($(this).parents('li').data('id'));
 					});
 
-					eh.xhr.messageRefresh('/admin/resource/deleteResources.html', {resourceID: ids}, 'delete');
+					eh.xhr.messageRefresh('/resource/deleteresources.html', {resourceID: ids}, 'delete');
 
 					layer.close(index);
 				});

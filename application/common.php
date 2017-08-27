@@ -7,7 +7,11 @@ Route::domain('admin', function(){
 	//注册后台普通路由
 	Route::rule('article/resource', 'admin/Article/resource');
 	Route::post('Member/list', 'admin/Member/getMemberList');
-	Route::rule('Resource/uploader/[:parentGroupID]/[:childrenGroupID]', 'admin/Resource/uploader', '*', [], ['parentGroupID' => '\d+|all', 'childrenGroupID' => '\d+']);
+	Route::rule('resource/uploader/[:parentGroupID]/[:childrenGroupID]', 'admin/Resource/uploader', '*', [], ['parentGroupID' => '\d+|all', 'childrenGroupID' => '\d+']);
+	Route::get('resource/index/[:group]', 'admin/Resource/index', [], ['group' => '\d+|all']);
+	Route::post('/resource/addgroup', 'admin/Resource/addGroup');
+	Route::delete('/resource/deleteresource', 'admin/Resource/deleteResource');
+	Route::delete('/resource/deleteresources', 'admin/Resource/deleteResources');
 	Route::rule('document/cover', 'admin/Document/uploaderCover');
 	Route::rule('article_category/parent_id/:parent_id', 'admin/ArticleCategory/index', 'get', [], ['parent' => '\d+']);
 	Route::rule('document_category/parent_id/:parent_id', 'admin/DocumentCategory/index', 'get', [], ['parent' => '\d+']);
