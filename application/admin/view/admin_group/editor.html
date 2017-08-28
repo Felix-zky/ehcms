@@ -1,27 +1,50 @@
 <header>
 	<div class="pull-left">
 		<!-- <button class="btn btn-danger" id="header-button-empty-form">清空表单</button> -->
-		<button class="btn btn-success" id="header-button-submit-form">发布模块</button>
+		<button class="btn btn-success" id="header-button-submit-form">发布角色分组</button>
 	</div>
 </header>
 <section class="iframe-main">
 	<form class="form-horizontal">
-		<div class="form-group">
-			<label for="name" class="col-sm-1 control-label">模块名称<span class="red">*</span>：</label>
+		<div class="form-group hr-line-dashed">
+			<label for="name" class="col-sm-1 control-label">分组名称<span class="red">*</span>：</label>
 			<div class="col-sm-10">
 				<input type="text" class="form-control" name="name" id="name" placeholder="输入模块名称" />
 			</div>
 		</div>
-		<div class="form-group">
-			<label for="icon" class="col-sm-1 control-label">模块图片<span class="red">*</span>：</label>
-			<div class="col-sm-10">
-				<input type="text" class="form-control" name="icon" id="icon" placeholder="输入模块图片文件名称" />
+		<div class="panel panel-primary">
+			<div class="panel-heading">选择模块权限</div>
+			<div class="panel-body">
+				根据管理员的岗位需求，选择对应的模块权限。
 			</div>
+
+			<table class="table table-striped table-bordered table-hover">
+				<thead>
+					<tr>
+						<th>模块名称</th>
+						<th>已选权限</th>
+						<th>设置权限</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr v-for="v in data">
+						<td><img :src="v.img">{{v.name}}</td>
+						<td>{{v.permissionName||'无'}}</td>
+						<td><button type="button" class="btn btn-success" :data-id="v.id">设置权限</button></td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	</form>
 </section>
 <script type="text/javascript">
-	require(['jquery', 'eh.xhr', 'eh.form'], function(){
+	require(['jquery', 'vue', 'eh.xhr', 'eh.form'], function($, Vue){
+		var vm = new Vue({
+			el: 'table',
+			data: {
+				data: ''
+			}
+		});
 
 		$('#header-button-submit-form').click(function() {
 			eh.xhr.messageRefresh('/module.html', eh.form.extractData(), {submitType: 'create'});
