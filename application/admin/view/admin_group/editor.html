@@ -21,28 +21,56 @@
 			<table class="table table-striped table-bordered table-hover">
 				<thead>
 					<tr>
-						<th>模块名称</th>
-						<th>已选权限</th>
-						<th>设置权限</th>
+						<th width="20%">模块名称</th>
+						<th width="60%">已选权限</th>
+						<th width="20%">设置权限</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr v-for="v in data">
-						<td><img :src="v.img">{{v.name}}</td>
-						<td>{{v.permissionName||'无'}}</td>
-						<td><button type="button" class="btn btn-success" :data-id="v.id">设置权限</button></td>
+					<tr v-for="m in module">
+						<td><img :src="'/static/admin/images/'+m.icon">{{m.name}}</td>
+						<td>{{m.permissionName||'无'}}</td>
+						<td><button type="button" class="btn btn-success" :data-id="m.id">设置权限</button></td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 	</form>
+	<div id="setting">
+		<div class="module" v-for="(m, mIndex) in permission" :id="'module-' + mIndex" :data-id="mIndex">
+			<div class="panel panel-default" v-for="(pg, pgIndex) in m" :data-id="pgIndex">
+				<div class="panel-heading">{{pg.name}}</div>
+				<div class="panel-body">
+					<ul>
+						<li v-for="(p, pIndex) in pg.permission" :data-id="pIndex" :data-key="p.key">{{p.name}}</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
 </section>
+{css href="__LIB_CSS__/iCheck.blue.css"}
 <script type="text/javascript">
-	require(['jquery', 'vue', 'eh.xhr', 'eh.form'], function($, Vue){
+	require(['jquery', 'vue', 'iCheck', 'eh.xhr', 'eh.form'], function($, Vue){
 		var vm = new Vue({
-			el: 'table',
+			el: 'section',
 			data: {
-				data: ''
+				module: '',
+				permission: ''
+			},
+			watch: {
+				permission: function(){
+					
+				}
+			}
+		});
+
+		var index = eh.xhr.loadPrompt({type: 'get'});
+		eh.xhr.post('/admingroup/getpermission.html', {}, {
+			success: function(response){
+				vm.module = response.data.module;
+				vm.permission = response.data.permission;
+				layer.close(index);
 			}
 		});
 

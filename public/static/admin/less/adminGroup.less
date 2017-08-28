@@ -1,19 +1,42 @@
 #admin-adminGroup-editor{
-	.panel{
-		width: 90%;
-		margin: 20px auto 0;
-	}
-
-	table{
-		th, td{
-			text-align: center;
+	form{
+		.panel{
+			width: 90%;
+			margin: 20px auto 40px;
 		}
-		td{
-			vertical-align: middle;
-			img{
-				width: 25px;
-				height: 25px;
-				margin-right: 10px;
+
+		table{
+			th, td{
+				text-align: center;
+			}
+			td{
+				vertical-align: middle;
+				img{
+					width: 25px;
+					height: 25px;
+					margin-right: 10px;
+				}
+			}
+		}
+	}
+	#setting{
+		.module{
+			display: none;
+			.panel{
+				width: 90%;
+				margin: 0 auto 10px;
+				li{
+					border: 1px solid #ddd;
+					border-radius: 10px;
+					display: inline-block;
+					padding: 5px 15px;
+					margin: 5px;
+					&.checked{
+						background-color: #337ab7;
+						color: #FFF;
+						border-color: #337ab7;
+					}
+				}
 			}
 		}
 	}
