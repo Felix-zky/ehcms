@@ -30,7 +30,7 @@
 					<tr v-for="m in module">
 						<td><img :src="'/static/admin/images/'+m.icon">{{m.name}}</td>
 						<td>{{m.permissionName||'无'}}</td>
-						<td><button type="button" class="btn btn-success" :data-id="m.id">设置权限</button></td>
+						<td><button type="button" class="btn btn-success setting-permission" :data-id="m.id">设置权限</button></td>
 					</tr>
 				</tbody>
 			</table>
@@ -51,19 +51,16 @@
 </section>
 {css href="__LIB_CSS__/iCheck.blue.css"}
 <script type="text/javascript">
-	require(['jquery', 'vue', 'iCheck', 'eh.xhr', 'eh.form'], function($, Vue){
+	require(['jquery', 'vue', 'iCheck', 'eh.xhr', 'eh.form', 'layer'], function($, Vue){
 		var vm = new Vue({
 			el: 'section',
 			data: {
 				module: '',
 				permission: ''
-			},
-			watch: {
-				permission: function(){
-					
-				}
 			}
 		});
+
+		var keys = {};
 
 		var index = eh.xhr.loadPrompt({type: 'get'});
 		eh.xhr.post('/admingroup/getpermission.html', {}, {
@@ -72,6 +69,40 @@
 				vm.permission = response.data.permission;
 				layer.close(index);
 			}
+		});
+
+		$('table').on('click', 'button', function() {
+			var id = $(this).data('id'),
+				moduleIndex = $(this).parents('tr').index(),
+				checked = $('#module-' + id).find('li.checked');
+
+			layer.open({
+				type: 1,
+				title: '选择权限',
+				content: $('#module-' + id),
+				area: '90%',
+				btn: ['确定', '取消'],
+				yes: function(index, layero){
+					checked = $('#module-' + id).find('li.checked');
+					var name = [],key = [];
+					$.each(checked, function() {
+						name.push($(this).html());
+						key.push($(this).data('key'));
+					});
+
+					keys[id] = key.join(',');
+					Vue.set(vm.module[moduleIndex], 'permissionName', name.join('，'));
+					layer.close(index);
+				},
+				btn2: function(index, layero){
+					$('#module-' + id).find('li').removeClass('checked');
+					checked.addClass('checked');
+				}
+			});
+		});
+
+		$('#setting').on('click', 'li', function(){
+			$(this).toggleClass('checked');
 		});
 
 		$('#header-button-submit-form').click(function() {
