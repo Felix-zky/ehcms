@@ -26,7 +26,7 @@ Route::domain('admin', function(){
 	Route::rule('member_point/bind', 'admin/MemberPoint/bind');
 	Route::rule('order/point', 'admin/Order/point');
 	Route::post('permission/getgroup', 'admin/Permission/getGroup');
-	Route::rule('admingroup/getpermission', 'admin/AdminGroup/getPermission');
+	Route::rule('admin_group/getpermission', 'admin/AdminGroup/getPermission');
 	
 	
 	//注册后台资源路由

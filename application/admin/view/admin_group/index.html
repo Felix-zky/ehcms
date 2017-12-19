@@ -3,26 +3,34 @@
 		<thead>
 			<tr>
 				<th width="20%">编号</th>
-				<th width="25%">模块名称</th>
-				<th width="20%">模块图标</th>
+				<th width="45%">分组名称</th>
 				<th width="35%">操作</th>
 			</tr>
 		</thead>
 		<tbody>
-			{foreach $module as $v}
+			{foreach $group as $v}
 			<tr>
 				<td>{$v.id}</td>
 				<td>{$v.name}</td>
-				<td><img src="/static/admin/images/{$v.icon}"></td>
 				<td>
-					<button class="btn btn-warning" data-id="{$v.id}">编辑</button>
+					<button class="btn btn-warning edit" data-url="{:url('admin/adminGroup/edit', ['id' => $v.id])}">编辑</button>
 					<button class="btn btn-danger" data-id="{$v.id}">删除</button>
 				</td>
 			</tr>
 			{/foreach}
 		</tbody>
 	</table>
+
+	<div id="list-pages">
+		{$group->render()}
+	</div>
 </section>
 
 <script type="text/javascript">
+	require(['jquery'], function(){
+		$('.edit').click(function(){
+			var url = $(this).data('url');
+			$(window.frameElement).attr('src', url);
+		});
+	});
 </script>

@@ -14,6 +14,8 @@ namespace app\admin\controller;
 class AdminGroup extends Init{
 	
 	public function index(){
+	    $group = db('admin_group')->field('keys', true)->order('id', 'desc')->paginate(20);
+	    $this->assign('group', $group);
 		return $this->fetch();
 	}
 	
@@ -23,9 +25,18 @@ class AdminGroup extends Init{
 	}
 	
 	public function save(){
-		return $this->fetch();
+	    if (db('admin_group')->insert(input()) == 1){
+	        $this->successResult('权限新增成功');
+        }else{
+	        $this->errorResult('权限新增失败');
+        }
 	}
-	
+
+	public function edit($id){
+        $this->assign('actionSign', 'editor');
+	    return $this->fetch('editor');
+    }
+
 	public function getPermission(){
 		$type = input('type');
 		$group = input('group');

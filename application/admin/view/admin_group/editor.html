@@ -63,7 +63,7 @@
 		var keys = {};
 
 		var index = eh.xhr.loadPrompt({type: 'get'});
-		eh.xhr.post('/admingroup/getpermission.html', {}, {
+		eh.xhr.post('/admin_group/getpermission.html', {}, {
 			success: function(response){
 				vm.module = response.data.module;
 				vm.permission = response.data.permission;
@@ -105,8 +105,34 @@
 			$(this).toggleClass('checked');
 		});
 
+		/**
+		 * 提交
+		 */
 		$('#header-button-submit-form').click(function() {
-			eh.xhr.messageRefresh('/module.html', eh.form.extractData(), {submitType: 'create'});
+			//初始化模块及权限容器
+			var moduleKeys = {
+				name: 'module_ids',
+				value: []
+			};
+			var permissionKeys = {
+				name: 'keys',
+				value: []
+			};
+
+			//根据设置的权限，对提交数据进行处理。
+			for (i in keys){
+				moduleKeys.value.push(i);
+				permissionKeys.value.push(keys[i]);
+			}
+
+			moduleKeys.value = moduleKeys.value.join(',');
+			permissionKeys.value = permissionKeys.value.join(',');
+
+			var data = eh.form.extractData({
+				'extend': [moduleKeys, permissionKeys]
+			});
+
+			eh.xhr.messageRefresh('/admin_group.html', data, {submitType: 'create'});
 		});
 
 	});

@@ -19,8 +19,8 @@ class Article extends Init{
 	 * 获取文章列表
 	 */
 	public function index(){
-		$article = db('article')->field('markdown,content', true)->order('id', 'desc')->paginate(20);
-		
+	    $article = db('article')->field('markdown,content', true)->order('id', 'desc')->paginate(20);
+
 		$this->assign('article', $article);
 		return $this->fetch();
 	}
