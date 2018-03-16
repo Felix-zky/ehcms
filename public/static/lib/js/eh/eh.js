@@ -159,8 +159,8 @@ define(['layer', 'laypage', 'jquery'], function(dialog, laypage){
 		 * 关闭iframe的父页面的左侧列表
 		 */
 		closeParentSidebar: function(){
-			var obj = parent.$('#' + window.name);
-			if (window.name && obj.length == 1) {
+			var obj = parent.$('#' + window.frameElement.name);
+			if (window.frameElement.name && obj.length == 1) {
 				obj.find('#iframe-main .menu-tree').hide();
 				obj.find('#iframe-main .content').width(obj.find('#iframe-main').width());
 			}
@@ -170,10 +170,25 @@ define(['layer', 'laypage', 'jquery'], function(dialog, laypage){
 		 * 打开iframe的父页面的左侧列表
 		 */
 		openParentSidebar: function(){
-			var obj = parent.$('#' + window.name);
-			if (window.name && obj.length == 1) {
+			var obj = parent.$('#' + window.frameElement.name);
+			if (window.frameElement.name && obj.length == 1) {
 				obj.find('#iframe-main .menu-tree').show();
 				obj.find('#iframe-main .content').width(obj.find('#iframe-main').width() - 218);
+			}
+		},
+
+		/**
+		 * 点击iframe的父页面左侧列表
+		 */
+		clickParentButton: function(key){
+			var obj = parent.$('#' + window.frameElement.name);
+			if (window.frameElement.name && obj.length == 1) {
+				var key = obj.find('#iframe-main .level-2 li[data-key="' + key + '"]');
+				var parentLi = key.parents('li');
+				if (!parentLi.hasClass('selected')){
+					parentLi.click();
+				}
+				key.click();
 			}
 		}
 	};

@@ -34,24 +34,24 @@ class Index extends Init{
 	public function getMenu(){
 		$post = input('post.');
 		
-		$level1 = db('admin_menu')->where(['module_id' => $post['moduleID'], 'parent_id' => 0, 'is_show' => 1])->order('sort desc')->select();
+		$level1 = db('admin_permission_group')->where(['module_id' => $post['moduleID']])->select();
 		
 		foreach ($level1 as $l1){
-			$parentID[] = $l1['id'];
+			$groupID[] = $l1['id'];
 			$menu[$l1['id']]['name'] = $l1['name'];
 		}
 		
-		$level2 = db('admin_menu')->where('parent_id', 'in', $parentID)->where('is_show', 1)->order('sort desc')->select();
-
+		$level2 = db('admin_permission')->where('group_id', 'in', $groupID)->where('is_menu', 1)->select();
 		
 		foreach ($level2 as $l2){
 			$data = [
 				'name' => $l2['name'],
-				'url'  => url($l2['url']),
-				'icon' => $l2['icon']
+				'url'  => url($l2['menu_url']),
+				'icon' => $l2['menu_icon'],
+                'key' => $l2['key']
 			];
 			
-			$menu[$l2['parent_id']]['child'][] = $data;
+			$menu[$l2['group_id']]['child'][] = $data;
 		}
 		
 		$menu = array_values($menu);

@@ -9,10 +9,10 @@
 		<div class="form-group hr-line-dashed">
 			<label for="name" class="col-sm-1 control-label">分组名称<span class="red">*</span>：</label>
 			<div class="col-sm-10">
-					{notempty name="groupID"}
-						<input type="hidden" id="group-id" value="{$groupID}">
-					{/notempty}
-					<input type="text" class="form-control" :value="group.name" name="name" id="name" placeholder="输入模块名称" />
+				{notempty name="groupID"}
+					<input type="hidden" id="group-id" value="{$groupID}">
+				{/notempty}
+				<input type="text" class="form-control" :value="group.name" name="name" id="name" placeholder="输入模块名称" />
 			</div>
 		</div>
 		<div class="panel panel-primary">
@@ -45,7 +45,8 @@
 				<div class="panel-heading">{{pg.name}}</div>
 				<div class="panel-body">
 					<ul>
-						<li v-for="(p, pIndex) in pg.permission" :data-id="pIndex" :data-key="p.key">{{p.name}}</li>
+						<li v-for="(p, pIndex) in pg.permission" :data-id="pIndex" :data-key="p.key" v-if="p.selected" class="checked">{{p.name}}</li>
+						<li :data-id="pIndex" :data-key="p.key" v-else>{{p.name}}</li>
 					</ul>
 				</div>
 			</div>
@@ -60,6 +61,12 @@
 			defaultKey = $('#default-keys').val();
 		}
 
+		var keys = {};
+
+		var index = eh.xhr.loadPrompt({type: 'get'});
+
+		var requestData = {};
+
 		var vm = new Vue({
 			el: 'section',
 			data: {
@@ -68,12 +75,6 @@
 				group: ''
 			}
 		});
-
-		var keys = {};
-
-		var index = eh.xhr.loadPrompt({type: 'get'});
-
-		var requestData = {};
 
 		if ($('#group-id').length == 1) {
 			requestData = {
@@ -85,7 +86,23 @@
 			success: function(response){
 				vm.module = response.data.module;
 				vm.permission = response.data.permission;
+				vm.group = response.data.group;
 				layer.close(index);
+
+				Vue.nextTick(function () {
+					$.each($('.module'), function() {
+						var key = [], 
+						id = $(this).data('id'), 
+						checked = $(this).find('li.checked');
+						$.each(checked, function() {
+							key.push($(this).data('key'));
+						});
+
+						if (key.length > 0) {
+							keys[id] = key.join(',');
+						}
+					});
+				});	
 			}
 		});
 
@@ -139,8 +156,10 @@
 
 			//根据设置的权限，对提交数据进行处理。
 			for (i in keys){
-				moduleKeys.value.push(i);
-				permissionKeys.value.push(keys[i]);
+				if (keys[i] != '') {
+					moduleKeys.value.push(i);
+					permissionKeys.value.push(keys[i]);
+				}
 			}
 
 			moduleKeys.value = moduleKeys.value.join(',');
@@ -150,8 +169,11 @@
 				'extend': [moduleKeys, permissionKeys]
 			});
 
-			eh.xhr.messageRefresh('/admin_group.html', data, {submitType: 'create'});
+			if ($('#group-id').length == 1) {
+				eh.xhr.messageRefresh('/admin_group/' + $('#group-id').val() + '.html', data, {submitType: 'put'});
+			}else{
+				eh.xhr.messageRefresh('/admin_group.html', data, {submitType: 'create'});
+			}
 		});
-
 	});
 </script>

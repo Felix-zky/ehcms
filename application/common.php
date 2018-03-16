@@ -9,9 +9,9 @@ Route::domain('admin', function(){
 	Route::post('Member/list', 'admin/Member/getMemberList');
 	Route::rule('resource/uploader/[:parentGroupID]/[:childrenGroupID]', 'admin/Resource/uploader', '*', [], ['parentGroupID' => '\d+|all', 'childrenGroupID' => '\d+']);
 	Route::get('resource/index/[:group]', 'admin/Resource/index', [], ['group' => '\d+|all']);
-	Route::post('/resource/addgroup', 'admin/Resource/addGroup');
-	Route::delete('/resource/deleteresource', 'admin/Resource/deleteResource');
-	Route::delete('/resource/deleteresources', 'admin/Resource/deleteResources');
+	Route::post('resource/addgroup', 'admin/Resource/addGroup');
+	Route::delete('resource/deleteresource', 'admin/Resource/deleteResource');
+	Route::delete('resource/deleteresources', 'admin/Resource/deleteResources');
 	Route::rule('document/cover', 'admin/Document/uploaderCover');
 	Route::rule('article_category/parent_id/:parent_id', 'admin/ArticleCategory/index', 'get', [], ['parent' => '\d+']);
 	Route::rule('document_category/parent_id/:parent_id', 'admin/DocumentCategory/index', 'get', [], ['parent' => '\d+']);
@@ -40,6 +40,7 @@ Route::domain('admin', function(){
 	Route::resource('permission', 'admin/Permission');
 	Route::resource('permission_group', 'admin/PermissionGroup');
 	Route::resource('admin_group', 'admin/AdminGroup');
+	Route::resource('member', 'admin/Member');
 	
 	Route::rule('login/index', 'admin/Login/index');
 });

@@ -94,7 +94,7 @@
 						{{# if(d[i].child){ }}
 						<ul class="level-2">
 							{{# for(var c = 0, cLen = d[i].child.length; c < cLen; c++){ }}
-							<li data-url = '{{ d[i].child[c].url }}'>
+							<li data-url = '{{ d[i].child[c].url }}' data-key = '{{d[i].child[c].key}}'>
 								<div class="menu-row">
 									<i class="fa fa-{{ d[i].child[c].icon }}"></i>
 									<span>{{ d[i].child[c].name }}</span>

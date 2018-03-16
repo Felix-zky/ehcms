@@ -3,8 +3,14 @@
 		<button class="btn btn-success" id="header-button-submit-form">添加新会员</button>
 	</div>
 	<div class="pull-right">
-		<!-- <button class="btn btn-success" id="header-button-submit-form">全选当页会员</button>
-		<button class="btn btn-danger" id="header-button-submit-form">删除所选会员</button> -->
+		<form class="form-inline">
+			<div class="form-group">
+				<div class="input-group">
+					<input type="text" class="form-control" id="search" placeholder="搜索用户名">
+					<div class="input-group-addon"><i class="fa fa-search"></i></div>
+				</div>
+			</div>
+		</form>
 	</div>
 </header>
 <section class="iframe-main">
@@ -27,9 +33,9 @@
 						<td>{eq name="v.is_admin" value="1"}是{else /}否{/eq}</td>
 						<td>{$v.create_time|date="y-m-d H:i:s",###}</td>
 						<td>
-							<button class="btn btn-primary">查看</button>
-							<button class="btn btn-warning">编辑</button>
-							<button class="btn btn-danger">删除</button>
+							<button class="btn btn-primary" id="view">查看</button>
+							<button class="btn btn-warning" id="update">编辑</button>
+							<button class="btn btn-danger" id="delete">删除</button>
 						</td>
 					</tr>
 				{/foreach}
@@ -42,5 +48,14 @@
 </section>
 
 <script type="text/javascript">
-	//require(['js/memberIndex']);
+	require(['jquery', 'eh'], function(){
+		$('#header-button-submit-form').click(function() {
+			eh.clickParentButton('eh_member_point');
+		});
+
+
+		$('.search').keyup(function() {
+			
+		});
+	});
 </script>
