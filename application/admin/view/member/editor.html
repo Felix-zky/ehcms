@@ -1,22 +1,25 @@
 <header>
 	<div class="pull-left">
 		<!-- <button class="btn btn-danger" id="header-button-empty-form">清空表单</button> -->
-		<button class="btn btn-success" id="header-button-submit-form">创建用户</button>
+		<button class="btn btn-success" id="header-button-submit-form">{empty name="id"}创建{else /}更新{/empty}用户</button>
 	</div>
 </header>
 <section class="iframe-main">
 	<div class="row">
 		<form class="form-horizontal" method="post" action="/member.html">
+			{notempty name="id"}
+				<input type="hidden" value="{$id}">
+			{/notempty}
 			<div class="form-group">
 				<label for="username" class="col-sm-3 control-label">注册用户名：</label>
 				<div class="col-sm-6">
-					<input type="text" name="username" class="form-control" id="username" placeholder="6-18个字符，请使用字母加数字的组合账号，不能单独使用字母、数字或符号！">
+					<input type="text" name="username" class="form-control" id="username" placeholder="6-18个字符，请使用字母加数字的组合账号，不能单独使用字母、数字或符号！" value="{notempty name='member'}{$member.username}{/notempty}">
 				</div>
 			</div>
 			<div class="form-group">
 				<label for="phone" class="col-sm-3 control-label">手机号码：</label>
 				<div class="col-sm-6">
-					<input type="text" name="phone" class="form-control" id="phone" placeholder="请输入您的真实手机号码">
+					<input type="text" name="phone" class="form-control" id="phone" placeholder="请输入您的真实手机号码" value="{notempty name='member'}{$member.phone}{/notempty}">
 				</div>
 			</div>
 			<div class="form-group">
@@ -37,7 +40,7 @@
 			<div class="form-group">
 				<label for="is-admin" class="col-sm-3 control-label">管理员：</label>
 				<div class="col-sm-6">
-					<input type="checkbox" id="is-admin" name="is_admin" checked data-on-text="是" data-off-text="否">
+					<input type="checkbox" id="is-admin" name="is_admin" {notempty name="member"}{eq name="member.is_admin" value="1"}checked{/eq}{else /}checked{/notempty} data-on-text="是" data-off-text="否">
 				</div>
 			</div>
 			<div class="form-group" id="admin-group-box">
@@ -45,7 +48,7 @@
 				<div class="col-sm-6">
 					<select class="selectpicker show-tick form-control" id="admin-group" name="admin_group" data-title="请选择权限" data-icon-base="fa" data-tick-icon="fa-check">
 						{foreach $adminGroup as $ag}
-							<option value="{$ag.id}">{$ag.name}</option>
+							<option value="{$ag.id}" {notempty name="member"}{eq name="member.admin_group" value="$ag.id"}selected="selected"{/eq}{/notempty}>{$ag.name}</option>
 						{/foreach}
 					</select>
 				</div>
@@ -62,6 +65,13 @@
 
 		$(function(){
 			$('#is-admin').bootstrapSwitch({
+				'onInit': function(el, e, res){
+					if (res == true) {
+						$('#admin-group-box').show();
+					}else{
+						$('#admin-group-box').hide();
+					}
+				},
 				'onSwitchChange': function(e, res){
 					if (res == true) {
 						$('#admin-group-box').show();

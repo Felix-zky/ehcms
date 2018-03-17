@@ -26,36 +26,94 @@
 				</tr>
 			</thead>
 			<tbody>
-				{foreach $member as $v}
-					<tr data-id="{$v.id}">
-						<td>{$v.id}</td>
-						<td>{$v.username}</td>
-						<td>{eq name="v.is_admin" value="1"}是{else /}否{/eq}</td>
-						<td>{$v.create_time|date="y-m-d H:i:s",###}</td>
-						<td>
-							<button class="btn btn-primary" id="view">查看</button>
-							<button class="btn btn-warning" id="update">编辑</button>
-							<button class="btn btn-danger" id="delete">删除</button>
-						</td>
-					</tr>
-				{/foreach}
+				<tr v-for="m in list" :data-id="m.id">
+					<td>{{m.id}}</td>
+					<td>{{m.username}}</td>
+					<td v-if="m.is_admin == 1">是</td>
+					<td v-else>否</td>
+					<td>{{m.create_time}}</td>
+					<td>
+						<button class="btn btn-primary view">查看</button>
+						<button class="btn btn-warning update">编辑</button>
+						<button class="btn btn-danger delete">删除</button>
+					</td>
+				</tr>
 			</tbody>
 		</table>
 	</div>
-	<div id="list-pages">
-		{$member->render()}
-	</div>
+	<div id="list-pages"></div>
 </section>
 
 <script type="text/javascript">
-	require(['jquery', 'eh'], function(){
+	require(['jquery', 'vue', 'eh.xhr'], function($, Vue){
 		$('#header-button-submit-form').click(function() {
-			eh.clickParentButton('eh_member_point');
+			eh.clickParentButton('eh_member_add');
 		});
 
-
-		$('.search').keyup(function() {
+		$('table').on('click', '.view', function() {
 			
 		});
+
+		$('table').on('click', '.update', function() {
+			var id = $(this).parents('tr').data('id');
+			location.href="/member/" + id + "/edit.html";
+		});
+
+		$('table').on('click', '.delete', function() {
+			
+		});
+
+		var vm = new Vue({
+			el: 'tbody',
+			data: {
+				list: ''
+			}
+		});
+
+		var first = true, loading, search = '';
+
+		getList();
+
+		$('#search').keyup(function() {
+			search = $(this).val();
+			if (loading == false) {
+				first = true;
+				getList('', search);
+			}
+		});
+
+		function getList(page, key){
+			loading = true;
+			page = page || 1;
+			key = key || '';
+			eh.xhr.post('/member/list.html', {'page': page, 'key': key}, {
+				success: function(response){
+					vm.list = response.data.member;
+					if (first == true) {
+						eh.pageRender({
+							pages: response.data.count_page,
+							jump: function(obj){
+								if(!first){
+									getList(obj.curr, search);
+								}
+							}
+						});
+						first = false;
+					}
+					if (key != search) {
+						first = true;
+						getList('', search);
+					}else{
+						loading = false;
+					}
+				},
+				fail: function(){
+					vm.list = '';
+					$('#list-pages').html('');
+					loading = false;
+					first = true;
+				}
+			});
+		}
 	});
 </script>

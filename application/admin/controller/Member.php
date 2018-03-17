@@ -53,13 +53,23 @@ class Member extends Init{
             $this->error($validate->getError());
         }
     }
+
+    public function edit($id){
+        $member = db('member')->where('id', $id)->find();
+        $adminGroup = $this->getAdminGroup();
+        $this->assign('adminGroup', $adminGroup);
+        $this->assign('actionSign', 'editor');
+        $this->assign('member', $member);
+        $this->assign('id', $id);
+        return $this->fetch('editor');
+    }
 	
 	/**
 	 * 获取用户列表
 	 * @param int $page
 	 * @return json
 	 */
-	public function getMemberList($page = 1){
+	public function getMemberList($page = 1, $key = ''){
 		$memberModel = new \app\member\model\Member();
 		
 		$request = $this->asyncPostCheck();
@@ -68,11 +78,17 @@ class Member extends Init{
 		}
 		
 		$page = is_numeric($page) ? $page : 1;
-		
- 		$member = $memberModel->field('password', TRUE)->page($page, 15)->select();
-		
+
+		$where = [];
+        if (!empty($key)){
+            $where['username'] = ['like', '%' . $key . '%'];
+        }
+
+		$countPage = $memberModel->field('id,username,is_admin,create_time')->where($where)->order('id', 'desc')->count() / 10;
+ 		$member = $memberModel->field('id,username,is_admin,create_time')->where($where)->order('id', 'desc')->page($page, 10)->select();
+
 		if ($member){
-			return $this->successResult(['member'=>$member]);
+			return $this->successResult(['member'=>$member, 'count_page'=>ceil($countPage)]);
 		}else {
 			return $this->errorResult('E-020201');
 		}

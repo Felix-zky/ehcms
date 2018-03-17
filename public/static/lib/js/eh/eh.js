@@ -87,8 +87,6 @@ define(['layer', 'laypage', 'jquery'], function(dialog, laypage){
 		 pageRender: function(option){
 		 	option = $.extend({
 		 		cont: 'list-pages', //容器。值支持id名、原生dom对象，jquery对象
-				curr: location.hash.replace('#!page=', ''), //获取hash值为page的当前页，与hash参数要对应。
-				hash: 'page', //自定义hash值
 				skin: '#AF0000'
 		 	},option);
 
