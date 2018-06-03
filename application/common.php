@@ -1,4 +1,13 @@
 <?php
+// +----------------------------------------------------------------------
+// | ehcms [ Efficient Handy Content Management System ]
+// +----------------------------------------------------------------------
+// | Copyright (c) http://ehcms.com All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
+// +----------------------------------------------------------------------
+// | Author: zky < zky@ehcms.com >
+// +----------------------------------------------------------------------
 use think\Route;
 
 Route::domain('admin', function(){
@@ -7,6 +16,7 @@ Route::domain('admin', function(){
 	//注册后台普通路由
 	Route::rule('article/resource', 'admin/Article/resource');
 	Route::post('Member/list', 'admin/Member/getMemberList');
+    Route::post('Article/list', 'admin/Article/getArticleList');
 	Route::rule('resource/uploader/[:parentGroupID]/[:childrenGroupID]', 'admin/Resource/uploader', '*', [], ['parentGroupID' => '\d+|all', 'childrenGroupID' => '\d+']);
 	Route::get('resource/index/[:group]', 'admin/Resource/index', [], ['group' => '\d+|all']);
 	Route::post('resource/addgroup', 'admin/Resource/addGroup');
@@ -27,6 +37,9 @@ Route::domain('admin', function(){
 	Route::rule('order/point', 'admin/Order/point');
 	Route::post('permission/getgroup', 'admin/Permission/getGroup');
 	Route::rule('admin_group/getpermission', 'admin/AdminGroup/getPermission');
+    Route::rule('cashier_goods/resource', 'admin/CashierGoods/resource');
+    Route::post('cashier/getgoods', 'admin/Cashier/getGoods');
+    Route::get('cashier/goods', 'admin/Cashier/goods', [], ['id' => '\d+']);
 	
 	
 	//注册后台资源路由
@@ -41,6 +54,8 @@ Route::domain('admin', function(){
 	Route::resource('permission_group', 'admin/PermissionGroup');
 	Route::resource('admin_group', 'admin/AdminGroup');
 	Route::resource('member', 'admin/Member');
+    Route::resource('cashier_category', 'admin/CashierCategory');
+    Route::resource('cashier_goods', 'admin/CashierGoods');
 	
 	Route::rule('login/index', 'admin/Login/index');
 });

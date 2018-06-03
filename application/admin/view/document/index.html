@@ -172,7 +172,7 @@
 
 		$('body').on('click', '#create-submit', function() {
 			var index = eh.xhr.loadPrompt({str: '正在创建文档，请稍等！'});
-			eh.xhr.post('/admin/document.html', eh.form.extractData(), {
+			eh.xhr.post('/document.html', eh.form.extractData(), {
 				success: function(response){
 					layer.close(index);
 					eh.xhr.msgLayerIndex = null;
@@ -207,7 +207,7 @@
 					 */
 					var uploader = new WebUploader.Uploader({
 						swf: '/static/lib/js/webuploader/Uploader.swf',
-						server: '/admin/document/cover.html',
+						server: '/document/cover.html',
 						pick: '.logo-uploader',
 						accept: {
 							title: 'Images',
@@ -274,7 +274,7 @@
 					$('.selectpicker').on('changed.bs.select', function(){
 						var index = $(this).parents('.col-sm-4').index();
 						if (index == 2) {
-							eh.xhr.getCommon('/admin/document/getCategory.html', {'parent_id': $(this).val()}, {
+							eh.xhr.getCommon('/document/getCategory.html', {'parent_id': $(this).val()}, {
 								'parentObj': $('.selectpicker:eq(1)'),
 								'tplID': 'category-tpl',
 								'after': function(){

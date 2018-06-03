@@ -1,0 +1,190 @@
+<header>
+	<div class="pull-left">
+		<button class="btn btn-danger" id="header-button-empty-form">清空表单</button>
+		<button class="btn btn-success" id="header-button-submit-form">发布商品</button>
+	</div>
+</header>
+<section class="iframe-main">
+	<form class="form-horizontal" {notempty name="goodsID"}data-id="{$goodsID}"{/notempty}>
+		<div class="form-group">
+			<label for="title" class="col-sm-1 control-label">标题<span class="red">*</span>：</label>
+			<div class="col-sm-10">
+				<input type="text" class="form-control" name="title" id="title" {notempty name="goods.title"}value="{$goods.title}"{/notempty} placeholder="输入商品标题" />
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="short" class="col-sm-1 control-label">简写<span class="red">*</span>：</label>
+			<div class="col-sm-10">
+				<input type="text" class="form-control" name="short" id="short" {notempty name="goods.short"}value="{$goods.short}"{/notempty} placeholder="输入商品标题" />
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-1 control-label">封面图：</label>
+			<div class="col-sm-10">
+				<div class="input-group">
+					<span class="input-group-btn logo-uploader">
+						<button class="btn btn-info" href="javascript:void();" type="button">上传封面图</button>
+					</span>
+					<input class="form-control" type="text" id="thumbnail" {notempty name="goods.thumbnail"}value="{$goods.thumbnail}"{/notempty}  placeholder="点击左侧按钮上传封面图" readonly />
+					<input type="hidden" name="thumbnail" id="thumbnailUrl" {notempty name="goods.thumbnail"}value="{$goods.thumbnail}"{/notempty}>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-1 control-label">商品分类：</label>
+			<input type="hidden" name="category_id" id="category-id" {notempty name="categoryID"}value="{$categoryID}"{/notempty}>
+			<div class="col-sm-10">
+				<select class="selectpicker show-tick form-control" data-title="请选择分类" data-icon-base="fa" data-tick-icon="fa-check">
+					{foreach $category as $v}
+						<option value="{$v.id}" {notempty name="categoryID"}{eq name="categoryID" value="$v.id"}selected{/eq}{/notempty}>{$v.name}</option>
+					{/foreach}
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="price" class="col-sm-1 control-label">商品价格<span class="red">*</span>：</label>
+			<div class="col-sm-10">
+				<input type="text" name="price" id="price" {notempty name="goods.price"}value="{$goods.price}"{/notempty} class="form-control">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="number" class="col-sm-1 control-label">商品数量<span class="red">*</span>：</label>
+			<div class="col-sm-10">
+				<input type="text" name="number" id="number" {present name="goods.number"}value="{$goods.number}"{/present} class="form-control">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="unit" class="col-sm-1 control-label">商品单位：</label>
+			<div class="col-sm-10">
+				<input type="text" name="unit" id="unit" {notempty name="goods.unit"}value="{$goods.unit}"{/notempty} class="form-control">
+			</div>
+		</div>
+	</form>
+</section>
+{css href="http://cdn.bootcss.com/bootstrap-select/1.12.1/css/bootstrap-select.min.css"}
+<script type="text/javascript">
+	require(['jquery', 'webuploader', 'messenger.future', 'eh.form', 'eh.xhr', 'bootstrap', 'bootstrap-select-zh', 'layer'], function($, WebUploader, Messenger){
+		$('.selectpicker').selectpicker({
+			size: 8,
+			dropupAuto: false
+		});
+
+		$('.selectpicker').on('changed.bs.select', function(){
+			$(this).parents('.form-group').find('#category-id').val($(this).val());
+		});
+
+		/**
+		 * 设置表单验证参数
+		 */
+		validate = eh.form.checkFormData({
+			rules: {
+				'title': "required",
+				'price': "required"
+			},
+			messages: {
+				'title': '商品标题必须设置',
+				'price': '商品价格不能为空'
+			}
+		});
+
+		/**
+		 * 清空表单按钮点击事件绑定
+		 */
+		$('#header-button-empty-form').click(function(){
+			eh.form.emptyFormData();
+			$('#html-preview .html-content').html(md.render($(this).val()));
+			$('.logo-uploader btn').html('上传封面图');
+
+			validate.resetForm();
+			eh.form.validateHighlightRemove();
+		});
+
+		/**
+		 * 保存表单按钮点击事件绑定
+		 */
+		$('#header-button-submit-form').click(function(){
+			var id = $('form').data('id');
+			if (validate.form()){
+				if (id > 0) {
+					eh.xhr.messageRedirect('/cashier_goods/' + id + '.html', eh.form.extractData(), {submitType: 'put'});
+				}else{
+					eh.xhr.messageRefresh('/cashier_goods.html', eh.form.extractData(), {submitType: 'create'});
+				}
+			}else{
+				eh.form.validateError(validate.errorMap);
+			}
+		});
+
+		/**
+		 * 配置messenger的显示位置及样式
+		 */
+		Messenger.options = {
+			extraClasses: 'messenger-fixed messenger-on-top',
+			theme: 'future'
+		};
+
+		/**
+		 * 实例化缩略图上传
+		 */
+		var uploader = new WebUploader.Uploader({
+			swf: '/static/lib/js/webuploader/Uploader.swf',
+			server: '/cashier_goods/resource.html',
+			pick: '.logo-uploader',
+			accept: {
+				title: 'Images',
+				extensions: 'gif,jpg,jpeg,bmp,png',
+				mimeTypes: 'image/*'
+			},
+			formData: {
+				_ajax: 1
+			},
+			fileNumLimit: 1,
+			auto: true,
+			compress: false
+		});
+
+		/**
+		 * 缩略图进入列队触发
+		 */
+		uploader.on('fileQueued', function(file){
+			$('.logo-uploader .webuploader-pick').next('div').hide();
+			$('#thumbnail').val(file.name);
+			uploader.option('formData', {
+				extension: file.ext
+			});
+		});
+
+		/**
+		 * 缩略图开始上传触发
+		 */
+		uploader.on('startUpload', function(file){
+			$('.logo-uploader button').html('<i class="fa fa-spinner fa-pulse"></i> 正在上传');
+		});
+
+		/**
+		 * 缩略图上传成功后触发
+		 */
+		uploader.on('uploadSuccess', function(file, response){
+			uploader.reset();
+			$('.webuploader-pick').next('div').show();
+
+			if (response.code == 1) {
+				Messenger().post({
+					message: '图片：' + file.name + ' 上传成功！',
+					showCloseButton: true
+				});
+				$('.logo-uploader button').html('<i class="fa fa-check"></i> 上传成功');
+				$('#thumbnail').val(file.name);
+				$('#thumbnailUrl').val(response.data.url);
+			}else{
+				Messenger().post({
+					message: '图片：' + file.name + ' 上传失败！',
+					showCloseButton: true,
+					type: 'error'
+				});
+				$('.logo-uploader button').html('重新上传');
+				$('#thumbnail').val('');
+			}
+		});
+	});
+</script>

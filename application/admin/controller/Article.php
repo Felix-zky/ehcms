@@ -109,6 +109,24 @@ class Article extends Init{
 	public function recycle(){
 	
 	}
+
+    public function getArticleList($page = 1, $key = ''){
+        $page = is_numeric($page) ? $page : 1;
+
+        $where = [];
+        if (!empty($key)){
+            $where['title'] = ['like', '%' . $key . '%'];
+        }
+
+        $article = db('article')->field('markdown,content', true)->where($where)->order('id', 'desc')->page($page, 10)->select();
+        $countPage = db('article')->field('markdown,content', true)->where($where)->order('id', 'desc')->count() / 10;
+
+        if ($article){
+            return $this->successResult(['article'=>$article, 'count_page'=>ceil($countPage)]);
+        }else {
+            return $this->errorResult('E-020201');
+        }
+    }
 	
 	/**
 	 * 文章资源上传，缩略图和正文资源暂一起上传，后期将缩略图分离出来做判断。

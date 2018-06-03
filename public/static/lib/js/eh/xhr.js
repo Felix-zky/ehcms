@@ -495,6 +495,13 @@ define(['jquery', 'laytpl', 'layer', 'eh'], function($, laytpl){
 			xhr.msgLayerIndex = layer.msg(str, param);
 
 			return xhr.msgLayerIndex;
+		},
+
+		/**
+		 * 关闭提示
+		 */
+		layerClose: function(index){
+			layerClose(index);
 		}
 	};
 

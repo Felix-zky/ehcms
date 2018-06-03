@@ -1,0 +1,260 @@
+#admin-cashier-index{
+	.iframe-main{
+		background-color: #d5d5d5;
+		overflow: hidden;
+		#left{
+			width: 350px;
+			height: 100%;
+			padding: 5px;
+			.box{
+				width: 100%;
+				height: 100%;
+				background-color: #ececec;
+				border-radius: 5px;
+				position: relative;
+				.top{
+					width: 100%;
+					height: 50px;
+					background-color: #FFF;
+					border-top-left-radius: 5px;
+					border-top-right-radius: 5px;
+					position: relative;
+					p{
+						position: absolute;
+						border: none;
+						width: 30px;
+						height: 30px;
+						line-height: 30px;
+						border-radius: 5px;
+						text-align: center;
+						background-color: #5e5e5e;
+						color: #FFF;
+						font-size: 14px;
+						cursor: pointer;
+						&.pause{
+							right: 18px;
+							top: 10px;
+						}
+						&.shopping{
+							top: 10px;
+							left: 18px;
+						}
+						&.selected{
+							background-color: #4bb15c;
+						}
+					}
+				}
+				.bottom{
+					position: absolute;
+					left: 0;
+					bottom: 0;
+					width: 100%;
+					height: 60px;
+					background-color: #FFF;
+					border-bottom-left-radius: 5px;
+					border-bottom-right-radius: 5px;
+					i{
+						font-size: 25px;
+						position: absolute;
+						bottom: 15px;
+						left: 19px;
+						color: #676767;
+						cursor: pointer;
+					}
+					button{
+						width: 100px;
+						height: 50px;
+						border-radius: 10px;
+						position: absolute;
+						&:focus{
+							outline: 0;
+						}
+						&.pause{
+							background-color: #d9d9d9;
+							border: 1px solid #c3c3c3;
+							right: 110px;
+							top: 5px;
+							color: #343434;
+						}
+						&.pay{
+							background-color: #9a2b2b;
+							border: 1px solid #802424;
+							right: 5px;
+							top: 5px;
+							color: #FFF;
+						}
+					}
+				}
+				.no-goods{
+					text-align: center;
+					color: #c8c8c8;
+					i{
+						font-size: 40px;
+					}
+				}
+			}
+		}
+		#right{
+			height: 100%;
+			padding: 5px;
+			.box{
+				width: 100%;
+				height: 100%;
+				background-color: #FFF;
+				border-radius: 5px;
+				position: relative;
+				.top{
+					border-bottom: 1px solid #ccc;
+					height: 50px;
+					overflow: hidden;
+					button{
+						width: 100px;
+						height: 36px;
+						border-radius: 5px;
+						border: 1px solid #ccc;
+						background-color: #f0f0f0;
+						position: absolute;
+						&:focus{
+							outline: 0;
+						}
+						&.member{
+							left: 10px;
+							top: 7px;
+						}
+						&.goods{
+							left: 120px;
+							top: 7px;
+						}
+						&.selected{
+							color: #4bb15c;
+							border-color: #4bb15c;
+						}
+					}
+					form{
+						position: absolute;
+						right: 20px;
+						top: 7px;
+						padding-top: 0;
+						.input-group{
+							width: 280px;
+							.input-group-addon{
+								cursor: pointer;
+							}
+						}
+					}
+				}
+				.main{
+					overflow-x: hidden;
+					overflow-y: auto;
+					width: 100%;
+					height: 100%;
+					margin-top: 10px;
+					ul{
+						padding: 0 10px;
+						font-size: 0;
+						li{
+							width: 23%;
+							display: inline-block;
+							padding: 5px;
+							margin: 0 1% 2%;
+							border: 1px solid #ccc;
+							background-color: #f0f0f0;
+							cursor: pointer;
+							img{
+								width: 100%;
+							}
+							p{
+								font-size: 14px;
+								padding: 2px 0;
+								&.price{
+									color: #ee3131;
+								}
+							}
+						}
+					}
+				}
+				.bottom{
+					position: absolute;
+					bottom: 0;
+					left: 0;
+					height: 60px;
+					border-top: 1px solid #CCC;
+					width: 100%;
+					overflow-x: auto;
+					overflow-y: hidden;
+					font-size: 0;
+					border-bottom-left-radius: 5px;
+					ul{
+						border-bottom-left-radius: 5px;
+						li{
+							width: 100px;
+							height: 100%;
+							font-size: 16px;
+							display: inline-block;
+							line-height: 60px;
+							text-align: center;
+							border-right: 1px solid #ccc;
+							cursor: pointer;
+							&.selected{
+								background-color: #4bb15c;
+								color: #FFF;
+							}
+						}
+					}
+				}
+			}
+		}
+		#insert-box{
+			display: none;
+			width: 300px;
+			form{
+				padding-top: 0;
+				input{
+					width: 270px;
+				}
+			}
+		}
+	}
+}
+
+#admin-cashierCategory-index{
+	.iframe-main{
+		padding: 10px 15px 0;
+		th, td{
+			text-align: center;
+		}
+		td{
+			line-height: 30px;
+			&:nth-child(2){
+				text-align: left;
+			}
+		}
+	}
+	#add-category-tpl{
+		display: none;
+		.form-group{
+			.hr-line-dashed;
+			&:last-child{
+				border-bottom: none;
+			}
+		}
+		button{
+			padding: 6px 50px;
+		}
+	}
+}
+
+#admin-cashierGoods-index{
+	#admin-goods-index;
+}
+#admin-cashierGoods-editor{
+	.logo-uploader{
+		button{
+			border-top-right-radius: 0;
+			border-bottom-right-radius: 0;
+		}
+	}
+	.webuploader-pick{
+		background: none;
+	}
+}

@@ -1,0 +1,223 @@
+<section class="iframe-main">
+	<div id="left" class="pull-left">
+		<div class="box">
+			<div class="top">
+				<p class="shopping selected">购</p>
+				<p class="pause">挂</p>
+			</div>
+			<div class="bottom">
+				<i class="fa fa-trash"></i>
+				<button class="pause">挂起</button>
+				<button class="pay">收款</button>
+			</div>
+			<div class="horizontal-center-center no-goods">
+				<i class="fa fa-shopping-basket"></i>
+				<p>没有商品</p>
+			</div>
+		</div>
+	</div>
+	<div id="right" class="pull-right">
+		<div class="box">
+			<div class="top">
+				<button class="member" id="member-button"><i class="fa fa-user"></i>会员</button>
+				<button class="goods selected" id="goods-button"><i class="fa fa-cubes"></i>商品</button>
+				<form class="form-inline">
+					<div class="form-group">
+						<div class="input-group">
+							<input type="text" class="form-control" id="search" placeholder="搜索商品（中文或者简写）">
+							<div class="input-group-addon" id="search-button"><i class="fa fa-search"></i></div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="main" id="goods">
+				<ul>
+					<li v-for="v in goods" :data-id="v.id">
+						<img :src="v.thumbnail">
+						<p class="name">{{v.title}}</p>
+						<p class="price">￥{{v.price}}/{{v.unit}}</p>
+					</li>
+				</ul>
+			</div>
+			<div class="bottom">
+				<ul>
+					<li class="selected">全部</li>
+					{foreach $category as $v}
+					<li data-id="{$v.id}">{$v.name}</li>
+					{/foreach}
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div id="insert-box">
+		<form class="form-inline">
+			<div class="form-group">
+				<input type="text" class="form-control" id="insert" value="2000010523100152" placeholder="请输入商品编码或会员码或手机号">
+			</div>
+		</form>
+	</div>
+</section>
+<script type="text/javascript">
+	require(['jquery', 'vue', 'eh.xhr', 'layer'], function($, Vue){
+		var analysisIndex, insertBoxIndex;
+		var vm = new Vue({
+			el: '#goods',
+			data: {
+				'goods': ''
+			}
+		});
+
+		getGoods();
+		adaptive();
+
+		$('#right #goods li').click(function() {
+			
+		});
+
+		$('body').keyup(function(e) {
+			if (e.keyCode == 73 && $('#insert-box:hidden').length == 1) {
+				insertBoxIndex = layer.open({
+					type: 1,
+					content: $('#insert-box'),
+					title: '编码识别',
+					success: function(){
+						$('#insert-box input').focus();
+					}
+				});
+			}else if ($('#analysis').length == 1 && e.keyCode == 13) {
+				layer.close(analysisIndex);
+			}
+		});
+
+		$('#insert-box').keyup(function(e) {
+			e.stopPropagation();
+
+			if (e.keyCode == 13) {
+				if ($('#analysis').length == 1) {
+					return false;
+				}
+
+				var val = $(this).find('input').val();
+				if (val) {
+					analysisCode(val);
+					$(this).find('input').val('');
+					layer.close(insertBoxIndex);
+				}
+			}
+		});
+
+		$('#insert-box').keydown(function(e) {
+			e.stopPropagation();
+
+			if ($.isNumeric(e.key) == false && e.keyCode != 8){
+				return false;
+			}
+		});
+
+		$('#search').keyup(function(e) {
+			e.stopPropagation();
+		});
+
+		$('#right .bottom li').click(function() {
+			var id = $(this).data('id');
+
+			$(this).addClass('selected').siblings().removeClass('selected');
+
+			if (id > 0) {
+				getGoods(id);
+			}else{
+				getGoods();
+			}
+		});
+
+		$(window).resize(function() {
+			adaptive();
+		});
+
+		function adaptive(){
+			var rightWidth = $(window).width() - 350 - 10,
+			mainHeight = $(window).height() - 110 - 30,
+			bottomLiLength = $('.bottom li').length;
+
+			if (bottomLiLength * 100 > rightWidth) {
+				mainHeight -= 18;
+				$('#right .bottom').height(77);
+				$('#right .bottom ul').width(bottomLiLength * 100);
+			}else{
+				$('#right .bottom').height(59);
+				$('#right .bottom ul').width('auto');
+			}
+
+			if (rightWidth > 1200) {
+				$('#right .main li').css({
+					'width': '11.5%',
+					'margin': '0 0.5% 1%'
+				});
+			}else if (rightWidth > 800) {
+				$('#right .main li').css({
+					'width': '18%'
+				});
+			}else{
+				$('#right .main li').css({
+					'width': '23%',
+					'margin': '0 1% 2%'
+				});
+			}
+
+			$('#right').width(rightWidth);
+			$('#right .main').height(mainHeight);
+		}
+
+		function getGoods(category){
+			var index = eh.xhr.loadPrompt({
+				'type': 'get'
+			});
+
+			if (category) {
+				$.post('/cashier/getgoods.html', {category: category}, function(data){
+					eh.xhr.layerClose(index);
+					vm.goods = data.data;
+				});
+			}else{
+				$.post('/cashier/getgoods.html', function(data){
+					eh.xhr.layerClose(index);
+					vm.goods = data.data;
+				});
+			}
+		}
+
+		function analysisCode(val){
+			//1开头的为手机号，2开头的为商品，8开头的为会员卡，9开头的为优惠券。
+			var first = val[0];
+			if (first == 1 && val.length == 11) {
+				eh.xhr.getCommon('/cashier/member.html', {'phone': val}, {fn: member});
+			}else if (first == 2 && val.length == 16){
+				var reg = /(\d{1})(\d{5})(\d{5})(\d{5})/,
+					res = val.match(reg),
+					goodsID = parseInt(res[2]),
+					price = res[3],
+					weight = res[4];
+
+				eh.xhr.getCommon('/cashier/goods.html', {id: goodsID}, {fn: goods});
+			}else if (first == 8) {
+				eh.xhr.getCommon('/cashier/member.html', {'code': val}, {fn: member});
+			}else if (first == 9) {
+
+			}else{
+				analysisError();
+			}
+		}
+
+		function analysisError(str){
+			analysisIndex = layer.alert(str || "无法识别", {icon: 1, id: 'analysis'});
+		}
+
+		function member(response){
+
+		}
+
+		function goods(response){
+			
+		}
+	});
+</script>

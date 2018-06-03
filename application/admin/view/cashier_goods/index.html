@@ -1,0 +1,104 @@
+<section class="iframe-main">
+	<div class="row">
+		<ul>
+			{foreach $goods as $v}
+				<li class="col-sm-3 col-lg-2">
+					<div class="img" data-id="{$v.id}">
+						<img src="{$v.thumbnail}">
+					</div>
+					<p>{$v.title}</p>
+				</li>
+			{/foreach}
+		</ul>
+		<div id="pages" class="col-sm-12">
+			{$goods->render()}
+		</div>
+		<div id="operation">
+			<i class="fa fa-pencil-square-o" id="update" title="编辑"></i>
+			<i class="fa fa-trash-o" id="delete" title="删除"></i>
+		</div>
+	</div>
+</section>
+<script type="text/javascript">
+	require(['jquery', 'dotdotdot', 'layer', 'eh.xhr'], function($, dotdotdot){
+		var currentDocument = {};
+
+		$('p').dotdotdot({
+			height: 50
+		});
+
+		$(function(){
+			$(window).resize(function() {
+				setHeight();
+				setOperation();
+			});
+
+			setHeight();
+			setOperation();
+
+			$('.img').mouseenter(function() {
+				currentDocument = $(this);
+
+				$('#operation').show();
+				var offsetLeft = $(this).offset().left,
+				offsetTop = $(this).offset().top;
+
+				$('#operation').css({
+					left: offsetLeft,
+					top: offsetTop
+				});				
+			});
+
+			$('#operation').mouseleave(function() {
+				$('#operation').hide();
+			});
+
+			$('#delete').click(function() {
+				if ($.isEmptyObject(currentDocument)) {
+					return false;
+				}
+
+				layer.confirm('确认删除该商品吗？', {icon: 3, title:'提示'}, function(index){
+					eh.xhr.messageRefresh('/cashier_goods/' + currentDocument.data('id') + '.html', {}, {submitType: 'delete'});
+
+					layer.close(index);
+				});
+			});
+
+			$('#update').click(function() {
+				if ($.isEmptyObject(currentDocument)) {
+					return false;
+				}
+
+				$(window.frameElement).attr('src', '/cashier_goods/' + currentDocument.data('id') + '/edit.html');
+			});
+		});
+
+		function setHeight(){
+			var width = $('li:eq(0) div').width();
+			$('li div').height(width);
+		}
+
+		function setOperation(){
+			var width = $('li:eq(0) div').outerWidth();
+
+			$('#operation').css({
+				width: width + 1,
+				height: width + 1
+			});
+
+			$('#operation i').css({
+				'font-size': (width + 1) / 4,
+				top: (width + 1 - ((width + 1) / 4)) / 2
+			});
+
+			$('i#update').css({
+				'left': (width + 1) / 6
+			});
+
+			$('i#delete').css({
+				'right': (width + 1) / 6
+			});
+		}
+	});
+</script>

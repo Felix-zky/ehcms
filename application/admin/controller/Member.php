@@ -35,22 +35,55 @@ class Member extends Init{
     public function save(){
         $validate = validate('Member');
         $post = input();
-        if ($validate->check($post) == TRUE){
-            $password = $this->createPassword($post['password']);
-            $data = [
-                'username' => $post['username'],
-                'password' => $password,
-                'is_admin' => !empty($post['is_admin']) ? 1 : 0,
-                'admin_group' => !empty($post['is_admin']) ? $post['admin_group'] : '',
-                'create_time' => THINK_START_TIME
-            ];
-            if (db('member')->insert($data) == 1){
-                $this->success('用户添加成功');
+
+        if (!empty($post['id'])){
+            if (!empty($post['password']) && $validate->check($post) == TRUE){
+                $password = $this->createPassword($post['password']);
+                $data = [
+                    'username' => $post['username'],
+                    'password' => $password,
+                    'phone' => $post['phone'],
+                    'is_admin' => !empty($post['is_admin']) ? 1 : 0,
+                    'admin_group' => !empty($post['is_admin']) ? $post['admin_group'] : ''
+                ];
+                if (db('member')->where('id', $post['id'])->update($data) == 1){
+                    $this->success('用户更新成功');
+                }
+
+            }elseif (empty($post['password']) && $validate->scene('edit')->check($post) == TRUE){
+                $data = [
+                    'username' => $post['username'],
+                    'phone' => $post['phone'],
+                    'is_admin' => !empty($post['is_admin']) ? 1 : 0,
+                    'admin_group' => !empty($post['is_admin']) ? $post['admin_group'] : ''
+                ];
+                if (db('member')->where('id', $post['id'])->update($data) == 1){
+                    $this->success('用户更新成功');
+                }else{
+                    $this->success('用户更新成功，数据未修改。');
+                }
             }else{
-                $this->error('用户添加失败');
+                $this->error($validate->getError());
             }
         }else{
-            $this->error($validate->getError());
+            if ($validate->check($post) == TRUE){
+                $password = $this->createPassword($post['password']);
+                $data = [
+                    'username' => $post['username'],
+                    'password' => $password,
+                    'phone' => $post['phone'],
+                    'is_admin' => !empty($post['is_admin']) ? 1 : 0,
+                    'admin_group' => !empty($post['is_admin']) ? $post['admin_group'] : '',
+                    'create_time' => THINK_START_TIME
+                ];
+                if (db('member')->insert($data) == 1){
+                    $this->success('用户添加成功');
+                }else{
+                    $this->error('用户添加失败');
+                }
+            }else{
+                $this->error($validate->getError());
+            }
         }
     }
 

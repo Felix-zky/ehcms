@@ -1,40 +1,118 @@
+<header>
+	<div class="pull-left">
+		<button class="btn btn-success" id="header-button-submit-form">添加新文章</button>
+	</div>
+	<div class="pull-right">
+		<form class="form-inline">
+			<div class="form-group">
+				<div class="input-group">
+					<input type="text" class="form-control" id="search" placeholder="搜索文章">
+					<div class="input-group-addon"><i class="fa fa-search"></i></div>
+				</div>
+			</div>
+		</form>
+	</div>
+</header>
 <!-- 列表主体 -->
 <section class="iframe-main">
-<div class="list-main">
-	<ul>
-		{foreach $article as $v}
-		<li class="row" data-id="{$v.id}">
-			<p class="col-sm-3 col-lg-2 number">文章编号：{$v.id}</p>
-			<p class="col-sm-9 col-lg-10 padding-clean-left add-time">发布时间：{$v.create_time|date="y-m-d H:i:s",###}</p>
-			<p class="col-sm-3 col-lg-2">
-				<span class="img-box">
-					<img src="{$v.thumbnail|default='__IMAGES__/question_mark.jpg'}" />
-				</span>
-			</p>
-			<p class="col-sm-9 col-lg-10 padding-clean-left">
-				<span class="title">{$v.title}</span>
-				<span class="description" data-description="{{ d[i].description }}">{$v.description}</span>
-			</p>
-			<p class="keywords col-sm-5 col-lg-6 col-sm-offset-3 col-lg-offset-2"><strong>关键词：</strong><span>{$v.keywords}</span></p>
-			<p class="button">
-				<button class="btn btn-primary edit" data-url="{:url('admin/article/edit', ['id' => $v.id])}">编辑</button>
-				<button class="btn btn-danger">删除</button>
-			</p>
-		</li>
-		{/foreach}
-	</ul>
-</div>
-
-<div id="list-pages">
-	{$article->render()}
-</div>
+	<div class="list-main">
+		<ul>
+			<li v-for="v in list" class="row" :data-id="v.id">
+				<p class="col-sm-3 col-lg-2 number">文章编号：{{v.id}}</p>
+				<p class="col-sm-9 col-lg-10 padding-clean-left add-time">发布时间：{{v.create_time|moment}}</p>
+				<p class="col-sm-3 col-lg-2">
+					<span class="img-box">
+						<img :src="v.thumbnail||'/static/admin/images/question_mark.jpg'" />
+					</span>
+				</p>
+				<p class="col-sm-9 col-lg-10 padding-clean-left">
+					<span class="title">{{v.title}}</span>
+					<span class="description" :data-description="v.description">{{v.description}}</span>
+				</p>
+				<p class="keywords col-sm-5 col-lg-6 col-sm-offset-3 col-lg-offset-2"><strong>关键词：</strong><span>{{v.keywords}}</span></p>
+				<p class="button">
+					<button class="btn btn-primary edit">编辑</button>
+					<button class="btn btn-danger detele">删除</button>
+				</p>
+			</li>
+			<!-- thumbnail   __IMAGES__/question_mark.jpg -->
+		</ul>
+	</div>
+	<div id="list-pages"></div>
 </section>
 
 <script type="text/javascript">
-	require(['jquery'], function(){
-		$('.edit').click(function(){
-			var url = $(this).data('url');
+	require(['jquery', 'vue', 'moment', 'eh.xhr'], function($, Vue, moment){
+		$('#header-button-submit-form').click(function() {
+			eh.clickParentButton('eh_article_add');
+		});
+
+		Vue.filter('moment', function (value, formatString) {
+			formatString = formatString || 'YYYY-MM-DD HH:mm:ss';
+			return moment(value).format(formatString);
+		});
+
+		var vm = new Vue({
+			el: 'ul',
+			data: {
+				list: ''
+			}
+		});
+
+		var first = true, loading, search = '';
+
+		getList();
+
+		$('#search').keyup(function() {
+			search = $(this).val();
+			if (loading == false) {
+				first = true;
+				getList('', search);
+			}
+		});
+
+		$('.list-main').on('click', '.edit', function(){
+			var id = $(this).parents('li').data('id'),
+				url = '/article/' + id + '/edit.html';
+
 			$(window.frameElement).attr('src', url);
 		});
+
+		function getList(page, key){
+			loading = true;
+			page = page || 1;
+			key = key || '';
+			var index = eh.xhr.loadPrompt({'type': 'get'})
+			eh.xhr.post('/article/list.html', {'page': page, 'key': key}, {
+				success: function(response){
+					vm.list = response.data.article;
+					if (first == true) {
+						eh.pageRender({
+							pages: response.data.count_page,
+							jump: function(obj){
+								if(!first){
+									getList(obj.curr, search);
+								}
+							}
+						});
+						first = false;
+					}
+					if (key != search) {
+						first = true;
+						getList('', search);
+					}else{
+						loading = false;
+					}
+					layer.close(index);
+				},
+				fail: function(){
+					vm.list = '';
+					$('#list-pages').html('');
+					loading = false;
+					first = true;
+					layer.close(index);
+				}
+			});
+		}
 	});
 </script>

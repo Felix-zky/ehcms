@@ -86,6 +86,7 @@
 			loading = true;
 			page = page || 1;
 			key = key || '';
+			var index = eh.xhr.loadPrompt({'type': 'get'})
 			eh.xhr.post('/member/list.html', {'page': page, 'key': key}, {
 				success: function(response){
 					vm.list = response.data.member;
@@ -106,12 +107,14 @@
 					}else{
 						loading = false;
 					}
+					layer.close(index);
 				},
 				fail: function(){
 					vm.list = '';
 					$('#list-pages').html('');
 					loading = false;
 					first = true;
+					layer.close(index);
 				}
 			});
 		}
