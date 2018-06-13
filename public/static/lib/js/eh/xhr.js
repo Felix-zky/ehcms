@@ -291,6 +291,7 @@ define(['jquery', 'laytpl', 'layer', 'eh'], function($, laytpl){
 		 * @param {Function}         [func]    数据自定义处理方法
 		 */
 		deleteCommon: function(url, data, settings){
+			settings = settings || {};
 			xhr.msgLayerIndex || this.loadPrompt(settings.loadPrompt || {type: 'delete'});
 
 			if (typeof settings.parentObj == 'string') {
@@ -335,7 +336,13 @@ define(['jquery', 'laytpl', 'layer', 'eh'], function($, laytpl){
 							}
 						}
 					}else if(!$.isEmptyObject(settings.deleteObj)){
-						settings.deleteObj.remove();
+						if (typeof settings.animate == 'string'){
+							settings.deleteObj.animateCss(settings.animate, function(){
+								settings.deleteObj.remove();
+							});
+						}else{
+							settings.deleteObj.remove();
+						}
 					}
 
 					if (!$.isEmptyObject(response.data.tpl) && !$.isEmptyObject(settings.parentObj) && settings.parentObj.length > 0) {

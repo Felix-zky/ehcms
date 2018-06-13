@@ -1,0 +1,54 @@
+<header>
+	<div class="pull-left">
+		<button class="btn btn-success" id="header-button-submit-form">{empty name="id"}创建{else /}更新{/empty}导航</button>
+	</div>
+</header>
+<section class="iframe-main">
+	<div class="row">
+		<form class="form-horizontal" method="post" action="{empty name="id"}/navigation.html{else /}/navigation/{$id}.html{/empty}">
+			{notempty name="id"}
+				<input type="hidden" name="_method" value="PUT">
+			{/notempty}
+			<div class="form-group">
+				<label for="name" class="col-sm-3 control-label">导航名称：</label>
+				<div class="col-sm-8">
+					<input type="text" name="name" class="form-control" id="name" placeholder="请输入导航名称" value="{notempty name='navigation'}{$navigation.name}{/notempty}">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="alias" class="col-sm-3 control-label">导航别名：</label>
+				<div class="col-sm-8">
+					<input type="text" name="alias" class="form-control" id="alias" placeholder="请输入导航别名" value="{notempty name='navigation'}{$navigation.alias}{/notempty}">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="url" class="col-sm-3 control-label">地址URL：</label>
+				<div class="col-sm-8">
+					<input type="text" name="url" class="form-control" id="url" placeholder="请输入导航地址URL" value="{notempty name='navigation'}{$navigation.url}{/notempty}">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="client-type" class="col-sm-3 control-label">展现客户端：</label>
+				<div class="col-sm-8">
+					<input type="checkbox" id="client-type" name="client_type" {notempty name="navigation"}{eq name="navigation.client_type" value="1"}checked{/eq}{else /}checked{/notempty} data-on-text="电脑" data-off-text="移动">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="is-blank" class="col-sm-3 control-label">新窗打开：</label>
+				<div class="col-sm-8">
+					<input type="checkbox" id="is-blank" name="is_blank" {notempty name="navigation"}{eq name="navigation.is_blank" value="1"}checked{/eq}{else /}checked{/notempty} data-on-text="是" data-off-text="否">
+				</div>
+			</div>
+		</form>
+	</div>
+</section>
+{css href="http://cdn.bootcss.com/bootstrap-switch/3.3.4/css/bootstrap3/bootstrap-switch.min.css"}
+<script type="text/javascript">
+	require(['jquery', 'bootstrap', 'switch'], function($){
+		$('#client-type, #is-blank').bootstrapSwitch();
+
+		$('#header-button-submit-form').click(function() {
+			$('form').submit();
+		});
+	});
+</script>

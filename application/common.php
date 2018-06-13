@@ -40,6 +40,7 @@ Route::domain('admin', function(){
     Route::rule('cashier_goods/resource', 'admin/CashierGoods/resource');
     Route::post('cashier/getgoods', 'admin/Cashier/getGoods');
     Route::get('cashier/goods', 'admin/Cashier/goods', [], ['id' => '\d+']);
+    Route::post('navigation/sort', 'admin/Navigation/sort');
 	
 	
 	//注册后台资源路由
@@ -56,6 +57,7 @@ Route::domain('admin', function(){
 	Route::resource('member', 'admin/Member');
     Route::resource('cashier_category', 'admin/CashierCategory');
     Route::resource('cashier_goods', 'admin/CashierGoods');
-	
+    Route::resource('navigation', 'admin/Navigation');
+
 	Route::rule('login/index', 'admin/Login/index');
 });
