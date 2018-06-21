@@ -107,7 +107,7 @@
 					</div>
 					<div id="editor">
 						<div class="form-markdown-left validate-style">
-							<textarea name="markdown" id="markdown" class="ignore-prompt">{$article.markdown}</textarea>
+							<textarea name="markdown" id="markdown" class="ignore-prompt">{notempty name="article.markdown"}{$article.markdown}{/notempty}</textarea>
 						</div>
 						<div class="form-markdown-right">
 							<p id="html-preview">

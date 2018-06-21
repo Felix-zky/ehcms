@@ -172,7 +172,7 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 							move: false,
 							area: ['100%', '100%'],
 							closeBtn: false,
-							content: '/resource/index/iframe/1.html'
+							content: '/resource/iframe.html'
 						});
 					}
 				}
@@ -561,7 +561,7 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 				var markdown = '![' + $(this).find('img').attr('alt') + '](' + $(this).find('img').attr('src') + ')';
 			}
 
-			$('#markdown').val($('#markdown').val() + markdown).keyup();
+			insert.call(markdownEditor, markdown);
 		});
 
 		$(window).resize(function() {

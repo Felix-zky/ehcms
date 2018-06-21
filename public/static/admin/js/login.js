@@ -1,4 +1,29 @@
-define(['jquery', 'eh.xhr', 'eh.form', 'validate.zh'], function(){
+define(['jquery', 'eh.xhr', 'eh.form', 'validate.zh', 'gt'], function(){
+
+	var geetObj = {};
+
+	eh.xhr.get('/login/geetest.html', {}, {
+		success: function(response){
+			var data = response.data;
+
+			initGeetest({
+				gt: data.gt,
+				challenge: data.challenge,
+				offline: !data.success,
+				new_captcha: true,
+				product: 'bind'
+			}, function (captchaObj) {
+				geetObj = captchaObj;
+				captchaObj.bindForm('form');
+				captchaObj.onSuccess(function(){
+					eh.xhr.post($('form').attr('action'), eh.form.extractData(), eh.xhr.doneState.messageRedirect);
+				});
+			});
+		},
+		fail: function(response){
+			layer.alert(response.msg, {icon: 0});
+		}
+	});
 
 	$(function(){
 		//多动画随机展现登录框
@@ -31,7 +56,11 @@ define(['jquery', 'eh.xhr', 'eh.form', 'validate.zh'], function(){
 			if (validate.checkForm() == false){
 				layer.alert(eh.form.validateError(validate.errorMap));
 			}else{
-				eh.xhr.post($('form').attr('action'), eh.form.extractData(), eh.xhr.doneState.messageRedirect);
+				if (!$.isEmptyObject(geetObj)){
+					geetObj.verify();
+				}else{
+					eh.xhr.post($('form').attr('action'), eh.form.extractData(), eh.xhr.doneState.messageRedirect);
+				}
 			}
 			return false;
 		});

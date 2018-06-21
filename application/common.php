@@ -22,6 +22,7 @@ Route::domain('admin', function(){
 	Route::post('resource/addgroup', 'admin/Resource/addGroup');
 	Route::delete('resource/deleteresource', 'admin/Resource/deleteResource');
 	Route::delete('resource/deleteresources', 'admin/Resource/deleteResources');
+	Route::get('resource/iframe', 'admin/Resource/index?iframe=1');
 	Route::rule('document/cover', 'admin/Document/uploaderCover');
 	Route::rule('article_category/parent_id/:parent_id', 'admin/ArticleCategory/index', 'get', [], ['parent' => '\d+']);
 	Route::rule('document_category/parent_id/:parent_id', 'admin/DocumentCategory/index', 'get', [], ['parent' => '\d+']);
@@ -41,6 +42,7 @@ Route::domain('admin', function(){
     Route::post('cashier/getgoods', 'admin/Cashier/getGoods');
     Route::get('cashier/goods', 'admin/Cashier/goods', [], ['id' => '\d+']);
     Route::post('navigation/sort', 'admin/Navigation/sort');
+    Route::get('login/geetest', 'admin/Login/geetest');
 	
 	
 	//注册后台资源路由
