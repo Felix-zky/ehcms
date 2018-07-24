@@ -7,7 +7,7 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 			var li = [];
 			for (var i = 0; i < data.length; i++) {
 				if ($('#resource-' + data[i].id).length == 0) {
-					li.push('<li class="col-sm-2" id="resource-' + data[i].id + '" data-type="' + data[i].type + '"><div class="img"><img src="' + data[i].url + '" alt="' + data[i].name + '" /></div></li>');
+					li.push('<li class="col-sm-2" id="resource-' + data[i].id + '" data-type="' + data[i].type + '"><div class="img"><img src="' + data[i].url + '" alt="' + data[i].name + '" title="' + data[i].name + '" /></div></li>');
 				}
 			}
 			if (li.length > 0) {
@@ -22,6 +22,7 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 	var resoucerIframe = 0;
 	var transitionEnd = 'transitionend webkitTransitionEnd oTransitionEnd otransitionend MSTransitionEnd';
 	var anchor = '';
+	var md = '';
 
 	$(function(){
 		var textareaHeight, previewHeight, validate,
@@ -263,7 +264,7 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 			/**
 			 * 实例化markdown解析器
 			 */
-			var md = new remarkable('full', {
+			md = new remarkable('full', {
 				linkify: true,
 				html: true,
 				xhtmlOut: true,
@@ -668,7 +669,7 @@ define(['jquery', 'webuploader', 'messenger.future', 'remarkable', 'highlight', 
 				resultStr += sign[tocIndex] + string + '\n';
 			}
 		}
-		return str.replace(toc, resultStr);
+		return str.replace(toc, "<div id='toc'>" + md.render(resultStr) + '</div>\n');
 	}
 
 	function insert(text) {

@@ -13,7 +13,7 @@ namespace app\admin\controller;
 
 class Module extends Init{
 	public function index(){
-		$module = db('admin_module')->select();
+        $module = db('admin_module')->order('id', 'desc')->paginate(10);
 		
 		$this->assign('module', $module);
 		return $this->fetch();

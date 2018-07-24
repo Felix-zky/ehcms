@@ -20,8 +20,15 @@ class Cashier extends Init{
         return $this->fetch();
     }
 
-    public function getGoods($category = false){
-        if (!empty($category)){
+    public function getGoods(){
+        $category = input('category');
+        $keyword = input('keyword');
+
+        if (!empty($category) && !empty($keyword)) {
+            $goods = db('cashier_goods')->where(['category_id' => $category, 'title|short' => ['like', '%'.$keyword.'%']])->order('id', 'desc')->select();
+        }elseif (empty($category) && !empty($keyword)) {
+            $goods = db('cashier_goods')->where('title|short', 'like', '%'.$keyword.'%')->order('id', 'desc')->select();
+        }elseif(!empty($category)){
             $goods = db('cashier_goods')->where('category_id', $category)->order('id', 'desc')->select();
         }else{
             $goods = db('cashier_goods')->order('id', 'desc')->select();

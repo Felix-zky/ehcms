@@ -30,6 +30,8 @@ class CashierGoods extends Init{
         $data = input();
         $data['create_time'] = THINK_START_TIME;
 
+        $data['type'] = !empty($data['type']) ? 1 : 2;
+
         if (db('cashier_goods')->insert($data) == 1){
             $this->successResult('商品发布成功');
         }else{
@@ -51,6 +53,8 @@ class CashierGoods extends Init{
 
     public function update($id){
         $data = input('param.');
+
+        $data['type'] = !empty($data['type']) ? 1 : 2;
 
         if (request()->isPut()){
             if (db('cashier_goods')->where('id', $id)->update($data) == 1){

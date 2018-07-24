@@ -54,6 +54,12 @@
 			</div>
 		</div>
 		<div class="form-group">
+			<label class="col-sm-1 control-label">计数类型<span class="red">*</span>：</label>
+			<div class="col-sm-10">
+				<input type="checkbox" name="type" id="switch" data-on-text="件数" data-off-text="称重" data-off-color="success" {notempty name="goods.type"}{eq name="goods.type" value="1" }checked{/eq}{else/}checked{/notempty}>
+			</div>
+		</div>
+		<div class="form-group">
 			<label for="unit" class="col-sm-1 control-label">商品单位：</label>
 			<div class="col-sm-10">
 				<input type="text" name="unit" id="unit" {notempty name="goods.unit"}value="{$goods.unit}"{/notempty} class="form-control">
@@ -61,9 +67,9 @@
 		</div>
 	</form>
 </section>
-{css href="http://cdn.bootcss.com/bootstrap-select/1.12.1/css/bootstrap-select.min.css"}
+{css href="http://cdn.bootcss.com/bootstrap-select/1.12.1/css/bootstrap-select.min.css,http://cdn.bootcss.com/bootstrap-switch/3.3.4/css/bootstrap3/bootstrap-switch.min.css"}
 <script type="text/javascript">
-	require(['jquery', 'webuploader', 'messenger.future', 'eh.form', 'eh.xhr', 'bootstrap', 'bootstrap-select-zh', 'layer'], function($, WebUploader, Messenger){
+	require(['jquery', 'webuploader', 'messenger.future', 'eh.form', 'eh.xhr', 'bootstrap', 'bootstrap-select-zh', 'layer', 'switch'], function($, WebUploader, Messenger){
 		$('.selectpicker').selectpicker({
 			size: 8,
 			dropupAuto: false
@@ -72,6 +78,8 @@
 		$('.selectpicker').on('changed.bs.select', function(){
 			$(this).parents('.form-group').find('#category-id').val($(this).val());
 		});
+
+		$('#switch').bootstrapSwitch();
 
 		/**
 		 * 设置表单验证参数

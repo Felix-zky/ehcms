@@ -5,21 +5,67 @@
 				<p class="shopping selected">购</p>
 				<p class="pause">挂</p>
 			</div>
-			<div class="bottom">
-				<i class="fa fa-trash"></i>
-				<button class="pause">挂起</button>
-				<button class="pay">收款</button>
+			<div id="shopping">
+				<div class="bottom">
+					<i class="fa fa-trash delete"></i>
+					<button class="pause">挂起</button>
+					<button class="pay">收款</button>
+				</div>
+				<div v-if="cart != false" class="goods" key="cart-goods">
+					<ul>
+						<li v-for="v in cart">
+							<p class="col-sm-3"><img :src="v.img"></p>
+							<p class="col-sm-3 goods-name">{{v.name}}</p>
+							<div class="col-sm-3 plus-minus" v-if="v.type == 1">
+								<div class="input-group">
+									<span class="input-group-btn">
+										<button class="btn btn-default minus" type="button">-</button>
+									</span>
+									<input type="text" class="form-control" :value="v.num">
+									<span class="input-group-btn">
+										<button class="btn btn-default plus" type="button">+</button>
+									</span>
+								</div>
+							</div>
+							<div class="col-sm-3 weight" v-if="v.type == 2">
+								<input type="text" class="form-control" placeholder="重量(KG)" :value="v.num">
+							</div>
+							<p class="col-sm-3">{{v.count}}</p>
+						</li>
+					</ul>
+				</div>
+				<div v-else class="horizontal-center-center no-goods" key="cart-no-goods">
+					<i class="fa fa-shopping-basket"></i>
+					<p>没有商品</p>
+				</div>
+				<div v-if="cart != false" class="count">
+					<p class="col-sm-4">合计</p>
+					<p class="col-sm-4">{{count.num}}</p>
+					<p class="col-sm-4">{{count.price}}</p>
+				</div>
 			</div>
-			<div class="horizontal-center-center no-goods">
-				<i class="fa fa-shopping-basket"></i>
-				<p>没有商品</p>
+			<div id="pause">
+				<ul>
+					<li v-for="v in pauseCount">
+						<div class="img">
+							<p class="col-sm-2" v-for="img in v.img"><img :src="img"></p>
+						</div>
+						<div class="count">
+							<p class="col-sm-5">合计：<span>￥{{v.price}}</span></p>
+							<p class="col-sm-7"><button class="btn btn-info btn-xs">恢复订单</button> <button class="btn btn-danger btn-xs">删除订单</button></p>
+						</div>
+						<div class="num">
+							<span>共{{v.num}}件</span>
+						</div>
+					</li>
+				</ul>
 			</div>
 		</div>
 	</div>
 	<div id="right" class="pull-right">
 		<div class="box">
 			<div class="top">
-				<button class="member" id="member-button"><i class="fa fa-user"></i>会员</button>
+				<!-- <button class="member" id="member-button"><i class="fa fa-user"></i>会员</button> -->
 				<button class="goods selected" id="goods-button"><i class="fa fa-cubes"></i>商品</button>
 				<form class="form-inline">
 					<div class="form-group">
@@ -32,10 +78,10 @@
 			</div>
 			<div class="main" id="goods">
 				<ul>
-					<li v-for="v in goods" :data-id="v.id">
+					<li v-for="v in goods" :data-id="v.id" :data-type="v.type">
 						<img :src="v.thumbnail">
 						<p class="name">{{v.title}}</p>
-						<p class="price">￥{{v.price}}/{{v.unit}}</p>
+						<p class="price">￥<span>{{v.price}}</span>/{{v.unit}}</p>
 					</li>
 				</ul>
 			</div>
@@ -48,6 +94,9 @@
 				</ul>
 			</div>
 		</div>
+		<div class="shade">
+			<i class="fa fa-ban horizontal-center-center"></i>
+		</div>
 	</div>
 	<div id="insert-box">
 		<form class="form-inline">
@@ -58,65 +107,231 @@
 	</div>
 </section>
 <script type="text/javascript">
-	require(['jquery', 'vue', 'eh.xhr', 'layer'], function($, Vue){
+	require(['jquery', 'vue', 'eh.xhr', 'layer', 'lodash'], function($, Vue){
 		var analysisIndex, insertBoxIndex;
 		var vm = new Vue({
-			el: '#goods',
+			el: '.iframe-main',
 			data: {
-				'goods': ''
+				'goods': '',
+				'cart': [],
+				'pause': []
+			},
+			computed:{
+				count: function(){
+					var count = {
+						num: 0,
+						price: 0
+					};
+					for (var i = 0; i < this.cart.length; i++) {
+						count.price += parseFloat(this.cart[i].count);
+						if (this.cart[i].type == 1) {
+							count.num += parseInt(this.cart[i].num);
+						}else{
+							count.num += 1;
+						}
+					}
+					count.price = count.price.toFixed(2);
+					return count;
+				},
+				pauseCount: function(){
+					var pause = [];
+
+					for (var i = 0; i < this.pause.length; i++) {
+						var data = {
+							img: [],
+							num: this.pause[i].length,
+							price: 0,
+						};
+
+						for (var c = 0; c < this.pause[i].length; c++) {
+							if (c < 5) {
+								data.img.push(this.pause[i][c].img);
+							}
+							data.price += parseFloat(this.pause[i][c].count);
+						}
+
+						pause.push(data);
+					}
+
+					return pause;
+				}
+			},
+			watch: {
+				cart: {
+					handler: function(){
+						var current = $('#left .goods li').length;
+						for (var i = 0; i < this.cart.length; i++) {
+							this.cart[i].count = (this.cart[i].num * 100 * this.cart[i].price / 100).toFixed(2);
+						}
+						Vue.nextTick(function () {
+							if (current < vm.cart.length) {
+								$('#left .goods li:last input').focus();
+							}
+							if (vm.cart.length == 1) {
+								leftGoodsHeight();
+							}
+						});
+					},
+					deep: true
+				}
 			}
 		});
 
 		getGoods();
 		adaptive();
 
-		$('#right #goods li').click(function() {
-			
+		$('#right #goods').on('click', 'li', function() {
+			var id = $(this).data('id'),
+				type = $(this).data('type'),
+				cart = {
+					id: id,
+					img: $(this).find('img').attr('src'),
+					name: $(this).find('.name').html(),
+					price: $(this).find('.price span').html(),
+					num: type == 1 ? 1 : '',
+					type: type
+				};
+
+			vm.cart.push(cart);
 		});
 
-		$('body').keyup(function(e) {
-			if (e.keyCode == 73 && $('#insert-box:hidden').length == 1) {
-				insertBoxIndex = layer.open({
-					type: 1,
-					content: $('#insert-box'),
-					title: '编码识别',
-					success: function(){
-						$('#insert-box input').focus();
-					}
-				});
-			}else if ($('#analysis').length == 1 && e.keyCode == 13) {
-				layer.close(analysisIndex);
-			}
+		$('#left .box').on('keyup', '.goods li input', function(){
+			var val = $(this).val().replace(/[^\d\.]/g, ''),
+				index = $(this).parents('li').index(),
+				data = vm.cart[index];
+
+			data.num = val;
+
+			$(this).val(val);
+
+			vm.cart.splice(index, 1, data);
 		});
 
-		$('#insert-box').keyup(function(e) {
-			e.stopPropagation();
+		$('#left .box').on('click', '.goods .plus-minus .minus', function(){
+			var index = $(this).parents('li').index(),
+				data = vm.cart[index];
 
-			if (e.keyCode == 13) {
-				if ($('#analysis').length == 1) {
-					return false;
-				}
-
-				var val = $(this).find('input').val();
-				if (val) {
-					analysisCode(val);
-					$(this).find('input').val('');
-					layer.close(insertBoxIndex);
-				}
-			}
-		});
-
-		$('#insert-box').keydown(function(e) {
-			e.stopPropagation();
-
-			if ($.isNumeric(e.key) == false && e.keyCode != 8){
+			if (data.num == 0) {
 				return false;
 			}
+
+			data.num -= 1;
+
+			vm.cart.splice(index, 1, data);
 		});
 
-		$('#search').keyup(function(e) {
-			e.stopPropagation();
+		$('#left .box').on('click', '.goods .plus-minus .plus', function(){
+			var index = $(this).parents('li').index(),
+				data = vm.cart[index];
+
+			data.num += 1;
+
+			vm.cart.splice(index, 1, data);
 		});
+
+		$('#left .box .bottom .delete').click(function() {
+			layer.confirm('确认删除当前购物车吗？', {icon: 3, title:'提示'}, function(index){
+				vm.cart = [];
+
+				layer.close(index);
+			});
+		});
+
+		$('#left .box .bottom .pause').click(function() {
+			layer.confirm('确认挂起此订单吗？', {icon: 3, title:'提示'}, function(index){
+				var storage = window.localStorage;
+				if(storage.hasOwnProperty('ehCart')){
+					var data = JSON.parse(storage.ehCart);
+					data.push(vm.cart);
+					storage.ehCart = JSON.stringify(data);
+				}else{
+					var data = JSON.stringify([vm.cart]);
+					storage.ehCart = data;
+				}
+
+				vm.cart = [];
+				layer.close(index);
+			});
+		});
+
+		$('#left .box .top .shopping').click(function() {
+			if ($(this).hasClass('selected')) {
+				return false;
+			}
+			$(this).addClass('selected').siblings().removeClass('selected');
+
+			$('#right .shade').hide();
+			$('#left #shopping').show();
+			$('#left #pause').hide();
+		});
+
+		$('#left .box .top .pause').click(function() {
+			if ($(this).hasClass('selected')) {
+				return false;
+			}
+			$(this).addClass('selected').siblings().removeClass('selected');
+
+			var storage = window.localStorage;
+
+			if(storage.hasOwnProperty('ehCart')){
+				vm.pause = JSON.parse(storage.ehCart);
+				vm.pause.reverse();
+			}
+
+			$('#left #shopping').hide();
+			$('#left #pause').show();
+			$('#right .shade').show();
+		});
+
+		// $('body').keyup(function(e) {
+		// 	if (e.keyCode == 73 && $('#insert-box:hidden').length == 1) {
+		// 		insertBoxIndex = layer.open({
+		// 			type: 1,
+		// 			content: $('#insert-box'),
+		// 			title: '编码识别',
+		// 			success: function(){
+		// 				$('#insert-box input').focus();
+		// 			}
+		// 		});
+		// 	}else if ($('#analysis').length == 1 && e.keyCode == 13) {
+		// 		layer.close(analysisIndex);
+		// 	}
+		// });
+
+		// $('#insert-box').keyup(function(e) {
+		// 	e.stopPropagation();
+
+		// 	if (e.keyCode == 13) {
+		// 		if ($('#analysis').length == 1) {
+		// 			return false;
+		// 		}
+
+		// 		var val = $(this).find('input').val();
+		// 		if (val) {
+		// 			analysisCode(val);
+		// 			$(this).find('input').val('');
+		// 			layer.close(insertBoxIndex);
+		// 		}
+		// 	}
+		// });
+
+		// $('#insert-box').keydown(function(e) {
+		// 	e.stopPropagation();
+
+		// 	if ($.isNumeric(e.key) == false && e.keyCode != 8){
+		// 		return false;
+		// 	}
+		// });
+
+		$('#search').on('keyup', _.debounce(function(){
+			var category = $('#right .bottom li.selected').data('id');
+
+			if (!!category !== true) {
+				getGoods(false, $(this).val());
+			}else{
+				getGoods(category, $(this).val());
+			}
+		}, 500));
 
 		$('#right .bottom li').click(function() {
 			var id = $(this).data('id');
@@ -128,6 +343,8 @@
 			}else{
 				getGoods();
 			}
+
+			$('#search').val('');
 		});
 
 		$(window).resize(function() {
@@ -136,8 +353,8 @@
 
 		function adaptive(){
 			var rightWidth = $(window).width() - 350 - 10,
-			mainHeight = $(window).height() - 110 - 30,
-			bottomLiLength = $('.bottom li').length;
+				mainHeight = $(window).height() - 110 - 30,
+				bottomLiLength = $('.bottom li').length;
 
 			if (bottomLiLength * 100 > rightWidth) {
 				mainHeight -= 18;
@@ -166,24 +383,34 @@
 
 			$('#right').width(rightWidth);
 			$('#right .main').height(mainHeight);
+			$('#right .shade').height($(window).height());
+			$('#left #pause').height($('#left .box').height() - 50);
+			leftGoodsHeight();
 		}
 
-		function getGoods(category){
+		function leftGoodsHeight(){
+			var leftGoodsHeight = $('#left .box').height() - 160 - 15;
+			$('#left .box').find('.goods').height(leftGoodsHeight);
+		}
+
+		function getGoods(category, keyword){
 			var index = eh.xhr.loadPrompt({
 				'type': 'get'
-			});
+			}),
+				where = {};
 
-			if (category) {
-				$.post('/cashier/getgoods.html', {category: category}, function(data){
-					eh.xhr.layerClose(index);
-					vm.goods = data.data;
-				});
-			}else{
-				$.post('/cashier/getgoods.html', function(data){
-					eh.xhr.layerClose(index);
-					vm.goods = data.data;
-				});
+			if (!category && keyword) {
+				where = {'keyword': keyword};
+			}else if (category && keyword) {
+				where = {'category': category, 'keyword': keyword};
+			}else if (category) {
+				where = {'category': category};
 			}
+
+			$.post('/cashier/getgoods.html', where, function(data){
+				eh.xhr.layerClose(index);
+				vm.goods = data.data;
+			});
 		}
 
 		function analysisCode(val){
