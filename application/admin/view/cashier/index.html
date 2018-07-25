@@ -52,7 +52,7 @@
 						</div>
 						<div class="count">
 							<p class="col-sm-5">合计：<span>￥{{v.price}}</span></p>
-							<p class="col-sm-7"><button class="btn btn-info btn-xs">恢复订单</button> <button class="btn btn-danger btn-xs">删除订单</button></p>
+							<p class="col-sm-7"><button class="btn btn-info btn-xs recovery">恢复订单</button> <button class="btn btn-danger btn-xs delete">删除订单</button></p>
 						</div>
 						<div class="num">
 							<span>共{{v.num}}件</span>
@@ -147,9 +147,13 @@
 							if (c < 5) {
 								data.img.push(this.pause[i][c].img);
 							}
+							if (this.pause[i][c].type == 1) {
+								data.num += (this.pause[i][c].num - 1);
+							}
 							data.price += parseFloat(this.pause[i][c].count);
 						}
 
+						data.price = data.price.toFixed(2);
 						pause.push(data);
 					}
 
@@ -238,11 +242,16 @@
 		});
 
 		$('#left .box .bottom .pause').click(function() {
+			if(vm.cart.length == 0){
+				layer.alert('当前购物车没有商品！');
+				return false;
+			}
+
 			layer.confirm('确认挂起此订单吗？', {icon: 3, title:'提示'}, function(index){
 				var storage = window.localStorage;
 				if(storage.hasOwnProperty('ehCart')){
 					var data = JSON.parse(storage.ehCart);
-					data.push(vm.cart);
+					data.unshift(vm.cart);
 					storage.ehCart = JSON.stringify(data);
 				}else{
 					var data = JSON.stringify([vm.cart]);
@@ -275,12 +284,21 @@
 
 			if(storage.hasOwnProperty('ehCart')){
 				vm.pause = JSON.parse(storage.ehCart);
-				vm.pause.reverse();
 			}
 
 			$('#left #shopping').hide();
 			$('#left #pause').show();
 			$('#right .shade').show();
+		});
+
+		$('#pause').on('click', '.delete', function() {
+			var storage = window.localStorage;
+				index = $(this).parents('li').index(),
+				data = JSON.parse(storage.ehCart);
+
+			data.splice(index, 1);
+			storage.ehCart = JSON.stringify(data);
+			vm.pause = data;
 		});
 
 		// $('body').keyup(function(e) {

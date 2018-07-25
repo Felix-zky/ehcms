@@ -47,4 +47,12 @@ class Setting extends Init{
 			}
 		}
 	}
+
+	public function alipay(){
+	    return $this->fetch();
+    }
+
+    public function weixin(){
+        return $this->fetch();
+    }
 }
