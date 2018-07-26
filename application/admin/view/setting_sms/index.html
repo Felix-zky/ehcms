@@ -62,7 +62,9 @@
 
 			eh.xhr.put('/setting_sms/update.html', data, {
 				success: function(response){
-					var data = response.data;
+					if (response.code == 1){
+						layer.msg('更新成功！', {icon: 6});
+					}
 				}
 			});
 		});

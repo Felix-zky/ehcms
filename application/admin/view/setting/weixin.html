@@ -1,0 +1,48 @@
+<header>
+	<div class="pull-left">
+		<button class="btn btn-success" id="header-button-submit-form">提交设置</button>
+	</div>
+</header>
+<section class="iframe-main">
+	<form method="post" class="form-horizontal">
+		<div class="form-group">
+			<label for="app-id" class="col-sm-3 control-label">APPID：</label>
+			<div class="col-sm-8">
+				<input type="text" class="form-control" name="app_id" id="app-id" value="{notempty name="weixin.app_id" }{$weixin.app_id}{/notempty}" placeholder="绑定支付的APPID">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="mch-id" class="col-sm-3 control-label">MCHID：</label>
+			<div class="col-sm-8">
+				<input type="text" class="form-control" name="mch_id" id="mch-id" value="{notempty name="weixin.mch_id" }{$weixin.mch_id}{/notempty}" placeholder="商户号">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="key" class="col-sm-3 control-label">KEY：</label>
+			<div class="col-sm-8">
+				<input type="text" class="form-control" name="key" id="key" value="{notempty name="weixin.key" }{$weixin.key}{/notempty}" placeholder="商户支付密钥">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="secert" class="col-sm-3 control-label">APPSECRET：</label>
+			<div class="col-sm-8">
+				<input type="text" class="form-control" name="secert" id="secert" value="{notempty name="weixin.secert" }{$weixin.secert}{/notempty}" placeholder="公众帐号secert（仅JSAPI支付的时候需要配置）">
+			</div>
+		</div>
+	</form>
+</section>
+<script type="text/javascript">
+	require(['jquery', 'eh.xhr', 'layer'], function(){
+		$('#header-button-submit-form').click(function() {
+			var data = $('form').serialize();
+
+			eh.xhr.put('/setting/weixin.html', data, {
+				success: function(response){
+					if (response.code == 1){
+						layer.msg('更新成功！', {icon: 6});
+					}
+				}
+			});
+		});
+	});
+</script>

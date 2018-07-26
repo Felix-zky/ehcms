@@ -10,6 +10,7 @@
 // +----------------------------------------------------------------------
 
 namespace app\admin\controller;
+use think\Db;
 
 class Setting extends Init{
 	
@@ -53,6 +54,26 @@ class Setting extends Init{
     }
 
     public function weixin(){
+	    $weixin = db('admin_setting')->where('key', 'weixin_pay')->find();
+	    $weixin = unserialize($weixin['value']);
+        $this->assign('weixin', $weixin);
         return $this->fetch();
+    }
+
+    public function weixinUpdate(){
+        $data = [
+            'name' => '微信支付配置',
+            'key' => 'weixin_pay',
+            'value' => serialize(input('param.'))
+        ];
+
+        $weixin = Db::name('admin_setting')->where('key', 'weixin_pay')->find();
+        if ($weixin){
+            Db::name('admin_setting')->where('key', 'weixin_pay')->update($data);
+        }else{
+            Db::name('admin_setting')->insert($data);
+        }
+
+        $this->successResult();
     }
 }

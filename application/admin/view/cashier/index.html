@@ -105,9 +105,24 @@
 			</div>
 		</form>
 	</div>
+	<div id="pay">
+		<p>请选择支付方式</p>
+		<ul class="horizontal-center-center">
+			<li>
+				<input type="radio" name="pay" value="ali" checked>
+				<img src="__IMAGES__/alipay.jpg">
+			</li>
+			<li>
+				<input type="radio" name="pay" value="weixin">
+				<img src="__IMAGES__/weixinpay.jpg">
+			</li>
+		</ul>
+		<button class="btn btn-info">确定</button>
+	</div>
 </section>
+{css href="__LIB_CSS__/iCheck.blue.css"}
 <script type="text/javascript">
-	require(['jquery', 'vue', 'eh.xhr', 'layer', 'lodash'], function($, Vue){
+	require(['jquery', 'vue', 'iCheck', 'eh.xhr', 'layer', 'jquery.contextMenu', 'lodash'], function($, Vue){
 		var analysisIndex, insertBoxIndex;
 		var vm = new Vue({
 			el: '.iframe-main',
@@ -177,6 +192,29 @@
 						});
 					},
 					deep: true
+				}
+			}
+		});
+
+		$('input:radio').iCheck({
+			radioClass: 'iradio_square-blue',
+			increaseArea: '20%'
+		});
+
+		$.contextMenu({
+			selector: '#shopping .goods li',
+			items: {
+				deleteGoods: {
+					name: '<i class="fa fa-trash"></i>删除当前商品',
+					isHtmlName: true
+				}
+			},
+			zIndex: 100000000,
+			callback: function(itemKey, opt){
+				switch (itemKey){
+					case 'deleteGoods':
+						var index = opt.$trigger.index();
+						vm.cart.splice(index, 1);
 				}
 			}
 		});
@@ -263,6 +301,20 @@
 			});
 		});
 
+		$('#left .box .bottom .pay').click(function() {
+			if(vm.cart.length == 0){
+				layer.alert('当前购物车没有商品！');
+				return false;
+			}
+
+			layer.open({
+				type: 1,
+				title: '选择支付',
+				content: $('#pay'),
+				area: '500px'
+			});
+		});
+
 		$('#left .box .top .shopping').click(function() {
 			if ($(this).hasClass('selected')) {
 				return false;
@@ -299,6 +351,21 @@
 			data.splice(index, 1);
 			storage.ehCart = JSON.stringify(data);
 			vm.pause = data;
+		});
+
+		$('#pause').on('click', '.recovery', function() {
+			var storage = window.localStorage;
+				index = $(this).parents('li').index(),
+				data = JSON.parse(storage.ehCart);
+
+			var cart = data.splice(index, 1);
+			storage.ehCart = JSON.stringify(data);
+			vm.pause = data;
+			vm.cart = cart[0];
+			Vue.nextTick(function () {
+				leftGoodsHeight();
+				$('#left .box .top .shopping').click();
+			});
 		});
 
 		// $('body').keyup(function(e) {

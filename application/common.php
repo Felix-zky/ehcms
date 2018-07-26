@@ -43,6 +43,7 @@ Route::domain('admin', function(){
     Route::get('cashier/goods', 'admin/Cashier/goods', [], ['id' => '\d+']);
     Route::post('navigation/sort', 'admin/Navigation/sort');
     Route::get('login/geetest', 'admin/Login/geetest');
+    Route::put('setting/weixin', 'admin/Setting/weixinUpdate');
 	
 	
 	//注册后台资源路由
