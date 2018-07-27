@@ -44,6 +44,7 @@ Route::domain('admin', function(){
     Route::post('navigation/sort', 'admin/Navigation/sort');
     Route::get('login/geetest', 'admin/Login/geetest');
     Route::put('setting/weixin', 'admin/Setting/weixinUpdate');
+    Route::rule('cashier/micro', 'admin/Cashier/micro');
 	
 	
 	//注册后台资源路由

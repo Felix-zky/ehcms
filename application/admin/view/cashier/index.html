@@ -117,13 +117,17 @@
 				<img src="__IMAGES__/weixinpay.jpg">
 			</li>
 		</ul>
-		<button class="btn btn-info">确定</button>
+		<button class="btn btn-info" id="pay-btn">确定</button>
+	</div>
+	<div id="weixin">
+		<p>请输入用户授权码</p>
+		<input type="text" class="form-control horizontal-center-center" id="auth_code" placeholder="请扫描或输入18位用户授权码，输入后自动提交。">
 	</div>
 </section>
 {css href="__LIB_CSS__/iCheck.blue.css"}
 <script type="text/javascript">
 	require(['jquery', 'vue', 'iCheck', 'eh.xhr', 'layer', 'jquery.contextMenu', 'lodash'], function($, Vue){
-		var analysisIndex, insertBoxIndex;
+		var analysisIndex, insertBoxIndex, paySelectIndex, weixinPayIndex;
 		var vm = new Vue({
 			el: '.iframe-main',
 			data: {
@@ -222,6 +226,39 @@
 		getGoods();
 		adaptive();
 
+		$('#pay-btn').click(function() {
+			var val = $('#pay').find('input:radio:checked').val();
+			if (val == 'weixin') {
+				layer.close(paySelectIndex);
+				layer.open({
+					type: 1,
+					title: '支付中',
+					content: $('#weixin'),
+					area: '500px',
+					success: function(layero){
+						layero.find('input').focus();
+					},
+					end: function(){
+						$('#weixin').find('input').val('');
+					}
+				});
+			}
+		});
+
+		$('#auth_code').keyup(function() {
+			var val = $(this).val().replace(/[^\d]/g, '');
+
+			$(this).val(val);
+			
+			if (val.length == 18) {
+				$(this).attr("disabled", true);
+
+				eh.xhr.post('/cashier/micro.html', function(response){
+					console.log(response);
+				});
+			}
+		});
+
 		$('#right #goods').on('click', 'li', function() {
 			var id = $(this).data('id'),
 				type = $(this).data('type'),
@@ -237,23 +274,23 @@
 			vm.cart.push(cart);
 		});
 
-		$('#left .box').on('keyup', '.goods li input', function(){
+		$('#left .box').on('keyup', '.goods li input', _.debounce(function(){
 			var val = $(this).val().replace(/[^\d\.]/g, ''),
 				index = $(this).parents('li').index(),
 				data = vm.cart[index];
 
-			data.num = val;
+			data.num = val && parseFloat(val);
 
 			$(this).val(val);
 
 			vm.cart.splice(index, 1, data);
-		});
+		}, 300));
 
 		$('#left .box').on('click', '.goods .plus-minus .minus', function(){
 			var index = $(this).parents('li').index(),
 				data = vm.cart[index];
 
-			if (data.num == 0) {
+			if (data.num <= 1) {
 				return false;
 			}
 
@@ -307,7 +344,17 @@
 				return false;
 			}
 
-			layer.open({
+			for (var i = 0; i < vm.cart.length; i++) {
+				if (!!vm.cart[i].num != true) {
+					layer.alert('【' + vm.cart[i].name + '】没有称重，请处理！', function(index){
+						$('#left .goods li:eq(' + i + ')').find('input').focus();
+						layer.close(index);
+					});
+					return false;
+				}
+			}
+
+			paySelectIndex = layer.open({
 				type: 1,
 				title: '选择支付',
 				content: $('#pay'),
