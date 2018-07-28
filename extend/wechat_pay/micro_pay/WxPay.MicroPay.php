@@ -2,6 +2,7 @@
 
 class MicroPay
 {
+    private $error;
 	/**
 	 * 
 	 * 提交刷卡支付，并且确认结果，接口比较慢
@@ -9,21 +10,20 @@ class MicroPay
 	 * @throws WxpayException
 	 * @return 返回查询接口的结果
 	 */
-	public function pay($microPayInput)
+	public function pay($config, $microPayInput)
 	{
 		//①、提交被扫支付
-		$config = new WxPayConfig();
 		$result = WxPayApi::micropay($config, $microPayInput, 5);
 		//如果返回成功
 		if(!array_key_exists("return_code", $result)
 			|| !array_key_exists("result_code", $result))
 		{
-			echo "接口调用失败,请确认是否输入是否有误！";
-			throw new WxPayException("接口调用失败！");
+			$this->setError("接口调用失败,请确认是否输入是否有误！");
+			return false;
 		}
 		
 		//取订单号
-		$out_trade_no = $microPayInput->GetOut_trade_no();
+		//$out_trade_no = $microPayInput->GetOut_trade_no();
 		
 		//②、接口调用成功，明确返回调用失败
 		if($result["return_code"] == "SUCCESS" &&
@@ -32,32 +32,32 @@ class MicroPay
 		   $result["err_code"] != "SYSTEMERROR")
 		{
 			return false;
-		}
+		}else{
+		    return $result;
+        }
 
 		//③、确认支付是否成功
-		$queryTimes = 10;
-		while($queryTimes > 0)
-		{
-			$succResult = 0;
-			$queryResult = $this->query($out_trade_no, $succResult);
-			//如果需要等待1s后继续
-			if($succResult == 2){
-				sleep(2);
-				continue;
-			} else if($succResult == 1){//查询成功
-				return $queryResult;
-			} else {//订单交易失败
-				break;
-			}
-		}
-		
-		//④、次确认失败，则撤销订单
-		if(!$this->cancel($out_trade_no))
-		{
-			throw new WxpayException("撤销单失败！");
-		}
+//		$queryTimes = 10;
+//		while($queryTimes > 0)
+//		{
+//			$succResult = 0;
+//			$queryResult = $this->query($out_trade_no, $succResult);
+//			//如果需要等待1s后继续
+//			if($succResult == 2){
+//				sleep(2);
+//				continue;
+//			} else if($succResult == 1){//查询成功
+//				return $queryResult;
+//			} else {//订单交易失败
+//				break;
+//			}
+//		}
 
-		return false;
+		//④、次确认失败，则撤销订单
+//		if(!$this->cancel($out_trade_no))
+//		{
+//			throw new WxpayException("撤销单失败！");
+//		}
 	}
 	
 	/**
@@ -140,4 +140,12 @@ class MicroPay
 		}
 		return false;
 	}
+
+	private function setError($msg){
+	    $this->error = $msg;
+    }
+
+    public function getError(){
+	    return $this->error;
+    }
 }

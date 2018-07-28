@@ -6,7 +6,7 @@ class WxPayConfig extends WxPayConfigInterface
 
     public function __construct()
     {
-        $pay = db('admin_setting')->where('key', 'weixin_pay1')->find();
+        $pay = db('admin_setting')->where('key', 'weixin_pay')->find();
         $this->setting = unserialize($pay['value']);
     }
 

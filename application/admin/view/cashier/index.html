@@ -127,7 +127,7 @@
 {css href="__LIB_CSS__/iCheck.blue.css"}
 <script type="text/javascript">
 	require(['jquery', 'vue', 'iCheck', 'eh.xhr', 'layer', 'jquery.contextMenu', 'lodash'], function($, Vue){
-		var analysisIndex, insertBoxIndex, paySelectIndex, weixinPayIndex;
+		var analysisIndex, insertBoxIndex, paySelectIndex, weixinPayIndex, weixinPayOrderID, weixinPayID, temporaryCart;
 		var vm = new Vue({
 			el: '.iframe-main',
 			data: {
@@ -230,7 +230,7 @@
 			var val = $('#pay').find('input:radio:checked').val();
 			if (val == 'weixin') {
 				layer.close(paySelectIndex);
-				layer.open({
+				weixinPayIndex = layer.open({
 					type: 1,
 					title: '支付中',
 					content: $('#weixin'),
@@ -239,7 +239,7 @@
 						layero.find('input').focus();
 					},
 					end: function(){
-						$('#weixin').find('input').val('');
+						$('#weixin').find('input').val('').removeAttr('disabled');
 					}
 				});
 			}
@@ -253,10 +253,82 @@
 			if (val.length == 18) {
 				$(this).attr("disabled", true);
 
-				eh.xhr.post('/cashier/micro.html', function(response){
-					console.log(response);
+				layer.close(weixinPayIndex);
+
+				var index = eh.xhr.loadPrompt({
+					str: '正在生成支付订单...'
+				});
+
+				eh.xhr.post('/cashier/weixin.html', {'auth_code': val, 'price': vm.count.price}, {
+					success: function(response){
+						var data = response.data;
+						temporaryCart = vm.cart;
+						vm.cart = [];
+
+						if (data.code == 'USERPAYING' || data.code == 'SYSTEMERROR') {
+							weixinPayID = data.id;
+							weixinPayOrderID = data.order_id;
+
+							index = eh.xhr.loadPrompt({
+								str: '扫描成功，等待用户付款... <button class="btn btn-danger btn-xs" id="weixin-cancel" style="vertical-align: text-top" disabled>20秒后可撤销</button>',
+								param: {closeBtn: true, area: '400px'}
+							});
+
+							query();
+							cancel(index, 20);
+						}else if(data.code == 'SUCCESS'){
+							layer.msg('支付成功', {icon: 6});
+						}
+					}
 				});
 			}
+		});
+
+		function query(queryNum){
+			setTimeout(function(){
+				if (queryNum > 0) {
+					queryNum--;
+					eh.xhr.post('/cashier/weixin_query.html', {'id': weixinPayID, 'order_id': weixinPayOrderID}, {
+						success: function(response){
+							var data = response.data;
+
+							if (data.code == 1) {
+								queryNum = -1;
+								layer.msg('订单支付成功', {icon: 6});
+							}else if (data.code == 0) {
+								layer.msg('订单支付失败', {icon: 5});
+								vm.cart = temporaryCart;
+							}else if (data.code == 2) {
+								query(queryNum);
+							}
+						}
+					});
+				}else if (queryNum == 0) {
+					$('body #weixin-cancel').click();
+				}
+			}, 5000);
+		}
+
+		function cancel(index, time){
+			setTimeout(function(){
+				time--;
+
+				if (time > 0) {
+					$('#layui-layer' + index).find('#weixin-cancel').html(time + '秒后可撤销');
+					cancel(index, time);
+				}else if(time == 0){
+					$('#layui-layer' + index).find('#weixin-cancel').html('撤销订单').removeAttr('disabled');
+				}
+			}, 1000);
+		}
+
+		$('body').on('click', '#weixin-cancel', function() {
+			eh.xhr.post('/cashier/weixin_cancel.html', {'id': weixinPayID, 'order_id': weixinPayOrderID}, {
+				success: function(response){
+					layer.msg('订单撤销成功');
+					vm.cart = temporaryCart;
+				}
+			});
 		});
 
 		$('#right #goods').on('click', 'li', function() {

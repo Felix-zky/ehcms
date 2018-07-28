@@ -44,8 +44,9 @@ Route::domain('admin', function(){
     Route::post('navigation/sort', 'admin/Navigation/sort');
     Route::get('login/geetest', 'admin/Login/geetest');
     Route::put('setting/weixin', 'admin/Setting/weixinUpdate');
-    Route::rule('cashier/micro', 'admin/Cashier/micro');
-	
+    Route::post('cashier/weixin', 'admin/Cashier/weixin');
+    Route::post('cashier/weixin_cancel', 'admin/Cashier/weixinCancel');
+    Route::post('cashier/weixin_query', 'admin/Cashier/weixinQuery');
 	
 	//注册后台资源路由
 	Route::resource('article', 'admin/Article');
