@@ -258,7 +258,7 @@
 				var index = eh.xhr.loadPrompt({
 					str: '正在生成支付订单...'
 				});
-
+				
 				eh.xhr.post('/cashier/weixin.html', {'auth_code': val, 'price': vm.count.price}, {
 					success: function(response){
 						var data = response.data;
@@ -274,7 +274,7 @@
 								param: {closeBtn: true, area: '400px'}
 							});
 
-							query();
+							query(25);
 							cancel(index, 20);
 						}else if(data.code == 'SUCCESS'){
 							layer.msg('支付成功', {icon: 6});
@@ -304,7 +304,12 @@
 						}
 					});
 				}else if (queryNum == 0) {
-					$('body #weixin-cancel').click();
+					eh.xhr.post('/cashier/weixin_cancel.html', {'id': weixinPayID, 'order_id': weixinPayOrderID}, {
+						success: function(response){
+							layer.msg('订单超时（2分钟），已自动撤销！');
+							vm.cart = temporaryCart;
+						}
+					});
 				}
 			}, 5000);
 		}

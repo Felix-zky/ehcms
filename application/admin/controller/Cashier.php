@@ -82,7 +82,7 @@ class Cashier extends Init{
         $input = new \WxPayMicroPay();
         $input->SetAuth_code($authCode);
         $input->SetBody("商品支付");
-        $input->SetTotal_fee(1);
+        $input->SetTotal_fee(input('price') * 100);
         $input->SetOut_trade_no($data['order_id']);
 
         $microPay = new \MicroPay();
@@ -129,13 +129,23 @@ class Cashier extends Init{
 
         $result = \WxPayApi::orderQuery($config, $queryOrderInput);
 
+        $order = Db::name('cashier_order')->where('id', $id)->find();
+
+        if (!$order){
+            $this->errorResult('订单不存在');
+        }
+
         if($result["return_code"] == "SUCCESS"
             && $result["result_code"] == "SUCCESS")
         {
             //支付成功
             if($result["trade_state"] == "SUCCESS"){
+                if (($result['total_fee'] / 100) != $order['order_total_fee'] || $result['out_trade_no'] != $order['order_id']){
+                    $this->errorResult('支付成功，但信息不符，请核查用户手机支付结果！');
+                }
+
                 $data = [
-                    'buyer' => $order_id,
+                    'buyer' => $result['openid'],
                     'status' => 2,
                     'pay_order_id' => $result['transaction_id'],
                     'finish_time' => strtotime($result['time_end'])
@@ -149,10 +159,14 @@ class Cashier extends Init{
             else if($result["trade_state"] == "USERPAYING"){
                 $this->successResult(['code' => 2]);
             }
+            //订单已撤销
+            else if($result["trade_state"] == "REVOKED"){
+                $this->successResult(['code' => 3]);
+            }
         }
 
         //如果返回错误码为“此交易订单号不存在”则直接认定失败
-        if($result["err_code"] == "ORDERNOTEXIST")
+        if(empty($result["err_code"]) || $result["err_code"] == "ORDERNOTEXIST")
         {
             $this->successResult(['code' => 0]);
         } else{
