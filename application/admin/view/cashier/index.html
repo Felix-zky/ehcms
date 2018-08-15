@@ -121,7 +121,16 @@
 	</div>
 	<div id="weixin">
 		<p>请输入用户授权码</p>
-		<input type="text" class="form-control horizontal-center-center" id="auth_code" placeholder="请扫描或输入18位用户授权码，输入后自动提交。">
+		<input type="text" class="form-control horizontal-center-center" id="auth_code_weixin" placeholder="请扫描或输入18位用户授权码，输入后自动提交。">
+	</div>
+	<div id="alipay">
+		<p>请输入用户付款码</p>
+		<div class="input-group">
+			<input type="text" class="form-control" id="auth_code_alipay" placeholder="请扫描或输入用户付款码，输入后点击提交。">
+			<span class="input-group-btn">
+				<button class="btn btn-success" type="button">提交</button>
+			</span>
+		</div>
 	</div>
 </section>
 {css href="__LIB_CSS__/iCheck.blue.css"}
@@ -242,10 +251,30 @@
 						$('#weixin').find('input').val('').removeAttr('disabled');
 					}
 				});
+			}else if(val == 'ali'){
+				layer.close(paySelectIndex);
+				alipayIndex = layer.open({
+					type: 1,
+					title: '支付中',
+					content: $('#alipay'),
+					area: '500px',
+					success: function(layero){
+						layero.find('input').focus();
+					},
+					end: function(){
+						$('#alipay').find('input').val('').removeAttr('disabled');
+					}
+				});
 			}
 		});
 
-		$('#auth_code').keyup(function() {
+		$('#auth_code_alipay').keyup(function() {
+			var val = $(this).val().replace(/[^\d]/g, '');
+
+			$(this).val(val);
+		});
+
+		$('#auth_code_weixin').keyup(function() {
 			var val = $(this).val().replace(/[^\d]/g, '');
 
 			$(this).val(val);

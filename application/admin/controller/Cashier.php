@@ -67,7 +67,7 @@ class Cashier extends Init{
             'order_total_fee' => input('price'),
             'order_body' => '商品支付',
             'pay_type' => 'weixin',
-            'status' => 1,
+            'status' => 0,
             'create_time' => (int)THINK_START_TIME
         ];
 
@@ -100,7 +100,7 @@ class Cashier extends Init{
 
                 $data = [
                     'buyer' => $pay['openid'],
-                    'status' => 2,
+                    'status' => 1,
                     'pay_order_id' => $pay['transaction_id'],
                     'finish_time' => strtotime($pay['time_end'])
                 ];
@@ -146,7 +146,7 @@ class Cashier extends Init{
 
                 $data = [
                     'buyer' => $result['openid'],
-                    'status' => 2,
+                    'status' => 1,
                     'pay_order_id' => $result['transaction_id'],
                     'finish_time' => strtotime($result['time_end'])
                 ];
@@ -193,7 +193,7 @@ class Cashier extends Init{
         }
 
         $data = [
-            'status' => 0,
+            'status' => 2,
             'finish_time' => (int)THINK_START_TIME
         ];
 
@@ -208,5 +208,9 @@ class Cashier extends Init{
         }else{
             $this->errorResult('订单撤销失败');
         }
+    }
+
+    public function alipay(){
+        return $this->fetch();
     }
 }

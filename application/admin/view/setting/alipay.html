@@ -1,0 +1,48 @@
+<header>
+	<div class="pull-left">
+		<button class="btn btn-success" id="header-button-submit-form">提交设置</button>
+	</div>
+</header>
+<section class="iframe-main">
+	<form method="post" class="form-horizontal">
+		<div class="form-group">
+			<label for="app-id" class="col-sm-3 control-label">app-id：</label>
+			<div class="col-sm-8">
+				<input type="text" class="form-control" name="app_id" id="app-id" value="{notempty name="alipay.app_id"}{$alipay.app_id}{/notempty}" placeholder="绑定支付的APPID">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="alipay-public-key" class="col-sm-3 control-label">alipay-public-key：</label>
+			<div class="col-sm-8">
+				<textarea class="form-control" name="alipay_public_key" id="alipay-public-key" rows="3" placeholder="支付宝公钥">{notempty name="alipay.alipay_public_key"}{$alipay.alipay_public_key}{/notempty}</textarea>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="merchant-private-key" class="col-sm-3 control-label">merchant-private-key：</label>
+			<div class="col-sm-8">
+				<textarea class="form-control" name="merchant_private_key" id="merchant-private-key" rows="10" placeholder="商户支付密钥">{notempty name="alipay.merchant_private_key"}{$alipay.merchant_private_key}{/notempty}</textarea>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="aes" class="col-sm-3 control-label">aes：</label>
+			<div class="col-sm-8">
+				<input type="text" class="form-control" name="aes" id="aes" value="{notempty name="alipay.aes" }{$alipay.aes}{/notempty}" placeholder="AES密钥">
+			</div>
+		</div>
+	</form>
+</section>
+<script type="text/javascript">
+	require(['jquery', 'eh.xhr', 'layer'], function(){
+		$('#header-button-submit-form').click(function() {
+			var data = $('form').serialize();
+
+			eh.xhr.put('/setting/alipay.html', data, {
+				success: function(response){
+					if (response.code == 1){
+						layer.msg('更新成功！', {icon: 6});
+					}
+				}
+			});
+		});
+	});
+</script>

@@ -379,7 +379,7 @@
 				padding: 6px 40px;
 			}
 		}
-		#weixin{
+		#weixin, #alipay{
 			display: none;
 			position: relative;
 			width: 500px;
@@ -390,8 +390,14 @@
 				font-weight: bold;
 				padding-top: 30px;
 			}
-			input{
+		}
+		#weixin input{
+			width: 90%;
+		}
+		#alipay{
+			.input-group{
 				width: 90%;
+				margin: 40px auto 0;
 			}
 		}
 	}
@@ -427,6 +433,7 @@
 #admin-cashierGoods-index{
 	#admin-goods-index;
 }
+
 #admin-cashierGoods-editor{
 	.logo-uploader{
 		button{
@@ -436,5 +443,20 @@
 	}
 	.webuploader-pick{
 		background: none;
+	}
+}
+
+#admin-cashierOrder-index{
+	.iframe-main{
+		th:last-child{
+			text-align: center;
+		}
+		td{
+			height: 34px;
+			line-height: 34px;
+			&:last-child{
+				text-align: center;
+			}
+		}
 	}
 }

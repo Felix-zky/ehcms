@@ -9,15 +9,19 @@
 // | Author: zky < zky@ehcms.com >
 // +----------------------------------------------------------------------
 
-namespace app\admin\controller;
+namespace app\admin\model;
 
-class CashierOrder extends Init{
+use think\Model;
+class CashierOrder extends Model{
 
-    public function index(){
-        $order = model('cashier_order')->order('id', 'desc')->paginate(20);
+    public function getStatusAttr($value){
+        $status = [1=>'已支付',0=>'未支付',2=>'已关闭'];
+        return $status[$value];
+    }
 
-        $this->assign('order', $order);
-        return $this->fetch();
+    public function getPayTypeAttr($value){
+        $status = ['weixin'=>'微信','ali'=>'支付宝'];
+        return $status[$value];
     }
 
 }

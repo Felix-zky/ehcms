@@ -1,0 +1,32 @@
+<section class="iframe-main">
+	<div class="list-main">
+		<table class="table table-striped table-bordered table-hover">
+			<thead>
+				<tr>
+					<th width="15%">订单编号</th>
+					<th width="15%">订单金额</th>
+					<th width="15%">支付类型</th>
+					<th width="15%">状态</th>
+					<th width="20%">创建时间</th>
+					<th width="20%">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				{foreach $order as $v}
+				<tr data-id="{$v.id}">
+					<td>{$v.order_id}</td>
+					<td>{$v.order_total_fee}</td>
+					<td>{$v.pay_type}</td>
+					<td>{$v.status}</td>
+					<td>{$v.create_time}</td>
+					<td><button class="btn btn-primary">查看完整订单</button></td>
+				</tr>
+				{/foreach}
+			</tbody>
+		</table>
+	</div>
+
+	<div id="list-pages">
+		{$order->render()}
+	</div>
+</section>

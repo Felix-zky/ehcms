@@ -50,7 +50,27 @@ class Setting extends Init{
 	}
 
 	public function alipay(){
+        $alipay = db('admin_setting')->where('key', 'alipay')->find();
+        $alipay = unserialize($alipay['value']);
+        $this->assign('alipay', $alipay);
 	    return $this->fetch();
+    }
+
+    public function alipayUpdate(){
+        $data = [
+            'name' => '支付宝配置',
+            'key' => 'alipay',
+            'value' => serialize(input('param.'))
+        ];
+
+        $alipay = Db::name('admin_setting')->where('key', 'alipay')->find();
+        if ($alipay){
+            Db::name('admin_setting')->where('key', 'alipay')->update($data);
+        }else{
+            Db::name('admin_setting')->insert($data);
+        }
+
+        $this->successResult();
     }
 
     public function weixin(){
