@@ -136,7 +136,7 @@
 {css href="__LIB_CSS__/iCheck.blue.css"}
 <script type="text/javascript">
 	require(['jquery', 'vue', 'iCheck', 'eh.xhr', 'layer', 'jquery.contextMenu', 'lodash'], function($, Vue){
-		var analysisIndex, insertBoxIndex, paySelectIndex, weixinPayIndex, weixinPayOrderID, weixinPayID, temporaryCart;
+		var analysisIndex, insertBoxIndex, paySelectIndex, weixinPayIndex, alipayIndex, weixinPayOrderID, weixinPayID, temporaryCart;
 		var vm = new Vue({
 			el: '.iframe-main',
 			data: {
@@ -272,6 +272,37 @@
 			var val = $(this).val().replace(/[^\d]/g, '');
 
 			$(this).val(val);
+		});
+
+		$('#alipay button').click(function() {
+			$(this).attr("disabled", true);
+			var val = $(this).parents('.input-group').find('input').val();
+
+			layer.close(alipayIndex);
+
+			var index = eh.xhr.loadPrompt({
+				str: '正在生成支付订单...'
+			});
+
+			eh.xhr.post('/cashier/alipay.html', {'auth_code': val, 'price': vm.count.price}, {
+				success: function(response){
+					var data = response.data;
+						temporaryCart = vm.cart;
+						vm.cart = [];
+
+					if (data.code == 1) {
+						layer.msg('订单支付成功', {icon: 6});
+					}else if (data.code == 0) {
+						layer.msg('订单支付失败', {icon: 5});
+						vm.cart = temporaryCart;
+					}else if (data.code == 2) {
+						layer.msg('订单异常', {icon: 5});
+						vm.cart = temporaryCart;
+					}
+
+					$('#alipay button').removeAttr("disabled");
+				}
+			});
 		});
 
 		$('#auth_code_weixin').keyup(function() {

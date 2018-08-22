@@ -20,7 +20,7 @@ class CashierOrder extends Model{
     }
 
     public function getPayTypeAttr($value){
-        $status = ['weixin'=>'微信','ali'=>'支付宝'];
+        $status = ['weixin'=>'微信','alipay'=>'支付宝'];
         return $status[$value];
     }
 

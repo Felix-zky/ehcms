@@ -211,6 +211,78 @@ class Cashier extends Init{
     }
 
     public function alipay(){
-        return $this->fetch();
+        require_once EXTEND_PATH . 'alipay/f2fpay/model/builder/AlipayTradePayContentBuilder.php';
+        require_once EXTEND_PATH . 'alipay/f2fpay/service/AlipayTradeService.php';
+        require_once EXTEND_PATH . 'alipay/f2fpay/config/config.php';
+
+        $alipay = db('admin_setting')->where('key', 'alipay')->find();
+        $alipay = unserialize($alipay['value']);
+
+        $config['app_id'] = $alipay['app_id'];
+        $config['alipay_public_key'] = $alipay['alipay_public_key'];
+        $config['merchant_private_key'] = $alipay['merchant_private_key'];
+        $config['aes'] = $alipay['aes'];
+
+        $data = [
+            'uid' => cookie('user_id'),
+            'order_id' => Date('Y').(int)THINK_START_TIME.cookie('user_id'),
+            'order_name' => '商品支付',
+            'order_total_fee' => 0.01, //input('price')
+            'order_body' => '商品支付',
+            'pay_type' => 'alipay',
+            'status' => 0,
+            'create_time' => (int)THINK_START_TIME
+        ];
+
+        if (Db::name('cashier_order')->insert($data) != 1){
+            $this->errorResult('订单生成失败');
+        }
+
+        $insert_id = Db::name('cashier_order')->getLastInsID();
+
+        $authCode = input('auth_code');
+
+        $barPayRequestBuilder = new \AlipayTradePayContentBuilder();
+        $barPayRequestBuilder->setOutTradeNo($data['order_id']);
+        $barPayRequestBuilder->setTotalAmount($data['order_total_fee']);
+        $barPayRequestBuilder->setAuthCode($authCode);
+        $barPayRequestBuilder->setTimeExpress('5m');
+        $barPayRequestBuilder->setSubject('商品支付');
+        $barPayRequestBuilder->setBody('商品支付');
+
+        $barPay = new \AlipayTradeService($config);
+        $barPayResult = $barPay->barPay($barPayRequestBuilder);
+
+        switch ($barPayResult->getTradeStatus()) {
+            case "SUCCESS":
+                $response = $barPayResult->getResponse();
+
+                if ($response->receipt_amount != $data['order_total_fee'] || $response->out_trade_no != $data['order_id']){
+                    $this->errorResult('支付成功，但信息不符，请核查用户手机支付结果！');
+                }
+
+                $update = [
+                    'buyer' => $response->buyer_user_id,
+                    'status' => 1,
+                    'pay_order_id' => $response->trade_no,
+                    'finish_time' => strtotime($response->gmt_payment)
+                ];
+
+                if (Db::name('cashier_order')->where('id', $insert_id)->update($update) == 1){
+                    $this->successResult(['code' => 1]);
+                }
+                break;
+            case "FAILED":
+                $update = [
+                    'status' => 2
+                ];
+
+                Db::name('cashier_order')->where('id', $insert_id)->update($update);
+                $this->successResult(['code' => 0]);
+                break;
+            default:
+                $this->successResult(['code' => 2]);
+                break;
+        }
     }
 }
