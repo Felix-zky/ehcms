@@ -101,7 +101,7 @@ class AlipayTradeService {
 
 		$appAuthToken = $req->getAppAuthToken();
 
-		$this->writeLog($bizContent);
+		//$this->writeLog($bizContent);
 
 		//echo $bizContent;
 		
@@ -315,7 +315,7 @@ class AlipayTradeService {
 	
 	public function cancel($cancelContentBuilder) {
 		$biz_content= $cancelContentBuilder->getBizContent();
-		$this->writeLog($biz_content);
+		//$this->writeLog($biz_content);
 		$request = new AlipayTradeCancelRequest();
 		$request->setBizContent ( $biz_content );
 		$response = $this->aopclientRequestExecute ( $request ,NULL ,$cancelContentBuilder->getAppAuthToken() );
@@ -353,11 +353,11 @@ class AlipayTradeService {
 		return $result;
 	}
 
-	function writeLog($text) {
-		// $text=iconv("GBK", "UTF-8//IGNORE", $text);
-		//$text = characet ( $text );
-		file_put_contents ( "log/log.txt", date ( "Y-m-d H:i:s" ) . "  " . $text . "\r\n", FILE_APPEND );
-	}
+//	function writeLog($text) {
+//		// $text=iconv("GBK", "UTF-8//IGNORE", $text);
+//		//$text = characet ( $text );
+//		file_put_contents ( "log/log.txt", date ( "Y-m-d H:i:s" ) . "  " . $text . "\r\n", FILE_APPEND );
+//	}
 
 	/** *利用google api生成二维码图片
 	 * $content：二维码内容参数
@@ -365,10 +365,10 @@ class AlipayTradeService {
 	 * $lev：可选参数，纠错等级
 	 * $margin：生成的二维码离边框的距离
 	 */
-	function create_erweima($content, $size = '200', $lev = 'L', $margin= '0') {
-		$content = urlencode($content);
-		$image = '<img src="http://chart.apis.google.com/chart?chs='.$size.'x'.$size.'&amp;cht=qr&chld='.$lev.'|'.$margin.'&amp;chl='.$content.'"  widht="'.$size.'" height="'.$size.'" />';
-		return $image;
-	}
+//	function create_erweima($content, $size = '200', $lev = 'L', $margin= '0') {
+//		$content = urlencode($content);
+//		$image = '<img src="http://chart.apis.google.com/chart?chs='.$size.'x'.$size.'&amp;cht=qr&chld='.$lev.'|'.$margin.'&amp;chl='.$content.'"  widht="'.$size.'" height="'.$size.'" />';
+//		return $image;
+//	}
 
 }

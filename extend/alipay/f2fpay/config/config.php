@@ -19,7 +19,7 @@ $config = array (
 		'app_id' => "",
 
 		//异步通知地址,只有扫码支付预下单可用
-		'notify_url' => "http://www.baidu.com",
+		'notify_url' => "",
 
 		//最大查询重试次数
 		'MaxQueryRetry' => "10",
