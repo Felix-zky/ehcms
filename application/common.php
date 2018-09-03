@@ -49,6 +49,8 @@ Route::domain('admin', function(){
     Route::post('cashier/weixin_query', 'admin/Cashier/weixinQuery');
     Route::put('setting/alipay', 'admin/Setting/alipayUpdate');
     Route::post('cashier/alipay', 'admin/Cashier/alipay');
+
+    Route::rule('store/register', 'admin/Store/register', 'get|post');
 	
 	//注册后台资源路由
 	Route::resource('article', 'admin/Article');

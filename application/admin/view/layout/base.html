@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="renderer" content="webkit">
-	<title>{block name="title"}{/block}</title>
+	<title>{block name="title"}{$title|default=""}{/block}</title>
 	<link rel="stylesheet" type="text/css" href="__CSS__/style.css" />
 	{block name="css"}
 		<link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/messenger/1.5.0/css/messenger.min.css" />

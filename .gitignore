@@ -4,3 +4,4 @@ composer.lock
 .settings/*
 .project
 .buildpath
+extend/alipay/tmp/*

@@ -17,6 +17,7 @@ use think\Lang;
 class Init extends Base{
 	protected $systemSetting;
 	protected $personalSetting;
+	protected $noCheckLogin;
 	
 	public function __construct(){
 		parent::__construct();
@@ -53,10 +54,19 @@ class Init extends Base{
 	 */
 	private function checkUserLogin(){
 		$controller = request()->controller();
-		
+		$action = request()->action();
+
 		//管理员状态检查及用户状态检查
 		if (!session('?eh_admin') || !action('member/User/checkUserLogin', [], 'event')){
-			$controller != 'Login' && $this->redirect(eh_url('U-010301'));
+		    if (!empty($this->noCheckLogin)){
+                if (is_array($this->noCheckLogin)){
+                    !in_array($action, $this->noCheckLogin) && $this->redirect(eh_url('U-010301'));
+                }else{
+                    $action != $this->noCheckLogin && $this->redirect(eh_url('U-010301'));
+                }
+            }else{
+                $controller != 'Login' && $this->redirect(eh_url('U-010301'));
+            }
 		}elseif ($controller == 'Login'){
 			$this->redirect(eh_url('U-010201'));
 		}
