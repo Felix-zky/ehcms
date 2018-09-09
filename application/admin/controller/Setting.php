@@ -24,9 +24,16 @@ class Setting extends Init{
 	
 	public function systemEdit(){
 		if (request()->isPut()){
-			if (db('admin_setting')->where(['uid' => 0, 'key' => input('key')])->update(['value' => input('value')]) == 1){
-				$this->successResult();
-			}
+            $result = db('admin_setting')->where('key', input('key'))->find();
+
+            if ($result){
+                db('admin_setting')->where(['uid' => 0, 'key' => input('key')])->update(['value' => input('value')]);
+                $this->successResult();
+            }else{
+                if (db('admin_setting')->where(['uid' => 0, 'key' => input('key')])->update(['value' => input('value')]) == 1){
+                    $this->successResult();
+                }
+            }
 		}
 	}
 	

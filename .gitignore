@@ -5,3 +5,4 @@ composer.lock
 .project
 .buildpath
 extend/alipay/tmp/*
+extend/duanxinwang/*

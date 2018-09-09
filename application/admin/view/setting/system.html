@@ -24,16 +24,65 @@
 					<td><input type="radio" name="editor_type" value="plain" {eq name="systemSetting.editor_type" value="plain"}checked{/eq}>富文本<input type="radio" name="editor_type" value="markdown" {eq name="systemSetting.editor_type" value="markdown"}checked{/eq}>Markdown</td>
 					<td>editor_type</td>
 				</tr>
+				<tr>
+					<td>是否开通管理员注册</td>
+					<td>
+						<input type="checkbox" name="is_admin_register" class="switch" data-on-text="是" data-off-text="否" data-off-color="success" {notempty name="systemSetting.is_admin_register"}{eq name="systemSetting.is_admin_register" value="1" }checked{/eq}{/notempty}>
+					</td>
+					<td>is_admin_register</td>
+				</tr>
+				<tr class="admin-register">
+					<td>管理员注册是否需要审核</td>
+					<td>
+						<input type="checkbox" name="is_admin_register_check" class="switch" data-on-text="是" data-off-text="否" data-off-color="success" {notempty name="systemSetting.is_admin_register_check"}{eq name="systemSetting.is_admin_register_check" value="1" }checked{/eq}{else/}checked{/notempty}>
+					</td>
+					<td>is_admin_register_check</td>
+				</tr>
+				<tr class="admin-register">
+					<td>管理员注册名称</td>
+					<td><input type="text" name="admin_register_name" class="form-control" value="{notempty name="systemSetting.admin_register_name"}{$systemSetting.admin_register_name}{/notempty}"></td>
+					<td>admin_register_name</td>
+				</tr>
+				<tr class="admin-register">
+					<td>管理员默认权限</td>
+					<td><input type="text" name="admin_register_permission" class="form-control" value="{notempty name="systemSetting.admin_register_permission"}{$systemSetting.admin_register_permission}">{/notempty}"></td>
+					<td>admin_register_permission</td>
+				</tr>
 			</tbody>
 		</table>
 	</div>
 </section>
-{css href="__LIB_CSS__/iCheck.blue.css"}
+{css href="__LIB_CSS__/iCheck.blue.css,https://cdn.bootcss.com/bootstrap-select/1.12.1/css/bootstrap-select.min.css,https://cdn.bootcss.com/bootstrap-switch/3.3.4/css/bootstrap3/bootstrap-switch.min.css"}
 <script type="text/javascript">
-	require(['jquery', 'layer', 'iCheck', 'eh.xhr'], function(){
+	require(['jquery', 'layer', 'iCheck', 'eh.xhr', 'bootstrap', 'bootstrap-select-zh', 'switch'], function(){
 		$('input:radio').iCheck({
 			radioClass: 'iradio_square-blue',
 			increaseArea: '20%'
+		});
+
+		$('.switch').bootstrapSwitch();
+
+		$('input[name="is_admin_register"]').on('switchChange.bootstrapSwitch', function(event, state) {
+			if (state == true) {
+				$('.admin-register td').css({
+					'border': 'none'
+				});
+				$('.admin-register').animateCss('rubberBand', function(){
+					$('.admin-register td').css({
+						'border': '1px solid #ddd'
+					});
+				}).show();
+			}else{
+				$('.admin-register td').css({
+					'border': 'none'
+				});
+				$('.admin-register').animateCss('rubberBand', function(){
+					$('.admin-register td').css({
+						'border': '1px solid #ddd'
+					});
+					$('.admin-register').hide();
+				});
+			}
 		});
 
 		$('input:text').change(function() {

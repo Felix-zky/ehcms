@@ -51,6 +51,7 @@ Route::domain('admin', function(){
     Route::post('cashier/alipay', 'admin/Cashier/alipay');
 
     Route::rule('store/register', 'admin/Store/register', 'get|post');
+    Route::post('store/sms', 'admin/Store/sms');
 	
 	//注册后台资源路由
 	Route::resource('article', 'admin/Article');
