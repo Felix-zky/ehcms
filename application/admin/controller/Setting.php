@@ -15,6 +15,8 @@ use think\Db;
 class Setting extends Init{
 	
 	public function system(){
+	    $group = db('admin_group')->field('id, name')->order('id', 'desc')->select();
+	    $this->assign('group', $group);
 		return $this->fetch();
 	}
 	
@@ -27,10 +29,10 @@ class Setting extends Init{
             $result = db('admin_setting')->where('key', input('key'))->find();
 
             if ($result){
-                db('admin_setting')->where(['uid' => 0, 'key' => input('key')])->update(['value' => input('value')]);
+                db('admin_setting')->where(['uid' => 0, 'key' => input('key')])->update(['name' => input('name'), 'value' => input('value')]);
                 $this->successResult();
             }else{
-                if (db('admin_setting')->where(['uid' => 0, 'key' => input('key')])->update(['value' => input('value')]) == 1){
+                if (db('admin_setting')->insert(['uid' => 0, 'name' => input('name'), 'key' => input('key'), 'value' => input('value')]) == 1){
                     $this->successResult();
                 }
             }

@@ -87,6 +87,12 @@ class Member extends Init{
         }
     }
 
+    public function register(){
+        if (request()->isPost()){
+            $this->save();
+        }
+    }
+
     public function edit($id){
         $member = db('member')->where('id', $id)->find();
         $adminGroup = $this->getAdminGroup();

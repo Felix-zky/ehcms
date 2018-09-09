@@ -49,6 +49,7 @@ Route::domain('admin', function(){
     Route::post('cashier/weixin_query', 'admin/Cashier/weixinQuery');
     Route::put('setting/alipay', 'admin/Setting/alipayUpdate');
     Route::post('cashier/alipay', 'admin/Cashier/alipay');
+    Route::get('admin/register', 'admin/Member/register');
 
     Route::rule('store/register', 'admin/Store/register', 'get|post');
     Route::post('store/sms', 'admin/Store/sms');

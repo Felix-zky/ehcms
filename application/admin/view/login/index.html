@@ -57,7 +57,23 @@
 			<input id="password" type="password" name="password" placeholder="请输入密码">
 			<!-- <div id="geetest"></div> -->
 			<button>登录</button>
-			<a href="/store/register.html">商户注册</a>
+			{notempty name="systemSetting.is_admin_register"}
+				{eq name="systemSetting.is_admin_register" value="1"}
+					{notempty name="systemSetting.admin_register_name"}
+						<a href="javascript:void(0);" id="register">{$systemSetting.admin_register_name}</a>
+					{/notempty}
+				{/eq}
+			{/notempty}
+		</form>
+	</section>
+	<section class="register">
+		<h1><img src="__IMAGES__/logo_default.png" alt="ehcms"></h1>
+		<form action="{:eh_url('U-010302')}" method="post">
+			<input id="username" type="text" name="username" placeholder="请输入用户名" autocomplete="off">
+			<input id="password" type="password" name="password" placeholder="请输入密码">
+			<!-- <div id="geetest"></div> -->
+			<button>注册</button>
+			<a href="javascript:void(0);" id="login">返回登录</a>
 		</form>
 	</section>
 	<script type="text/javascript">

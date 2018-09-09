@@ -27,14 +27,14 @@
 				<tr>
 					<td>是否开通管理员注册</td>
 					<td>
-						<input type="checkbox" name="is_admin_register" class="switch" data-on-text="是" data-off-text="否" data-off-color="success" {notempty name="systemSetting.is_admin_register"}{eq name="systemSetting.is_admin_register" value="1" }checked{/eq}{/notempty}>
+						<input type="checkbox" name="is_admin_register" class="switch" data-on-text="是" data-off-text="否" data-off-color="success" {notempty name="systemSetting.is_admin_register"}{eq name="systemSetting.is_admin_register" value="1"}checked{/eq}{/notempty}>
 					</td>
 					<td>is_admin_register</td>
 				</tr>
 				<tr class="admin-register">
 					<td>管理员注册是否需要审核</td>
 					<td>
-						<input type="checkbox" name="is_admin_register_check" class="switch" data-on-text="是" data-off-text="否" data-off-color="success" {notempty name="systemSetting.is_admin_register_check"}{eq name="systemSetting.is_admin_register_check" value="1" }checked{/eq}{else/}checked{/notempty}>
+						<input type="checkbox" name="is_admin_register_check" class="switch" data-on-text="是" data-off-text="否" data-off-color="success" {notempty name="systemSetting.is_admin_register_check"}{eq name="systemSetting.is_admin_register_check" value="1"}checked{/eq}{else/}checked{/notempty}>
 					</td>
 					<td>is_admin_register_check</td>
 				</tr>
@@ -45,8 +45,14 @@
 				</tr>
 				<tr class="admin-register">
 					<td>管理员默认权限</td>
-					<td><input type="text" name="admin_register_permission" class="form-control" value="{notempty name="systemSetting.admin_register_permission"}{$systemSetting.admin_register_permission}">{/notempty}"></td>
-					<td>admin_register_permission</td>
+					<td>
+						<select class="selectpicker show-tick form-control" name="admin_register_group" data-title="请选择权限" data-icon-base="fa" data-tick-icon="fa-check">
+							{foreach $group as $v}
+								<option value="{$v.id}" {notempty name="systemSetting.admin_register_group"}{eq name="systemSetting.admin_register_group" value="$v.id"}selected{/eq}{/notempty}>{$v.name}</option>
+							{/foreach}
+						</select>
+					</td>
+					<td>admin_register_group</td>
 				</tr>
 			</tbody>
 		</table>
@@ -61,6 +67,18 @@
 		});
 
 		$('.switch').bootstrapSwitch();
+
+		if ($('input[name="is_admin_register"]').bootstrapSwitch('state') === true){
+			$('.admin-register').show();
+		}
+
+		$('.switch').on('switchChange.bootstrapSwitch', function(event, state){
+			var key = $(this).attr('name'),
+				name = $(this).parents('tr').find('td:eq(0)').html(),
+				value = state === true ? 1 : 0;
+
+			edit(name, key, value);
+		});
 
 		$('input[name="is_admin_register"]').on('switchChange.bootstrapSwitch', function(event, state) {
 			if (state == true) {
@@ -85,22 +103,33 @@
 			}
 		});
 
-		$('input:text').change(function() {
-			var key = $(this).attr('name'),
-				value = $(this).val();
+		$('.selectpicker').selectpicker({
+			size: 8,
+			dropupAuto: false
+		});
 
-			edit(key, value);
+		$('.selectpicker').on('changed.bs.select', function(){
+			data($(this));
+		});
+
+		$('input:text').change(function() {
+			data($(this));
 		});
 
 		$('input').on('ifChecked', function(event){
-			var key = $(this).attr('name'),
-				value = $(this).val();
-
-			edit(key, value);
+			data($(this));
 		});
 
-		function edit(key, value){
-			eh.xhr.put('/admin/setting/systemEdit.html', {key: key, value:value}, {
+		function data(that){
+			var key = that.attr('name'),
+				name = that.parents('tr').find('td:eq(0)').html(),
+				value = that.val();
+
+			edit(name, key, value);
+		}
+
+		function edit(name, key, value){
+			eh.xhr.put('/admin/setting/systemEdit.html', {name: name, key: key, value:value}, {
 				success: function(response){
 					layer.msg('更新成功', {skin: 'layui-layer-hui', anim: 2});
 				}

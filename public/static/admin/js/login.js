@@ -2,6 +2,10 @@ define(['jquery', 'eh.xhr', 'eh.form', 'validate.zh', 'gt'], function(){
 
 	var geetObj = {};
 
+	$('#register').click(function(){
+		alert(123);
+	});
+
 	eh.xhr.get('/login/geetest.html', {}, {
 		success: function(response){
 			var data = response.data;
