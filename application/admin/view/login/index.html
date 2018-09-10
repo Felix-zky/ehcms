@@ -55,7 +55,6 @@
 		<form action="{:eh_url('U-010302')}" method="post">
 			<input id="username" type="text" name="username" placeholder="请输入用户名" autocomplete="off">
 			<input id="password" type="password" name="password" placeholder="请输入密码">
-			<!-- <div id="geetest"></div> -->
 			<button>登录</button>
 			{notempty name="systemSetting.is_admin_register"}
 				{eq name="systemSetting.is_admin_register" value="1"}
@@ -68,11 +67,12 @@
 	</section>
 	<section class="register">
 		<h1><img src="__IMAGES__/logo_default.png" alt="ehcms"></h1>
-		<form action="{:eh_url('U-010302')}" method="post">
+		<form>
 			<input id="username" type="text" name="username" placeholder="请输入用户名" autocomplete="off">
 			<input id="password" type="password" name="password" placeholder="请输入密码">
-			<!-- <div id="geetest"></div> -->
-			<button>注册</button>
+			<input id="phone" type="text" name="phone" placeholder="请输入手机号">
+			<input id="code" type="text" name="code" placeholder="请输入验证码">
+			<button class="send-code">发送验证码</button>
 			<a href="javascript:void(0);" id="login">返回登录</a>
 		</form>
 	</section>

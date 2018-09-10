@@ -33,7 +33,8 @@ class Login extends Init{
         //必须使用post提交
         if (request()->isPost()){
             if (!empty($this->systemSetting['geetest_id']) && !empty($this->systemSetting['geetest_key'])){
-                if ($this->geetestValidate(input('geetest_challenge'), input('geetest_validate'), input('geetest_seccode')) !== true) {
+                $geetest = new \geetest\Geetest($this->systemSetting['geetest_id'], $this->systemSetting['geetest_key']);
+                if ($geetest->validate(input('geetest_challenge'), input('geetest_validate'), input('geetest_seccode')) !== true){
                     $this->successResult('验证失败');
                     die;
                 }
@@ -57,44 +58,7 @@ class Login extends Init{
 	        die;
         }
 
-        require_once EXTEND_PATH . 'geetest/lib/class.geetestlib.php';
-
-        $request = request();
-
-        $GtSdk = new \GeetestLib($this->systemSetting['geetest_id'], $this->systemSetting['geetest_key']);
-        $data = array(
-            "client_type" => "web",
-            "ip_address" => $request->ip()
-        );
-
-        $status = $GtSdk->pre_process($data, 1);
-        session('gtserver', $status);
-        $this->successResult($GtSdk->get_response());
-    }
-
-    private function geetestValidate($challenge, $validate, $seccode){
-        require_once EXTEND_PATH . 'geetest/lib/class.geetestlib.php';
-
-        $request = request();
-
-        $GtSdk = new \GeetestLib($this->systemSetting['geetest_id'], $this->systemSetting['geetest_key']);
-        $data = array(
-            "client_type" => "web",
-            "ip_address" => $request->ip()
-        );
-        if (session('gtserver') == 1) {   //服务器正常
-            $result = $GtSdk->success_validate($challenge, $validate, $seccode, $data);
-            if ($result) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {  //服务器宕机,走failback模式
-            if ($GtSdk->fail_validate($challenge, $validate, $seccode)) {
-                return true;
-            } else {
-                return false;
-            }
-        }
+        $geetest = new \geetest\Geetest($this->systemSetting['geetest_id'], $this->systemSetting['geetest_key']);
+        $this->successResult($geetest->init());
     }
 }
