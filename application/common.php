@@ -50,6 +50,7 @@ Route::domain('admin', function(){
     Route::put('setting/alipay', 'admin/Setting/alipayUpdate');
     Route::post('cashier/alipay', 'admin/Cashier/alipay');
     Route::get('admin/register', 'admin/Member/register');
+    Route::post('member/sendcode', 'admin/Member/sendCode');
 
     Route::rule('store/register', 'admin/Store/register', 'get|post');
     Route::post('store/sms', 'admin/Store/sms');

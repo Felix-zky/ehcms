@@ -1,6 +1,9 @@
 define(['jquery', 'eh.xhr', 'eh.form', 'validate.zh', 'gt'], function(){
 
 	var geetObj = {};
+	var submitType;
+	var time = 60;
+	var countDown;
 
 	$('#register').click(function(){
 		$('.login').animateCss('flipOutY', function(){
@@ -22,6 +25,43 @@ define(['jquery', 'eh.xhr', 'eh.form', 'validate.zh', 'gt'], function(){
 		});
 	});
 
+	$('#code').keydown(function(e) {
+		if ($(this).val().length >= 6 && e.keyCode != 8 && e.keyCode != 9 && e.keyCode != 46){
+			return false;
+		}
+	});
+
+	$('#phone').keydown(function(e) {
+		if ($(this).val().length >= 11 && e.keyCode != 8 && e.keyCode != 9 && e.keyCode != 46){
+			return false;
+		}
+	});
+
+	$('#code').keyup(function() {
+		var v = $(this).val(),
+			phone = $('.register #phone').val();
+
+		if (phone.length == 11 && v.length == 6) {
+			clearInterval(countDown);
+			$('.send-code').attr({disabled: false}).hide();
+			$('.register .submit').show();
+		}else{
+			returnSendCode();
+		}
+	});
+
+	$('#phone').keyup(function() {
+		if ($(this).val().length < 11) {
+			returnSendCode();
+		}else if ($(this).val().length == 11 && $('.register #code').val().length == 6) {
+			if ($('.register button').hasClass('send-code')){
+				clearInterval(countDown);
+				$('.send-code').attr({disabled: false}).hide();
+				$('.register .submit').show();
+			}
+		}
+	});
+
 	function geetest(form){
 		eh.xhr.get('/login/geetest.html', {}, {
 			success: function(response){
@@ -37,7 +77,11 @@ define(['jquery', 'eh.xhr', 'eh.form', 'validate.zh', 'gt'], function(){
 					geetObj = captchaObj;
 					captchaObj.bindForm(form);
 					captchaObj.onSuccess(function(){
-						eh.xhr.post($(form).attr('action'), eh.form.extractData(), eh.xhr.doneState.messageRedirect);
+						if (submitType == 'code') {
+							sendCode();
+						}else{
+							eh.xhr.post($(form).attr('action'), eh.form.extractData(), eh.xhr.doneState.messageRedirect);
+						}
 					});
 				});
 			},
@@ -45,6 +89,52 @@ define(['jquery', 'eh.xhr', 'eh.form', 'validate.zh', 'gt'], function(){
 				layer.alert(response.msg, {icon: 0});
 			}
 		});
+	}
+
+	function sendCode(){
+		eh.xhr.post('/member/sendcode.html', eh.form.extractData({extend: {name: 'phone', value: $('.register #phone').val()}}), {
+			success: function(response){
+				submitType = '';
+				if (response.code == 1){
+					$('.send-code').attr({disabled: true});
+					countDown = setInterval(function(){
+						if (time == -1) {
+							$('.send-code').attr({disabled: false}).html('重发验证码');
+							clearInterval(countDown);
+							time = 60;
+						}else{
+							$('.send-code').html('（' + time + '）秒后可重发');
+							--time;
+						}
+					}, 1000);
+					layer.alert('短信发送成功');
+				}else{
+					layer.alert('短信发送失败');
+				}
+			}
+		});
+	}
+
+	function returnSendCode(){
+		if ($('.register button').hasClass('submit')){
+			if (time == 60) {
+				$('.register .submit').hide();
+				$('.register .send-code').show();
+			}else{
+				$('.register .submit').hide();
+				$('.register .send-code').attr({disabled: true}).show();
+				countDown = setInterval(function(){
+					if (time == -1) {
+						$('.send-code').attr({disabled: false}).html('重发验证码');
+						clearInterval(countDown);
+						time = 60;
+					}else{
+						$('.send-code').html('（' + time + '）秒后可重发');
+						--time;
+					}
+				}, 1000);
+			}
+		}
 	}
 
 	$(function(){
@@ -73,7 +163,7 @@ define(['jquery', 'eh.xhr', 'eh.form', 'validate.zh', 'gt'], function(){
 		})
 
 		$('.login button').click(function(){
-			var validate = $("form").validate({
+			var validate = $(".login form").validate({
 				rules:{
 					'username': 'required',
 					'password': 'required'
@@ -85,7 +175,7 @@ define(['jquery', 'eh.xhr', 'eh.form', 'validate.zh', 'gt'], function(){
 			});
 
 			if (validate.checkForm() == false){
-				layer.alert(eh.form.validateError(validate.errorMap));
+				eh.form.validateError(validate.errorMap);
 			}else{
 				if (!$.isEmptyObject(geetObj)){
 					geetObj.verify();
@@ -94,6 +184,60 @@ define(['jquery', 'eh.xhr', 'eh.form', 'validate.zh', 'gt'], function(){
 				}
 			}
 			return false;
+		});
+
+		$('.register .submit').click(function(){
+			var validate = $(".register form").validate({
+				rules:{
+					'username': 'required',
+					'password': 'required'
+				},
+				messages:{
+					'username': '用户名不能为空',
+					'password': '密码不能为空'
+				}
+			});
+
+			if (validate.checkForm() == false){
+				eh.form.validateError(validate.errorMap);
+			}else{
+				if (!$.isEmptyObject(geetObj)){
+					geetObj.verify();
+				}else{
+					eh.xhr.post($('form').attr('action'), eh.form.extractData(), eh.xhr.doneState.messageRedirect);
+				}
+			}
+			validate.destroy();
+			return false;
+		});
+
+		$('.register .send-code').click(function() {
+			var validate = $(".register form").validate({
+				rules:{
+					phone: {
+						required: true,
+						rangelength: [11, 11]
+					},
+				},
+				messages:{
+					phone: {
+						required: '手机号必须填写',
+						rangelength: '手机号长度只能为11位'
+					},
+				}
+			});
+
+			if (validate.checkForm() == false){
+				eh.form.validateError(validate.errorMap);
+			}else{
+				if (!$.isEmptyObject(geetObj)){
+					submitType = 'code';
+					geetObj.verify();
+				}else{
+					sendCode();
+				}
+			}
+			validate.destroy();
 		});
 	});
 });

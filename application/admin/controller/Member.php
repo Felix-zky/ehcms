@@ -12,6 +12,7 @@
 namespace app\admin\controller;
 
 class Member extends Init{
+    protected $noCheckLogin = 'sendCode';
     use \eh\traits\Password;
 
 	public function __construct(){
@@ -90,6 +91,19 @@ class Member extends Init{
     public function register(){
         if (request()->isPost()){
             $this->save();
+        }
+    }
+
+    /*
+     * 由于项目原因，暂时直接写的短信网接口。后期需要修改成动态判断的。
+     */
+    public function sendCode(){
+        $phone = input('phone');
+        $duanxinwang = new \duanxinwang\index();
+        if ($duanxinwang->submit($phone, 'member-register') == true){
+            $this->successResult();
+        }else{
+            $this->errorResult();
         }
     }
 
