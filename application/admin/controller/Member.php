@@ -121,7 +121,7 @@ class Member extends Init{
                         'create_time' => (int)THINK_START_TIME
                     ]], 'event');
                     session('eh_admin', 1);
-                    $this->successResult('用户添加成功'. Db::name('member')->getLastInsID() . (int)THINK_START_TIME, '/admin/index.html');
+                    $this->successResult('用户添加成功', '/');
                 }else{
                     $this->errorResult('用户添加失败');
                 }

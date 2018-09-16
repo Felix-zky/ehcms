@@ -51,6 +51,7 @@ Route::domain('admin', function(){
     Route::post('cashier/alipay', 'admin/Cashier/alipay');
     Route::post('admin/register', 'admin/Member/register');
     Route::post('member/sendcode', 'admin/Member/sendCode');
+    Route::rule('admin/sign_out', 'admin/Login/signOut');
 
     Route::rule('store/register', 'admin/Store/register', 'get|post');
     Route::post('store/sms', 'admin/Store/sms');

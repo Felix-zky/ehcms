@@ -68,4 +68,12 @@ class User extends Base{
         cookie('user_id', $member['id']);
         cookie('user_sign', md5($member['id'].$member['username'].$member['password'].'eh'.$member['create_time']));
     }
+
+    /**
+     * 退出
+     */
+    public function signOut(){
+        cookie('user_id', null);
+        cookie('user_sign', null);
+    }
 }

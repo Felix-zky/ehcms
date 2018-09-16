@@ -23,8 +23,14 @@ class Index extends Init{
 	 * 后台首页，读取桌面图标。
 	 */
 	public function index(){
+	    $userID = cookie('user_id');
 		//查询桌面图标
-		//$this->assign('desktop', db('admin_desktop')->select());
+        if ($userID == 1){
+            db('admin_module')->order('id', 'desc')->select();
+        }else{
+            db('admin_module')->alias('m')->join()->where()->order('id', 'desc')->select();
+        }
+		$this->assign('desktop', db('admin_desktop')->select());
 		return $this->fetch();
 	}
 	

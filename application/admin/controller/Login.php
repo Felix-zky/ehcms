@@ -12,7 +12,6 @@
 namespace app\admin\controller;
 
 class Login extends Init{
-	
 	public function __construct(){
 		parent::__construct();
 	
@@ -45,10 +44,10 @@ class Login extends Init{
                 return $result;
             }else{
                 session('eh_admin', 1);
-                $this->successResult('S-020101', 'U-010201');
+                $this->successResult('登录成功', 'U-010201');
             }
         }else{
-            return $this->errorResult('E-020102');
+            return $this->errorResult('登录失败');
         }
 	}
 
@@ -60,5 +59,11 @@ class Login extends Init{
 
         $geetest = new \geetest\Geetest($this->systemSetting['geetest_id'], $this->systemSetting['geetest_key']);
         $this->successResult($geetest->init());
+    }
+
+    public function signOut(){
+        action('member/User/signOut', [], 'event');
+        session('eh_admin', null);
+        $this->successResult('退出成功', '/login/index.html');
     }
 }

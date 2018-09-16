@@ -1,4 +1,4 @@
-define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash', 'eh'],function(laytpl){
+define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash', 'eh.xhr'],function(laytpl){
 		var	screenHeight = window.screen.height,
 		contentMenuItemsConfigure = {
 			'open': {
@@ -79,10 +79,26 @@ define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash', 'eh'],funct
 
 		/** 双击图标触发 */
 		$('#desktop-icon').on('dblclick', 'li', function() {
+			if ($(this).is('#exit')) {
+				layer.confirm('确认退出系统？', {icon: 3, title:'退出提示'}, function(){
+					eh.xhr.loadPrompt({
+						str: '正在退出，请稍等！'
+					});
+					eh.xhr.post('/admin/sign_out.html', {}, eh.xhr.doneState.messageRedirect);
+				});
+
+				return false;
+			}
+
 			var icon = $(this).find('img').attr('src'),
-				name = $(this).find('span').html();
+				name = $(this).find('span').html(),
+				moduleID = $(this).data('module-id');
+
+			if (!!moduleID == false) {
+				return false;
+			}
 				
-			var xhr = $.post('/admin/Index/getMenu', {moduleID: $(this).data('module-id')}, '', "json");
+			var xhr = $.post('/admin/Index/getMenu', {moduleID: moduleID}, '', "json");
 
 			xhr.done(function(response){
 				if (response.code == 1){
@@ -548,6 +564,13 @@ define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash', 'eh'],funct
 			//递增当前列图标数量以及下一个图标的位置
 			currentColumnNum++;
 			currentOffset[1] += 110;
+		});
+
+		$('#exit').css({
+			left: 'inherit',
+			top: 'inherit',
+			right: '10px',
+			bottom: '10px'
 		});
 	}
 });

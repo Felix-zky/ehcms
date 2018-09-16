@@ -68,7 +68,9 @@ class Init extends Base{
                 $controller != 'Login' && $this->redirect(eh_url('U-010301'));
             }
 		}elseif ($controller == 'Login'){
-			$this->redirect(eh_url('U-010201'));
+            if ($action != 'signOut'){
+                $this->redirect(eh_url('U-010201'));
+            }
 		}
 	}
 

@@ -184,7 +184,7 @@ define(['jquery', 'eh.xhr', 'eh.form', 'validate.zh', 'gt'], function(){
 				if (!$.isEmptyObject(geetObj)){
 					geetObj.verify();
 				}else{
-					eh.xhr.post($('form').attr('action'), eh.form.extractData(), eh.xhr.doneState.messageRedirect);
+					eh.xhr.post($('.login form').attr('action'), eh.form.extractData({}, '.login form'), eh.xhr.doneState.messageRedirect);
 				}
 			}
 			return false;
@@ -209,7 +209,7 @@ define(['jquery', 'eh.xhr', 'eh.form', 'validate.zh', 'gt'], function(){
 					submitType = 'register';
 					geetObj.verify();
 				}else{
-					eh.xhr.post($('.register form').attr('action'), eh.form.extractData(), eh.xhr.doneState.messageRedirect);
+					eh.xhr.post($('.register form').attr('action'), eh.form.extractData({}, '.register form'), eh.xhr.doneState.messageRedirect);
 				}
 			}
 			validate.destroy();
