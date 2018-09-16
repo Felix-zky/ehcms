@@ -46,12 +46,14 @@ define(['jquery', 'eh.xhr', 'eh.form', 'validate.zh', 'gt'], function(){
 			$('.send-code').attr({disabled: false}).hide();
 			$('.register .submit').show();
 		}else{
+			clearInterval(countDown);
 			returnSendCode();
 		}
 	});
 
 	$('#phone').keyup(function() {
 		if ($(this).val().length < 11) {
+			clearInterval(countDown);
 			returnSendCode();
 		}else if ($(this).val().length == 11 && $('.register #code').val().length == 6) {
 			if ($('.register button').hasClass('send-code')){
@@ -79,6 +81,8 @@ define(['jquery', 'eh.xhr', 'eh.form', 'validate.zh', 'gt'], function(){
 					captchaObj.onSuccess(function(){
 						if (submitType == 'code') {
 							sendCode();
+						}else if (submitType == 'register'){
+							eh.xhr.post($('.register form').attr('action'), eh.form.extractData({}, '.register form'), eh.xhr.doneState.messageRedirect);
 						}else{
 							eh.xhr.post($(form).attr('action'), eh.form.extractData(), eh.xhr.doneState.messageRedirect);
 						}
@@ -202,9 +206,10 @@ define(['jquery', 'eh.xhr', 'eh.form', 'validate.zh', 'gt'], function(){
 				eh.form.validateError(validate.errorMap);
 			}else{
 				if (!$.isEmptyObject(geetObj)){
+					submitType = 'register';
 					geetObj.verify();
 				}else{
-					eh.xhr.post($('form').attr('action'), eh.form.extractData(), eh.xhr.doneState.messageRedirect);
+					eh.xhr.post($('.register form').attr('action'), eh.form.extractData(), eh.xhr.doneState.messageRedirect);
 				}
 			}
 			validate.destroy();

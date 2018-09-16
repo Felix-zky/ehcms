@@ -10,9 +10,10 @@
 // +----------------------------------------------------------------------
 
 namespace app\admin\controller;
+use Think\Db;
 
 class Member extends Init{
-    protected $noCheckLogin = 'sendCode';
+    protected $noCheckLogin = ['sendCode', 'register'];
     use \eh\traits\Password;
 
 	public function __construct(){
@@ -89,8 +90,44 @@ class Member extends Init{
     }
 
     public function register(){
+        $validate = validate('Member');
+        $post = input();
+
         if (request()->isPost()){
-            $this->save();
+            if (!empty($this->systemSetting['geetest_id']) && !empty($this->systemSetting['geetest_key'])){
+                $geetest = new \geetest\Geetest($this->systemSetting['geetest_id'], $this->systemSetting['geetest_key']);
+                if ($geetest->validate(input('geetest_challenge'), input('geetest_validate'), input('geetest_seccode')) !== true){
+                    $this->successResult('验证失败');
+                    die;
+                }
+            }
+
+            $validate->rule('code', 'require|length:6|codeCheck');
+            if ($validate->scene('admin_register')->check($post) == TRUE){
+                $password = $this->createPassword($post['password']);
+                $data = [
+                    'username' => $post['username'],
+                    'password' => $password,
+                    'phone' => $post['phone'],
+                    'is_admin' => 1,
+                    'admin_group' => $this->systemSetting['admin_register_group'],
+                    'create_time' => THINK_START_TIME
+                ];
+                if (Db::name('member')->insert($data) == 1){
+                    action('member/User/generateLoginStatus', ['member' => [
+                        'id' => Db::name('member')->getLastInsID(),
+                        'username' => $post['username'],
+                        'password' => $password,
+                        'create_time' => (int)THINK_START_TIME
+                    ]], 'event');
+                    session('eh_admin', 1);
+                    $this->successResult('用户添加成功'. Db::name('member')->getLastInsID() . (int)THINK_START_TIME, '/admin/index.html');
+                }else{
+                    $this->errorResult('用户添加失败');
+                }
+            }else{
+                $this->error($validate->getError());
+            }
         }
     }
 

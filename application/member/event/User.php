@@ -44,9 +44,8 @@ class User extends Base{
 		if (!$this->checkPassword($post['password'], $member['password'])){
 			return $this->errorResult('E-020104');
 		}
-		
-		cookie('user_id', $member['id']);
-		cookie('user_sign', md5($member['id'].$member['username'].$member['password'].'eh'.$member['create_time']));
+
+        $this->generateLoginStatus($member);
 		
 		return TRUE;
 	}
@@ -61,4 +60,12 @@ class User extends Base{
 	
 		return db('member')->field($field)->where($where)->find();
 	}
+
+    /**
+     * 生成登录状态
+     */
+	public function generateLoginStatus($member){
+        cookie('user_id', $member['id']);
+        cookie('user_sign', md5($member['id'].$member['username'].$member['password'].'eh'.$member['create_time']));
+    }
 }
