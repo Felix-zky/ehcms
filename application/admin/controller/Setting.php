@@ -12,18 +12,30 @@
 namespace app\admin\controller;
 use think\Db;
 
+/**
+ * 系统设置
+ */
 class Setting extends Init{
-	
+
+    /**
+     * 全局系统设置
+     */
 	public function system(){
 	    $group = db('admin_group')->field('id, name')->order('id', 'desc')->select();
 	    $this->assign('group', $group);
 		return $this->fetch();
 	}
-	
+
+    /**
+     * 个人系统设置（个性化）
+     */
 	public function personal(){
 		return $this->fetch();
 	}
-	
+
+    /**
+     * 全局系统设置（编辑）
+     */
 	public function systemEdit(){
 		if (request()->isPut()){
             $result = db('admin_setting')->where('key', input('key'))->find();
@@ -38,7 +50,10 @@ class Setting extends Init{
             }
 		}
 	}
-	
+
+    /**
+     * 个人系统设置（编辑）
+     */
 	public function personalEdit(){
 		if (request()->isPut()){
 			$result = db('admin_setting')->where(['uid' => cookie('user_id'), 'key' => input('key')])->find();
@@ -58,6 +73,9 @@ class Setting extends Init{
 		}
 	}
 
+    /**
+     * 支付参数设置
+     */
 	public function alipay(){
         $alipay = db('admin_setting')->where('key', 'alipay')->find();
         $alipay = unserialize($alipay['value']);
@@ -65,6 +83,9 @@ class Setting extends Init{
 	    return $this->fetch();
     }
 
+    /**
+     * 支付参数设置（编辑）
+     */
     public function alipayUpdate(){
         $data = [
             'name' => '支付宝配置',
@@ -82,6 +103,9 @@ class Setting extends Init{
         $this->successResult();
     }
 
+    /**
+     * 微信参数设置
+     */
     public function weixin(){
 	    $weixin = db('admin_setting')->where('key', 'weixin_pay')->find();
 	    $weixin = unserialize($weixin['value']);
@@ -89,6 +113,9 @@ class Setting extends Init{
         return $this->fetch();
     }
 
+    /**
+     * 微信参数设置（编辑）
+     */
     public function weixinUpdate(){
         $data = [
             'name' => '微信支付配置',

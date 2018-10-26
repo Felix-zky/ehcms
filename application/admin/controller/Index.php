@@ -11,6 +11,9 @@
 
 namespace app\admin\controller;
 
+/**
+ * 桌面首页
+ */
 class Index extends Init{
 	
 	public function __construct(){

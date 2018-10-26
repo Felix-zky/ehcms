@@ -16,11 +16,12 @@ use think\Lang;
 use think\Db;
 
 class Init extends Base{
-	protected $systemSetting;
-	protected $personalSetting;
-	protected $powerIds;
-	protected $powerKeys;
-	protected $noCheckLogin;
+	protected $systemSetting; //系统设置
+	protected $personalSetting; //个人设置
+	protected $powerIds; //权限分组模块
+	protected $powerKeys; //权限分组权限
+	protected $noCheckLogin; //不判断登录状态
+	protected $classPermission = []; //类权限，用于验证允许权限范围。
 	
 	public function __construct(){
 		parent::__construct();

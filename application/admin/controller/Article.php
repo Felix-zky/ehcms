@@ -12,9 +12,10 @@
 namespace app\admin\controller;
 
 /**
- * 文章模块后台控制器
+ * 文章模块
  */
 class Article extends Init{
+
 	/**
 	 * 获取文章列表
 	 */
@@ -24,7 +25,6 @@ class Article extends Init{
 		$this->assign('article', $article);
 		return $this->fetch();
 	}
-
 
 	/**
 	 * 新增文章

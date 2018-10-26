@@ -11,8 +11,15 @@
 
 namespace app\admin\controller;
 
+/**
+ * 短信接口配置
+ * 默认采用阿里云短信接口
+ */
 class SettingSms extends Init{
-	
+
+    /**
+     * 配置页面
+     */
 	public function index(){
 		$sms = db('admin_setting')->where('key', 'aliyun_sms')->find();
 		
@@ -21,7 +28,10 @@ class SettingSms extends Init{
 		$this->assign('sms', $sms['value']);
 		return $this->fetch();
 	}
-	
+
+    /**
+     * 配置更新
+     */
 	public function update(){
 		if (request()->isPut()){
 			$data = [
