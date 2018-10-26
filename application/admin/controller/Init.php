@@ -13,10 +13,13 @@ namespace app\admin\controller;
 
 use app\common\controller\Base;
 use think\Lang;
+use think\Db;
 
 class Init extends Base{
 	protected $systemSetting;
 	protected $personalSetting;
+	protected $powerIds;
+	protected $powerKeys;
 	protected $noCheckLogin;
 	
 	public function __construct(){
@@ -25,12 +28,15 @@ class Init extends Base{
 		//加载语言包，先固定使用zh-cn，后期改多语言。
 		Lang::load(APP_PATH . 'admin/lang/zh-cn/error.php');
 		Lang::load(APP_PATH . 'admin/lang/zh-cn/success.php');
-		
+
+		//设置布局模板
 		$this->view->engine->layout('layout/layout');
-		
+
+		//判断登录状态
 		$this->checkUserLogin();
-		
-		$result = db('admin_setting')->where('uid', 0)->select();
+
+		//获取全局设置
+		$result = Db::name('admin_setting')->where('uid', 0)->select();
 		
 		if ($result){
 			foreach ($result as $v){
@@ -38,8 +44,9 @@ class Init extends Base{
 			}
 			$this->assign('systemSetting', $this->systemSetting);
 		}
-		
-		$result = db('admin_setting')->where('uid', cookie('user_id'))->select();
+
+		//获取个人设置
+		$result = Db::name('admin_setting')->where('uid', cookie('user_id'))->select();
 		
 		if ($result){
 			foreach ($result as $v){
@@ -47,6 +54,11 @@ class Init extends Base{
 			}
 			$this->assign('personalSetting', $this->personalSetting);
 		}
+
+		//获取权限
+        $adminGroup = Db::name('admin_group')->alias('g')->field('module_ids, keys')->join('__MEMBER__ m', 'm.admin_group = g.id')->where('m.id', cookie('user_id'))->find();
+		$this->powerIds = $adminGroup['module_ids'];
+		$this->powerKeys = explode(',', $adminGroup['keys']);
 	}
 	
 	/**

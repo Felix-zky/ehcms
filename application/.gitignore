@@ -3,3 +3,12 @@ admin/controller/Store.php
 admin/view/my_store_info/*
 admin/view/store/*
 admin/controller/MyStoreInfo.php
+admin/controller/MyStoreMoney.php
+admin/controller/MyStoreTable.php
+admin/model/MyStoreMoney.php
+admin/model/Store.php
+admin/validate/Store.php
+admin/view/my_store/*
+admin/view/my_store_money/*
+admin/view/my_store_table/*
+admin/controller/MyStore.php

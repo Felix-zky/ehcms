@@ -26,11 +26,11 @@ class Index extends Init{
 	    $userID = cookie('user_id');
 		//查询桌面图标
         if ($userID == 1){
-            db('admin_module')->order('id', 'desc')->select();
+            $desktop = db('admin_module')->select();
         }else{
-            db('admin_module')->alias('m')->join()->where()->order('id', 'desc')->select();
+            $desktop = db('admin_module')->where('id', 'in', $this->powerIds)->select();
         }
-		$this->assign('desktop', db('admin_desktop')->select());
+		$this->assign('desktop', $desktop);
 		return $this->fetch();
 	}
 	

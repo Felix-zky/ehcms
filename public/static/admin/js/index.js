@@ -120,10 +120,10 @@ define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash', 'eh.xhr'],f
 				open: {
 					name: '打开'
 				},
-				sep1: "---------",
-				trash: {
-					name: '卸载'
-				}
+				// sep1: "---------",
+				// trash: {
+				// 	name: '卸载'
+				// }
 			},
 			zIndex: 100000000, //确保遮罩层和弹出菜单在layer弹窗之上。
 			callback: function(itemKey, opt){

@@ -10,7 +10,7 @@ trait FastResponse{
 		//如果msg等于字符串类型且通过正则验证，则将返回信息替换，目前正则验证S-开头（区分大小写），后面跟6个数字，且数字结尾。
 		if (is_string($msg) && preg_match('/^S-\d{6,8}$/', $msg)){
 			$msg = lang($msg);
-		}elseif (is_array($msg)){
+		}elseif (is_array($msg) || is_object($msg)){
 			if (empty($msg['lang_name'])){
 				$this->msgIsData($msg, $data);
 			}else{

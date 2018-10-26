@@ -53,8 +53,13 @@ Route::domain('admin', function(){
     Route::post('member/sendcode', 'admin/Member/sendCode');
     Route::rule('admin/sign_out', 'admin/Login/signOut');
 
-    Route::rule('store/register', 'admin/Store/register', 'get|post');
-    Route::post('store/sms', 'admin/Store/sms');
+    ///////////////////////////////////////////////////////////
+    Route::rule('store/register', 'admin/MyStore/register', 'get|post');
+    Route::post('store/sms', 'admin/MyStore/sms');
+    Route::get('store/geetest', 'admin/MyStore/geetest');
+    Route::post('store/resource', 'admin/MyStore/resource');
+    Route::rule('store/info', 'admin/MyStore/info');
+    ///////////////////////////////////////////////////////////
 	
 	//注册后台资源路由
 	Route::resource('article', 'admin/Article');
@@ -71,6 +76,7 @@ Route::domain('admin', function(){
     Route::resource('cashier_category', 'admin/CashierCategory');
     Route::resource('cashier_goods', 'admin/CashierGoods');
     Route::resource('navigation', 'admin/Navigation');
+    Route::resource('my_store_table', 'admin/MyStoreTable');
 
 	Route::rule('login/index', 'admin/Login/index');
 });

@@ -14,7 +14,7 @@ namespace app\admin\controller;
 /**
  * 文章模块后台控制器
  */
-class Article extends Init{	
+class Article extends Init{
 	/**
 	 * 获取文章列表
 	 */
@@ -24,8 +24,8 @@ class Article extends Init{
 		$this->assign('article', $article);
 		return $this->fetch();
 	}
-	
-	
+
+
 	/**
 	 * 新增文章
 	 */
@@ -35,7 +35,7 @@ class Article extends Init{
 		$this->assign('actionSign', 'editor');
 		return $this->fetch('editor');
 	}
-	
+
 	/**
 	 * 保存（新增入库）文章
 	 */
@@ -50,7 +50,7 @@ class Article extends Init{
 			$this->errorResult('E-03002');
 		}
 	}
-	
+
 	/**
 	 * 修改文章
 	 */
@@ -58,7 +58,7 @@ class Article extends Init{
 		$article = db('article')->where('id', $id)->find();
 		$categoryID = $article['category_id'];
 		$categoryParentID = 0;
-		
+
 		if ($categoryID > 0){
 			$category = db('article_category')->where('id', $categoryID)->find();
 			$categoryParentID = $category['parent_id'];
@@ -71,7 +71,7 @@ class Article extends Init{
 				$categoryParentID = $categoryID;
 			}
 		}
-		
+
 		$this->assign('id', $id);
 		$this->assign('article', $article);
 		$this->assign('categoryParentID', $categoryParentID);
@@ -80,7 +80,7 @@ class Article extends Init{
 		$this->assign('actionSign', 'editor');
 		return $this->fetch('editor');
 	}
-	
+
 	/**
 	 * 更新文章
 	 */
@@ -95,19 +95,19 @@ class Article extends Init{
 			$this->errorResult('E-03002');
 		}
 	}
-	
+
 	/**
 	 * 删除文章
 	 */
 	public function delete($id){
-		
+
 	}
-	
+
 	/**
 	 * 文章回收站
 	 */
 	public function recycle(){
-	
+
 	}
 
     public function getArticleList($page = 1, $key = ''){
@@ -127,17 +127,17 @@ class Article extends Init{
             return $this->errorResult('E-020201');
         }
     }
-	
+
 	/**
 	 * 文章资源上传，缩略图和正文资源暂一起上传，后期将缩略图分离出来做判断。
 	 */
 	public function resource(){
 		$file = request()->file('file');
-		
+
 		if (is_object($file)){
 			$resource = new \eh\Resource();
 			$result = $resource->uploader($file, (int)input('groupID'));
-			
+
 			if ($result > 0){
 				$this->successResult('上传成功', ['url' => $resource->getData('url')]);
 			}else{
@@ -147,7 +147,7 @@ class Article extends Init{
 			$this->errorResult('获取上传文件失败');
 		}
 	}
-	
+
 	public function getCategory($parentID = 0){
 		$parentID = input('parent_id') ?: $parentID;
 		$result = db('article_category')->where('parent_id', $parentID)->order('id', 'desc')->select();

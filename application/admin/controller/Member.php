@@ -120,6 +120,8 @@ class Member extends Init{
                         'password' => $password,
                         'create_time' => (int)THINK_START_TIME
                     ]], 'event');
+
+                    Db::name('verification_code')->where(['code' => $post['code'], 'phone' => $data['phone'], 'scene' => 'member-register'])->delete();
                     session('eh_admin', 1);
                     $this->successResult('用户添加成功', '/');
                 }else{

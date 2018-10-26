@@ -8,22 +8,9 @@
 <body class="desktop">
 	<div id="desktop-icon">
 		<ul>
-			<li data-module-id="1"><div class="icon-img"><img src="__IMAGES__/setting.png" /></div><div class="icon-name"><span>系统设置</span></div></li>
-			<li data-module-id="2"><div class="icon-img"><img src="__IMAGES__/module.png" /></div><div class="icon-name"><span>模块管理</span></div></li>
-			<li data-module-id="3"><div class="icon-img"><img src="__IMAGES__/article.png" /></div><div class="icon-name"><span>文章管理</span></div></li>
-			<li data-module-id="4"><div class="icon-img"><img src="__IMAGES__/member.png" /></div><div class="icon-name"><span>会员管理</span></div></li>
-			<li data-module-id="5"><div class="icon-img"><img src="__IMAGES__/computer.png" /></div><div class="icon-name"><span>资源管理</span></div></li>
-			<li data-module-id="6"><div class="icon-img"><img src="__IMAGES__/book.png" /></div><div class="icon-name"><span>文档书库</span></div></li>
-			<li data-module-id="7"><div class="icon-img"><img src="__IMAGES__/goods.png" /></div><div class="icon-name"><span>商品管理</span></div></li>
-			<li data-module-id="8"><div class="icon-img"><img src="__IMAGES__/order.png" /></div><div class="icon-name"><span>订单管理</span></div></li>
-			<li data-module-id="9"><div class="icon-img"><img src="__IMAGES__/calculator.png" /></div><div class="icon-name"><span>收银系统</span></div></li>
-			<li data-module-id="10"><div class="icon-img"><img src="__IMAGES__/sale.png" /></div><div class="icon-name"><span>促销模块</span></div></li>
-			<li data-module-id="11"><div class="icon-img"><img src="__IMAGES__/navigation.png" /></div><div class="icon-name"><span>导航管理</span></div></li>
-			<li data-module-id="12"><div class="icon-img"><img src="__IMAGES__/wechat.png" /></div><div class="icon-name"><span>微信公众号</span></div></li>
-			<li data-module-id="13"><div class="icon-img"><img src="__IMAGES__/miniprogram.png" /></div><div class="icon-name"><span>小程序</span></div></li>
-			<li data-module-id="14"><div class="icon-img"><img src="__IMAGES__/message.png" /></div><div class="icon-name"><span>留言模块</span></div></li>
-			<li data-module-id="15"><div class="icon-img"><img src="__IMAGES__/shop.png" /></div><div class="icon-name"><span>商铺模块</span></div></li>
-			<li data-module-id="16"><div class="icon-img"><img src="__IMAGES__/shop.png" /></div><div class="icon-name"><span>我的店铺</span></div></li>
+			{foreach $desktop as $v}
+				<li data-module-id="{$v.id}"><div class="icon-img"><img src="__IMAGES__/{$v.icon}" /></div><div class="icon-name"><span>{$v.name}</span></div></li>
+			{/foreach}
 
 			<li id="exit"><div class="icon-img"><img src="__IMAGES__/exit.png" /></div><div class="icon-name"><span>退出系统</span></div></li>
 		</ul>
