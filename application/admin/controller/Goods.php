@@ -11,21 +11,34 @@
 
 namespace app\admin\controller;
 
+/**
+ * 商品管理
+ */
 class Goods extends Init{
-	
+
+    /**
+     * 商品列表页面
+     */
 	public function index(){
 		$goods = db('goods')->order('id', 'desc')->where('status', 1)->paginate(24);
 		
 		$this->assign('goods', $goods);
 		return $this->fetch();
 	}
-	
+
+    /**
+     * 商品创建页面
+     */
 	public function create(){
 		$this->assign('category', $this->getCategory());
 		$this->assign('actionSign', 'editor');
 		return $this->fetch('editor');
 	}
-	
+
+    /**
+     * 商品编辑页面
+     * @param int $id 商品编号
+     */
 	public function edit($id){
 		$goods = db('goods')->where('id', $id)->find();
 		$categoryID = $goods['category_id'];
@@ -55,7 +68,11 @@ class Goods extends Init{
 		$this->assign('actionSign', 'editor');
 		return $this->fetch('editor');
 	}
-	
+
+    /**
+     * 商品更新
+     * @param int $id 商品编号
+     */
 	public function update($id){
 		$data = input('param.');
 		$data['sale_mode'] = !empty($data['sale_mode']) ? 1 : 2;
@@ -71,7 +88,11 @@ class Goods extends Init{
 			$this->errorResult('E-03002');
 		}
 	}
-	
+
+    /**
+     * 商品删除
+     * @param int $id 商品编号
+     */
 	public function delete($id){
 		$result = db('goods')->where('id', $id)->update([
 			'status' => 2
@@ -122,7 +143,11 @@ class Goods extends Init{
 			$this->errorResult('获取上传文件失败');
 		}
 	}
-	
+
+    /**
+     * 获取商品分类
+     * @param int $parentID 父分类编号
+     */
 	public function getCategory($parentID = 0){
 		$parentID = input('parent_id') ?: $parentID;
 		$result = db('goods_category')->where('parent_id', $parentID)->order('id', 'desc')->select();

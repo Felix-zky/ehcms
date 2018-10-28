@@ -10,15 +10,25 @@
 // +----------------------------------------------------------------------
 
 namespace app\admin\controller;
-
 use Think\Db;
+
+/**
+ * 用户积分管理
+ */
 class MemberPoint extends Init{
+
+    /**
+     * 用户积分列表页面
+     */
 	public function index(){
 		$log = model('PointLog')->order('id', 'desc')->paginate(20);
 		$this->assign('log', $log);
 		return $this->fetch();
 	}
-	
+
+    /**
+     * 用户积分更新及页面
+     */
 	public function edit(){
 		if (request()->isPost()){
 			$id = input('id');
@@ -67,7 +77,10 @@ class MemberPoint extends Init{
 		
 		return $this->fetch();
 	}
-	
+
+    /**
+     * 绑定用户积分卡
+     */
 	public function bind(){
 		if (request()->isPost()){
 			$uid = input('id');
@@ -101,6 +114,9 @@ class MemberPoint extends Init{
 		return $this->fetch();
 	}
 
+    /**
+     * 获取用户信息
+     */
 	public function getMember(){
 		$data = input('data');
 		if (!$data){
@@ -125,7 +141,11 @@ class MemberPoint extends Init{
 			$this->errorResult('用户不存在');
 		}
 	}
-	
+
+    /**
+     * 新增用户积分记录
+     * @param array $data 记录数据
+     */
 	private function log($data){
 		Db::name('point_log')->insert($data);
 	}

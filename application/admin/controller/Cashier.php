@@ -12,16 +12,27 @@
 namespace app\admin\controller;
 use think\Db;
 
+/**
+ * 收银台
+ */
 class Cashier extends Init{
 
+    /**
+     * 收银台页面
+     */
     public function index(){
+        //获取收银台商品分类
         $category = db('cashier_goods_category')->select();
+        //获取收银台商品
         $goods = db('cashier_goods')->order('id', 'desc')->select();
         $this->assign('goods', $goods);
         $this->assign('category', $category);
         return $this->fetch();
     }
 
+    /**
+     * 获取商品
+     */
     public function getGoods(){
         $category = input('category');
         $keyword = input('keyword');

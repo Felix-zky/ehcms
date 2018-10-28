@@ -11,15 +11,18 @@
 
 namespace app\admin\controller;
 
+/**
+ * 后台登录
+ */
 class Login extends Init{
+
 	public function __construct(){
 		parent::__construct();
-	
 		$this->view->engine->layout(FALSE);
 	}
 	
 	/**
-	 * 管理员登录
+	 * 管理员登录页面
 	 */
 	public function index(){
 		return $this->fetch();
@@ -51,6 +54,9 @@ class Login extends Init{
         }
 	}
 
+    /**
+     * 极验验证实例化
+     */
     public function geetest(){
 	    if (empty($this->systemSetting['geetest_id']) || empty($this->systemSetting['geetest_key'])){
 	        $this->errorResult('当前未设置安全验证，出于安全考虑，请在首次登录后在“系统设置”中进行设置，目前采用<a href="https://www.geetest.com" style="color:#2274ff;" target="_blank">极验验证</a>，请自行前往申请验证账号。');
@@ -61,6 +67,9 @@ class Login extends Init{
         $this->successResult($geetest->init());
     }
 
+    /**
+     * 后台登出
+     */
     public function signOut(){
         action('member/User/signOut', [], 'event');
         session('eh_admin', null);

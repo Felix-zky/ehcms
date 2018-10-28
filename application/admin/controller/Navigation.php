@@ -16,17 +16,26 @@ namespace app\admin\controller;
  */
 class Navigation extends Init{
 
+    /**
+     * 导航列表页面
+     */
     public function index(){
         $navigation = db('navigation')->order(['sort' => 'desc', 'id' => 'desc'])->paginate(20);
         $this->assign('navigation', $navigation);
         return $this->fetch();
     }
 
+    /**
+     * 导航创建页面
+     */
     public function create(){
         $this->assign('actionSign', 'editor');
         return $this->fetch('editor');
     }
 
+    /**
+     * 新增导航
+     */
     public function save(){
         $data = input('param.');
 
@@ -43,6 +52,10 @@ class Navigation extends Init{
         }
     }
 
+    /**
+     * 导航编辑页面
+     * @param int $id 导航编号
+     */
     public function edit($id){
         $navigation = db('navigation')->where('id', $id)->find();
         $this->assign('id', $id);
@@ -51,6 +64,10 @@ class Navigation extends Init{
         return $this->fetch('editor');
     }
 
+    /**
+     * 编辑导航
+     * @param int $id 导航编辑
+     */
     public function update($id){
         $data = input('param.');
 
@@ -63,6 +80,10 @@ class Navigation extends Init{
         $this->success('导航更新成功', 'admin/Navigation/index');
     }
 
+    /**
+     * 删除导航
+     * @param int $id 导航编号
+     */
     public function delete($id){
         if (db('navigation')->where('id', $id)->delete() == 1){
             $this->successResult('导航删除成功');
@@ -71,6 +92,9 @@ class Navigation extends Init{
         }
     }
 
+    /**
+     * 导航更新排序顺序
+     */
     public function sort(){
         $type = input('type');
         $id = input('id');

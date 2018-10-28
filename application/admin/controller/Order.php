@@ -10,17 +10,26 @@
 // +----------------------------------------------------------------------
 
 namespace app\admin\controller;
-
 use Think\Db;
+
+/**
+ * 订单
+ */
 class Order extends Init{
-	
+
+    /**
+     * 订单列表页面
+     */
 	public function index(){
 		$order = model('order')->order('id', 'desc')->paginate(10);
 	
 		$this->assign('order', $order);
 		return $this->fetch();
 	}
-	
+
+    /**
+     * 积分兑换提交及对应页面
+     */
 	public function point(){
 		if (request()->isPost()){
 			$phone = input('phone');

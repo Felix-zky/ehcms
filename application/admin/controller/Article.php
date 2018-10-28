@@ -17,7 +17,7 @@ namespace app\admin\controller;
 class Article extends Init{
 
 	/**
-	 * 获取文章列表
+	 * 获取文章列表页面
 	 */
 	public function index(){
 	    $article = db('article')->field('markdown,content', true)->order('id', 'desc')->paginate(20);
@@ -27,7 +27,7 @@ class Article extends Init{
 	}
 
 	/**
-	 * 新增文章
+	 * 新增文章页面
 	 */
 	public function create(){
 		$this->assign('category', $this->getCategory());
@@ -37,22 +37,8 @@ class Article extends Init{
 	}
 
 	/**
-	 * 保存（新增入库）文章
-	 */
-	public function save(){
-		if (request()->isPost()){
-			if (db('article')->insert(array_merge(input('param.'), ['uid' => cookie('user_id'), 'create_time' => THINK_START_TIME])) == 1){
-				$this->successResult('文章发布成功', '/admin/article');
-			}else{
-				$this->errorResult('文章发布失败');
-			}
-		}else{
-			$this->errorResult('E-03002');
-		}
-	}
-
-	/**
-	 * 修改文章
+	 * 修改文章页面
+     * @param int $id 文章编号
 	 */
 	public function edit($id){
 		$article = db('article')->where('id', $id)->find();
@@ -81,8 +67,24 @@ class Article extends Init{
 		return $this->fetch('editor');
 	}
 
+    /**
+     * 保存（新增入库）文章
+     */
+    public function save(){
+        if (request()->isPost()){
+            if (db('article')->insert(array_merge(input('param.'), ['uid' => cookie('user_id'), 'create_time' => THINK_START_TIME])) == 1){
+                $this->successResult('文章发布成功', '/admin/article');
+            }else{
+                $this->errorResult('文章发布失败');
+            }
+        }else{
+            $this->errorResult('E-03002');
+        }
+    }
+
 	/**
 	 * 更新文章
+     * @param int $id 文章编号
 	 */
 	public function update($id){
 		if (request()->isPut()){
@@ -98,6 +100,7 @@ class Article extends Init{
 
 	/**
 	 * 删除文章
+     * @param int $id 文章编号
 	 */
 	public function delete($id){
 
@@ -110,6 +113,11 @@ class Article extends Init{
 
 	}
 
+    /**
+     * 获取文章列表
+     * @param int $page 当前页数
+     * @param string $key 检索的关键词
+     */
     public function getArticleList($page = 1, $key = ''){
         $page = is_numeric($page) ? $page : 1;
 
@@ -148,6 +156,10 @@ class Article extends Init{
 		}
 	}
 
+    /**
+     * 获取文章分类
+     * @param int $parentID 父分类编号
+     */
 	public function getCategory($parentID = 0){
 		$parentID = input('parent_id') ?: $parentID;
 		$result = db('article_category')->where('parent_id', $parentID)->order('id', 'desc')->select();

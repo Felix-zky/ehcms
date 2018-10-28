@@ -10,22 +10,34 @@
 // +----------------------------------------------------------------------
 
 namespace app\admin\controller;
-
 use think\Db;
+
+/**
+ * 文档书库
+ */
 class Document extends Init{
-	
+
+    /**
+     * 文档书库列表
+     */
 	public function index(){
 		$document = db('document')->field('id, name, cover')->order('id', 'desc')->paginate(18);
 		$this->assign('category', $this->getCategory());
 		$this->assign('document', $document);
 		return $this->fetch();
 	}
-	
+
+    /**
+     * 创建文档书库
+     */
 	public function create(){
 		$this->assign('actionSign', 'editor');
 		return $this->fetch('editor');
 	}
-	
+
+    /**
+     * 保存文档书库
+     */
 	public function save(){
 		$data = input('param.');
 		$id = db('document')->insertGetId($data);
@@ -35,17 +47,27 @@ class Document extends Init{
 			$this->errorResult('文档新增失败');
 		}
 	}
-	
+
+    /**
+     * 文档编辑页面
+     * @param int $id 文档编号
+     */
 	public function edit($id){
 		$this->assign('id', $id);
 		$this->assign('actionSign', 'editor');
 		return $this->fetch('editor');
 	}
-	
+
+    /**
+     * 文档更新
+     */
 	public function update(){
 		
 	}
-	
+
+    /**
+     * 上传文档资源
+     */
 	public function uploaderCover(){
 		if (request()->isAjax()){
 			$file = request()->file('file');
@@ -64,7 +86,10 @@ class Document extends Init{
 			}
 		}
 	}
-	
+
+    /**
+     * 获取文档目录
+     */
 	public function getItems(){
 		$items = db('document_item')->where('document_id', input('document_id'))->select();
 		$data = [];
@@ -83,7 +108,10 @@ class Document extends Init{
 		
 		$this->successResult(['items' => $data]);
 	}
-	
+
+    /**
+     * 新增文档目录
+     */
 	public function addItem(){
 		$data = input('post.');
 		$returnData = [];
@@ -94,12 +122,12 @@ class Document extends Init{
 			
 			if (is_numeric($data['name'])){
 				$data['relation_id'] = $data['name'];
-				$result = Db('article')->field('title')->where(['id' => $data['name'], 'document_id' => 0])->find();
+				$result = Db::name('article')->field('title')->where(['id' => $data['name'], 'document_id' => 0])->find();
 				if ($result){
 					$data['name'] = $result['title'];
 					$returnData['name'] = $result['title'];
-					
-					Db('article')->where('id', $data['relation_id'])->update(['document_id' => $data['document_id']]);
+
+                    Db::name('article')->where('id', $data['relation_id'])->update(['document_id' => $data['document_id']]);
 				}else{
 					$this->errorResult('文章不存在或已被其他文档使用');
 				}
@@ -117,10 +145,13 @@ class Document extends Init{
 			$this->errorResult('新增失败');
 		}
 	}
-	
+
+    /**
+     * 获取文章
+     */
 	public function getArticle(){
 		$itemID = input('id');
-		$item = db('document_item')->field('relation_id')->where('id', input('id'))->find();
+		$item = db('document_item')->field('relation_id')->where('id', $itemID)->find();
 		$article = db('article')->field('content')->where('id', $item['relation_id'])->find();
 		
 		$data = [
@@ -130,7 +161,10 @@ class Document extends Init{
 		
 		$this->successResult($data);
 	}
-	
+
+    /**
+     * 获取文档分类
+     */
 	public function getCategory(){
 		$parentID = input('parent_id') ?: 0;
 		$result = db('document_category')->where('parent_id', $parentID)->order('id', 'desc')->select();

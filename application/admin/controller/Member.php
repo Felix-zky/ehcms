@@ -12,6 +12,9 @@
 namespace app\admin\controller;
 use Think\Db;
 
+/**
+ * 用户管理
+ */
 class Member extends Init{
     protected $noCheckLogin = ['sendCode', 'register'];
     use \eh\traits\Password;
@@ -19,7 +22,10 @@ class Member extends Init{
 	public function __construct(){
 		parent::__construct();
 	}
-	
+
+    /**
+     * 用户列表页面
+     */
 	public function index(){
 		$member = db('member')->field('id,username,is_admin,create_time')->order('id', 'desc')->paginate(20);
 		
@@ -27,6 +33,9 @@ class Member extends Init{
 		return $this->fetch();
 	}
 
+    /**
+     * 用户创建页面
+     */
 	public function create(){
 	    $adminGroup = $this->getAdminGroup();
 	    $this->assign('adminGroup', $adminGroup);
@@ -34,6 +43,9 @@ class Member extends Init{
 	    return $this->fetch('editor');
     }
 
+    /**
+     * 新增/更新用户
+     */
     public function save(){
         $validate = validate('Member');
         $post = input();
@@ -89,6 +101,9 @@ class Member extends Init{
         }
     }
 
+    /**
+     * 管理员自助注册
+     */
     public function register(){
         $validate = validate('Member');
         $post = input();
@@ -146,6 +161,10 @@ class Member extends Init{
         }
     }
 
+    /**
+     * 用户修改页面
+     * @param int $id 用户编号
+     */
     public function edit($id){
         $member = db('member')->where('id', $id)->find();
         $adminGroup = $this->getAdminGroup();
@@ -158,7 +177,8 @@ class Member extends Init{
 	
 	/**
 	 * 获取用户列表
-	 * @param int $page
+	 * @param int $page 分页数
+     * @param string $key 关键词
 	 * @return json
 	 */
 	public function getMemberList($page = 1, $key = ''){
@@ -186,6 +206,10 @@ class Member extends Init{
 		}
 	}
 
+    /**
+     * 获取用户权限分组
+     * @access private
+     */
 	private function getAdminGroup(){
         return db('admin_group')->field(['id', 'name'])->select();
     }

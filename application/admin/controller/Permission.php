@@ -11,7 +11,9 @@
 
 namespace app\admin\controller;
 
-
+/**
+ * 权限
+ */
 class Permission extends Init{
 	
 	public function index(){

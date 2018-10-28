@@ -10,23 +10,32 @@
 // +----------------------------------------------------------------------
 
 namespace app\admin\controller;
-
 use think\Db;
+
+/**
+ * 商品分类
+ */
 class GoodsCategory extends Init{
-	
+
+    /**
+     * 商品分类页面
+     */
 	public function index(){
 		$parentID = input('parent_id') ?: 0;
-		$lists = Db('goods_category')->where('parent_id', $parentID)->order('id', 'desc')->paginate(10);
+		$lists = Db::name('goods_category')->where('parent_id', $parentID)->order('id', 'desc')->paginate(10);
 		
 		if ($parentID > 0){
-			$parent = Db('goods_category')->field('name')->where('id', $parentID)->find();
+			$parent = Db::name('goods_category')->field('name')->where('id', $parentID)->find();
 			$this->assign('parentName', $parent['name']);
 		}
 		$this->assign('parentID', $parentID);
 		$this->assign('category', $lists);
 		return $this->fetch();
 	}
-	
+
+    /**
+     * 新增商品分类
+     */
 	public function save(){
 		$parentID = input('parent_id') ?: 0;
 		$name = input('name');
@@ -37,7 +46,10 @@ class GoodsCategory extends Init{
 			$this->success('商品分类新增成功！');
 		}
 	}
-	
+
+    /**
+     * 更新商品分类
+     */
 	public function update(){
 		$id = input('id');
 		$name = input('name');
