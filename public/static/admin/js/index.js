@@ -150,14 +150,14 @@ define(['laytpl', 'jquery', 'layer', 'jquery.contextMenu', 'lodash', 'eh.xhr'],f
 				refresh: {
 					name: '刷新'
 				},
-				sep1: "---------",
-				sort: {
-					name: '排序方式'
-				},
-				sep1: "---------",
-				wallpaper: {
-					name: '桌面壁纸'
-				}
+				// sep1: "---------",
+				// sort: {
+				// 	name: '排序方式'
+				// },
+				// sep1: "---------",
+				// wallpaper: {
+				// 	name: '桌面壁纸'
+				// }
 			},
 			zIndex: 100000000, //确保遮罩层和弹出菜单在layer弹窗之上。
 			reposition: false,

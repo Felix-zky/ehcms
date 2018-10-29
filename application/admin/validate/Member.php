@@ -1,8 +1,10 @@
 <?php
 namespace app\admin\validate;
-
 use think\Validate;
 
+/**
+ * 用户验证器
+ */
 class Member extends Validate{
     protected $rule = [
         'username'  =>  'require|only',
@@ -20,10 +22,14 @@ class Member extends Validate{
     ];
 
     protected $scene = [
-        'edit' => ['username'],
-        'admin_register' => ['username', 'password', 'phone', 'code']
+        'edit' => ['username'], //编辑场景
+        'admin_register' => ['username', 'password', 'phone', 'code'] //管理后台注册场景
     ];
 
+    /**
+     * 验证码校验
+     * @return bool
+     */
     protected function codeCheck($value, $rule, $data){
         $res = db('verification_code')->where(['code' => $value, 'phone' => $data['phone'], 'scene' => 'member-register'])->find();
         if ($res){
@@ -33,6 +39,10 @@ class Member extends Validate{
         }
     }
 
+    /**
+     * 用户名唯一校验
+     * @return bool
+     */
     protected function only($value, $rule, $data){
         if (!empty($data['id'])){
             $user = db('member')->where('id', $data['id'])->find();
@@ -46,6 +56,10 @@ class Member extends Validate{
         }
     }
 
+    /**
+     * 手机号唯一校验
+     * @return bool
+     */
     protected function phoneOnly($value){
         $res = db('member')->where('phone', $value)->find();
         if ($res){
@@ -55,6 +69,11 @@ class Member extends Validate{
         }
     }
 
+    /**
+     * 查询用户名是否存在
+     * @access private
+     * @return bool
+     */
     private function checkUsername($value){
         $user = db('member')->where('username', $value)->find();
         if ($user){

@@ -15,7 +15,10 @@ namespace app\admin\controller;
  * 权限
  */
 class Permission extends Init{
-	
+
+    /**
+     * 权限列表页面
+     */
 	public function index(){
 		$data = model('permission')
 				->field('p.id, p.name, p.key, p.is_menu, pg.name as group_name, m.name as module_name')
@@ -28,14 +31,20 @@ class Permission extends Init{
 		$this->assign('data', $data);
 		return $this->fetch();
 	}
-	
+
+    /**
+     * 新增权限页面
+     */
 	public function create(){
 		$module = db('admin_module')->select();
 		$this->assign('module', $module);
 		$this->assign('actionSign', 'editor');
 		return $this->fetch('editor');
 	}
-	
+
+    /**
+     * 新增权限
+     */
 	public function save(){
 		$post = input('param.');
 		
@@ -57,7 +66,10 @@ class Permission extends Init{
 			$this->errorResult();
 		}
 	}
-	
+
+    /**
+     * 获取权限分组
+     */
 	public function getGroup(){
 		$mouduleID = input('moudule_id');
 		

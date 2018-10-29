@@ -10,11 +10,17 @@
 // +----------------------------------------------------------------------
 
 namespace app\admin\controller;
-
 use app\admin\model\Resource as ResourceModel;
 use app\admin\model\ResourceGroup;
+
+/**
+ * 资源管理
+ */
 class Resource extends Init{
-	
+
+    /**
+     * 资源列表页面
+     */
 	public function index(){
 		$result = ResourceGroup::withCount('resource')->where('uid', cookie('user_id'))->select();
 		
@@ -61,7 +67,10 @@ class Resource extends Init{
 		input('iframe') && $this->assign('iframe', 1);
 		return $this->fetch();
 	}
-	
+
+    /**
+     * 资源上传及页面
+     */
 	public function uploader(){
 		if (request()->isAjax()){
 			$file = request()->file('file');
@@ -127,7 +136,10 @@ class Resource extends Init{
 			return $this->fetch();
 		}
 	}
-	
+
+    /**
+     * 新增资源分组
+     */
 	public function addGroup(){
 		$parentID = input('parentID');
 		$name = input('name');
@@ -154,7 +166,10 @@ class Resource extends Init{
 			$this->errorResult('目录添加失败');
 		}
 	}
-	
+
+    /**
+     * 删除资源（单资源）
+     */
 	public function deleteResource(){
 		$resource = new \eh\Resource();
 		if ($resource->delete(input('resourceID')) === TRUE){
@@ -163,7 +178,10 @@ class Resource extends Init{
 			$this->successResult($resource->getError() ?: '资源删除失败');
 		}
 	}
-	
+
+    /**
+     * 删除资源（多资源）
+     */
 	public function deleteResources(){
 		$resource = new \eh\Resource();
 		if ($resource->delete(input('resourceID/a')) === TRUE){
